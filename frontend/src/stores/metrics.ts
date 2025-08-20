@@ -3,6 +3,8 @@ import { service } from '../api/service';
 
 export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total: number; used: number } };
 
+let started = false;
+
 export const useMetricsStore = defineStore('metrics', {
   state: () => ({
     latest: null as MetricPoint | null,
@@ -12,6 +14,7 @@ export const useMetricsStore = defineStore('metrics', {
   }),
   actions: {
     start() {
+      if (started) return; started = true;
       service.onMetrics((p: MetricPoint) => {
         this.latest = p;
         this.history.push(p);

@@ -39,13 +39,15 @@ onMounted(async () => {
   const w: any = typeof window !== 'undefined' ? window : {};
   try {
     await import('@tauri-apps/api/core');
-    await ensureEventBridge();
+    // 非阻塞：不要等待事件桥建立，避免后端异常导致 UI 等待
+    void ensureEventBridge();
     w.__IS_TAURI__ = true;
   } catch {
     w.__IS_TAURI__ = false;
   }
-  await session.init();
+  // 非阻塞：优先启动 metrics，session.init() 不阻塞主流程
   metrics.start();
+  void session.init();
 });
 
 // 健康状态（每秒刷新）

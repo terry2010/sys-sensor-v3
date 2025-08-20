@@ -10,10 +10,18 @@ import type {
   BurstSubscribeParams,
 } from './dto';
 
-async function rpcCall<T>(method: string, params?: any): Promise<T> {
+async function rpcCall<T>(method: string, params?: any, timeoutMs = 6000): Promise<T> {
   const { invoke } = await import('@tauri-apps/api/core');
   // 约定在 Rust 端实现 invoke("rpc_call", { method, params })
-  return await invoke('rpc_call', { method, params }) as T;
+  const call = invoke('rpc_call', { method, params }) as Promise<T>;
+  if (!timeoutMs || timeoutMs <= 0) return call;
+  const timeout = new Promise<T>((_, reject) => {
+    const id = setTimeout(() => {
+      clearTimeout(id);
+      reject(new Error(`RPC timeout: ${method}`));
+    }, timeoutMs);
+  });
+  return Promise.race([call, timeout]) as Promise<T>;
 }
 
 export const tauriRpc = {

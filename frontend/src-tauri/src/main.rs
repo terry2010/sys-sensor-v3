@@ -10,6 +10,7 @@ use std::time::Instant;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 use tauri::Emitter;
+use tauri::async_runtime;
 
 const PIPE_PATH: &str = r"\\.\pipe\sys_sensor_v3.rpc";
 
@@ -221,8 +222,14 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn rpc_call(method: String, params: Option<Value>) -> Result<Value, String> {
-    call_over_named_pipe(&method, params).map_err(|e| e.to_string())
+async fn rpc_call(method: String, params: Option<Value>) -> Result<Value, String> {
+    // 将阻塞的命名管道调用放到后台线程，避免阻塞 UI/事件循环
+    let task = async_runtime::spawn_blocking(move || call_over_named_pipe(&method, params));
+    match task.await {
+        Ok(Ok(v)) => Ok(v),
+        Ok(Err(e)) => Err(e.to_string()),
+        Err(join_err) => Err(format!("rpc task join error: {}", join_err)),
+    }
 }
 
 fn main() {

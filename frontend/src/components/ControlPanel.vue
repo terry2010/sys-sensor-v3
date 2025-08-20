@@ -2,24 +2,24 @@
   <div class="card">
     <h3>Control Panel</h3>
     <div class="row">
-      <button @click="onHello">hello()</button>
-      <button @click="onSnapshot">snapshot()</button>
+      <button @click="onHello" :disabled="helloLoading">hello()</button>
+      <button @click="onSnapshot" :disabled="snapshotLoading">snapshot()</button>
     </div>
     <div class="row">
       <label>base_interval_ms: <input type="number" v-model.number="baseInterval" min="100" step="100" /></label>
       <label>persist: <input type="checkbox" v-model="persist" /></label>
-      <button @click="onSetConfig">setConfig()</button>
+      <button @click="onSetConfig" :disabled="setcfgLoading">setConfig()</button>
     </div>
     <div class="row">
       <label>start modules: <input v-model="startModules" placeholder="cpu,mem" /></label>
-      <button @click="onStart">start()</button>
-      <button @click="onStop">stop()</button>
+      <button @click="onStart" :disabled="startLoading">start()</button>
+      <button @click="onStop" :disabled="stopLoading">stop()</button>
     </div>
     <div class="row">
       <label>burst modules: <input v-model="burstModules" placeholder="cpu" /></label>
       <label>interval_ms: <input type="number" v-model.number="burstInterval" min="100" step="100" /></label>
       <label>ttl_ms: <input type="number" v-model.number="burstTtl" min="1000" step="500" /></label>
-      <button @click="onBurst">burstSubscribe()</button>
+      <button @click="onBurst" :disabled="burstLoading">burstSubscribe()</button>
     </div>
     <div class="log">
       <textarea :value="logs.join('\n')" readonly></textarea>
@@ -40,32 +40,66 @@ const burstInterval = ref<number>(1000);
 const burstTtl = ref<number>(5000);
 const log = (m: any) => logs.value.push(`[${new Date().toLocaleTimeString()}] ${typeof m === 'string' ? m : JSON.stringify(m)}`);
 
-async function onHello() {
-  try { const r = await api.hello(); log(r); } catch (e:any) { log(e?.message || e); }
+// 统一 6s 超时封装 + 800ms 最长 loading 展示，避免长时间占用交互
+const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
+  let timer: any; const t = new Promise<never>((_, rej) => { timer = setTimeout(() => rej(new Error('control timeout')), ms); });
+  try { return await Promise.race([p, t]) as T; } finally { if (timer) clearTimeout(timer); }
+};
+
+const helloLoading = ref(false);
+function onHello() {
+  helloLoading.value = true; const lt = setTimeout(() => { helloLoading.value = false; }, 800);
+  withTimeout(api.hello())
+    .then(r => log(r))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); helloLoading.value = false; });
 }
-async function onSnapshot() {
-  try { const r = await api.snapshot(); log(r); } catch (e:any) { log(e?.message || e); }
+
+const snapshotLoading = ref(false);
+function onSnapshot() {
+  snapshotLoading.value = true; const lt = setTimeout(() => { snapshotLoading.value = false; }, 800);
+  withTimeout(api.snapshot())
+    .then(r => log(r))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); snapshotLoading.value = false; });
 }
-async function onSetConfig() {
-  try {
-    const r = await api.setConfig?.({ base_interval_ms: baseInterval.value, persist: persist.value });
-    log(r ?? 'ok');
-  } catch (e:any) { log(e?.message || e); }
+
+const setcfgLoading = ref(false);
+function onSetConfig() {
+  setcfgLoading.value = true; const lt = setTimeout(() => { setcfgLoading.value = false; }, 800);
+  withTimeout(Promise.resolve(api.setConfig?.({ base_interval_ms: baseInterval.value, persist: persist.value }) as any))
+    .then(r => log(r ?? 'ok'))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); setcfgLoading.value = false; });
 }
-async function onStart() {
-  try {
-    const r = await api.start?.({ modules: startModules.value.split(',').map(s=>s.trim()).filter(Boolean) });
-    log(r ?? 'ok');
-  } catch (e:any) { log(e?.message || e); }
+
+const startLoading = ref(false);
+function onStart() {
+  startLoading.value = true; const lt = setTimeout(() => { startLoading.value = false; }, 800);
+  const modules = startModules.value.split(',').map(s=>s.trim()).filter(Boolean);
+  withTimeout(Promise.resolve(api.start?.({ modules }) as any))
+    .then(r => log(r ?? 'ok'))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); startLoading.value = false; });
 }
-async function onStop() {
-  try { const r = await api.stop?.({}); log(r ?? 'ok'); } catch (e:any) { log(e?.message || e); }
+
+const stopLoading = ref(false);
+function onStop() {
+  stopLoading.value = true; const lt = setTimeout(() => { stopLoading.value = false; }, 800);
+  withTimeout(Promise.resolve(api.stop?.({}) as any))
+    .then(r => log(r ?? 'ok'))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); stopLoading.value = false; });
 }
-async function onBurst() {
-  try {
-    const r = await api.burstSubscribe?.({ modules: burstModules.value.split(',').map(s=>s.trim()).filter(Boolean), interval_ms: burstInterval.value, ttl_ms: burstTtl.value });
-    log(r ?? 'ok');
-  } catch (e:any) { log(e?.message || e); }
+
+const burstLoading = ref(false);
+function onBurst() {
+  burstLoading.value = true; const lt = setTimeout(() => { burstLoading.value = false; }, 800);
+  const modules = burstModules.value.split(',').map(s=>s.trim()).filter(Boolean);
+  withTimeout(Promise.resolve(api.burstSubscribe?.({ modules, interval_ms: burstInterval.value, ttl_ms: burstTtl.value }) as any))
+    .then(r => log(r ?? 'ok'))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); burstLoading.value = false; });
 }
 </script>
 

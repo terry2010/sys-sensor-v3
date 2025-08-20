@@ -18,6 +18,7 @@ import { useHistoryQueryStore } from '../stores/historyQuery';
 const chartRef = ref<HTMLDivElement | null>(null);
 const chart = ref<echarts.EChartsType | null>(null);
 const loading = ref(false);
+const error = ref<string | null>(null);
 const winSec = ref(6);
 const stepMs = ref(500);
 
@@ -34,20 +35,23 @@ const render = (data: { x: number[]; cpu: number[] }) => {
   });
 };
 
-const load = async () => {
-  loading.value = true;
-  try {
-    const now = Date.now();
-    const res = await service.queryHistory({ from_ts: now - winSec.value * 1000, to_ts: now, modules: ['cpu'], step_ms: stepMs.value });
-    const x: number[] = []; const cpu: number[] = [];
-    for (const it of res.items) { if (it.cpu) { x.push(it.ts); cpu.push(it.cpu.usage_percent); } }
-    render({ x, cpu });
-  } catch (e) {
-    // 简单吞掉异常，避免阻塞 UI；必要时可在 ControlPanel 的日志中检查详情
-    console.warn('[HistoryChart] load error', e);
-  } finally {
-    loading.value = false;
-  }
+let reqSeq = 0;
+const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
+  let timer: any; const t = new Promise<never>((_, rej) => { timer = setTimeout(() => rej(new Error('chart query timeout')), ms); });
+  try { return await Promise.race([p, t]) as T; } finally { if (timer) clearTimeout(timer); }
+};
+const load = () => {
+  const my = ++reqSeq; error.value = null;
+  loading.value = true; const lt = setTimeout(() => { if (my === reqSeq) loading.value = false; }, 800);
+  const now = Date.now();
+  withTimeout(service.queryHistory({ from_ts: now - winSec.value * 1000, to_ts: now, modules: ['cpu'], step_ms: stepMs.value }))
+    .then((res) => {
+      const x: number[] = []; const cpu: number[] = [];
+      for (const it of res.items) { if ((it as any)?.cpu) { x.push((it as any).ts); cpu.push((it as any).cpu.usage_percent); } }
+      if (my === reqSeq) render({ x, cpu });
+    })
+    .catch((e:any) => { if (my === reqSeq) error.value = e?.message || String(e); })
+    .finally(() => { clearTimeout(lt); if (my === reqSeq) loading.value = false; });
 };
 
 onMounted(() => { load(); window.addEventListener('resize', ()=> chart.value?.resize()); });
@@ -67,4 +71,5 @@ watch(() => hq.items, (arr) => {
 .row { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
 .chart { width: 100%; height: 320px; }
 input { width: 80px; }
+.err { color: #c00; font-size: 12px; }
 </style>
