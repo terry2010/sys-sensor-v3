@@ -1,5 +1,8 @@
 [build]
-target-dir = "target-tauri"
+# 原来: target-dir = "target-tauri" 会位于 src-tauri 下，导致 tauri dev 监听到改动后无限重建
+#target-dir = "target-tauri"
+# 迁移到包外部，避免 src-tauri 目录被写入触发 watch 循环
+target-dir = "../.tauri-target"
 jobs = 1
 
 [target.x86_64-pc-windows-msvc]

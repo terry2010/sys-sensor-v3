@@ -18,11 +18,16 @@ import SnapshotPanel from './components/SnapshotPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import { useSessionStore } from './stores/session';
 import { useMetricsStore } from './stores/metrics';
+import { ensureEventBridge } from './api/rpc.tauri';
 
 const session = useSessionStore();
 const metrics = useMetricsStore();
 
 onMounted(() => {
+  if (typeof window !== 'undefined' && (window as any).__TAURI__) {
+    // 在 Tauri 宿主中启动事件桥
+    ensureEventBridge();
+  }
   session.init();
   metrics.start();
 });

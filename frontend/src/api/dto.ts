@@ -28,3 +28,19 @@ export type QueryHistoryResult = {
   ok: boolean;
   items: QueryHistoryItem[];
 };
+
+// below: new DTOs
+export type SetConfigParams = {
+  base_interval_ms?: number;
+  module_intervals?: Record<string, number>;
+  persist?: boolean;
+};
+
+export type StartParams = { modules?: string[] } | undefined;
+export type StopParams = {};
+
+export type BurstSubscribeParams = {
+  modules?: string[];
+  interval_ms: number;
+  ttl_ms: number;
+};
