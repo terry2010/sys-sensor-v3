@@ -1,10 +1,30 @@
+function applyWin(min: number) {
+  const end = toNow.value ? 0 : Date.now();
+  to.value = end;
+  from.value = (end === 0 ? Date.now() : end) - min * 60_000;
+}
+
+// 勾选“到现在”时，自动将 to 置为 0；取消勾选则保持当前时间
+watch(toNow, (v) => {
+  if (v) {
+    to.value = 0;
+  } else {
+    to.value = Date.now();
+  }
+});
 <template>
   <div class="card">
     <h3>History Query</h3>
     <div class="row">
       <label>From(ms): <input type="number" v-model.number="from" /></label>
-      <label>To(ms 0=now): <input type="number" v-model.number="to" /></label>
+      <label>To(ms 0=now): <input type="number" v-model.number="to" :disabled="toNow" /></label>
       <label>Step(ms, optional): <input type="number" v-model.number="step" /></label>
+    </div>
+    <div class="row">
+      <button @click="applyWin(1)">近1分钟</button>
+      <button @click="applyWin(5)">近5分钟</button>
+      <button @click="applyWin(15)">近15分钟</button>
+      <label><input type="checkbox" v-model="toNow" /> 到现在</label>
     </div>
     <div class="row">
       <label><input type="checkbox" value="cpu" v-model="mods" /> cpu</label>
@@ -23,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { service } from '../api/service';
 import { useHistoryQueryStore } from '../stores/historyQuery';
 
@@ -32,6 +52,7 @@ const from = ref<number>(now - 60_000);
 const to = ref<number>(0);
 const step = ref<number | null>(1000);
 const mods = ref<string[]>(['cpu','memory']);
+const toNow = ref<boolean>(true);
 
 const items = ref<any[]>([]);
 const loading = ref(false);

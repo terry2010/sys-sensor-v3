@@ -96,8 +96,8 @@
 {
   "jsonrpc":"2.0","result": {
     "ts": 1710000000,
-    "cpu": { "usage_pct": 12.5 },
-    "memory": { "used_mb": 2048 }
+    "cpu": { "usage_percent": 12.5 },
+    "memory": { "total": 16000, "used": 2048 }
   },"id":6
 }
 ```
@@ -106,8 +106,10 @@
 // query_history
 {
   "jsonrpc":"2.0","method":"query_history","params":{
-    "from_ts":1710000000,"to_ts":1710003600,
-    "modules":["cpu","memory"],"step_ms":1000
+    "from_ts":1710000000,
+    "to_ts":1710003600,
+    "modules":["cpu","memory"],
+    "step_ms":1000
   },"id":7
 }
 ```
@@ -127,6 +129,7 @@
 
 - 参数
   - `from_ts`/`to_ts`：毫秒级 UTC 时间戳，闭区间 `[from_ts, to_ts]`。
+    - 约定：`to_ts = 0` 表示“到当前时刻”（服务端在查询时替换为 `DateTimeOffset.Now`）。
   - `modules`：要返回的模块字段子集；缺省表示按当前启用模块动态裁剪。
   - `step_ms`：可选，>0 时按该步长聚合为时间桶，取每桶“最后一条记录”。
 
@@ -137,12 +140,12 @@
     - `memory?`: `{ total: number, used: number }`（单位 MB）
 
 - 边界与回退
-  - 若窗口内无历史记录，服务端会返回一条“即时值”作为回退，确保 `items.length >= 1`。
+  - 若 SQLite 中窗口内无记录，服务端会回退到内存缓存或即时快照，通常至少返回 1 条，确保 `items.length >= 1`（视实现策略）。
   - 当 `modules` 仅含部分模块时，其它模块字段省略为 `null`/缺失。
   - `step_ms` 生效时，每个桶仅保留该桶内最后一条；桶无数据则不补零。
 
 - 限制
-  - 历史基于内存环形缓冲，当前最大约 10,000 条，重启后不保留（后续里程碑将支持可选 SQLite 持久化）。
+  - 历史已接入 SQLite 持久化（`metrics_1s/10s/1m`），配合保留策略定期清理；重启后历史可用。
   - 大窗口+小步长可能返回较多点位，建议客户端根据可视化需要合理设置 `step_ms`。
 
 > 注：`set_log_level/update_*` 非 M1 范围，后续里程碑再补充。

@@ -1,4 +1,4 @@
-# 数据模型设计（v1 草案）
+# 数据模型设计（v1 实装）
 
 > 指标字段唯一来源：`doc/istat-menus-metrics.md`。以下仅定义结构与命名策略，具体字段在实现时逐项对照补全。
 
@@ -13,7 +13,7 @@
 
 注：最终键名以指标文档为准，示意项仅作占位。
 
-## 2. SQLite 表结构 DDL（草案）
+## 2. SQLite 表结构 DDL（当前实现 + 规划）
 ```sql
 -- 原始 1s
 CREATE TABLE IF NOT EXISTS metrics_1s (
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS metrics_1s (
   PRIMARY KEY (ts, module)
 ) WITHOUT ROWID;
 
--- 聚合 10s / 1m（后续由 Aggregator 生成）
+-- 聚合 10s / 1m（规划：由 Aggregator 生成）
 CREATE TABLE IF NOT EXISTS metrics_10s (
   ts INTEGER NOT NULL,
   module TEXT NOT NULL,
@@ -59,19 +59,19 @@ CREATE TABLE IF NOT EXISTS config (
 ### 2.1 索引与查询策略
 - 典型查询：`query_history(from_ts, to_ts, modules[], step_ms)`
   - 范围扫描走 `PRIMARY KEY(ts, module)`；按 `module IN (...)` 过滤
-  - 建议视图：`v_metrics(ts, module, payload_json)` 统一聚合源表（见 3.2）
-- 补充索引（可选，待基准验证）：
+  - 视图建议：`v_metrics(ts, module, payload_json)` 聚合 `metrics_1s/10s/1m`（便于根据 `step_ms` 选择最合适的明细/聚合源）
+- 补充索引（当前建议，按需要开启）：
   - `CREATE INDEX IF NOT EXISTS idx_m1s_module_ts ON metrics_1s(module, ts);`
   - `CREATE INDEX IF NOT EXISTS idx_m10s_module_ts ON metrics_10s(module, ts);`
   - `CREATE INDEX IF NOT EXISTS idx_m1m_module_ts ON metrics_1m(module, ts);`
 
 ### 2.2 保留策略（Retention）
-- `metrics_1s`：保留 2 天
-- `metrics_10s`：保留 14 天
-- `metrics_1m`：保留 90 天
-- 通过定时清理任务执行 `DELETE FROM <table> WHERE ts < cutoff`；操作前进行 `VACUUM` 评估
+- `metrics_1s`：保留 2 天（已启用）
+- `metrics_10s`：保留 14 天（规划）
+- `metrics_1m`：保留 90 天（规划）
+- 通过定时清理任务执行 `DELETE FROM <table> WHERE ts < cutoff`；定期 `VACUUM` 评估与窗口维护
 
-## 3. 内存映射文件（MMF）格式
+## 3. 内存映射文件（MMF）格式（实现中）
 - 名称：`Global/sys_sensor_v3_snapshot`
 - 内容：`{ ts, seq, modules: { <module>: payload_json } }`
 - 大小控制：环形缓冲 + 版本号，避免破坏式变更
@@ -135,9 +135,9 @@ CREATE TABLE IF NOT EXISTS config (
 - 破坏式字段变更需同步 `protocol_version` 升级与兼容处理
 
 ## 6. 聚合产物与查询映射
-- Aggregator 周期性将 `metrics_1s` 计算聚合后写入 `metrics_10s/metrics_1m`
-- `query_history.step_ms` 选择逻辑：
+- 当前：直接从 `metrics_1s` 读取，并在服务端进行 `step_ms` 分桶聚合（取桶内最后一条）。
+- 规划：Aggregator 周期性将 `metrics_1s` 聚合到 `metrics_10s/metrics_1m`，并按下述选择逻辑：
   - `step_ms <= 1000` → `metrics_1s`
   - `1000 < step_ms <= 10000` → `metrics_10s`
   - `step_ms > 10000` → `metrics_1m`
-- 跨模块查询：对每个 `ts` 进行模块 payload 的合并，缺失模块可省略字段
+- 跨模块查询：对相同 `ts` 的多模块记录合并返回；缺失模块可省略/为 null。
