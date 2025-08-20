@@ -1,0 +1,6 @@
+[build]
+target-dir = "target-tauri"
+jobs = 1
+
+[target.x86_64-pc-windows-msvc]
+# 可按需添加 linker 配置
