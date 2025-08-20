@@ -16,6 +16,25 @@
 - 返回 `protocol_version`、`capabilities`，客户端做兼容分支
 - 失败返回 JSON-RPC `unauthorized(-32040)`
 
+### 3.1 Token 生成与存储
+- 生成：安装阶段生成 128-bit 随机数，Base64Url 编码
+- 存放：`%ProgramData%\sys-sensor-v3\token`，ACL 仅 SYSTEM/Administrators/当前用户（600 权限）
+- 轮换：提供 `update_token` 运维脚本，轮换后要求客户端重新 `hello`
+
+### 3.2 握手时序（Mermaid 占位）
+```mermaid
+sequenceDiagram
+  participant UI
+  participant Svc as Service
+  UI->>Svc: hello{ app_version, protocol_version, token, capabilities }
+  Svc->>Svc: 验证 token/ACL/版本
+  alt 合法
+    Svc-->>UI: result{ server_version, protocol_version, capabilities, session_id }
+  else 非法
+    Svc-->>UI: error{ code:-32040, message:"unauthorized" }
+  end
+```
+
 ## 4. 能力与授权
 - 按能力位开放接口（如 `history_query`）
 - 未来可按会话粒度限流/配额
@@ -29,7 +48,19 @@
 - 包签名与验签、回滚策略、受限更新通道
 - 最小化执行权限（非管理员运行）
 
+### 6.1 签名验证流程（占位）
+1) 发行时使用代码签名证书对更新包签名
+2) 客户端仅信任内置公钥/证书链，离线验证签名
+3) 校验哈希/长度后进行原子替换，失败回滚
+4) 升级过程产生最小停机时间（目标 <5s）
+
 ## 7. 安全基线
 - 默认最小权限运行
 - 对外接口最小集、参数严格校验（`invalid_params`）
 - 单元与 E2E 含安全用例（认证失败、ACL 异常、权限不足）
+
+### 7.1 最小权限清单（初版）
+- 服务进程：本地系统服务或普通用户（优先普通用户），仅访问 ProgramData 对应目录
+- 管道：仅 SYSTEM/Administrators/当前交互用户可读写
+- 文件：`token` 600、`data.db` 660、`logs` 可写、禁止 Everyone/Anonymous
+- 网络：默认不开放任何端口；调试端口需文档声明并默认关闭

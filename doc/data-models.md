@@ -76,6 +76,17 @@ CREATE TABLE IF NOT EXISTS config (
 - 内容：`{ ts, seq, modules: { <module>: payload_json } }`
 - 大小控制：环形缓冲 + 版本号，避免破坏式变更
 
+### 3.0 字段定义（草案）
+- `version`：数字，快照结构版本（破坏式变更时递增）
+- `ts`：Unix 毫秒时间戳
+- `seq`：自增序号（uint32，溢出回绕）
+- `modules`：对象映射，键为模块名（如 `cpu/memory/...`），值为 JSON 字符串或已解析对象（实现可选）
+- `checksum`：（可选）CRC32/xxHash，总体一致性 quick check
+
+### 3.0.1 访问与并发
+- 写侧采用单写者策略；读侧可多读者，建议快照复制以避免读写竞争
+- 发生结构升级时以 `version` 判定向后兼容路径
+
 ### 3.1 快照到事件映射
 - 采集器写入内存快照；推送 `metrics` 事件携带同一份 payload 的精简结构
 - `burst_subscribe` 期间增加频度，不改变数据结构
@@ -103,6 +114,13 @@ CREATE TABLE IF NOT EXISTS config (
 
 ## 5. 命名与序列化策略
 - 外部：snake_case；内部：语言惯例；通过统一序列化策略转换
+
+### 5.0 命名校验流程
+1) 以 `doc/istat-menus-metrics.md` 为对照表，生成字段清单
+2) 在测试中对所有 JSON 输出执行正/负用例校验：
+   - 正例：仅包含对照表中允许字段，全部 `snake_case`
+   - 负例：驼峰/帕斯卡/拼写错误必须触发失败
+3) 对 Schema（如 `query_history` 返回）进行 JSON Schema 校验
 
 ### 5.1 模块字段清单（占位）
 - `cpu`：`{ usage_percent, user, system, idle, load_avg_1m, load_avg_5m, load_avg_15m }`

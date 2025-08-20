@@ -63,3 +63,9 @@
 ## 5. 验收标准
 - 里程碑 1/2 的验收条件满足；契约冻结后不破坏
  - API 变更必须先更新 `doc/api-reference.md` 与契约测试
+
+## 6. 运行截图与日志采集约定
+- 截图：`artifacts/screenshots/<YYYYMMDD-HHMMSS>-<scenario>.png`
+- 日志：`logs/service-<date>.log` 与 `logs/client-<date>.log`；失败用例附末尾 200 行
+- 约定：遇到 UI “cancel/关闭”即视为流程完成，采集当次日志与截图
+- 结果判定：对照测试计划中“期望”与“边界”逐条核对并记录

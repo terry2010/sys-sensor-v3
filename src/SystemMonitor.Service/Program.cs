@@ -40,6 +40,7 @@ try
         hostBuilder.ConfigureServices((ctx, services) =>
         {
             services.AddHostedService<Worker>();
+            services.AddSingleton<HistoryStore>();
             services.AddHostedService<RpcHostedService>();
         });
 

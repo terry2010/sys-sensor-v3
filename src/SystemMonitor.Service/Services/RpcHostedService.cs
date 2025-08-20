@@ -23,10 +23,12 @@ namespace SystemMonitor.Service.Services
         private const string PipeName = "sys_sensor_v3.rpc";
         private readonly ILogger<RpcHostedService> _logger;
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly HistoryStore _store;
 
-        public RpcHostedService(ILogger<RpcHostedService> logger)
+        public RpcHostedService(ILogger<RpcHostedService> logger, HistoryStore store)
         {
             _logger = logger;
+            _store = store;
             _jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
@@ -40,6 +42,9 @@ namespace SystemMonitor.Service.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("RPC 服务启动，等待客户端连接…");
+            // 初始化历史存储（SQLite）
+            try { await _store.InitAsync(null, stoppingToken).ConfigureAwait(false); }
+            catch (Exception ex) { _logger.LogError(ex, "HistoryStore 初始化失败"); }
 
             var backoffMs = 500;
             var sessions = new List<Task>();
@@ -96,7 +101,7 @@ namespace SystemMonitor.Service.Services
             formatter.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
             var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
 
-            var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+            var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), _store);
             var rpc = new JsonRpc(handler, rpcServer);
 
             rpc.Disconnected += (s, e) =>
@@ -143,6 +148,8 @@ namespace SystemMonitor.Service.Services
                         if (cpuVal.HasValue || memVal.HasValue)
                         {
                             rpcServer.AppendHistory(now, cpuVal, memVal);
+                            // 持久化到 SQLite（忽略错误，不影响推送）
+                            try { await rpcServer.PersistHistoryAsync(now, cpuVal, memVal).ConfigureAwait(false); } catch { }
                         }
                         await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
                         var pushed = rpcServer.IncrementMetricsCount();
@@ -256,11 +263,13 @@ namespace SystemMonitor.Service.Services
             private readonly List<HistoryItem> _history = new();
             private const int MaxHistory = 10_000;
             private static readonly HashSet<string> _supportedCapabilities = new(new[] { "metrics_stream", "burst_mode", "history_query" }, StringComparer.OrdinalIgnoreCase);
+            private readonly HistoryStore _store;
 
-            public RpcServer(ILogger logger, long initialSeq)
+            public RpcServer(ILogger logger, long initialSeq, HistoryStore store)
             {
                 _logger = logger;
                 _seq = initialSeq;
+                _store = store;
             }
 
             public long NextSeq() => Interlocked.Increment(ref _seq);
@@ -329,6 +338,9 @@ namespace SystemMonitor.Service.Services
                     }
                 }
             }
+
+            public Task PersistHistoryAsync(long ts, double? cpu, (long total, long used)? mem)
+                => _store.AppendAsync(ts, cpu, mem);
 
             /// <summary>
             /// 握手认证：校验 token（MVP 先放行非空），返回会话信息。
@@ -507,51 +519,84 @@ namespace SystemMonitor.Service.Services
             /// <summary>
             /// 历史查询：从内存历史缓冲区返回真实数据，支持 step_ms 聚合（按时间桶选用最后一条）。
             /// </summary>
-            public Task<object> query_history(QueryHistoryParams p)
+            public async Task<object> query_history(QueryHistoryParams p)
             {
                 if (p == null) throw new ArgumentNullException(nameof(p));
                 var from = p.from_ts;
                 var to = p.to_ts <= 0 || p.to_ts < from ? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : p.to_ts;
                 var want = new HashSet<string>(p.modules ?? new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
-                List<HistoryItem> slice;
-                lock (_lock)
-                {
-                    // 简单筛选时间窗口
-                    slice = _history.Where(h => h.ts >= from && h.ts <= to).ToList();
-                }
                 object[] resultItems;
-                if (p.step_ms.HasValue && p.step_ms.Value > 0)
+                // 1) 先尝试从 SQLite 读取
+                var rows = await _store.QueryAsync(from, to).ConfigureAwait(false);
+                if (rows.Count > 0)
                 {
-                    var step = p.step_ms.Value;
-                    // 分桶并取每桶最后一条记录
-                    resultItems = slice
-                        .GroupBy(h => (h.ts - from) / step)
-                        .OrderBy(g => g.Key)
-                        .Select(g =>
-                        {
-                            var last = g.Last();
-                            return new
+                    if (p.step_ms.HasValue && p.step_ms.Value > 0)
+                    {
+                        var step = p.step_ms.Value;
+                        resultItems = rows
+                            .GroupBy(r => (r.Ts - from) / step)
+                            .OrderBy(g => g.Key)
+                            .Select(g =>
                             {
-                                ts = from + (g.Key + 1) * step,
-                                cpu = want.Contains("cpu") && last.cpu.HasValue ? new { usage_percent = last.cpu.Value } : null,
-                                memory = want.Contains("memory") && last.mem_total.HasValue ? new { total = last.mem_total.Value, used = last.mem_used!.Value } : null
-                            } as object;
-                        })
-                        .ToArray();
+                                var last = g.Last();
+                                return new
+                                {
+                                    ts = from + (g.Key + 1) * step,
+                                    cpu = want.Contains("cpu") && last.Cpu.HasValue ? new { usage_percent = last.Cpu.Value } : null,
+                                    memory = want.Contains("memory") && last.MemTotal.HasValue ? new { total = last.MemTotal.Value, used = last.MemUsed!.Value } : null
+                                } as object;
+                            })
+                            .ToArray();
+                    }
+                    else
+                    {
+                        resultItems = rows
+                            .Select(r => (object)new
+                            {
+                                ts = r.Ts,
+                                cpu = want.Contains("cpu") && r.Cpu.HasValue ? new { usage_percent = r.Cpu.Value } : null,
+                                memory = want.Contains("memory") && r.MemTotal.HasValue ? new { total = r.MemTotal.Value, used = r.MemUsed!.Value } : null
+                            })
+                            .ToArray();
+                    }
                 }
                 else
                 {
-                    resultItems = slice
-                        .Select(h =>
-                        {
-                            return new
+                    // 2) 回退到内存窗口
+                    List<HistoryItem> slice;
+                    lock (_lock)
+                    {
+                        slice = _history.Where(h => h.ts >= from && h.ts <= to).ToList();
+                    }
+                    if (p.step_ms.HasValue && p.step_ms.Value > 0)
+                    {
+                        var step = p.step_ms.Value;
+                        resultItems = slice
+                            .GroupBy(h => (h.ts - from) / step)
+                            .OrderBy(g => g.Key)
+                            .Select(g =>
+                            {
+                                var last = g.Last();
+                                return new
+                                {
+                                    ts = from + (g.Key + 1) * step,
+                                    cpu = want.Contains("cpu") && last.cpu.HasValue ? new { usage_percent = last.cpu.Value } : null,
+                                    memory = want.Contains("memory") && last.mem_total.HasValue ? new { total = last.mem_total.Value, used = last.mem_used!.Value } : null
+                                } as object;
+                            })
+                            .ToArray();
+                    }
+                    else
+                    {
+                        resultItems = slice
+                            .Select(h => (object)new
                             {
                                 ts = h.ts,
                                 cpu = want.Contains("cpu") && h.cpu.HasValue ? new { usage_percent = h.cpu.Value } : null,
                                 memory = want.Contains("memory") && h.mem_total.HasValue ? new { total = h.mem_total.Value, used = h.mem_used!.Value } : null
-                            } as object;
-                        })
-                        .ToArray();
+                            })
+                            .ToArray();
+                    }
                 }
                 // 回退：当窗口内没有历史数据时，返回一条当前即时值，避免空结果
                 if (resultItems.Length == 0)
@@ -567,7 +612,7 @@ namespace SystemMonitor.Service.Services
                     } as object;
                     resultItems = new[] { item };
                 }
-                return Task.FromResult<object>(new { ok = true, items = resultItems });
+                return new { ok = true, items = resultItems };
             }
         }
 

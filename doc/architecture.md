@@ -10,10 +10,37 @@
    |<-- events(metrics/state/alert/update_ready/ping)  <-------------|
 ```
 
+### 1.1 组件关系（Mermaid 占位）
+```mermaid
+flowchart LR
+  UI[Vue3/Tauri App] -- JSON-RPC --> PipeClient[Rust Pipe Client]
+  PipeClient -- HeaderDelimited --> Pipe[\\.\\pipe\\sys_sensor_v3.rpc]
+  Pipe --> RpcServer[StreamJsonRpc Server]
+  RpcServer --> MetricsSvc[MetricsCollectionService]
+  RpcServer --> Storage[SqliteStore/Aggregator]
+  RpcServer --> Updater[UpdateService]
+  RpcServer --> Rules[AlertRulesEngine]
+  RpcServer --> Power[PowerManagementService]
+  RpcServer <-- events --- UI
+```
+
 ## 2. 数据流向
 - __采集__: `Collectors/*` 周期采集 → `MetricsCollectionService` 聚合 → 内存快照/RingBuffer → 事件推送/SQLite 落盘
 - __查询__: UI `snapshot/query_history` → RPC → 服务读取内存/SQLite → 响应
 - __配置__: UI `set_config` → 服务生效（支持热重载）
+
+### 2.1 数据流向（Mermaid 占位）
+```mermaid
+sequenceDiagram
+  participant UI
+  participant RPC as RPC Server
+  participant COL as Collectors
+  participant DB as SQLite
+  UI->>RPC: snapshot
+  COL-->>RPC: latest snapshot
+  RPC-->>UI: { ts, ...metrics }
+  Note over COL,DB: 周期写入 metrics_1s/10s/1m
+```
 
 ## 3. 部署架构
 - __进程__：
@@ -22,9 +49,34 @@
 - __文件路径__：参考 `doc/task.md` 的“数据管理方案/文件位置”
 - __权限/安全__：Named Pipe 严格 ACL；Token 认证
 
+### 3.1 部署（Mermaid 占位）
+```mermaid
+flowchart TB
+  subgraph OS[Windows 10/11]
+    Service[SystemMonitor.Service]
+    UI[Tauri App]
+    Pipe[Named Pipe: \\.\pipe\sys_sensor_v3.rpc]
+    DB[(SQLite DB)]
+    Logs[(Logs)]
+  end
+  UI <--> Pipe
+  Service <--> Pipe
+  Service <--> DB
+  Service --> Logs
+```
+
 ## 4. 窗口系统关系（MVP范围）
 - 单窗口（Debug/主窗口复用）
 - 后续（两窗法/托盘/宠物）在对应里程碑前再冻结
+
+### 4.1 窗口关系（Mermaid 占位）
+```mermaid
+flowchart LR
+  Tray[系统托盘] -.optional.-> Main[MainWindow]
+  Main -->|后续| Floating[FloatingWindow]
+  Main -->|后续| EdgeDock[EdgeDockWindow]
+  Main -->|后续| Pet[DesktopPetWindow]
+```
 
 ## 5. 时序（握手/订阅示意）
 1) UI 启动 → `hello`
@@ -36,3 +88,5 @@
 
 ## 7. 待确认
 - UI 运行在便携化场景下的数据路径策略
+ - 多窗口间状态同步与资源占用上限
+ - 调试模式下的诊断端口是否需要（默认不开端口）

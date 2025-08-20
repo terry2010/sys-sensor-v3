@@ -2,12 +2,11 @@ param(
     [Parameter(Mandatory=$true)][string]$TrxPath,
     [string]$OutDir = "artifacts/test-results/report",
     [string]$OutFile = "index.html",
-    [ValidateSet('en','zh-CN')][string]$Lang = 'en',
+    [ValidateSet('en','zh-CN')][string]$Lang = 'zh-CN',
     [switch]$Open
 )
 
 # Normalize paths
-$root = Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path -Parent
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $TrxFull = Resolve-Path -Path $TrxPath -ErrorAction Stop
 $OutDirFull = Join-Path -Path (Resolve-Path -Path ".").Path -ChildPath $OutDir
@@ -17,7 +16,7 @@ $outPath = Join-Path $OutDirFull $OutFile
 [xml]$xml = Get-Content -LiteralPath $TrxFull -Raw
 
 # Load i18n resources (external JSON, UTF-8 BOM recommended)
-function Load-I18n([string]$lang){
+function Get-I18n([string]$lang){
   $res = @{}
   try {
     $candidate = Join-Path $scriptDir ("trx-report.i18n." + $lang + ".json")
@@ -43,7 +42,7 @@ function Load-I18n([string]$lang){
   return $res
 }
 
-$I18N = Load-I18n $Lang
+$I18N = Get-I18n $Lang
 function T([string]$k, [string]$def){
   try {
     if ($I18N -is [hashtable]) {
