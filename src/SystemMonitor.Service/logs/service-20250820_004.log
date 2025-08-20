@@ -1,0 +1,1259 @@
+2025-08-20 13:09:32.954 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:32.9305387+08:00"
+2025-08-20 13:09:33.027 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 13:09:33.035 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 500ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:33.553 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 1000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:34.031 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:34.0313333+08:00"
+2025-08-20 13:09:34.573 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 2000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:35.041 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:35.0412251+08:00"
+2025-08-20 13:09:36.045 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:36.0451675+08:00"
+2025-08-20 13:09:36.586 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 4000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:37.057 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:37.0571306+08:00"
+2025-08-20 13:09:38.121 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:38.1201457+08:00"
+2025-08-20 13:09:39.133 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:39.1332836+08:00"
+2025-08-20 13:09:40.137 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:40.1374562+08:00"
+2025-08-20 13:09:40.587 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 8000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:41.145 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:41.1433712+08:00"
+2025-08-20 13:09:42.147 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:42.1471564+08:00"
+2025-08-20 13:09:43.148 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:43.1481787+08:00"
+2025-08-20 13:09:44.156 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:44.1565283+08:00"
+2025-08-20 13:09:45.166 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:45.1660471+08:00"
+2025-08-20 13:09:46.169 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:46.1697317+08:00"
+2025-08-20 13:09:47.171 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:47.1710173+08:00"
+2025-08-20 13:09:48.173 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:48.1735142+08:00"
+2025-08-20 13:09:48.588 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:49.173 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:49.1734743+08:00"
+2025-08-20 13:09:50.186 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:50.1863151+08:00"
+2025-08-20 13:09:51.200 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:51.2009186+08:00"
+2025-08-20 13:09:52.219 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:52.2199045+08:00"
+2025-08-20 13:09:53.233 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:53.2334044+08:00"
+2025-08-20 13:09:54.245 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:54.2452393+08:00"
+2025-08-20 13:09:55.254 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:55.2546151+08:00"
+2025-08-20 13:09:56.263 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:56.2636735+08:00"
+2025-08-20 13:09:57.264 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:57.2648674+08:00"
+2025-08-20 13:09:58.275 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:58.2756794+08:00"
+2025-08-20 13:09:58.602 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:09:59.291 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:09:59.2909663+08:00"
+2025-08-20 13:10:00.310 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:00.3102628+08:00"
+2025-08-20 13:10:01.318 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:01.3184125+08:00"
+2025-08-20 13:10:02.328 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:02.3289246+08:00"
+2025-08-20 13:10:03.335 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:03.3353726+08:00"
+2025-08-20 13:10:04.351 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:04.3514398+08:00"
+2025-08-20 13:10:05.353 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:05.3538586+08:00"
+2025-08-20 13:10:06.354 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:06.3547427+08:00"
+2025-08-20 13:10:07.366 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:07.3665476+08:00"
+2025-08-20 13:10:08.370 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:08.3701518+08:00"
+2025-08-20 13:10:08.617 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:10:09.374 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:09.3741327+08:00"
+2025-08-20 13:10:10.388 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:10.3884534+08:00"
+2025-08-20 13:10:11.401 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:11.4014332+08:00"
+2025-08-20 13:10:12.405 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:12.4051896+08:00"
+2025-08-20 13:10:13.406 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:13.4068288+08:00"
+2025-08-20 13:10:14.408 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:14.4089388+08:00"
+2025-08-20 13:10:15.411 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:15.4116874+08:00"
+2025-08-20 13:10:16.418 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:16.4182334+08:00"
+2025-08-20 13:10:17.427 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:17.4273327+08:00"
+2025-08-20 13:10:18.430 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:18.4303410+08:00"
+2025-08-20 13:10:18.629 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:10:19.430 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:19.4302965+08:00"
+2025-08-20 13:10:20.441 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:20.4416296+08:00"
+2025-08-20 13:10:21.443 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:21.4438771+08:00"
+2025-08-20 13:10:22.455 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:22.4556096+08:00"
+2025-08-20 13:10:23.461 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:23.4610186+08:00"
+2025-08-20 13:10:24.462 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:24.4621660+08:00"
+2025-08-20 13:10:25.477 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:25.4766565+08:00"
+2025-08-20 13:10:26.484 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:26.4839611+08:00"
+2025-08-20 13:10:27.495 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:27.4953064+08:00"
+2025-08-20 13:10:28.510 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:28.5107698+08:00"
+2025-08-20 13:10:28.639 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:10:29.524 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:29.5246953+08:00"
+2025-08-20 13:10:30.527 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:30.5271654+08:00"
+2025-08-20 13:10:31.532 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:31.5322084+08:00"
+2025-08-20 13:10:32.536 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:32.5369189+08:00"
+2025-08-20 13:10:33.537 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:33.5377239+08:00"
+2025-08-20 13:10:34.544 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:34.5446122+08:00"
+2025-08-20 13:10:35.546 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:35.5463919+08:00"
+2025-08-20 13:10:36.547 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:36.5477524+08:00"
+2025-08-20 13:10:37.551 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:37.5512572+08:00"
+2025-08-20 13:10:38.550 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:38.5509155+08:00"
+2025-08-20 13:10:38.644 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:10:39.565 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:39.5656950+08:00"
+2025-08-20 13:10:40.569 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:40.5696230+08:00"
+2025-08-20 13:10:41.571 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:41.5716057+08:00"
+2025-08-20 13:10:42.573 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:42.5733091+08:00"
+2025-08-20 13:10:43.584 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:43.5845117+08:00"
+2025-08-20 13:10:44.599 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:44.5992357+08:00"
+2025-08-20 13:10:45.614 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:45.6140980+08:00"
+2025-08-20 13:10:46.628 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:46.6282302+08:00"
+2025-08-20 13:10:47.631 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:47.6313588+08:00"
+2025-08-20 13:10:48.649 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:48.6496735+08:00"
+2025-08-20 13:10:48.650 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:10:49.661 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:49.6617695+08:00"
+2025-08-20 13:10:50.676 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:50.6763490+08:00"
+2025-08-20 13:10:51.682 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:51.6821782+08:00"
+2025-08-20 13:10:52.687 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:52.6879018+08:00"
+2025-08-20 13:10:53.690 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:53.6901427+08:00"
+2025-08-20 13:10:54.697 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:54.6973402+08:00"
+2025-08-20 13:10:55.697 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:55.6975043+08:00"
+2025-08-20 13:10:56.698 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:56.6987364+08:00"
+2025-08-20 13:10:57.702 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:57.7029109+08:00"
+2025-08-20 13:10:58.661 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:10:58.707 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:58.7071603+08:00"
+2025-08-20 13:10:59.710 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:10:59.7101166+08:00"
+2025-08-20 13:11:00.715 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:00.7157674+08:00"
+2025-08-20 13:11:01.719 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:01.7192333+08:00"
+2025-08-20 13:11:02.725 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:02.7252957+08:00"
+2025-08-20 13:11:03.740 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:03.7406095+08:00"
+2025-08-20 13:11:04.743 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:04.7431856+08:00"
+2025-08-20 13:11:05.758 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:05.7580531+08:00"
+2025-08-20 13:11:06.763 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:06.7634895+08:00"
+2025-08-20 13:11:07.767 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:07.7678977+08:00"
+2025-08-20 13:11:08.665 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:11:08.771 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:08.7717706+08:00"
+2025-08-20 13:11:09.781 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:09.7812593+08:00"
+2025-08-20 13:11:10.790 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:10.7902213+08:00"
+2025-08-20 13:11:11.792 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:11.7922483+08:00"
+2025-08-20 13:11:12.793 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:12.7934308+08:00"
+2025-08-20 13:11:13.798 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:13.7985659+08:00"
+2025-08-20 13:11:14.811 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:14.8111065+08:00"
+2025-08-20 13:11:15.811 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:15.8113336+08:00"
+2025-08-20 13:11:16.813 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:16.8131560+08:00"
+2025-08-20 13:11:17.815 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:17.8157434+08:00"
+2025-08-20 13:11:18.678 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:11:18.830 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:18.8308533+08:00"
+2025-08-20 13:11:19.845 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:19.8452628+08:00"
+2025-08-20 13:11:20.849 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:20.8497953+08:00"
+2025-08-20 13:11:21.851 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:21.8516549+08:00"
+2025-08-20 13:11:22.856 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:22.8568193+08:00"
+2025-08-20 13:11:23.894 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:23.8943989+08:00"
+2025-08-20 13:11:24.896 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:24.8965771+08:00"
+2025-08-20 13:11:25.898 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:25.8989723+08:00"
+2025-08-20 13:11:26.913 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:26.9132352+08:00"
+2025-08-20 13:11:27.922 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:27.9227030+08:00"
+2025-08-20 13:11:28.691 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:11:28.923 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:28.9237610+08:00"
+2025-08-20 13:11:29.931 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:29.9310328+08:00"
+2025-08-20 13:11:30.961 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:30.9611404+08:00"
+2025-08-20 13:11:31.977 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:31.9771017+08:00"
+2025-08-20 13:11:32.989 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:32.9891334+08:00"
+2025-08-20 13:11:34.033 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:34.0334124+08:00"
+2025-08-20 13:11:35.042 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:35.0413793+08:00"
+2025-08-20 13:11:36.056 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:36.0562960+08:00"
+2025-08-20 13:11:37.061 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:37.0618561+08:00"
+2025-08-20 13:11:38.103 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:38.1033651+08:00"
+2025-08-20 13:11:38.703 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:11:39.119 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:39.1196618+08:00"
+2025-08-20 13:11:40.128 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:40.1286106+08:00"
+2025-08-20 13:11:41.131 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:41.1317031+08:00"
+2025-08-20 13:11:42.136 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:42.1363699+08:00"
+2025-08-20 13:11:43.137 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:43.1376779+08:00"
+2025-08-20 13:11:44.153 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:44.1532004+08:00"
+2025-08-20 13:11:45.155 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:45.1552496+08:00"
+2025-08-20 13:11:46.162 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:46.1628548+08:00"
+2025-08-20 13:11:47.166 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:47.1663927+08:00"
+2025-08-20 13:11:48.168 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:48.1683508+08:00"
+2025-08-20 13:11:48.708 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:11:49.175 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:49.1755997+08:00"
+2025-08-20 13:11:50.177 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:50.1771400+08:00"
+2025-08-20 13:11:51.184 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:51.1848145+08:00"
+2025-08-20 13:11:52.188 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:52.1883748+08:00"
+2025-08-20 13:11:53.195 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:53.1955914+08:00"
+2025-08-20 13:11:54.198 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:54.1988630+08:00"
+2025-08-20 13:11:55.203 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:55.2035945+08:00"
+2025-08-20 13:11:56.210 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:56.2100902+08:00"
+2025-08-20 13:11:57.216 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:57.2161384+08:00"
+2025-08-20 13:11:58.251 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:58.2511871+08:00"
+2025-08-20 13:11:58.713 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:11:59.257 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:11:59.2571016+08:00"
+2025-08-20 13:12:00.261 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:00.2610442+08:00"
+2025-08-20 13:12:01.262 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:01.2628511+08:00"
+2025-08-20 13:12:02.265 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:02.2658723+08:00"
+2025-08-20 13:12:03.270 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:03.2700638+08:00"
+2025-08-20 13:12:04.273 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:04.2731073+08:00"
+2025-08-20 13:12:05.278 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:05.2782900+08:00"
+2025-08-20 13:12:06.293 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:06.2934804+08:00"
+2025-08-20 13:12:07.296 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:07.2963764+08:00"
+2025-08-20 13:12:08.298 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:08.2988747+08:00"
+2025-08-20 13:12:08.715 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:12:09.303 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:09.3036136+08:00"
+2025-08-20 13:12:10.317 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:10.3173858+08:00"
+2025-08-20 13:12:11.324 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:11.3240050+08:00"
+2025-08-20 13:12:12.338 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:12.3387889+08:00"
+2025-08-20 13:12:13.355 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:13.3553603+08:00"
+2025-08-20 13:12:14.357 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:14.3578561+08:00"
+2025-08-20 13:12:15.370 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:15.3705930+08:00"
+2025-08-20 13:12:16.374 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:16.3742712+08:00"
+2025-08-20 13:12:17.379 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:17.3797961+08:00"
+2025-08-20 13:12:18.383 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:18.3838560+08:00"
+2025-08-20 13:12:18.721 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:12:19.389 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:19.3889729+08:00"
+2025-08-20 13:12:20.402 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:20.4028290+08:00"
+2025-08-20 13:12:21.408 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:21.4080261+08:00"
+2025-08-20 13:12:22.422 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:22.4226615+08:00"
+2025-08-20 13:12:23.427 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:23.4274330+08:00"
+2025-08-20 13:12:24.429 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:24.4293701+08:00"
+2025-08-20 13:12:25.429 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:25.4296811+08:00"
+2025-08-20 13:12:26.430 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:26.4302383+08:00"
+2025-08-20 13:12:27.448 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:27.4486736+08:00"
+2025-08-20 13:12:28.450 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:28.4508798+08:00"
+2025-08-20 13:12:28.728 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:12:29.454 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:29.4546143+08:00"
+2025-08-20 13:12:30.457 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:30.4577288+08:00"
+2025-08-20 13:12:31.458 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:31.4587537+08:00"
+2025-08-20 13:12:32.458 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:32.4589548+08:00"
+2025-08-20 13:12:33.474 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:33.4741260+08:00"
+2025-08-20 13:12:34.488 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:34.4882989+08:00"
+2025-08-20 13:12:35.494 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:35.4939765+08:00"
+2025-08-20 13:12:36.499 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:36.4996132+08:00"
+2025-08-20 13:12:37.505 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:37.5051610+08:00"
+2025-08-20 13:12:38.520 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:38.5200260+08:00"
+2025-08-20 13:12:38.737 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:12:39.524 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:39.5244291+08:00"
+2025-08-20 13:12:40.529 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:40.5291373+08:00"
+2025-08-20 13:12:41.534 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:41.5341808+08:00"
+2025-08-20 13:12:42.536 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:42.5368780+08:00"
+2025-08-20 13:12:43.539 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:43.5398510+08:00"
+2025-08-20 13:12:44.545 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:44.5449731+08:00"
+2025-08-20 13:12:45.559 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:45.5594117+08:00"
+2025-08-20 13:12:46.562 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:46.5623251+08:00"
+2025-08-20 13:12:47.564 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:47.5639857+08:00"
+2025-08-20 13:12:48.574 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:48.5741352+08:00"
+2025-08-20 13:12:48.743 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:12:49.588 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:49.5880034+08:00"
+2025-08-20 13:12:50.596 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:50.5968157+08:00"
+2025-08-20 13:12:51.612 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:51.6128671+08:00"
+2025-08-20 13:12:52.623 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:52.6232043+08:00"
+2025-08-20 13:12:53.637 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:53.6373741+08:00"
+2025-08-20 13:12:54.644 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:54.6446430+08:00"
+2025-08-20 13:12:55.657 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:55.6576002+08:00"
+2025-08-20 13:12:56.672 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:56.6725868+08:00"
+2025-08-20 13:12:57.678 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:57.6788862+08:00"
+2025-08-20 13:12:58.714 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:58.7142066+08:00"
+2025-08-20 13:12:58.768 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:12:59.714 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:12:59.7143368+08:00"
+2025-08-20 13:13:00.716 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:00.7167460+08:00"
+2025-08-20 13:13:01.720 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:01.7207351+08:00"
+2025-08-20 13:13:02.724 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:02.7248016+08:00"
+2025-08-20 13:13:03.730 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:03.7307859+08:00"
+2025-08-20 13:13:04.736 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:04.7365576+08:00"
+2025-08-20 13:13:05.743 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:05.7431016+08:00"
+2025-08-20 13:13:06.749 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:06.7499445+08:00"
+2025-08-20 13:13:07.754 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:07.7540562+08:00"
+2025-08-20 13:13:08.760 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:08.7599672+08:00"
+2025-08-20 13:13:08.775 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:13:09.771 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:09.7711571+08:00"
+2025-08-20 13:13:10.775 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:10.7751498+08:00"
+2025-08-20 13:13:11.779 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:11.7790820+08:00"
+2025-08-20 13:13:12.789 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:12.7897836+08:00"
+2025-08-20 13:13:13.794 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:13.7945353+08:00"
+2025-08-20 13:13:14.809 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:14.8096029+08:00"
+2025-08-20 13:13:15.809 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:15.8098216+08:00"
+2025-08-20 13:13:16.813 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:16.8137552+08:00"
+2025-08-20 13:13:17.816 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:17.8165110+08:00"
+2025-08-20 13:13:18.790 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:13:18.820 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:18.8207195+08:00"
+2025-08-20 13:13:19.836 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:19.8367492+08:00"
+2025-08-20 13:13:20.882 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:20.8822799+08:00"
+2025-08-20 13:13:21.887 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:21.8875395+08:00"
+2025-08-20 13:13:22.899 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:22.8999146+08:00"
+2025-08-20 13:13:23.901 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:23.9016816+08:00"
+2025-08-20 13:13:24.915 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:24.9155349+08:00"
+2025-08-20 13:13:25.927 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:25.9269964+08:00"
+2025-08-20 13:13:26.928 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:26.9285137+08:00"
+2025-08-20 13:13:27.933 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:27.9331712+08:00"
+2025-08-20 13:13:28.798 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:13:28.937 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:28.9372988+08:00"
+2025-08-20 13:13:29.952 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:29.9527431+08:00"
+2025-08-20 13:13:30.956 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:30.9562859+08:00"
+2025-08-20 13:13:31.961 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:31.9616200+08:00"
+2025-08-20 13:13:32.968 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:32.9684950+08:00"
+2025-08-20 13:13:33.980 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:33.9802681+08:00"
+2025-08-20 13:13:34.987 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:34.9872015+08:00"
+2025-08-20 13:13:35.991 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:35.9917718+08:00"
+2025-08-20 13:13:37.039 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:37.0394986+08:00"
+2025-08-20 13:13:38.052 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:38.0522943+08:00"
+2025-08-20 13:13:38.809 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:13:39.120 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:39.1204272+08:00"
+2025-08-20 13:13:40.134 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:40.1341434+08:00"
+2025-08-20 13:13:41.136 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:41.1362678+08:00"
+2025-08-20 13:13:42.192 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:42.1926964+08:00"
+2025-08-20 13:13:43.200 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:43.2009082+08:00"
+2025-08-20 13:13:44.214 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:44.2147918+08:00"
+2025-08-20 13:13:45.214 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:45.2149264+08:00"
+2025-08-20 13:13:46.216 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:46.2167092+08:00"
+2025-08-20 13:13:47.222 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:47.2227066+08:00"
+2025-08-20 13:13:48.227 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:48.2276385+08:00"
+2025-08-20 13:13:48.815 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:13:49.231 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:49.2315479+08:00"
+2025-08-20 13:13:50.239 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:50.2390601+08:00"
+2025-08-20 13:13:51.253 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:51.2531363+08:00"
+2025-08-20 13:13:52.267 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:52.2673835+08:00"
+2025-08-20 13:13:53.269 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:53.2696930+08:00"
+2025-08-20 13:13:54.284 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:54.2842347+08:00"
+2025-08-20 13:13:55.288 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:55.2882752+08:00"
+2025-08-20 13:13:56.291 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:56.2913207+08:00"
+2025-08-20 13:13:57.340 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:57.3400252+08:00"
+2025-08-20 13:13:58.342 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:58.3419880+08:00"
+2025-08-20 13:13:58.824 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:13:59.357 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:13:59.3573102+08:00"
+2025-08-20 13:14:00.360 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:00.3606031+08:00"
+2025-08-20 13:14:01.364 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:01.3649350+08:00"
+2025-08-20 13:14:02.370 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:02.3701475+08:00"
+2025-08-20 13:14:03.376 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:03.3761637+08:00"
+2025-08-20 13:14:04.392 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:04.3925373+08:00"
+2025-08-20 13:14:05.399 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:05.3999014+08:00"
+2025-08-20 13:14:06.414 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:06.4147312+08:00"
+2025-08-20 13:14:07.427 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:07.4274318+08:00"
+2025-08-20 13:14:08.432 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:08.4324063+08:00"
+2025-08-20 13:14:08.832 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:14:09.434 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:09.4349400+08:00"
+2025-08-20 13:14:10.439 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:10.4398987+08:00"
+2025-08-20 13:14:11.454 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:11.4545861+08:00"
+2025-08-20 13:14:12.459 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:12.4589958+08:00"
+2025-08-20 13:14:13.464 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:13.4645079+08:00"
+2025-08-20 13:14:14.480 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:14.4808583+08:00"
+2025-08-20 13:14:15.483 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:15.4838635+08:00"
+2025-08-20 13:14:16.488 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:16.4880376+08:00"
+2025-08-20 13:14:17.502 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:17.5027705+08:00"
+2025-08-20 13:14:18.513 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:18.5137938+08:00"
+2025-08-20 13:14:18.835 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:14:19.524 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:19.5242354+08:00"
+2025-08-20 13:14:20.538 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:20.5386155+08:00"
+2025-08-20 13:14:21.541 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:21.5413878+08:00"
+2025-08-20 13:14:22.555 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:22.5550685+08:00"
+2025-08-20 13:14:23.562 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:23.5623105+08:00"
+2025-08-20 13:14:24.577 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:24.5777680+08:00"
+2025-08-20 13:14:25.578 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:25.5782170+08:00"
+2025-08-20 13:14:26.591 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:26.5910430+08:00"
+2025-08-20 13:14:27.606 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:27.6067168+08:00"
+2025-08-20 13:14:28.621 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:28.6215236+08:00"
+2025-08-20 13:14:28.850 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:14:29.636 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:29.6361927+08:00"
+2025-08-20 13:14:30.637 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:30.6369158+08:00"
+2025-08-20 13:14:31.649 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:31.6490398+08:00"
+2025-08-20 13:14:32.664 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:32.6649664+08:00"
+2025-08-20 13:14:33.668 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:33.6689308+08:00"
+2025-08-20 13:14:34.683 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:34.6832706+08:00"
+2025-08-20 13:14:35.698 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:35.6983411+08:00"
+2025-08-20 13:14:36.704 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:36.7039983+08:00"
+2025-08-20 13:14:37.713 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:37.7137329+08:00"
+2025-08-20 13:14:38.727 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:38.7276481+08:00"
+2025-08-20 13:14:38.859 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:14:39.737 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:39.7376770+08:00"
+2025-08-20 13:14:40.746 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:40.7464523+08:00"
+2025-08-20 13:14:41.751 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:41.7514444+08:00"
+2025-08-20 13:14:42.762 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:42.7619686+08:00"
+2025-08-20 13:14:43.762 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:43.7620773+08:00"
+2025-08-20 13:14:44.780 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:44.7785627+08:00"
+2025-08-20 13:14:45.785 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:45.7852008+08:00"
+2025-08-20 13:14:46.796 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:46.7965115+08:00"
+2025-08-20 13:14:47.798 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:47.7984463+08:00"
+2025-08-20 13:14:48.803 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:48.8036515+08:00"
+2025-08-20 13:14:48.865 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:14:49.837 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:49.8378059+08:00"
+2025-08-20 13:14:50.845 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:50.8454232+08:00"
+2025-08-20 13:14:51.851 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:51.8519493+08:00"
+2025-08-20 13:14:52.865 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:52.8652946+08:00"
+2025-08-20 13:14:53.873 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:53.8737472+08:00"
+2025-08-20 13:14:54.887 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:54.8878195+08:00"
+2025-08-20 13:14:55.893 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:55.8932593+08:00"
+2025-08-20 13:14:56.897 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:56.8970249+08:00"
+2025-08-20 13:14:57.902 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:57.9029301+08:00"
+2025-08-20 13:14:58.876 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:14:58.918 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:58.9188997+08:00"
+2025-08-20 13:14:59.921 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:14:59.9219444+08:00"
+2025-08-20 13:15:00.924 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:00.9248382+08:00"
+2025-08-20 13:15:01.928 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:01.9289017+08:00"
+2025-08-20 13:15:02.943 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:02.9431360+08:00"
+2025-08-20 13:15:03.946 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:03.9466961+08:00"
+2025-08-20 13:15:04.948 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:04.9485185+08:00"
+2025-08-20 13:15:05.950 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:05.9501248+08:00"
+2025-08-20 13:15:06.952 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:06.9521623+08:00"
+2025-08-20 13:15:07.955 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:07.9557084+08:00"
+2025-08-20 13:15:08.881 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:15:08.958 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:08.9588087+08:00"
+2025-08-20 13:15:09.971 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:09.9712059+08:00"
+2025-08-20 13:15:10.971 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:10.9715368+08:00"
+2025-08-20 13:15:11.972 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:11.9726098+08:00"
+2025-08-20 13:15:12.981 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:12.9816076+08:00"
+2025-08-20 13:15:14.005 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:14.0059341+08:00"
+2025-08-20 13:15:15.009 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:15.0097788+08:00"
+2025-08-20 13:15:16.015 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:16.0150921+08:00"
+2025-08-20 13:15:17.015 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:17.0156333+08:00"
+2025-08-20 13:15:18.016 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:18.0165164+08:00"
+2025-08-20 13:15:18.895 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:15:19.028 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:19.0285582+08:00"
+2025-08-20 13:15:20.037 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:20.0371270+08:00"
+2025-08-20 13:15:21.041 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:21.0418329+08:00"
+2025-08-20 13:15:22.054 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:22.0542731+08:00"
+2025-08-20 13:15:23.082 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:23.0825140+08:00"
+2025-08-20 13:15:24.083 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:24.0834004+08:00"
+2025-08-20 13:15:25.085 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:25.0851262+08:00"
+2025-08-20 13:15:26.100 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:26.1001068+08:00"
+2025-08-20 13:15:27.115 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:27.1158550+08:00"
+2025-08-20 13:15:28.123 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:28.1238896+08:00"
+2025-08-20 13:15:28.898 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:15:29.131 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:29.1312486+08:00"
+2025-08-20 13:15:30.137 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:30.1378546+08:00"
+2025-08-20 13:15:31.143 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:31.1431873+08:00"
+2025-08-20 13:15:32.152 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:32.1520779+08:00"
+2025-08-20 13:15:33.167 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:33.1673278+08:00"
+2025-08-20 13:15:34.180 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:34.1805290+08:00"
+2025-08-20 13:15:35.181 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:35.1817152+08:00"
+2025-08-20 13:15:36.182 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:36.1820483+08:00"
+2025-08-20 13:15:37.197 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:37.1971355+08:00"
+2025-08-20 13:15:38.202 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:38.2021479+08:00"
+2025-08-20 13:15:38.940 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:15:39.206 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:39.2067135+08:00"
+2025-08-20 13:15:40.221 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:40.2214319+08:00"
+2025-08-20 13:15:41.241 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:41.2413086+08:00"
+2025-08-20 13:15:42.256 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:42.2565224+08:00"
+2025-08-20 13:15:43.261 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:43.2612455+08:00"
+2025-08-20 13:15:44.271 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:44.2715439+08:00"
+2025-08-20 13:15:45.275 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:45.2749991+08:00"
+2025-08-20 13:15:46.276 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:46.2763509+08:00"
+2025-08-20 13:15:47.290 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:47.2901082+08:00"
+2025-08-20 13:15:48.296 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:48.2965470+08:00"
+2025-08-20 13:15:48.954 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:15:49.365 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:49.3652306+08:00"
+2025-08-20 13:15:50.377 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:50.3779452+08:00"
+2025-08-20 13:15:51.383 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:51.3831387+08:00"
+2025-08-20 13:15:52.395 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:52.3957239+08:00"
+2025-08-20 13:15:53.398 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:53.3981250+08:00"
+2025-08-20 13:15:54.412 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:54.4120764+08:00"
+2025-08-20 13:15:55.420 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:55.4200778+08:00"
+2025-08-20 13:15:56.430 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:56.4301820+08:00"
+2025-08-20 13:15:57.438 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:57.4380114+08:00"
+2025-08-20 13:15:58.444 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:58.4448946+08:00"
+2025-08-20 13:15:58.979 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:15:59.460 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:15:59.4600305+08:00"
+2025-08-20 13:16:00.464 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:00.4639739+08:00"
+2025-08-20 13:16:01.470 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:01.4703975+08:00"
+2025-08-20 13:16:02.475 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:02.4753141+08:00"
+2025-08-20 13:16:03.488 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:03.4889370+08:00"
+2025-08-20 13:16:04.505 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:04.5053552+08:00"
+2025-08-20 13:16:05.514 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:05.5142496+08:00"
+2025-08-20 13:16:06.532 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:06.5320869+08:00"
+2025-08-20 13:16:07.543 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:07.5434716+08:00"
+2025-08-20 13:16:08.558 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:08.5589265+08:00"
+2025-08-20 13:16:08.992 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:16:09.565 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:09.5658750+08:00"
+2025-08-20 13:16:10.574 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:10.5745058+08:00"
+2025-08-20 13:16:11.575 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:11.5753794+08:00"
+2025-08-20 13:16:12.576 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:12.5768149+08:00"
+2025-08-20 13:16:13.595 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:13.5950708+08:00"
+2025-08-20 13:16:14.598 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:14.5982341+08:00"
+2025-08-20 13:16:15.646 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:15.6459887+08:00"
+2025-08-20 13:16:16.653 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:16.6536860+08:00"
+2025-08-20 13:16:17.659 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:17.6597257+08:00"
+2025-08-20 13:16:18.663 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:18.6630209+08:00"
+2025-08-20 13:16:19.117 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:16:19.667 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:19.6673209+08:00"
+2025-08-20 13:16:20.680 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:20.6804864+08:00"
+2025-08-20 13:16:21.681 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:21.6815206+08:00"
+2025-08-20 13:16:22.682 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:22.6822103+08:00"
+2025-08-20 13:16:23.685 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:23.6858821+08:00"
+2025-08-20 13:16:24.688 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:24.6884323+08:00"
+2025-08-20 13:16:25.692 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:25.6920182+08:00"
+2025-08-20 13:16:26.699 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:26.6990579+08:00"
+2025-08-20 13:16:27.708 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:27.7088149+08:00"
+2025-08-20 13:16:28.711 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:28.7119164+08:00"
+2025-08-20 13:16:29.127 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:16:29.726 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:29.7269400+08:00"
+2025-08-20 13:16:30.729 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:30.7292501+08:00"
+2025-08-20 13:16:31.734 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:31.7349083+08:00"
+2025-08-20 13:16:32.736 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:32.7364005+08:00"
+2025-08-20 13:16:33.747 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:33.7472288+08:00"
+2025-08-20 13:16:34.750 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:34.7508518+08:00"
+2025-08-20 13:16:35.764 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:35.7641439+08:00"
+2025-08-20 13:16:36.770 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:36.7700035+08:00"
+2025-08-20 13:16:37.771 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:37.7712417+08:00"
+2025-08-20 13:16:38.775 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:38.7757516+08:00"
+2025-08-20 13:16:39.131 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:16:39.779 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:39.7793280+08:00"
+2025-08-20 13:16:40.783 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:40.7836691+08:00"
+2025-08-20 13:16:41.787 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:41.7870011+08:00"
+2025-08-20 13:16:42.802 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:42.8022628+08:00"
+2025-08-20 13:16:43.815 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:43.8153313+08:00"
+2025-08-20 13:16:44.888 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:44.8885109+08:00"
+2025-08-20 13:16:45.903 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:45.9029887+08:00"
+2025-08-20 13:16:46.906 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:46.9061321+08:00"
+2025-08-20 13:16:47.920 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:47.9208739+08:00"
+2025-08-20 13:16:48.925 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:48.9250729+08:00"
+2025-08-20 13:16:49.139 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:16:49.927 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:49.9275981+08:00"
+2025-08-20 13:16:50.942 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:50.9427642+08:00"
+2025-08-20 13:16:51.958 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:51.9580564+08:00"
+2025-08-20 13:16:52.964 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:52.9641614+08:00"
+2025-08-20 13:16:53.976 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:53.9762953+08:00"
+2025-08-20 13:16:54.989 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:54.9891583+08:00"
+2025-08-20 13:16:56.003 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:56.0037224+08:00"
+2025-08-20 13:16:57.016 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:57.0160014+08:00"
+2025-08-20 13:16:58.023 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:58.0239005+08:00"
+2025-08-20 13:16:59.037 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:16:59.0376871+08:00"
+2025-08-20 13:16:59.148 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:00.053 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:00.0531294+08:00"
+2025-08-20 13:17:01.065 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:01.0652604+08:00"
+2025-08-20 13:17:02.079 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:02.0789747+08:00"
+2025-08-20 13:17:03.092 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:03.0923474+08:00"
+2025-08-20 13:17:04.106 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:04.1060781+08:00"
+2025-08-20 13:17:05.117 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:05.1171862+08:00"
+2025-08-20 13:17:06.157 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:06.1570733+08:00"
+2025-08-20 13:17:07.157 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:07.1575414+08:00"
+2025-08-20 13:17:08.160 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:08.1606104+08:00"
+2025-08-20 13:17:09.161 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:09.1613056+08:00"
+2025-08-20 13:17:09.161 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:10.179 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:10.1789361+08:00"
+2025-08-20 13:17:11.184 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:11.1846531+08:00"
+2025-08-20 13:17:12.198 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:12.1980130+08:00"
+2025-08-20 13:17:13.204 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:13.2048968+08:00"
+2025-08-20 13:17:14.219 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:14.2199315+08:00"
+2025-08-20 13:17:15.225 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:15.2251410+08:00"
+2025-08-20 13:17:16.232 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:16.2324572+08:00"
+2025-08-20 13:17:17.246 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:17.2461944+08:00"
+2025-08-20 13:17:18.311 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:18.3112922+08:00"
+2025-08-20 13:17:19.168 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:19.320 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:19.3200745+08:00"
+2025-08-20 13:17:20.336 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:20.3360420+08:00"
+2025-08-20 13:17:21.349 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:21.3493607+08:00"
+2025-08-20 13:17:22.349 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:22.3499186+08:00"
+2025-08-20 13:17:23.354 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:23.3540448+08:00"
+2025-08-20 13:17:24.356 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:24.3560734+08:00"
+2025-08-20 13:17:25.368 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:25.3681456+08:00"
+2025-08-20 13:17:26.379 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:26.3795990+08:00"
+2025-08-20 13:17:27.380 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:27.3807773+08:00"
+2025-08-20 13:17:28.383 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:28.3833174+08:00"
+2025-08-20 13:17:29.169 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:29.385 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:29.3852042+08:00"
+2025-08-20 13:17:30.416 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:30.4160583+08:00"
+2025-08-20 13:17:31.425 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:31.4255499+08:00"
+2025-08-20 13:17:32.437 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:32.4378248+08:00"
+2025-08-20 13:17:33.452 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:33.4522452+08:00"
+2025-08-20 13:17:34.456 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:34.4569213+08:00"
+2025-08-20 13:17:35.459 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:35.4594770+08:00"
+2025-08-20 13:17:36.474 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:36.4742205+08:00"
+2025-08-20 13:17:37.480 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:37.4803373+08:00"
+2025-08-20 13:17:38.490 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:38.4901292+08:00"
+2025-08-20 13:17:39.181 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:39.503 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:39.5031829+08:00"
+2025-08-20 13:17:40.503 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:40.5037560+08:00"
+2025-08-20 13:17:41.519 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:41.5191323+08:00"
+2025-08-20 13:17:42.530 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:42.5306660+08:00"
+2025-08-20 13:17:43.532 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:43.5328305+08:00"
+2025-08-20 13:17:44.544 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:44.5447477+08:00"
+2025-08-20 13:17:45.549 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:45.5489831+08:00"
+2025-08-20 13:17:46.553 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:46.5536851+08:00"
+2025-08-20 13:17:47.566 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:47.5661922+08:00"
+2025-08-20 13:17:48.571 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:48.5716906+08:00"
+2025-08-20 13:17:49.183 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:49.587 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:49.5875586+08:00"
+2025-08-20 13:17:50.602 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:50.6027632+08:00"
+2025-08-20 13:17:51.617 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:51.6178415+08:00"
+2025-08-20 13:17:52.620 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:52.6206781+08:00"
+2025-08-20 13:17:53.629 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:53.6295873+08:00"
+2025-08-20 13:17:54.642 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:54.6427486+08:00"
+2025-08-20 13:17:55.656 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:55.6563109+08:00"
+2025-08-20 13:17:56.666 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:56.6665106+08:00"
+2025-08-20 13:17:57.679 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:57.6794256+08:00"
+2025-08-20 13:17:58.682 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:58.6826776+08:00"
+2025-08-20 13:17:59.193 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:17:59.782 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:17:59.7829647+08:00"
+2025-08-20 13:18:00.787 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:00.7876671+08:00"
+2025-08-20 13:18:01.802 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:01.8024412+08:00"
+2025-08-20 13:18:02.810 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:02.8101620+08:00"
+2025-08-20 13:18:03.824 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:03.8246716+08:00"
+2025-08-20 13:18:04.839 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:04.8394139+08:00"
+2025-08-20 13:18:05.842 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:05.8428426+08:00"
+2025-08-20 13:18:06.846 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:06.8468174+08:00"
+2025-08-20 13:18:07.853 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:07.8536318+08:00"
+2025-08-20 13:18:08.868 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:08.8689264+08:00"
+2025-08-20 13:18:09.197 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:18:09.873 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:09.8730973+08:00"
+2025-08-20 13:18:10.878 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:10.8783875+08:00"
+2025-08-20 13:18:11.879 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:11.8791409+08:00"
+2025-08-20 13:18:12.893 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:12.8934166+08:00"
+2025-08-20 13:18:13.894 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:13.8943463+08:00"
+2025-08-20 13:18:14.908 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:14.9086805+08:00"
+2025-08-20 13:18:15.911 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:15.9110363+08:00"
+2025-08-20 13:18:16.925 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:16.9253479+08:00"
+2025-08-20 13:18:17.933 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:17.9335342+08:00"
+2025-08-20 13:18:18.947 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:18.9473305+08:00"
+2025-08-20 13:18:19.209 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:18:19.957 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:19.9575519+08:00"
+2025-08-20 13:18:20.962 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:20.9622201+08:00"
+2025-08-20 13:18:21.980 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:21.9808259+08:00"
+2025-08-20 13:18:22.985 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:22.9856365+08:00"
+2025-08-20 13:18:23.991 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:23.9910904+08:00"
+2025-08-20 13:18:24.991 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:24.9913129+08:00"
+2025-08-20 13:18:26.004 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:26.0044570+08:00"
+2025-08-20 13:18:27.014 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:27.0142159+08:00"
+2025-08-20 13:18:28.028 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:28.0284419+08:00"
+2025-08-20 13:18:29.041 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:29.0413021+08:00"
+2025-08-20 13:18:29.213 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:18:30.042 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:30.0421076+08:00"
+2025-08-20 13:18:31.046 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:31.0469490+08:00"
+2025-08-20 13:18:32.052 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:32.0528321+08:00"
+2025-08-20 13:18:33.067 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:33.0673834+08:00"
+2025-08-20 13:18:34.071 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:34.0712575+08:00"
+2025-08-20 13:18:35.086 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:35.0862949+08:00"
+2025-08-20 13:18:36.092 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:36.0922353+08:00"
+2025-08-20 13:18:37.098 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:37.0983630+08:00"
+2025-08-20 13:18:38.099 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:38.0993596+08:00"
+2025-08-20 13:18:39.114 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:39.1140454+08:00"
+2025-08-20 13:18:39.221 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:18:40.115 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:40.1154855+08:00"
+2025-08-20 13:18:41.120 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:41.1206702+08:00"
+2025-08-20 13:18:42.136 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:42.1365910+08:00"
+2025-08-20 13:18:43.152 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:43.1528809+08:00"
+2025-08-20 13:18:44.166 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:44.1662434+08:00"
+2025-08-20 13:18:45.178 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:45.1789609+08:00"
+2025-08-20 13:18:46.192 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:46.1927334+08:00"
+2025-08-20 13:18:47.207 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:47.2071499+08:00"
+2025-08-20 13:18:48.207 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:48.2079256+08:00"
+2025-08-20 13:18:49.219 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:49.2198401+08:00"
+2025-08-20 13:18:49.235 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:18:50.234 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:50.2346578+08:00"
+2025-08-20 13:18:51.239 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:51.2397914+08:00"
+2025-08-20 13:18:52.243 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:52.2439488+08:00"
+2025-08-20 13:18:53.250 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:53.2501908+08:00"
+2025-08-20 13:18:54.254 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:54.2540736+08:00"
+2025-08-20 13:18:55.268 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:55.2684766+08:00"
+2025-08-20 13:18:56.276 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:56.2765497+08:00"
+2025-08-20 13:18:57.291 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:57.2911947+08:00"
+2025-08-20 13:18:58.298 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:58.2983588+08:00"
+2025-08-20 13:18:59.239 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at System.IO.Pipes.NamedPipeServerStreamAcl.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:18:59.354 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:18:59.3543346+08:00"
+2025-08-20 13:19:00.368 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:00.3683039+08:00"
+2025-08-20 13:19:01.379 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:01.3792515+08:00"
+2025-08-20 13:19:02.393 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:02.3938177+08:00"
+2025-08-20 13:19:03.393 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:03.3939279+08:00"
+2025-08-20 13:19:04.394 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:04.3943408+08:00"
+2025-08-20 13:19:05.398 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:05.3987768+08:00"
+2025-08-20 13:19:06.406 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:06.4059447+08:00"
+2025-08-20 13:19:07.419 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:07.4196959+08:00"
+2025-08-20 13:19:08.430 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:08.4302336+08:00"
+2025-08-20 13:19:09.243 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:19:09.443 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:09.4430290+08:00"
+2025-08-20 13:19:10.470 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:10.4701083+08:00"
+2025-08-20 13:19:11.477 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:11.4774821+08:00"
+2025-08-20 13:19:12.482 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:12.4822072+08:00"
+2025-08-20 13:19:13.496 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:13.4962691+08:00"
+2025-08-20 13:19:14.509 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:14.5099573+08:00"
+2025-08-20 13:19:15.512 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:15.5121510+08:00"
+2025-08-20 13:19:16.527 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:16.5277615+08:00"
+2025-08-20 13:19:17.537 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:17.5372925+08:00"
+2025-08-20 13:19:18.562 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:18.5624455+08:00"
+2025-08-20 13:19:19.255 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:19:19.564 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:19.5640769+08:00"
+2025-08-20 13:19:20.577 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:20.5777486+08:00"
+2025-08-20 13:19:21.581 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:21.5813920+08:00"
+2025-08-20 13:19:22.588 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:22.5882958+08:00"
+2025-08-20 13:19:23.593 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:23.5935231+08:00"
+2025-08-20 13:19:24.599 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:24.5996770+08:00"
+2025-08-20 13:19:25.612 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:25.6121077+08:00"
+2025-08-20 13:19:26.616 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:26.6166715+08:00"
+2025-08-20 13:19:27.618 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:27.6180703+08:00"
+2025-08-20 13:19:28.620 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:28.6205106+08:00"
+2025-08-20 13:19:29.270 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:19:29.624 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:29.6240729+08:00"
+2025-08-20 13:19:30.625 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:30.6257363+08:00"
+2025-08-20 13:19:31.662 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:31.6628577+08:00"
+2025-08-20 13:19:32.675 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:32.6750359+08:00"
+2025-08-20 13:19:33.677 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:33.6769677+08:00"
+2025-08-20 13:19:34.687 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:34.6874663+08:00"
+2025-08-20 13:19:35.700 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:35.7008567+08:00"
+2025-08-20 13:19:36.705 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:36.7058743+08:00"
+2025-08-20 13:19:37.706 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:37.7059952+08:00"
+2025-08-20 13:19:38.716 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:38.7165526+08:00"
+2025-08-20 13:19:39.272 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:19:39.721 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:39.7215564+08:00"
+2025-08-20 13:19:40.726 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:40.7261118+08:00"
+2025-08-20 13:19:41.740 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:41.7402127+08:00"
+2025-08-20 13:19:42.744 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:42.7447339+08:00"
+2025-08-20 13:19:43.758 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:43.7588957+08:00"
+2025-08-20 13:19:44.773 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:44.7730135+08:00"
+2025-08-20 13:19:45.772 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:45.7727752+08:00"
+2025-08-20 13:19:46.785 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:46.7853704+08:00"
+2025-08-20 13:19:47.799 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:47.7994900+08:00"
+2025-08-20 13:19:48.813 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:48.8131570+08:00"
+2025-08-20 13:19:49.281 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:19:49.814 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:49.8140553+08:00"
+2025-08-20 13:19:50.828 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:50.8284532+08:00"
+2025-08-20 13:19:51.841 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:51.8418648+08:00"
+2025-08-20 13:19:52.853 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:52.8538603+08:00"
+2025-08-20 13:19:53.857 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:53.8571565+08:00"
+2025-08-20 13:19:54.859 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:54.8595003+08:00"
+2025-08-20 13:19:55.860 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:55.8605706+08:00"
+2025-08-20 13:19:56.861 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:56.8616166+08:00"
+2025-08-20 13:19:57.865 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:57.8653484+08:00"
+2025-08-20 13:19:58.869 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:58.8692666+08:00"
+2025-08-20 13:19:59.285 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:19:59.873 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:19:59.8734663+08:00"
+2025-08-20 13:20:00.887 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:00.8872387+08:00"
+2025-08-20 13:20:01.896 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:01.8967777+08:00"
+2025-08-20 13:20:02.899 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:02.8992709+08:00"
+2025-08-20 13:20:03.900 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:03.9006652+08:00"
+2025-08-20 13:20:04.902 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:04.9021713+08:00"
+2025-08-20 13:20:05.912 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:05.9122914+08:00"
+2025-08-20 13:20:07.007 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:07.0077139+08:00"
+2025-08-20 13:20:08.013 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:08.0138583+08:00"
+2025-08-20 13:20:09.029 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:09.0290428+08:00"
+2025-08-20 13:20:09.290 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:20:10.042 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:10.0425121+08:00"
+2025-08-20 13:20:11.048 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:11.0484920+08:00"
+2025-08-20 13:20:12.052 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:12.0522558+08:00"
+2025-08-20 13:20:13.058 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:13.0588007+08:00"
+2025-08-20 13:20:14.060 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:14.0604989+08:00"
+2025-08-20 13:20:15.075 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:15.0752312+08:00"
+2025-08-20 13:20:16.082 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:16.0825555+08:00"
+2025-08-20 13:20:17.096 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:17.0966639+08:00"
+2025-08-20 13:20:18.109 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:18.1097820+08:00"
+2025-08-20 13:20:19.112 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:19.1121300+08:00"
+2025-08-20 13:20:19.297 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:20:20.126 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:20.1266398+08:00"
+2025-08-20 13:20:21.141 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:21.1411017+08:00"
+2025-08-20 13:20:22.147 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:22.1470925+08:00"
+2025-08-20 13:20:23.147 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:23.1478197+08:00"
+2025-08-20 13:20:24.153 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:24.1529910+08:00"
+2025-08-20 13:20:25.156 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:25.1562504+08:00"
+2025-08-20 13:20:26.169 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:26.1697016+08:00"
+2025-08-20 13:20:27.172 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:27.1723107+08:00"
+2025-08-20 13:20:28.175 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:28.1751122+08:00"
+2025-08-20 13:20:29.186 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:29.1860521+08:00"
+2025-08-20 13:20:29.312 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:20:30.187 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:30.1871029+08:00"
+2025-08-20 13:20:31.198 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:31.1987379+08:00"
+2025-08-20 13:20:32.214 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:32.2140357+08:00"
+2025-08-20 13:20:33.220 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:33.2200467+08:00"
+2025-08-20 13:20:34.235 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:34.2351946+08:00"
+2025-08-20 13:20:35.244 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:35.2444091+08:00"
+2025-08-20 13:20:36.258 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:36.2580765+08:00"
+2025-08-20 13:20:37.270 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:37.2702942+08:00"
+2025-08-20 13:20:38.277 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:38.2771986+08:00"
+2025-08-20 13:20:39.280 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:39.2802111+08:00"
+2025-08-20 13:20:39.325 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:20:40.282 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:40.2821200+08:00"
+2025-08-20 13:20:41.283 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:41.2830921+08:00"
+2025-08-20 13:20:42.286 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:42.2863488+08:00"
+2025-08-20 13:20:43.293 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:43.2934811+08:00"
+2025-08-20 13:20:44.301 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:44.3015500+08:00"
+2025-08-20 13:20:45.303 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:45.3036270+08:00"
+2025-08-20 13:20:46.312 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:46.3122082+08:00"
+2025-08-20 13:20:47.322 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:47.3228273+08:00"
+2025-08-20 13:20:48.325 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:48.3250004+08:00"
+2025-08-20 13:20:49.343 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:49.3430314+08:00"
+2025-08-20 13:20:49.343 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:20:50.347 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:50.3478467+08:00"
+2025-08-20 13:20:51.357 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:51.3570618+08:00"
+2025-08-20 13:20:52.363 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:52.3634937+08:00"
+2025-08-20 13:20:53.370 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:53.3707033+08:00"
+2025-08-20 13:20:54.375 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:54.3754564+08:00"
+2025-08-20 13:20:55.381 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:55.3818921+08:00"
+2025-08-20 13:20:56.385 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:56.3857294+08:00"
+2025-08-20 13:20:57.389 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:57.3899490+08:00"
+2025-08-20 13:20:58.393 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:58.3933556+08:00"
+2025-08-20 13:20:59.350 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:20:59.396 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:20:59.3964402+08:00"
+2025-08-20 13:21:00.400 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:00.4005792+08:00"
+2025-08-20 13:21:01.404 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:01.4048710+08:00"
+2025-08-20 13:21:02.419 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:02.4198656+08:00"
+2025-08-20 13:21:03.433 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:03.4336238+08:00"
+2025-08-20 13:21:04.437 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:04.4374206+08:00"
+2025-08-20 13:21:05.440 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:05.4403750+08:00"
+2025-08-20 13:21:06.445 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:06.4458176+08:00"
+2025-08-20 13:21:07.446 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:07.4463720+08:00"
+2025-08-20 13:21:08.450 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:08.4507324+08:00"
+2025-08-20 13:21:09.359 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:21:09.453 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:09.4538206+08:00"
+2025-08-20 13:21:10.457 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:10.4570375+08:00"
+2025-08-20 13:21:11.469 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:11.4694174+08:00"
+2025-08-20 13:21:12.470 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:12.4707212+08:00"
+2025-08-20 13:21:13.481 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:13.4813066+08:00"
+2025-08-20 13:21:14.495 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:14.4959322+08:00"
+2025-08-20 13:21:15.499 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:15.4998412+08:00"
+2025-08-20 13:21:16.503 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:16.5031226+08:00"
+2025-08-20 13:21:17.508 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:17.5086553+08:00"
+2025-08-20 13:21:18.509 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:18.5093323+08:00"
+2025-08-20 13:21:19.367 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:21:19.520 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:19.5209381+08:00"
+2025-08-20 13:21:20.522 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:20.5226343+08:00"
+2025-08-20 13:21:21.528 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:21.5288321+08:00"
+2025-08-20 13:21:22.529 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:22.5293118+08:00"
+2025-08-20 13:21:23.531 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:23.5315006+08:00"
+2025-08-20 13:21:24.538 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:24.5388399+08:00"
+2025-08-20 13:21:25.544 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:25.5443927+08:00"
+2025-08-20 13:21:26.550 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:26.5502285+08:00"
+2025-08-20 13:21:27.551 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:27.5511162+08:00"
+2025-08-20 13:21:28.597 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:28.5979713+08:00"
+2025-08-20 13:21:29.378 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:21:29.608 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:29.6087707+08:00"
+2025-08-20 13:21:30.624 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:30.6244801+08:00"
+2025-08-20 13:21:31.628 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:31.6283072+08:00"
+2025-08-20 13:21:32.628 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:32.6285936+08:00"
+2025-08-20 13:21:33.631 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:33.6317987+08:00"
+2025-08-20 13:21:34.640 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:34.6407697+08:00"
+2025-08-20 13:21:35.669 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:35.6692841+08:00"
+2025-08-20 13:21:36.669 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:36.6693327+08:00"
+2025-08-20 13:21:37.670 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:37.6709053+08:00"
+2025-08-20 13:21:38.685 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:38.6849916+08:00"
+2025-08-20 13:21:39.392 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:21:39.699 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:39.6989871+08:00"
+2025-08-20 13:21:40.704 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:40.7039548+08:00"
+2025-08-20 13:21:41.715 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:41.7155453+08:00"
+2025-08-20 13:21:42.716 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:42.7159902+08:00"
+2025-08-20 13:21:43.729 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:43.7290538+08:00"
+2025-08-20 13:21:44.740 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:44.7405251+08:00"
+2025-08-20 13:21:45.741 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:45.7416746+08:00"
+2025-08-20 13:21:46.754 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:46.7539804+08:00"
+2025-08-20 13:21:47.765 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:47.7651516+08:00"
+2025-08-20 13:21:48.778 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:48.7784824+08:00"
+2025-08-20 13:21:49.394 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:21:49.792 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:49.7925710+08:00"
+2025-08-20 13:21:50.797 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:50.7975959+08:00"
+2025-08-20 13:21:51.802 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:51.8026946+08:00"
+2025-08-20 13:21:52.817 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:52.8171368+08:00"
+2025-08-20 13:21:53.830 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:53.8302385+08:00"
+2025-08-20 13:21:54.848 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:54.8484229+08:00"
+2025-08-20 13:21:55.848 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:55.8486498+08:00"
+2025-08-20 13:21:56.852 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:56.8520146+08:00"
+2025-08-20 13:21:57.866 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:57.8663755+08:00"
+2025-08-20 13:21:58.875 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:58.8753605+08:00"
+2025-08-20 13:21:59.401 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:21:59.881 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:21:59.8815878+08:00"
+2025-08-20 13:22:00.894 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:00.8942848+08:00"
+2025-08-20 13:22:01.908 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:01.9081879+08:00"
+2025-08-20 13:22:02.920 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:02.9206963+08:00"
+2025-08-20 13:22:03.940 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:03.9403495+08:00"
+2025-08-20 13:22:04.947 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:04.9470020+08:00"
+2025-08-20 13:22:05.961 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:05.9618091+08:00"
+2025-08-20 13:22:06.967 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:06.9674767+08:00"
+2025-08-20 13:22:07.982 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:07.9828961+08:00"
+2025-08-20 13:22:08.992 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:08.9923053+08:00"
+2025-08-20 13:22:09.408 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:22:09.998 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:09.9980194+08:00"
+2025-08-20 13:22:11.000 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:11.0002944+08:00"
+2025-08-20 13:22:12.004 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:12.0047417+08:00"
+2025-08-20 13:22:13.008 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:13.0089233+08:00"
+2025-08-20 13:22:14.010 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:14.0100344+08:00"
+2025-08-20 13:22:15.017 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:15.0172842+08:00"
+2025-08-20 13:22:16.028 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:16.0282061+08:00"
+2025-08-20 13:22:17.043 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:17.0438549+08:00"
+2025-08-20 13:22:18.058 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:18.0586507+08:00"
+2025-08-20 13:22:19.063 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:19.0632780+08:00"
+2025-08-20 13:22:19.419 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:22:20.064 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:20.0649663+08:00"
+2025-08-20 13:22:21.067 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:21.0669961+08:00"
+2025-08-20 13:22:22.079 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:22.0792049+08:00"
+2025-08-20 13:22:23.081 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:23.0815556+08:00"
+2025-08-20 13:22:24.087 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:24.0877504+08:00"
+2025-08-20 13:22:25.091 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:25.0916569+08:00"
+2025-08-20 13:22:26.097 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:26.0970203+08:00"
+2025-08-20 13:22:27.144 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:27.1444179+08:00"
+2025-08-20 13:22:28.158 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:28.1581333+08:00"
+2025-08-20 13:22:29.163 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:29.1632182+08:00"
+2025-08-20 13:22:29.425 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:22:30.170 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:30.1705438+08:00"
+2025-08-20 13:22:31.181 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:31.1814467+08:00"
+2025-08-20 13:22:32.196 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:32.1961650+08:00"
+2025-08-20 13:22:33.212 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:33.2121121+08:00"
+2025-08-20 13:22:34.213 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:34.2136969+08:00"
+2025-08-20 13:22:35.228 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:35.2284650+08:00"
+2025-08-20 13:22:36.240 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:36.2402142+08:00"
+2025-08-20 13:22:37.253 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:37.2532331+08:00"
+2025-08-20 13:22:38.280 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:38.2803396+08:00"
+2025-08-20 13:22:39.294 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:39.2949362+08:00"
+2025-08-20 13:22:39.433 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService RPC 会话 I/O 异常，将在 10000ms 后重试
+System.IO.IOException: 所有的管道范例都在使用中。
+   at System.IO.Pipes.NamedPipeServerStream.Create(String pipeName, PipeDirection direction, Int32 maxNumberOfServerInstances, PipeTransmissionMode transmissionMode, PipeOptions options, Int32 inBufferSize, Int32 outBufferSize, PipeSecurity pipeSecurity, HandleInheritability inheritability, PipeAccessRights additionalAccessRights)
+   at SystemMonitor.Service.Services.RpcHostedService.CreateSecuredPipe() in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 174
+   at SystemMonitor.Service.Services.RpcHostedService.ExecuteAsync(CancellationToken stoppingToken) in C:\code\sys-sensor-v3\src\SystemMonitor.Service\Services\RpcHostedService.cs:line 48
+2025-08-20 13:22:40.301 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:40.3011509+08:00"
+2025-08-20 13:22:41.303 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T13:22:41.3029334+08:00"

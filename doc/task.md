@@ -71,6 +71,7 @@
 - **Tauri插件**：@tauri-apps/plugin-tray、plugin-updater、plugin-positioner、plugin-global-shortcut
 - **自研Rust插件**：pipe（Named Pipe客户端，MVP 必选）；input/window_anim（后置，可选）
 - **UI与动画**：Element Plus、ECharts/Chart.js、lottie-web/PixiJS、CSS transform（复杂动画后置，可选）
+- **语言**：支持多语言，初期支持中文，英文
 
 说明：MVP 仅需单窗口 + 调试视图 + JSON-RPC 客户端。多窗口、贴边、动画、宠物等放在协议冻结后实施。
 
@@ -346,7 +347,7 @@ C:\code\sys-sensor-v3\
 验收：启动 UI 可连接服务并每秒显示 snapshot 原始数据。
 
 ### 里程碑3：C# 指标模块与数据面（第3-5周）
-- [ ] 采集器全集：CPU/Memory/Disk/Network/GPU/Sensor（字段以“指标文档”为唯一来源）
+- [ ] 采集器全集：CPU/Memory/Disk/Network/GPU/Sensor（字段以“指标文档”为唯一来源）采集器都需要异步调用不阻塞主线程
 - [ ] 采集调度与功耗管理（Active/Standby/LowPower/Suspended）
 - [ ] SQLite 存储与聚合（1s 原始、10s/1m 聚合）
 - [ ] 历史查询 `query_history`、事件 `metrics/state`
