@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { service } from '../api/service';
+import { useHistoryQueryStore } from '../stores/historyQuery';
 
 const now = Date.now();
 const from = ref<number>(now - 60_000);
@@ -36,6 +37,7 @@ const items = ref<any[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
 const preview = computed(() => JSON.stringify({ from: from.value, to: to.value, step: step.value ?? undefined, modules: mods.value, items: items.value.slice(0, 5) }, null, 2));
+const hq = useHistoryQueryStore();
 
 async function onQuery() {
   loading.value = true; error.value = null; items.value = [];
@@ -48,6 +50,7 @@ async function onQuery() {
     } as any);
     const arr = (r as any)?.items ?? [];
     items.value = Array.isArray(arr) ? arr : [];
+    hq.setResult({ from_ts: from.value, to_ts: to.value, step_ms: step.value ?? undefined, modules: mods.value }, items.value);
   } catch (e: any) {
     error.value = e?.message || String(e);
   } finally {

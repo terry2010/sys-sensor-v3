@@ -13,6 +13,7 @@
 import { ref, onMounted, watch } from 'vue';
 import * as echarts from 'echarts';
 import { service } from '../api/service';
+import { useHistoryQueryStore } from '../stores/historyQuery';
 
 const chartRef = ref<HTMLDivElement | null>(null);
 const chart = ref<echarts.EChartsType | null>(null);
@@ -45,6 +46,15 @@ const load = async () => {
 
 onMounted(() => { load(); window.addEventListener('resize', ()=> chart.value?.resize()); });
 watch([winSec, stepMs], () => { /* 不自动加载，避免频繁请求 */ });
+
+// 监听历史查询结果联动
+const hq = useHistoryQueryStore();
+watch(() => hq.items, (arr) => {
+  if (!arr || arr.length === 0) return;
+  const x: number[] = []; const cpu: number[] = [];
+  for (const it of arr) { if ((it as any)?.cpu) { x.push((it as any).ts); cpu.push((it as any).cpu.usage_percent); } }
+  if (x.length) render({ x, cpu });
+}, { deep: true });
 </script>
 <style scoped>
 .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; }

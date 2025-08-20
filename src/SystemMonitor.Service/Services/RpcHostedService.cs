@@ -35,126 +35,134 @@ namespace SystemMonitor.Service.Services
         }
 
         /// <summary>
-        /// 后台循环：接受连接并处理 JSON-RPC 会话。
+        /// 后台循环：接受连接并发处理 JSON-RPC 会话（支持并发）。
         /// </summary>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("RPC 服务启动，等待客户端连接…");
 
             var backoffMs = 500;
-            while (!stoppingToken.IsCancellationRequested)
+            var sessions = new List<Task>();
+
+            try
             {
-                try
+                while (!stoppingToken.IsCancellationRequested)
                 {
-                    using var serverStream = CreateSecuredPipe();
-                    await serverStream.WaitForConnectionAsync(stoppingToken).ConfigureAwait(false);
-
-                    _logger.LogInformation("客户端已连接");
-
-                    // HeaderDelimited 分帧（PipeReader/PipeWriter + SystemTextJsonFormatter）
-                    var reader = serverStream.UsePipeReader();
-                    var writer = serverStream.UsePipeWriter();
-                    var formatter = new SystemTextJsonFormatter();
-                    // 设置命名策略（snake_case）
-                    formatter.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
-                    var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
-
-                    var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
-                    var rpc = new JsonRpc(handler, rpcServer);
-
-                    rpc.Disconnected += (s, e) =>
+                    try
                     {
-                        _logger.LogInformation("客户端断开：{Reason}", e?.Description);
-                    };
+                        var serverStream = CreateSecuredPipe();
+                        await serverStream.WaitForConnectionAsync(stoppingToken).ConfigureAwait(false);
 
-                    rpc.StartListening();
-
-                    // 指标推流任务（按当前间隔，支持 burst_subscribe）
-                    using (var cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken))
-                    {
-                        var metricsTask = Task.Run(async () =>
-                        {
-                            var logEvery = GetMetricsLogEvery();
-                            while (!cts.Token.IsCancellationRequested)
-                            {
-                                try
-                                {
-                                    var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                                    // 动态构造仅包含启用模块的 payload
-                                    var enabled = rpcServer.GetEnabledModules();
-                                    double? cpuVal = null;
-                                    (long total, long used)? memVal = null;
-                                    var payload = new Dictionary<string, object?>
-                                    {
-                                        ["ts"] = now,
-                                        ["seq"] = rpcServer.NextSeq(),
-                                    };
-                                    if (enabled.Contains("cpu"))
-                                    {
-                                        var cpu = GetCpuUsagePercent();
-                                        cpuVal = cpu;
-                                        payload["cpu"] = new { usage_percent = cpu };
-                                    }
-                                    if (enabled.Contains("memory"))
-                                    {
-                                        var mem = GetMemoryInfoMb();
-                                        memVal = (mem.total_mb, mem.used_mb);
-                                        payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
-                                    }
-                                    // 记录到内存历史缓冲区
-                                    if (cpuVal.HasValue || memVal.HasValue)
-                                    {
-                                        rpcServer.AppendHistory(now, cpuVal, memVal);
-                                    }
-                                    await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
-                                    var pushed = rpcServer.IncrementMetricsCount();
-                                    if (logEvery > 0 && pushed % logEvery == 0)
-                                    {
-                                        _logger.LogInformation("metrics 推送累计: {Count}", pushed);
-                                    }
-                                    var delay = rpcServer.GetCurrentIntervalMs(now);
-                                    await Task.Delay(delay, cts.Token).ConfigureAwait(false);
-                                }
-                                catch (OperationCanceledException)
-                                {
-                                    break;
-                                }
-                                catch (Exception ex)
-                                {
-                                    _logger.LogDebug(ex, "metrics 推送异常（忽略并继续）");
-                                    await Task.Delay(1000, cts.Token).ConfigureAwait(false);
-                                }
-                            }
-                        }, cts.Token);
-
-                        // 等待到断开
-                        await rpc.Completion.ConfigureAwait(false);
-                        cts.Cancel();
-                        try { await metricsTask.ConfigureAwait(false); } catch { /* ignore */ }
+                        // 连接建立后，交由后台任务处理该会话；主循环立即继续监听下一连接
+                        var task = HandleClientAsync(serverStream, stoppingToken);
+                        sessions.Add(task);
+                        // 清理已完成的任务，避免列表无限增长
+                        sessions.RemoveAll(t => t.IsCompleted);
+                        backoffMs = 500; // 有新连接，重置退避
                     }
-
-                    // 正常断开后重置退避时间
-                    backoffMs = 500;
-                }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-                catch (IOException ioex)
-                {
-                    // 常见：ERROR_PIPE_BUSY（所有管道实例都在使用中）
-                    _logger.LogWarning(ioex, "RPC 会话 I/O 异常，将在 {Delay}ms 后重试", backoffMs);
-                    await Task.Delay(backoffMs, stoppingToken).ConfigureAwait(false);
-                    backoffMs = Math.Min(backoffMs * 2, 10_000); // 指数退避上限 10s
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "RPC 会话异常");
-                    await Task.Delay(backoffMs, stoppingToken).ConfigureAwait(false);
-                    backoffMs = Math.Min(backoffMs * 2, 10_000);
+                    catch (OperationCanceledException)
+                    {
+                        break;
+                    }
+                    catch (IOException ioex)
+                    {
+                        _logger.LogWarning(ioex, "RPC 会话 I/O 异常，将在 {Delay}ms 后重试", backoffMs);
+                        await Task.Delay(backoffMs, stoppingToken).ConfigureAwait(false);
+                        backoffMs = Math.Min(backoffMs * 2, 10_000);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "RPC 会话异常");
+                        await Task.Delay(backoffMs, stoppingToken).ConfigureAwait(false);
+                        backoffMs = Math.Min(backoffMs * 2, 10_000);
+                    }
                 }
             }
+            finally
+            {
+                // 等待所有会话结束
+                try { await Task.WhenAll(sessions).ConfigureAwait(false); } catch { }
+            }
+        }
 
+        private async Task HandleClientAsync(NamedPipeServerStream serverStream, CancellationToken stoppingToken)
+        {
+            using var _ = serverStream;
+            _logger.LogInformation("客户端已连接");
+
+            var reader = serverStream.UsePipeReader();
+            var writer = serverStream.UsePipeWriter();
+            var formatter = new SystemTextJsonFormatter();
+            formatter.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+            var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
+
+            var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+            var rpc = new JsonRpc(handler, rpcServer);
+
+            rpc.Disconnected += (s, e) =>
+            {
+                _logger.LogInformation("客户端断开：{Reason}", e?.Description);
+            };
+
+            rpc.StartListening();
+
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+            var metricsTask = Task.Run(async () =>
+            {
+                var logEvery = GetMetricsLogEvery();
+                while (!cts.Token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        var enabled = rpcServer.GetEnabledModules();
+                        double? cpuVal = null;
+                        (long total, long used)? memVal = null;
+                        var payload = new Dictionary<string, object?>
+                        {
+                            ["ts"] = now,
+                            ["seq"] = rpcServer.NextSeq(),
+                        };
+                        if (enabled.Contains("cpu"))
+                        {
+                            var cpu = GetCpuUsagePercent();
+                            cpuVal = cpu;
+                            payload["cpu"] = new { usage_percent = cpu };
+                        }
+                        if (enabled.Contains("memory"))
+                        {
+                            var mem = GetMemoryInfoMb();
+                            memVal = (mem.total_mb, mem.used_mb);
+                            payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
+                        }
+                        if (cpuVal.HasValue || memVal.HasValue)
+                        {
+                            rpcServer.AppendHistory(now, cpuVal, memVal);
+                        }
+                        await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
+                        var pushed = rpcServer.IncrementMetricsCount();
+                        if (logEvery > 0 && pushed % logEvery == 0)
+                        {
+                            _logger.LogInformation("metrics 推送累计: {Count}", pushed);
+                        }
+                        var delay = rpcServer.GetCurrentIntervalMs(now);
+                        await Task.Delay(delay, cts.Token).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogDebug(ex, "metrics 推送异常（忽略并继续）");
+                        await Task.Delay(1000, cts.Token).ConfigureAwait(false);
+                    }
+                }
+            }, cts.Token);
+
+            await rpc.Completion.ConfigureAwait(false);
+            cts.Cancel();
+            try { await metricsTask.ConfigureAwait(false); } catch { }
         }
 
         private static int GetMetricsLogEvery()
@@ -178,15 +186,17 @@ namespace SystemMonitor.Service.Services
             // Administrators
             pipeSecurity.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, null),
                 PipeAccessRights.FullControl, AccessControlType.Allow));
-            // 当前交互用户
-            pipeSecurity.AddAccessRule(new PipeAccessRule(WindowsIdentity.GetCurrent().User!,
+            // 已通过身份验证的本地用户（允许前端普通用户连接）
+            pipeSecurity.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null),
                 PipeAccessRights.ReadWrite, AccessControlType.Allow));
 
             // 使用 Acl 扩展创建带 ACL 的命名管道
+            // 允许并发连接：事件桥（长期占用）+ 前端短连接 RPC 调用
+            // 注意：StreamJsonRpc 每个连接一个会话，服务端会在断开后继续接受后续连接
             var server = System.IO.Pipes.NamedPipeServerStreamAcl.Create(
                 PipeName,
                 PipeDirection.InOut,
-                maxNumberOfServerInstances: 1,
+                maxNumberOfServerInstances: NamedPipeServerStream.MaxAllowedServerInstances,
                 transmissionMode: PipeTransmissionMode.Byte,
                 options: PipeOptions.Asynchronous,
                 inBufferSize: 0,

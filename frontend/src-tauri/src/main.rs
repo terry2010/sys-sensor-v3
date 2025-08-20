@@ -6,6 +6,7 @@ use serde_json::Value;
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::Instant;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 use tauri::Emitter;
@@ -94,13 +95,25 @@ fn read_response(stream: &mut std::fs::File) -> Result<JsonRpcResponse> {
     Ok(resp)
 }
 
+fn open_pipe_with_retry(timeout: Duration) -> Result<std::fs::File> {
+    let start = Instant::now();
+    let mut last_err: Option<anyhow::Error> = None;
+    loop {
+        match OpenOptions::new().read(true).write(true).open(PIPE_PATH) {
+            Ok(f) => return Ok(f),
+            Err(e) => {
+                last_err = Some(anyhow!(e).context(format!("open named pipe {}", PIPE_PATH)));
+                if start.elapsed() >= timeout { break; }
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        }
+    }
+    Err(last_err.unwrap_or_else(|| anyhow!("failed to open named pipe")).into())
+}
+
 fn call_over_named_pipe(method: &str, params: Option<Value>) -> Result<Value> {
-    // 连接命名管道（阻塞直到服务端就绪）
-    let mut file = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .open(PIPE_PATH)
-        .with_context(|| format!("open named pipe {}", PIPE_PATH))?;
+    // 连接命名管道，带重试（最多 3 秒）
+    let mut file = open_pipe_with_retry(Duration::from_secs(3))?;
 
     let (payload, _id) = build_request(method, params);
     file.write_all(&payload)?;

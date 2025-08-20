@@ -17,7 +17,7 @@ function Test-Admin {
     }
 }
 
-function Log([string]$msg) { Write-Host "[install-service] $msg" }
+function Log([string]$msg) { Write-Host ("install-service: {0}" -f $msg) }
 
 Test-Admin
 
@@ -58,4 +58,4 @@ if ($exists) {
     sc.exe create $ServiceName binPath= $bin DisplayName= "$DisplayName" start= auto
 }
 
-Log "完成。可使用 -Start/-Stop 控制服务运行。"
+Log "Done. You can use -Start/-Stop to control the service."

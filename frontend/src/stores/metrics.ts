@@ -4,12 +4,22 @@ import { service } from '../api/service';
 export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total: number; used: number } };
 
 export const useMetricsStore = defineStore('metrics', {
-  state: () => ({ latest: null as MetricPoint | null, history: [] as MetricPoint[] }),
+  state: () => ({
+    latest: null as MetricPoint | null,
+    history: [] as MetricPoint[],
+    lastAt: 0,
+    count: 0,
+  }),
   actions: {
     start() {
-      service.onMetrics((p) => {
-        this.latest = p; this.history.push(p);
+      service.onMetrics((p: MetricPoint) => {
+        this.latest = p;
+        this.history.push(p);
         if (this.history.length > 300) this.history.shift();
+        this.lastAt = Date.now();
+        this.count += 1;
+        const w: any = typeof window !== 'undefined' ? window : {};
+        if (!w.__METRICS_READY) w.__METRICS_READY = true;
       });
     }
   }
