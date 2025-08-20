@@ -24,7 +24,7 @@ async function rpcCall<T>(method: string, params?: any): Promise<T> {
 }
 
 export const tauriRpc = {
-  async hello(): Promise<HelloResult> { return rpcCall<HelloResult>('hello', { app_version: 'fe-mock', protocol_version: 1, token: '', capabilities: [] }); },
+  async hello(): Promise<HelloResult> { return rpcCall<HelloResult>('hello', { app_version: 'fe-mock', protocol_version: 1, token: 'dev', capabilities: [] }); },
   async snapshot(): Promise<SnapshotResult> { return rpcCall<SnapshotResult>('snapshot', {}); },
   async query_history(p: QueryHistoryParams): Promise<QueryHistoryResult> { return rpcCall<QueryHistoryResult>('query_history', p); },
   async set_config(p: SetConfigParams) { return rpcCall<any>('set_config', p); },
