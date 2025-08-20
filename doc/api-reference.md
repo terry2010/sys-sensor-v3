@@ -1,6 +1,8 @@
-# JSON-RPC 接口规范（M1 冻结）
+# JSON-RPC 接口规范（冻结）
 
 > 传输：Named Pipes + HeaderDelimited + JSON-RPC 2.0；管道名：`\\.\pipe\sys_sensor_v3.rpc`；字段统一 `snake_case`。
+
+> 冻结时间：2025-08-20 15:37（后续变更需评审并 bump `protocol_version` 或声明向后兼容策略）
 
 ## 1. 方法列表（M1 实装）
 - `hello(params: { app_version: string, protocol_version: number, token: string, capabilities?: string[] })`
@@ -13,6 +15,10 @@
 
 ## 2. 事件（Service → UI）
 - `metrics`: `{ ts: number, seq: number, cpu?: {...}, memory?: {...}, ... }`（按启用模块动态裁剪）
+- `state`: `{ running: boolean, clients: number, effective_intervals: Record<string, number> }`
+- `alert`: `{ level: "info"|"warn"|"error", metric: string, value: number, threshold?: number, rule_id?: string, message: string, ts: number }`
+- `ping`: `{}`（可选心跳）
+- `update_ready`: `{ component: string, version: string }`
 
 ## 3. 请求/响应示例
 ```json
@@ -121,6 +127,11 @@
 
 > 注：字段名以指标文档为准；所有键名均为 `snake_case`。
 
+> 握手约束：
+> - `token` 必须为非空字符串，否则返回 `unauthorized` 错误码。
+> - 仅支持 `protocol_version = 1`，否则返回 `not_supported`（或明确的 `unsupported_version` 自定义码）。
+> - `capabilities` 如包含未知能力，返回 `not_supported`。
+
 ## 4. 错误响应与错误码
 统一采用 JSON-RPC error 对象，`message` 为机器可读短语，`data` 可包含细节：
 ```json
@@ -134,12 +145,18 @@
 推荐错误码（私有区间 -32000~-32099）：
 - unauthorized: -32040（示例：`hello` 缺少/无效 token）
 - invalid_params: -32001
-- not_supported: -32050（协议/能力不支持）
+- not_supported / unsupported_version: -32050
+- rate_limited: -32060
 - internal: -32099
 
 ## 5. 字段命名校验
 - 服务端序列化策略：.NET `System.Text.Json` + `JsonNamingPolicy.SnakeCaseLower`
 - 契约测试：对请求/响应进行 schema 与 snake_case 正则校验
 
-## 6. 版本与兼容
+## 6. 能力声明（capabilities）
+- `metrics_stream`: 支持 metrics 推流
+- `burst_mode`: 支持 `burst_subscribe`
+- `history_query`: 支持 `query_history`
+
+## 7. 版本与兼容
 - `protocol_version` 初始为 1；破坏式变更需升版本并保持灰度兼容期

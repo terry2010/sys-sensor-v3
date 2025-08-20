@@ -1301,3 +1301,103 @@ System.IO.IOException: 所有的管道范例都在使用中。
 2025-08-20 14:46:56.541 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T14:46:56.5410584+08:00"
 2025-08-20 14:46:57.545 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T14:46:57.5452919+08:00"
 2025-08-20 14:46:57.915 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService snapshot called, modules=*
+2025-08-20 15:42:40.862 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:40.8476853+08:00"
+2025-08-20 15:42:41.084 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:42:41.162 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:42:44.046 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:44.0340595+08:00"
+2025-08-20 15:42:44.100 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:42:44.200 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:42:47.653 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:47.6368259+08:00"
+2025-08-20 15:42:47.702 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:42:47.858 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:42:47.994 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=0, module_intervals=[]
+2025-08-20 15:42:50.635 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:50.6081819+08:00"
+2025-08-20 15:42:50.696 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:42:50.868 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:42:51.059 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=400, module_intervals=[]
+2025-08-20 15:42:51.059 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config: base_interval_ms -> 400ms
+2025-08-20 15:42:51.699 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:51.6998332+08:00"
+2025-08-20 15:42:52.389 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService burst_subscribe: interval=100ms ttl=600ms -> expires_at=1755675772989
+2025-08-20 15:42:52.702 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:52.7026500+08:00"
+2025-08-20 15:42:53.703 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:53.7033898+08:00"
+2025-08-20 15:42:53.826 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService metrics 推送累计: 10
+2025-08-20 15:42:57.244 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:42:57.2253631+08:00"
+2025-08-20 15:42:57.305 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:42:57.450 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:42:57.616 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService hello validation failed: unsupported protocol_version=2
+2025-08-20 15:43:01.119 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:01.0876753+08:00"
+2025-08-20 15:43:01.185 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:43:01.378 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:43:01.557 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=200, module_intervals=[]
+2025-08-20 15:43:01.558 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config: base_interval_ms -> 200ms
+2025-08-20 15:43:01.628 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService burst_subscribe: interval=200ms ttl=1500ms -> expires_at=1755675783128
+2025-08-20 15:43:04.542 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:04.5270670+08:00"
+2025-08-20 15:43:04.597 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:43:04.677 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:43:04.822 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService hello validation failed: unsupported capabilities=unknown_cap
+2025-08-20 15:43:07.951 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:07.9368304+08:00"
+2025-08-20 15:43:08.001 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:43:08.105 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:43:08.239 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService hello ok: app=1.0.0 proto=1 caps=[metrics_stream] session_id=92cc683f-68e4-46c0-aad3-9ead9b11f8b6
+2025-08-20 15:43:09.004 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:09.0041841+08:00"
+2025-08-20 15:43:10.005 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:10.0058123+08:00"
+2025-08-20 15:43:11.020 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:11.0207059+08:00"
+2025-08-20 15:43:12.023 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:12.0236756+08:00"
+2025-08-20 15:43:13.025 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:43:13.0253734+08:00"
+2025-08-20 15:43:13.480 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService snapshot called, modules=*
+2025-08-20 15:47:26.369 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:26.3504593+08:00"
+2025-08-20 15:47:26.429 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:26.600 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:30.622 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:30.6086582+08:00"
+2025-08-20 15:47:30.663 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:30.891 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:31.066 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService hello ok: app=1.0.0 proto=1 caps=[metrics_stream] session_id=899dcffc-cd85-4495-9dc1-fbad1a87c9c9
+2025-08-20 15:47:31.153 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=250, module_intervals=[cpu=250, memory=250]
+2025-08-20 15:47:31.153 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config: base_interval_ms -> 250ms
+2025-08-20 15:47:31.153 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config: module_intervals -> cpu=250ms, memory=250ms
+2025-08-20 15:47:34.351 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:34.3369308+08:00"
+2025-08-20 15:47:34.397 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:34.474 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:38.001 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:37.9428695+08:00"
+2025-08-20 15:47:38.098 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:38.294 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:38.437 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=0, module_intervals=[]
+2025-08-20 15:47:41.206 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:41.1883504+08:00"
+2025-08-20 15:47:41.252 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:41.283 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:41.400 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=400, module_intervals=[]
+2025-08-20 15:47:41.400 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config: base_interval_ms -> 400ms
+2025-08-20 15:47:42.251 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:42.2514004+08:00"
+2025-08-20 15:47:42.736 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService burst_subscribe: interval=100ms ttl=600ms -> expires_at=1755676063336
+2025-08-20 15:47:43.265 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:43.2650961+08:00"
+2025-08-20 15:47:44.176 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService metrics 推送累计: 10
+2025-08-20 15:47:44.283 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:44.2836798+08:00"
+2025-08-20 15:47:46.936 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:46.9230153+08:00"
+2025-08-20 15:47:46.976 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:47.024 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:47.128 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService hello validation failed: unsupported protocol_version=2
+2025-08-20 15:47:50.393 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:50.3773580+08:00"
+2025-08-20 15:47:50.436 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:50.588 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:50.734 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config 收到: base_interval_ms=200, module_intervals=[]
+2025-08-20 15:47:50.735 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService set_config: base_interval_ms -> 200ms
+2025-08-20 15:47:50.769 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService burst_subscribe: interval=200ms ttl=1500ms -> expires_at=1755676072268
+2025-08-20 15:47:53.359 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:53.3447480+08:00"
+2025-08-20 15:47:53.401 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:53.578 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:53.705 +08:00 [WRN] SystemMonitor.Service.Services.RpcHostedService hello validation failed: unsupported capabilities=unknown_cap
+2025-08-20 15:47:57.110 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:57.0860211+08:00"
+2025-08-20 15:47:57.179 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:47:57.253 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:47:57.411 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService hello ok: app=1.0.0 proto=1 caps=[metrics_stream] session_id=393de0bf-e208-43bb-b9d0-37fd482ee902
+2025-08-20 15:47:58.167 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:58.1670989+08:00"
+2025-08-20 15:47:59.172 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:47:59.1722548+08:00"
+2025-08-20 15:48:00.175 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:48:00.1758591+08:00"
+2025-08-20 15:48:01.180 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:48:01.1800046+08:00"
+2025-08-20 15:48:02.193 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:48:02.1937959+08:00"
+2025-08-20 15:48:02.645 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService snapshot called, modules=*
+2025-08-20 15:48:05.638 +08:00 [INF] SystemMonitor.Service.Worker Worker running at: "2025-08-20T15:48:05.6228035+08:00"
+2025-08-20 15:48:05.685 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService RPC 服务启动，等待客户端连接…
+2025-08-20 15:48:05.884 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-20 15:48:06.034 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService hello ok: app=1.0.0 proto=1 caps=[metrics_stream] session_id=77ef5648-ff8a-4a39-9c6d-275c7d9cb360
+2025-08-20 15:48:06.063 +08:00 [INF] SystemMonitor.Service.Services.RpcHostedService snapshot called, modules=*

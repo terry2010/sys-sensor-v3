@@ -36,6 +36,7 @@ public class EndToEndTests : IAsyncLifetime
                 var candidate = Path.Combine(_svcWorkDir!, "logs");
                 if (Directory.Exists(candidate)) logsDir = candidate;
             }
+
             if (logsDir == null)
             {
                 var root = FindRepoRoot();
@@ -316,6 +317,27 @@ public class EndToEndTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Snapshot_CpuMem_Ranges()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(20));
+        var helloParams = new { app_version = "1.0.0", protocol_version = 1, token = "t", capabilities = new[] { "metrics_stream" } };
+        await rpc.InvokeAsync<object>("hello", new object[] { helloParams });
+
+        var snap = await rpc.InvokeAsync<System.Text.Json.JsonElement>("snapshot", new object[] { new { } });
+        // cpu.usage_percent in [0,100]
+        Assert.True(snap.TryGetProperty("cpu", out var cpu));
+        var usage = cpu.GetProperty("usage_percent").GetDouble();
+        Assert.InRange(usage, 0.0, 100.0);
+        // memory.used<=total and >=0
+        Assert.True(snap.TryGetProperty("memory", out var mem));
+        var total = mem.GetProperty("total").GetInt64();
+        var used = mem.GetProperty("used").GetInt64();
+        Assert.True(total >= 0);
+        Assert.True(used >= 0);
+        Assert.True(used <= total);
+    }
+
+    [Fact]
     public async Task SetConfig_And_BurstSubscribe_Works()
     {
         using var rpc = await ConnectAsync(TimeSpan.FromSeconds(10));
@@ -326,6 +348,61 @@ public class EndToEndTests : IAsyncLifetime
         var burst = await rpc.InvokeAsync<System.Text.Json.JsonElement>("burst_subscribe", new object[] { new { modules = new[] { "cpu" }, interval_ms = 200, ttl_ms = 1500 } });
         Assert.True(burst.GetProperty("ok").GetBoolean());
         Assert.True(burst.GetProperty("expires_at").GetInt64() > 0);
+    }
+
+    private sealed class MetricsValidator
+    {
+        private readonly object _lock = new();
+        public System.Text.Json.JsonElement? LastPayload { get; private set; }
+        public int Count { get; private set; }
+
+        [JsonRpcMethod("metrics")]
+        public void OnMetrics(System.Text.Json.JsonElement payload)
+        {
+            lock (_lock)
+            {
+                LastPayload = payload;
+                Count++;
+            }
+        }
+    }
+
+    [Fact]
+    public async Task Metrics_CpuMem_Ranges()
+    {
+        var validator = new MetricsValidator();
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(20), validator);
+        var helloParams = new { app_version = "1.0.0", protocol_version = 1, token = "t", capabilities = new[] { "metrics_stream" } };
+        await rpc.InvokeAsync<object>("hello", new object[] { helloParams });
+
+        // 设置较快的基础间隔，确保在合理时间内接收到推送
+        await rpc.InvokeAsync<System.Text.Json.JsonElement>("set_config", new object[] { new { base_interval_ms = 250, module_intervals = new System.Collections.Generic.Dictionary<string, int> { ["cpu"] = 250, ["memory"] = 250 } } });
+
+        var start = DateTime.UtcNow;
+        System.Text.Json.JsonElement? payload = null;
+        while ((DateTime.UtcNow - start).TotalSeconds < 5)
+        {
+            var p = validator.LastPayload;
+            if (p.HasValue)
+            {
+                payload = p.Value;
+                break;
+            }
+            await Task.Delay(50);
+        }
+        Assert.True(payload.HasValue, "expected at least one metrics payload within 5s");
+        var pl = payload!.Value;
+        Assert.True(pl.TryGetProperty("cpu", out var cpu));
+        var usage = cpu.GetProperty("usage_percent").GetDouble();
+        Assert.InRange(usage, 0.0, 100.0);
+        if (pl.TryGetProperty("memory", out var mem))
+        {
+            var total = mem.GetProperty("total").GetInt64();
+            var used = mem.GetProperty("used").GetInt64();
+            Assert.True(total >= 0);
+            Assert.True(used >= 0);
+            Assert.True(used <= total);
+        }
     }
 
     private sealed class MetricsCollector

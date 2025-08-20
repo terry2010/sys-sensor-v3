@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Nerdbank.Streams;
 using StreamJsonRpc;
 using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
 
 namespace SystemMonitor.Service.Services
 {
@@ -88,11 +89,13 @@ namespace SystemMonitor.Service.Services
                                     };
                                     if (enabled.Contains("cpu"))
                                     {
-                                        payload["cpu"] = new { usage_percent = 10.0 + (now % 30) / 10.0 };
+                                        var cpu = GetCpuUsagePercent();
+                                        payload["cpu"] = new { usage_percent = cpu };
                                     }
                                     if (enabled.Contains("memory"))
                                     {
-                                        payload["memory"] = new { total = 16_000, used = 7_500 + (int)(now % 500) };
+                                        var mem = GetMemoryInfoMb();
+                                        payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
                                     }
                                     await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
                                     var pushed = rpcServer.IncrementMetricsCount();
@@ -283,16 +286,18 @@ namespace SystemMonitor.Service.Services
             }
 
             /// <summary>
-            /// 获取即时快照（Mock 数据）。
+            /// 获取即时快照（最小实现：CPU/内存信息）。
             /// </summary>
             public Task<object> snapshot(SnapshotParams? p)
             {
                 var ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                var mem = GetMemoryInfoMb();
+                var cpu = GetCpuUsagePercent();
                 var result = new
                 {
                     ts,
-                    cpu = new { usage_percent = 12.3 },
-                    memory = new { total = 16_000, used = 8_123 },
+                    cpu = new { usage_percent = cpu },
+                    memory = new { total = mem.total_mb, used = mem.used_mb },
                     disk = new { read_bytes_per_sec = 1024, write_bytes_per_sec = 2048 }
                 };
                 _logger.LogInformation("snapshot called, modules={Modules}", p?.modules == null ? "*" : string.Join(',', p.modules));
@@ -459,5 +464,108 @@ namespace SystemMonitor.Service.Services
             public int? step_ms { get; set; }
         }
         #endregion
+
+        // Helpers
+        private static (long total_mb, long used_mb) GetMemoryInfoMb()
+        {
+            try
+            {
+                if (TryGetMemoryStatus(out var status))
+                {
+                    long totalMb = (long)(status.ullTotalPhys / (1024 * 1024));
+                    long availMb = (long)(status.ullAvailPhys / (1024 * 1024));
+                    long usedMb = Math.Max(0, totalMb - availMb);
+                    return (totalMb, usedMb);
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+            // 回退到固定值，保证接口不失败
+            return (16_000, 8_000);
+        }
+
+        // CPU usage via GetSystemTimes
+        [StructLayout(LayoutKind.Sequential)]
+        private struct FILETIME
+        {
+            public uint dwLowDateTime;
+            public uint dwHighDateTime;
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetSystemTimes(out FILETIME lpIdleTime, out FILETIME lpKernelTime, out FILETIME lpUserTime);
+
+        private static readonly object _cpuLock = new();
+        private static bool _cpuInit;
+        private static ulong _prevIdle, _prevKernel, _prevUser;
+
+        private static double GetCpuUsagePercent()
+        {
+            try
+            {
+                if (!GetSystemTimes(out var idle, out var kernel, out var user))
+                {
+                    return 0.0;
+                }
+                static ulong ToUInt64(FILETIME ft) => ((ulong)ft.dwHighDateTime << 32) | ft.dwLowDateTime;
+                var idleNow = ToUInt64(idle);
+                var kernelNow = ToUInt64(kernel);
+                var userNow = ToUInt64(user);
+                double usage = 0.0;
+                lock (_cpuLock)
+                {
+                    if (_cpuInit)
+                    {
+                        var idleDelta = idleNow - _prevIdle;
+                        var kernelDelta = kernelNow - _prevKernel;
+                        var userDelta = userNow - _prevUser;
+                        // kernel 包含 idle，需要与 user 一起作为 total，再减去 idle 得到 busy
+                        var total = kernelDelta + userDelta;
+                        var busy = total > idleDelta ? (total - idleDelta) : 0UL;
+                        if (total > 0)
+                        {
+                            usage = Math.Clamp(100.0 * busy / total, 0.0, 100.0);
+                        }
+                    }
+                    _prevIdle = idleNow;
+                    _prevKernel = kernelNow;
+                    _prevUser = userNow;
+                    _cpuInit = true;
+                }
+                return usage;
+            }
+            catch
+            {
+                return 0.0;
+            }
+        }
+
+        // Memory via GlobalMemoryStatusEx
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct MEMORYSTATUSEX
+        {
+            public uint dwLength;
+            public uint dwMemoryLoad;
+            public ulong ullTotalPhys;
+            public ulong ullAvailPhys;
+            public ulong ullTotalPageFile;
+            public ulong ullAvailPageFile;
+            public ulong ullTotalVirtual;
+            public ulong ullAvailVirtual;
+            public ulong ullAvailExtendedVirtual;
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
+
+        private static bool TryGetMemoryStatus(out MEMORYSTATUSEX status)
+        {
+            status = new MEMORYSTATUSEX();
+            status.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
+            return GlobalMemoryStatusEx(ref status);
+        }
     }
 }
