@@ -120,19 +120,19 @@ fn read_response(stream: &mut std::fs::File) -> Result<JsonRpcResponse> {
 
 fn open_pipe_with_retry(timeout: Duration) -> Result<std::fs::File> {
     let start = Instant::now();
-    let mut last_err: Option<anyhow::Error> = None;
     loop {
         match OpenOptions::new().read(true).write(true).open(PIPE_PATH) {
             Ok(f) => return Ok(f),
             Err(e) => {
-                last_err = Some(anyhow!(e).context(format!("open named pipe {}", PIPE_PATH)));
-                if start.elapsed() >= timeout { break; }
+                let err = anyhow!(e).context(format!("open named pipe {}", PIPE_PATH));
+                if start.elapsed() >= timeout {
+                    return Err(err.into());
+                }
                 // 稍快一些的轮询，提升抢占成功率
                 std::thread::sleep(Duration::from_millis(80));
             }
         }
     }
-    Err(last_err.unwrap_or_else(|| anyhow!("failed to open named pipe")).into())
 }
 
 fn call_over_named_pipe(method: &str, params: Option<Value>) -> Result<Value> {
