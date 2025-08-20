@@ -140,6 +140,76 @@ powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1 -Configuration Relea
 Start-Process powershell -ArgumentList 'Get-ChildItem artifacts/test-results -Recurse'
 ```
 
+### 测试报告生成与查看（TRX -> HTML）
+我们提供 `scripts/trx-report.ps1` 将 TRX 转为 HTML 报告，输出到 `artifacts/test-results/report/index.html`。
+
+推荐使用 PowerShell 7（pwsh）：
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 -TrxPath "artifacts\test-results\TestResults.trx" -Open
+```
+
+可选语言切换：使用 `-Lang`（默认 `en`，支持 `zh-CN`）。语言文案来自外置 JSON，路径：`scripts/trx-report.i18n.<lang>.json`。
+
+示例（中文）：
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 -TrxPath "artifacts\test-results\TestResults.trx" -Lang zh-CN -Open
+```
+
+若使用 Windows PowerShell 5.1（powershell.exe），请确保脚本文件为 UTF-8 带 BOM，以避免中文或符号乱码：
+
+```powershell
+# 将脚本保存为 UTF-8 with BOM（一次性操作）
+$p = 'scripts\trx-report.ps1'
+$s = Get-Content -LiteralPath $p -Raw
+$enc = New-Object System.Text.UTF8Encoding($true) # 含 BOM
+[System.IO.File]::WriteAllText((Resolve-Path $p), $s, $enc)
+
+# 运行报告生成
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 -TrxPath "artifacts\test-results\TestResults.trx" -Open
+
+# （可选）中文界面
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 -TrxPath "artifacts\test-results\TestResults.trx" -Lang zh-CN -Open
+```
+
+注意：生成的 `index.html` 已使用 UTF-8 BOM，并在 `<head>` 中显式声明 `charset=utf-8`。
+
+### i18n 文案文件
+- 路径：`scripts/trx-report.i18n.en.json`, `scripts/trx-report.i18n.zh-CN.json`
+- 编码：建议保存为 UTF-8 with BOM；脚本通过 .NET StreamReader 自动识别 BOM，并在无 BOM 时默认以 UTF-8 读取。
+- 可扩展：若需新增语言，按 `scripts/trx-report.i18n.<lang>.json` 命名新增文件，并通过 `-Lang <lang>` 选择。
+
+### 命令示例（生成并自动打开报告）
+__PowerShell 7（pwsh）__
+```powershell
+# 英文
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 `
+  -TrxPath "artifacts\test-results\TestResults.trx" `
+  -OutDir "artifacts/test-results/report-pwsh-en" `
+  -Lang en -Open
+
+# 中文
+pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 `
+  -TrxPath "artifacts\test-results\TestResults.trx" `
+  -OutDir "artifacts/test-results/report-pwsh-zh" `
+  -Lang zh-CN -Open
+```
+
+__Windows PowerShell 5.1（powershell.exe）__
+```powershell
+# 英文
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 `
+  -TrxPath "artifacts\test-results\TestResults.trx" `
+  -OutDir "artifacts/test-results/report-ps51-en" `
+  -Lang en -Open
+
+# 中文
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\trx-report.ps1 `
+  -TrxPath "artifacts\test-results\TestResults.trx" `
+  -OutDir "artifacts/test-results/report-ps51-zh" `
+  -Lang zh-CN -Open
+```
+
 ## 安装为 Windows 服务（管理员）
 使用 `scripts/install-service.ps1` 在本机注册/更新/启动服务。
 

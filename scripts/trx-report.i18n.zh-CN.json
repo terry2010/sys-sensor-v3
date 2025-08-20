@@ -1,0 +1,18 @@
+{
+  "title_prefix": "测试报告",
+  "label_total": "总计",
+  "label_passed": "通过",
+  "label_failed": "失败",
+  "label_skipped": "跳过",
+  "label_time_range": "时间范围",
+  "label_duration": "耗时",
+  "label_test_details": "用例明细",
+  "col_outcome": "结果",
+  "col_test": "用例",
+  "col_class": "类",
+  "col_duration": "耗时",
+  "col_error": "错误",
+  "outcome_passed": "通过",
+  "outcome_failed": "失败",
+  "outcome_skipped": "跳过"
+}

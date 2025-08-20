@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Nerdbank.Streams;
 using StreamJsonRpc;
 using Xunit;
+using System.Collections.Generic;
 
 namespace SystemMonitor.Tests;
 
@@ -87,7 +88,11 @@ public class EndToEndTests : IAsyncLifetime
 
     private static string? FindServiceBinary()
     {
-        // 优先使用已编译产物，若不存在则返回 null 以回退到 dotnet run
+        // 默认使用 dotnet run 以确保使用最新源码构建。
+        // 如需使用现成 Release 二进制，可设置环境变量 E2E_USE_BIN=1。
+        var useBin = string.Equals(Environment.GetEnvironmentVariable("E2E_USE_BIN"), "1", StringComparison.Ordinal);
+        if (!useBin) return null;
+
         var root = FindRepoRoot();
         var exe = Path.Combine(root, "src", "SystemMonitor.Service", "bin", "Release", "net8.0", "SystemMonitor.Service.exe");
         if (File.Exists(exe)) return exe;
@@ -96,7 +101,7 @@ public class EndToEndTests : IAsyncLifetime
         return null;
     }
 
-    private static async Task<JsonRpc> ConnectAsync(TimeSpan timeout)
+    private static async Task<JsonRpc> ConnectAsync(TimeSpan timeout, object? localTarget = null)
     {
         var start = DateTime.UtcNow;
         Exception? last = null;
@@ -113,6 +118,10 @@ public class EndToEndTests : IAsyncLifetime
                 formatter.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
                 var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
                 var rpc = new JsonRpc(handler);
+                if (localTarget != null)
+                {
+                    rpc.AddLocalRpcTarget(localTarget);
+                }
                 rpc.StartListening();
                 return rpc;
             }
@@ -319,6 +328,68 @@ public class EndToEndTests : IAsyncLifetime
         Assert.True(burst.GetProperty("expires_at").GetInt64() > 0);
     }
 
+    private sealed class MetricsCollector
+    {
+        private readonly object _lock = new();
+        private readonly List<long> _ts = new();
+        public IReadOnlyList<long> Timestamps
+        {
+            get { lock (_lock) { return _ts.ToArray(); } }
+        }
+        public void Clear()
+        {
+            lock (_lock) { _ts.Clear(); }
+        }
+        [JsonRpcMethod("metrics")]
+        public void OnMetrics(System.Text.Json.JsonElement payload)
+        {
+            try
+            {
+                var ts = payload.GetProperty("ts").GetInt64();
+                lock (_lock) { _ts.Add(ts); }
+            }
+            catch { /* ignore malformed */ }
+        }
+    }
+
+    [Fact]
+    public async Task Metrics_Throttle_Burst_Recovery_Works()
+    {
+        var collector = new MetricsCollector();
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(20), collector);
+
+        // 设置基础间隔为 400ms，等待稳定一段时间统计次数
+        var cfg = await rpc.InvokeAsync<System.Text.Json.JsonElement>("set_config", new object[] { new { base_interval_ms = 400 } });
+        Assert.True(cfg.GetProperty("ok").GetBoolean());
+
+        collector.Clear();
+        await Task.Delay(1300); // 约 3 个周期
+        var c1 = collector.Timestamps.Count;
+        Assert.True(c1 >= 2, $"expected >=2 at base rate, got {c1}");
+
+        // 进入 burst: 100ms，TTL 600ms
+        var burst = await rpc.InvokeAsync<System.Text.Json.JsonElement>("burst_subscribe", new object[] { new { modules = new[] { "cpu" }, interval_ms = 100, ttl_ms = 600 } });
+        Assert.True(burst.GetProperty("ok").GetBoolean());
+
+        collector.Clear();
+        // 轮询等待，最多 1200ms，直到收集到 >=4 条（避免调度抖动造成偶发失败）
+        var swStart = DateTime.UtcNow;
+        int c2 = 0;
+        while ((DateTime.UtcNow - swStart).TotalMilliseconds < 1200)
+        {
+            c2 = collector.Timestamps.Count;
+            if (c2 >= 4) break;
+            await Task.Delay(50);
+        }
+        Assert.True(c2 >= 3, $"expected >=3 during burst (target >=4), got {c2}");
+
+        // 等待 TTL 过期后恢复到基础间隔
+        collector.Clear();
+        await Task.Delay(900); // 超过 TTL，恢复 base（~400ms）
+        var c3 = collector.Timestamps.Count;
+        Assert.True(c3 >= 1 && c3 <= 4, $"expected 1..4 after recovery, got {c3}");
+    }
+
     [Fact]
     public async Task QueryHistory_Works()
     {
@@ -328,6 +399,12 @@ public class EndToEndTests : IAsyncLifetime
         var res = await rpc.InvokeAsync<System.Text.Json.JsonElement>("query_history", new object[] { q });
         Assert.True(res.GetProperty("ok").GetBoolean());
         Assert.True(res.GetProperty("items").GetArrayLength() > 0);
+        foreach (var item in res.GetProperty("items").EnumerateArray())
+        {
+            Assert.True(item.TryGetProperty("ts", out _));
+            Assert.True(item.TryGetProperty("cpu", out _));
+            Assert.True(item.TryGetProperty("memory", out _));
+        }
     }
 
     [Fact]
@@ -338,6 +415,38 @@ public class EndToEndTests : IAsyncLifetime
         {
             var bad = new { app_version = "1.0.0", protocol_version = 1, token = "" };
             await rpc.InvokeAsync<object>("hello", new object[] { bad });
+        });
+    }
+
+    [Fact]
+    public async Task Hello_Protocol_NotSupported_Fails()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(10));
+        await Assert.ThrowsAsync<RemoteInvocationException>(async () =>
+        {
+            var bad = new { app_version = "1.0.0", protocol_version = 2, token = "t" };
+            await rpc.InvokeAsync<object>("hello", new object[] { bad });
+        });
+    }
+
+    [Fact]
+    public async Task Hello_Unsupported_Capability_Fails()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(10));
+        await Assert.ThrowsAsync<RemoteInvocationException>(async () =>
+        {
+            var bad = new { app_version = "1.0.0", protocol_version = 1, token = "t", capabilities = new[] { "unknown_cap" } };
+            await rpc.InvokeAsync<object>("hello", new object[] { bad });
+        });
+    }
+
+    [Fact]
+    public async Task SetConfig_Invalid_BaseInterval_Fails()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(10));
+        await Assert.ThrowsAsync<RemoteInvocationException>(async () =>
+        {
+            await rpc.InvokeAsync<object>("set_config", new object[] { new { base_interval_ms = 0 } });
         });
     }
 

@@ -1,0 +1,18 @@
+{
+  "title_prefix": "Test Report",
+  "label_total": "Total",
+  "label_passed": "Passed",
+  "label_failed": "Failed",
+  "label_skipped": "Skipped",
+  "label_time_range": "Time Range",
+  "label_duration": "Duration",
+  "label_test_details": "Test Details",
+  "col_outcome": "Outcome",
+  "col_test": "Test",
+  "col_class": "Class",
+  "col_duration": "Duration",
+  "col_error": "Error",
+  "outcome_passed": "Passed",
+  "outcome_failed": "Failed",
+  "outcome_skipped": "Skipped"
+}

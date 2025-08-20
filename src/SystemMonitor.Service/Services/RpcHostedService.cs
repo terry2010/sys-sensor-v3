@@ -198,6 +198,7 @@ namespace SystemMonitor.Service.Services
             private long _burstExpiresAt;
             private long _metricsPushed;
             private readonly Dictionary<string, int> _moduleIntervals = new(StringComparer.OrdinalIgnoreCase);
+            private static readonly HashSet<string> _supportedCapabilities = new(new[] { "metrics_stream", "burst_mode", "history_query" }, StringComparer.OrdinalIgnoreCase);
 
             public RpcServer(ILogger logger, long initialSeq)
             {
@@ -244,20 +245,40 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> hello(HelloParams p)
             {
-                if (p == null || string.IsNullOrWhiteSpace(p.token))
+                if (p == null)
                 {
-                    // MVP 阶段先返回通用未授权错误（由框架映射为标准 JSON-RPC 错误），避免依赖特定异常类型。
+                    throw new ArgumentNullException(nameof(p));
+                }
+                if (string.IsNullOrWhiteSpace(p.token))
+                {
+                    // 认证失败：未携带 token
                     throw new UnauthorizedAccessException("unauthorized");
                 }
+                if (p.protocol_version != 1)
+                {
+                    // 协议不支持
+                    _logger.LogWarning("hello validation failed: unsupported protocol_version={Proto}", p.protocol_version);
+                    throw new InvalidOperationException($"not_supported: protocol_version={p.protocol_version}");
+                }
+                if (p.capabilities != null && p.capabilities.Length > 0)
+                {
+                    var unsupported = p.capabilities.Where(c => !_supportedCapabilities.Contains(c)).ToArray();
+                    if (unsupported.Length > 0)
+                    {
+                        _logger.LogWarning("hello validation failed: unsupported capabilities={Caps}", string.Join(',', unsupported));
+                        throw new InvalidOperationException($"not_supported: capabilities=[{string.Join(',', unsupported)}]");
+                    }
+                }
 
+                var sessionId = Guid.NewGuid().ToString();
                 var result = new
                 {
                     server_version = "1.0.0",
                     protocol_version = 1,
-                    capabilities = new[] { "metrics_stream", "burst_mode", "history_query" },
-                    session_id = Guid.NewGuid().ToString()
+                    capabilities = _supportedCapabilities.ToArray(),
+                    session_id = sessionId
                 };
-                _logger.LogInformation("hello: app={App} proto={Proto}", p.app_version, p.protocol_version);
+                _logger.LogInformation("hello ok: app={App} proto={Proto} caps=[{Caps}] session_id={SessionId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId);
                 return Task.FromResult<object>(result);
             }
 

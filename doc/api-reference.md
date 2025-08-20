@@ -1,25 +1,18 @@
-# JSON-RPC 接口规范（最终版草案）
+# JSON-RPC 接口规范（M1 冻结）
 
 > 传输：Named Pipes + HeaderDelimited + JSON-RPC 2.0；管道名：`\\.\pipe\sys_sensor_v3.rpc`；字段统一 `snake_case`。
 
-## 1. 方法列表
+## 1. 方法列表（M1 实装）
 - `hello(params: { app_version: string, protocol_version: number, token: string, capabilities?: string[] })`
+- `snapshot(params?: { modules?: string[] })`
 - `set_config(params: { base_interval_ms?: number, module_intervals?: Record<string, number>, persist?: boolean })`
+- `burst_subscribe(params: { modules?: string[], interval_ms: number, ttl_ms: number })`
 - `start(params?: { modules?: string[] })`
 - `stop(params: {})`
-- `burst_subscribe(params: { modules: string[], interval_ms: number, ttl_ms: number })`
-- `snapshot(params?: { modules?: string[] })`
-- `query_history(params: { start_ts: number, end_ts: number, modules?: string[], granularity?: '1s'|'10s'|'1m' })`
-- `set_log_level(params: { level: 'verbose'|'debug'|'information'|'warning'|'error'|'fatal' })`
-- `update_check(params: {})`
-- `update_apply(params: { version?: string })`
+- `query_history(params: { from_ts: number, to_ts: number, modules?: string[], step_ms?: number })`
 
 ## 2. 事件（Service → UI）
-- `metrics`: `{ ts: number, seq: number, ...模块字段 }`
-- `state`: `{ running: boolean, clients: number, effective_intervals: Record<string, number> }`
-- `alert`: `{ level: 'info'|'warn'|'error', metric: string, value: number|string, threshold?: number|string, rule_id?: string, message: string, ts: number }`
-- `update_ready`: `{ component: string, version: string }`
-- `ping`: `{}`
+- `metrics`: `{ ts: number, seq: number, cpu?: {...}, memory?: {...}, ... }`（按启用模块动态裁剪）
 
 ## 3. 请求/响应示例
 ```json
@@ -54,7 +47,7 @@
 ```
 ```json
 // set_config response
-{ "jsonrpc":"2.0","result": { "ok": true }, "id":2 }
+{ "jsonrpc":"2.0","result": { "ok": true, "base_interval_ms": 1000, "effective_intervals": { "cpu": 300 } }, "id":2 }
 ```
 
 ```json
@@ -85,7 +78,7 @@
 ```
 ```json
 // burst_subscribe response
-{ "jsonrpc":"2.0","result": { "subscription_id": "uuid-v4" }, "id":5 }
+{ "jsonrpc":"2.0","result": { "ok": true, "expires_at": 1710001000 }, "id":5 }
 ```
 
 ```json
@@ -107,8 +100,8 @@
 // query_history
 {
   "jsonrpc":"2.0","method":"query_history","params":{
-    "start_ts":1710000000,"end_ts":1710003600,
-    "modules":["cpu"],"granularity":"10s"
+    "from_ts":1710000000,"to_ts":1710003600,
+    "modules":["cpu","memory"],"step_ms":1000
   },"id":7
 }
 ```
@@ -116,41 +109,20 @@
 // query_history response（示例）
 {
   "jsonrpc":"2.0","result": {
-    "series": [{ "ts":1710000000, "cpu": { "usage_pct": 10.1 } }]
+    "ok": true,
+    "items": [
+      { "ts":1710000000, "cpu": { "usage_percent": 10.1 }, "memory": { "total": 16000, "used": 7650 } }
+    ]
   },"id":7
 }
 ```
 
-```json
-// set_log_level
-{ "jsonrpc":"2.0","method":"set_log_level","params": { "level":"warning" }, "id":8 }
-```
-```json
-// set_log_level response
-{ "jsonrpc":"2.0","result": { "effective":"warning" }, "id":8 }
-```
-
-```json
-// update_check
-{ "jsonrpc":"2.0","method":"update_check","params": {}, "id":9 }
-```
-```json
-// update_check response
-{ "jsonrpc":"2.0","result": { "latest":"1.1.0", "has_update": true }, "id":9 }
-```
-
-```json
-// update_apply
-{ "jsonrpc":"2.0","method":"update_apply","params": { "version": "1.1.0" }, "id":10 }
-```
-```json
-// update_apply response
-{ "jsonrpc":"2.0","result": { "accepted": true }, "id":10 }
-```
+> 注：`set_log_level/update_*` 非 M1 范围，后续里程碑再补充。
 
 > 注：字段名以指标文档为准；所有键名均为 `snake_case`。
 
-## 4. 错误响应
+## 4. 错误响应与错误码
+统一采用 JSON-RPC error 对象，`message` 为机器可读短语，`data` 可包含细节：
 ```json
 {
   "jsonrpc":"2.0",
@@ -158,6 +130,12 @@
   "id": 1
 }
 ```
+
+推荐错误码（私有区间 -32000~-32099）：
+- unauthorized: -32040（示例：`hello` 缺少/无效 token）
+- invalid_params: -32001
+- not_supported: -32050（协议/能力不支持）
+- internal: -32099
 
 ## 5. 字段命名校验
 - 服务端序列化策略：.NET `System.Text.Json` + `JsonNamingPolicy.SnakeCaseLower`

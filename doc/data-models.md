@@ -56,10 +56,29 @@ CREATE TABLE IF NOT EXISTS config (
 );
 ```
 
+### 2.1 索引与查询策略
+- 典型查询：`query_history(from_ts, to_ts, modules[], step_ms)`
+  - 范围扫描走 `PRIMARY KEY(ts, module)`；按 `module IN (...)` 过滤
+  - 建议视图：`v_metrics(ts, module, payload_json)` 统一聚合源表（见 3.2）
+- 补充索引（可选，待基准验证）：
+  - `CREATE INDEX IF NOT EXISTS idx_m1s_module_ts ON metrics_1s(module, ts);`
+  - `CREATE INDEX IF NOT EXISTS idx_m10s_module_ts ON metrics_10s(module, ts);`
+  - `CREATE INDEX IF NOT EXISTS idx_m1m_module_ts ON metrics_1m(module, ts);`
+
+### 2.2 保留策略（Retention）
+- `metrics_1s`：保留 2 天
+- `metrics_10s`：保留 14 天
+- `metrics_1m`：保留 90 天
+- 通过定时清理任务执行 `DELETE FROM <table> WHERE ts < cutoff`；操作前进行 `VACUUM` 评估
+
 ## 3. 内存映射文件（MMF）格式
 - 名称：`Global/sys_sensor_v3_snapshot`
 - 内容：`{ ts, seq, modules: { <module>: payload_json } }`
 - 大小控制：环形缓冲 + 版本号，避免破坏式变更
+
+### 3.1 快照到事件映射
+- 采集器写入内存快照；推送 `metrics` 事件携带同一份 payload 的精简结构
+- `burst_subscribe` 期间增加频度，不改变数据结构
 
 ## 4. 配置文件 JSON Schema（草案）
 ```json
@@ -84,3 +103,23 @@ CREATE TABLE IF NOT EXISTS config (
 
 ## 5. 命名与序列化策略
 - 外部：snake_case；内部：语言惯例；通过统一序列化策略转换
+
+### 5.1 模块字段清单（占位）
+- `cpu`：`{ usage_percent, user, system, idle, load_avg_1m, load_avg_5m, load_avg_15m }`
+- `memory`：`{ total, used, available, pressure }`
+- `disk`：`{ read_bytes_per_sec, write_bytes_per_sec, read_iops, write_iops, busy_percent }`
+- `network`：`{ rx_bytes_per_sec, tx_bytes_per_sec, rx_errors, tx_errors }`
+- `gpu`：`{ usage_percent, vram_used, temperature }`
+
+### 5.2 命名一致性约束
+- 对外一律 `snake_case`；禁止驼峰/帕斯卡混用
+- 单位约定：以 `*_percent`, `*_bytes_per_sec`, `*_mb` 等后缀清晰表达
+- 破坏式字段变更需同步 `protocol_version` 升级与兼容处理
+
+## 6. 聚合产物与查询映射
+- Aggregator 周期性将 `metrics_1s` 计算聚合后写入 `metrics_10s/metrics_1m`
+- `query_history.step_ms` 选择逻辑：
+  - `step_ms <= 1000` → `metrics_1s`
+  - `1000 < step_ms <= 10000` → `metrics_10s`
+  - `step_ms > 10000` → `metrics_1m`
+- 跨模块查询：对每个 `ts` 进行模块 payload 的合并，缺失模块可省略字段
