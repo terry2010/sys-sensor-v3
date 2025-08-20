@@ -186,3 +186,48 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn split_header_body(buf: &[u8]) -> (String, Vec<u8>) {
+        let sep = b"\r\n\r\n";
+        let pos = buf
+            .windows(sep.len())
+            .position(|w| w == sep)
+            .expect("header separator not found");
+        let (h, b) = buf.split_at(pos + sep.len());
+        (String::from_utf8(h.to_vec()).unwrap(), b.to_vec())
+    }
+
+    #[test]
+    fn test_build_request_content_length_and_json() {
+        let params = serde_json::json!({"a":1,"b":"x"});
+        let (buf, id) = super::build_request("unit_test", Some(params));
+        assert!(id > 0);
+
+        let (header, body) = split_header_body(&buf);
+        assert!(header.to_ascii_lowercase().starts_with("content-length:"));
+
+        // parse content-length
+        let mut cl: usize = 0;
+        for line in header.split("\r\n") {
+            let lower = line.to_ascii_lowercase();
+            if lower.starts_with("content-length:") {
+                let parts: Vec<&str> = line.split(':').collect();
+                if parts.len() >= 2 {
+                    cl = parts[1].trim().parse::<usize>().unwrap();
+                }
+            }
+        }
+        assert_eq!(cl, body.len());
+
+        // json structure
+        let v: serde_json::Value = serde_json::from_slice(&body).expect("json parse");
+        assert_eq!(v.get("jsonrpc").and_then(|x| x.as_str()), Some("2.0"));
+        assert_eq!(v.get("method").and_then(|x| x.as_str()), Some("unit_test"));
+        assert!(v.get("id").is_some());
+        assert!(v.get("params").is_some());
+    }
+}

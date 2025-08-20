@@ -12,6 +12,7 @@ import type {
 } from './dto';
 
 function tauri() {
+  if (typeof window === 'undefined') return undefined as any;
   return (window as any).__TAURI__;
 }
 
