@@ -24,6 +24,7 @@ export const tauriRpc = {
   async start(p?: StartParams) { return rpcCall<any>('start', p ?? {}); },
   async stop(p: StopParams = {}) { return rpcCall<any>('stop', p); },
   async burst_subscribe(p: BurstSubscribeParams) { return rpcCall<any>('burst_subscribe', p); },
+  async subscribe_metrics(enable: boolean = true) { return rpcCall<any>('subscribe_metrics', { enable }); },
   onMetrics(listener: (payload: any) => void) {
     let unlisten: (() => void) | null = null;
     // 动态引入事件 API，避免在纯 Web 环境编译/运行报错
@@ -41,6 +42,11 @@ export async function ensureEventBridge() {
     try {
       const { invoke } = await import('@tauri-apps/api/core');
       await invoke('start_event_bridge');
+      // 事件桥建立后，冗余调用一次 subscribe_metrics，确保后端开始推送
+      try { await tauriRpc.subscribe_metrics(true); } catch {}
+      // 标记宿主为 Tauri（首次成功后）
+      const w: any = typeof window !== 'undefined' ? window : {};
+      if (!w.__IS_TAURI__) w.__IS_TAURI__ = true;
     }
     catch (e) { /* 忽略重复启动等错误 */ }
   };

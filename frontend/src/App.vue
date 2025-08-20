@@ -8,6 +8,8 @@
         <span :class="{ stale: isStale }">last: {{ lastDeltaSec }}s</span>
         <span class="badge" :class="rpcSourceClass">RPC: {{ rpcSource }}</span>
       </div>
+      <div v-if="session.error" class="error">会话失败：{{ session.error }}</div>
+      <div v-else-if="isStale" class="warn">未收到 metrics，请确认后端是否运行，或稍候片刻…</div>
     </header>
 
     <section class="cards">
@@ -32,12 +34,17 @@ import { ensureEventBridge } from './api/rpc.tauri';
 const session = useSessionStore();
 const metrics = useMetricsStore();
 
-onMounted(() => {
-  if (typeof window !== 'undefined' && (window as any).__TAURI__) {
-    // 在 Tauri 宿主中启动事件桥
-    ensureEventBridge();
+onMounted(async () => {
+  // 统一初始化顺序：先探测并尝试启动事件桥 -> 再进行会话与 metrics 订阅
+  const w: any = typeof window !== 'undefined' ? window : {};
+  try {
+    await import('@tauri-apps/api/core');
+    await ensureEventBridge();
+    w.__IS_TAURI__ = true;
+  } catch {
+    w.__IS_TAURI__ = false;
   }
-  session.init();
+  await session.init();
   metrics.start();
 });
 
@@ -58,18 +65,7 @@ const rpcSource = computed(() => {
 });
 const rpcSourceClass = computed(() => rpcSource.value === 'tauri' ? 'ok' : 'warn');
 
-// 探测 Tauri v2 环境：动态引入 @tauri-apps/api/core
-onMounted(async () => {
-  const w: any = typeof window !== 'undefined' ? window : {};
-  try {
-    await import('@tauri-apps/api/core');
-    // 只有当能成功调用桥接（即 invoke 可用且命令可达）时，才认为是 Tauri
-    await ensureEventBridge();
-    w.__IS_TAURI__ = true;
-  } catch {
-    w.__IS_TAURI__ = false;
-  }
-});
+// 探测逻辑已合并进上面的 onMounted 初始化
 </script>
 
 <style scoped>
@@ -86,6 +82,8 @@ header {
 .badge { padding: 2px 6px; border-radius: 10px; border: 1px solid #ddd; }
 .badge.ok { background: #e6ffed; color: #046c4e; border-color: #b7ebc6; }
 .badge.warn { background: #fff7e6; color: #ad4e00; border-color: #ffd591; }
+.error { margin-top: 6px; color: #b00020; font-size: 12px; }
+.warn { margin-top: 6px; color: #ad4e00; font-size: 12px; }
 .cards { display: grid; gap: 16px; grid-template-columns: 1fr; }
 @media (min-width: 900px) {
   .cards { grid-template-columns: 1fr 1fr; }

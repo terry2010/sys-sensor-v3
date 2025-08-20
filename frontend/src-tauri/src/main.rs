@@ -43,11 +43,18 @@ fn now_millis() -> u64 {
 
 fn build_request(method: &str, params: Option<Value>) -> (Vec<u8>, u64) {
     let id = now_millis();
+    // 兼容 StreamJsonRpc：当服务端方法签名为单个 DTO 参数（e.g. hello(HelloParams p)）时，
+    // 需要使用位置参数形式传递，即 [ { ... } ]；若直接传对象会被视为多个同名参数，导致 "hello/4" 等错误。
+    let wrapped_params = match params {
+        None => None,
+        Some(Value::Array(_)) => params, // 已是位置参数数组，直接使用
+        Some(v) => Some(Value::Array(vec![v])), // 包装为单元素数组
+    };
     let req = JsonRpcRequest {
         jsonrpc: "2.0",
         id,
         method,
-        params,
+        params: wrapped_params,
     };
     let body = serde_json::to_vec(&req).expect("serialize request");
     let header = format!("Content-Length: {}\r\n\r\n", body.len());
@@ -91,7 +98,22 @@ fn read_response(stream: &mut std::fs::File) -> Result<JsonRpcResponse> {
         if n == 0 { return Err(anyhow!("connection closed while reading body")); }
         read += n;
     }
-    let resp: JsonRpcResponse = serde_json::from_slice(&body).context("decode json-rpc response")?;
+    let resp: JsonRpcResponse = match serde_json::from_slice(&body) {
+        Ok(v) => v,
+        Err(e) => {
+            // 尝试提供更多上下文，便于定位问题
+            let mut preview = String::new();
+            let take = body.len().min(400);
+            // 以 lossy 方式显示，避免非 UTF-8 阻断信息
+            preview.push_str(&String::from_utf8_lossy(&body[..take]));
+            let err = anyhow!(e).context(format!(
+                "decode json-rpc response (header=\"{}\", body_preview=\"{}\")",
+                header_str.replace('\n', "\\n").replace('\r', "\\r"),
+                preview.replace('\n', "\\n").replace('\r', "\\r")
+            ));
+            return Err(err);
+        }
+    };
     Ok(resp)
 }
 
@@ -104,7 +126,8 @@ fn open_pipe_with_retry(timeout: Duration) -> Result<std::fs::File> {
             Err(e) => {
                 last_err = Some(anyhow!(e).context(format!("open named pipe {}", PIPE_PATH)));
                 if start.elapsed() >= timeout { break; }
-                std::thread::sleep(Duration::from_millis(100));
+                // 稍快一些的轮询，提升抢占成功率
+                std::thread::sleep(Duration::from_millis(80));
             }
         }
     }
@@ -113,7 +136,8 @@ fn open_pipe_with_retry(timeout: Duration) -> Result<std::fs::File> {
 
 fn call_over_named_pipe(method: &str, params: Option<Value>) -> Result<Value> {
     // 连接命名管道，带重试（最多 3 秒）
-    let mut file = open_pipe_with_retry(Duration::from_secs(3))?;
+    // 延长到 10 秒，避免事件桥刚建立后，服务端尚未创建下一监听实例导致的短暂不可用
+    let mut file = open_pipe_with_retry(Duration::from_secs(10))?;
 
     let (payload, _id) = build_request(method, params);
     file.write_all(&payload)?;
@@ -138,6 +162,14 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
             // 尝试连接命名管道
             match OpenOptions::new().read(true).write(true).open(PIPE_PATH) {
                 Ok(mut file) => {
+                    // 连接建立后，先订阅 metrics 推送，避免服务端在其它短连接上推送导致混流
+                    // 仅做一次请求并读取其响应，忽略错误（服务端老版本可能没有该方法）
+                    let sub_params = serde_json::json!({ "enable": true });
+                    let (sub_payload, _id) = build_request("subscribe_metrics", Some(sub_params));
+                    let _ = file.write_all(&sub_payload);
+                    let _ = file.flush();
+                    let _ = read_response(&mut file);
+
                     // 持续读取通知帧（HeaderDelimited + JSON）
                     loop {
                         // 读取直到空行

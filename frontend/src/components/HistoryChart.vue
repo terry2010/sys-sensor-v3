@@ -36,12 +36,18 @@ const render = (data: { x: number[]; cpu: number[] }) => {
 
 const load = async () => {
   loading.value = true;
-  const now = Date.now();
-  const res = await service.queryHistory({ from_ts: now - winSec.value * 1000, to_ts: now, modules: ['cpu'], step_ms: stepMs.value });
-  const x: number[] = []; const cpu: number[] = [];
-  for (const it of res.items) { if (it.cpu) { x.push(it.ts); cpu.push(it.cpu.usage_percent); } }
-  render({ x, cpu });
-  loading.value = false;
+  try {
+    const now = Date.now();
+    const res = await service.queryHistory({ from_ts: now - winSec.value * 1000, to_ts: now, modules: ['cpu'], step_ms: stepMs.value });
+    const x: number[] = []; const cpu: number[] = [];
+    for (const it of res.items) { if (it.cpu) { x.push(it.ts); cpu.push(it.cpu.usage_percent); } }
+    render({ x, cpu });
+  } catch (e) {
+    // 简单吞掉异常，避免阻塞 UI；必要时可在 ControlPanel 的日志中检查详情
+    console.warn('[HistoryChart] load error', e);
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(() => { load(); window.addEventListener('resize', ()=> chart.value?.resize()); });

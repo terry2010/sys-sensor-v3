@@ -115,6 +115,11 @@ namespace SystemMonitor.Service.Services
                     try
                     {
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        if (!rpcServer.MetricsPushEnabled)
+                        {
+                            await Task.Delay(300, cts.Token).ConfigureAwait(false);
+                            continue;
+                        }
                         var enabled = rpcServer.GetEnabledModules();
                         double? cpuVal = null;
                         (long total, long used)? memVal = null;
@@ -178,8 +183,8 @@ namespace SystemMonitor.Service.Services
         [SupportedOSPlatform("windows")]
         private static NamedPipeServerStream CreateSecuredPipe()
         {
+            // 构建自定义 ACL
             var pipeSecurity = new PipeSecurity();
-
             // SYSTEM
             pipeSecurity.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.LocalSystemSid, null),
                 PipeAccessRights.FullControl, AccessControlType.Allow));
@@ -189,22 +194,48 @@ namespace SystemMonitor.Service.Services
             // 已通过身份验证的本地用户（允许前端普通用户连接）
             pipeSecurity.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null),
                 PipeAccessRights.ReadWrite, AccessControlType.Allow));
+            try
+            {
+                // 显式添加“当前用户”FullControl，缓解某些环境下的 UAC/完整性级别导致的拒绝
+                var current = WindowsIdentity.GetCurrent();
+                if (current?.User != null)
+                {
+                    pipeSecurity.AddAccessRule(new PipeAccessRule(current.User, PipeAccessRights.FullControl, AccessControlType.Allow));
+                }
+            }
+            catch { /* ignore */ }
 
-            // 使用 Acl 扩展创建带 ACL 的命名管道
-            // 允许并发连接：事件桥（长期占用）+ 前端短连接 RPC 调用
-            // 注意：StreamJsonRpc 每个连接一个会话，服务端会在断开后继续接受后续连接
-            var server = System.IO.Pipes.NamedPipeServerStreamAcl.Create(
-                PipeName,
-                PipeDirection.InOut,
-                maxNumberOfServerInstances: NamedPipeServerStream.MaxAllowedServerInstances,
-                transmissionMode: PipeTransmissionMode.Byte,
-                options: PipeOptions.Asynchronous,
-                inBufferSize: 0,
-                outBufferSize: 0,
-                pipeSecurity: pipeSecurity
-            );
-
-            return server;
+            try
+            {
+                // 使用 Acl 扩展创建带 ACL 的命名管道
+                // 允许并发连接：事件桥（长期占用）+ 前端短连接 RPC 调用
+                // 注意：StreamJsonRpc 每个连接一个会话，服务端会在断开后继续接受后续连接
+                var server = System.IO.Pipes.NamedPipeServerStreamAcl.Create(
+                    PipeName,
+                    PipeDirection.InOut,
+                    maxNumberOfServerInstances: NamedPipeServerStream.MaxAllowedServerInstances,
+                    transmissionMode: PipeTransmissionMode.Byte,
+                    options: PipeOptions.Asynchronous,
+                    inBufferSize: 0,
+                    outBufferSize: 0,
+                    pipeSecurity: pipeSecurity
+                );
+                return server;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // 回退：在极少数环境下，设置 ACL 会被拒绝。为保证可用性，退回到默认安全描述符。
+                // 注意：此回退依赖系统默认 ACL，通常仅本用户可访问。
+                return new NamedPipeServerStream(
+                    PipeName,
+                    PipeDirection.InOut,
+                    NamedPipeServerStream.MaxAllowedServerInstances,
+                    PipeTransmissionMode.Byte,
+                    PipeOptions.Asynchronous,
+                    0,
+                    0
+                );
+            }
         }
 
         /// <summary>
@@ -220,6 +251,7 @@ namespace SystemMonitor.Service.Services
             private long _burstExpiresAt;
             private long _metricsPushed;
             private readonly Dictionary<string, int> _moduleIntervals = new(StringComparer.OrdinalIgnoreCase);
+            private bool _metricsEnabled = false; // 需订阅后才开始推送
             // 简易内存历史缓冲区（环形，最多保留最近 MaxHistory 条）
             private readonly List<HistoryItem> _history = new();
             private const int MaxHistory = 10_000;
@@ -234,6 +266,11 @@ namespace SystemMonitor.Service.Services
             public long NextSeq() => Interlocked.Increment(ref _seq);
 
             public long IncrementMetricsCount() => Interlocked.Increment(ref _metricsPushed);
+
+            public bool MetricsPushEnabled
+            {
+                get { lock (_lock) { return _metricsEnabled; } }
+            }
 
             public int GetCurrentIntervalMs(long now)
             {
@@ -371,6 +408,19 @@ namespace SystemMonitor.Service.Services
                 }
                 _logger.LogInformation("burst_subscribe: interval={Interval}ms ttl={Ttl}ms -> expires_at={Expires}", p.interval_ms, p.ttl_ms, _burstExpiresAt);
                 return Task.FromResult<object>(new { ok = true, expires_at = _burstExpiresAt });
+            }
+
+            /// <summary>
+            /// 开启/关闭 metrics 推送（默认关闭，避免与短连接响应混流）。
+            /// </summary>
+            public Task<object> subscribe_metrics(SubscribeMetricsParams p)
+            {
+                lock (_lock)
+                {
+                    _metricsEnabled = p != null && p.enable;
+                }
+                _logger.LogInformation("subscribe_metrics: enable={Enable}", _metricsEnabled);
+                return Task.FromResult<object>(new { ok = true, enabled = _metricsEnabled });
             }
 
             /// <summary>
@@ -563,6 +613,11 @@ namespace SystemMonitor.Service.Services
             public long to_ts { get; set; }
             public string[]? modules { get; set; }
             public int? step_ms { get; set; }
+        }
+        
+        public sealed class SubscribeMetricsParams
+        {
+            public bool enable { get; set; }
         }
         #endregion
 
