@@ -9,6 +9,7 @@
       <SnapshotPanel />
       <HistoryChart />
       <ControlPanel />
+      <HistoryQuery />
     </section>
   </div>
 </template>
@@ -18,6 +19,7 @@ import { onMounted } from 'vue';
 import SnapshotPanel from './components/SnapshotPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import ControlPanel from './components/ControlPanel.vue';
+import HistoryQuery from './components/HistoryQuery.vue';
 import { useSessionStore } from './stores/session';
 import { useMetricsStore } from './stores/metrics';
 import { ensureEventBridge } from './api/rpc.tauri';
