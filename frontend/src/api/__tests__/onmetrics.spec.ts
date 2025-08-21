@@ -25,10 +25,11 @@ describe('onMetrics listener', () => {
     const handler = vi.fn();
     const unlisten = tauriRpc.onMetrics((p) => handler(p));
 
-    // wait microtask
-    await Promise.resolve();
+    // 等待动态 import 完成并调用 listen（可能超过一个 microtask）
+    await vi.waitFor(() => {
+      expect(listenMock).toHaveBeenCalledTimes(1);
+    });
 
-    expect(listenMock).toHaveBeenCalledTimes(1);
     expect(listenMock.mock.calls[0][0]).toBe('metrics');
 
     // call unlisten

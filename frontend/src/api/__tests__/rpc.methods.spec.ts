@@ -38,10 +38,10 @@ describe('tauriRpc invoke calls', () => {
 
   it('stop sends proper payload', async () => {
     invokeMock.mockResolvedValueOnce({ ok: true });
-    await tauriRpc.stop({});
+    await tauriRpc.stop();
     expect(invokeMock).toHaveBeenCalledWith('rpc_call', {
       method: 'stop',
-      params: {}
+      params: undefined
     });
   });
 

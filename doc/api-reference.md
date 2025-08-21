@@ -10,13 +10,14 @@
 - `set_config(params: { base_interval_ms?: number, module_intervals?: Record<string, number>, persist?: boolean })`
 - `burst_subscribe(params: { modules?: string[], interval_ms: number, ttl_ms: number })`
 - `start(params?: { modules?: string[] })`
-- `stop(params: {})`
+- `stop()`
 - `query_history(params: { from_ts: number, to_ts: number, modules?: string[], step_ms?: number })`
 - `subscribe_metrics(params: { enable: boolean })`
 
 ## 2. 事件（Service → UI）
 - `metrics`: `{ ts: number, seq: number, cpu?: {...}, memory?: {...}, ... }`（按启用模块动态裁剪；仅在“事件桥”连接且推流开关启用时发送）
-- `state`（预留，M1 未实现）: `{ running: boolean, clients: number, effective_intervals: Record<string, number> }`
+- `state`（已实现，最小版）: `{ ts: number, phase: "start"|"stop"|"burst", reason?: string, extra?: any }`
+  - 触发点：`start`、`stop`、`burst_subscribe` 成功后各发送一次；`ts` 为 UTC 毫秒时间戳。
 - `alert`（预留，M1 未实现）: `{ level: "info"|"warn"|"error", metric: string, value: number, threshold?: number, rule_id?: string, message: string, ts: number }`
 - `ping`（预留，M1 未实现）: `{}`（可选心跳）
 - `update_ready`（预留，M1 未实现）: `{ component: string, version: string }`
@@ -67,8 +68,8 @@
 ```
 
 ```json
-// stop
-{ "jsonrpc":"2.0","method":"stop","params": {}, "id":4 }
+// stop（无参）
+{ "jsonrpc":"2.0","method":"stop","id":4 }
 ```
 ```json
 // stop response（与实现对齐）
@@ -148,7 +149,7 @@
 - 边界与回退
   - 若 SQLite 中窗口内无记录，服务端会回退到内存缓存或即时快照，通常至少返回 1 条，确保 `items.length >= 1`（视实现策略）。
   - 当 `modules` 仅含部分模块时，其它模块字段省略为 `null`/缺失。
-  - `step_ms` 生效时，每个桶仅保留该桶内最后一条；桶无数据则不补零。
+  - `step_ms` 生效时，每个桶仅保留该桶内最后一条；桶无数据则不补零。窗口很短或数据极其稀疏时，可能退化为仅 1 个桶。
 
 - 限制
   - 历史已接入 SQLite 持久化（当前 M1 为单表 `metrics`，含 `ts/cpu/mem_total/mem_used`），配合保留策略定期清理；重启后历史可用。后续里程碑可能扩展为多粒度表。
