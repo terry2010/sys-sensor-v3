@@ -158,7 +158,10 @@
       "top_processes": [
         { "name": "chrome", "pid": 1234, "cpu_percent": 22.5 },
         { "name": "code", "pid": 5678, "cpu_percent": 12.0 }
-      ]
+      ],
+      "context_switches_per_sec": 120000.0,
+      "syscalls_per_sec": 450000.0,
+      "interrupts_per_sec": 15000.0
     },
     "memory": { "total": 16000, "used": 2048 }
   },"id":6

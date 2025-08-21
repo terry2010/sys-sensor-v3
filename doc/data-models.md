@@ -123,10 +123,15 @@ CREATE TABLE IF NOT EXISTS config (
 3) 对 Schema（如 `query_history` 返回）进行 JSON Schema 校验
 
 ### 5.1 模块字段清单（占位）
-- `cpu`：`{ usage_percent, user, system, idle, load_avg_1m, load_avg_5m, load_avg_15m, process_count, thread_count, per_core[], current_mhz?, max_mhz?, top_processes?[] }`
+- `cpu`：`{ usage_percent, user, system, idle, load_avg_1m, load_avg_5m, load_avg_15m, process_count, thread_count, per_core[], current_mhz?, max_mhz?, top_processes?[], context_switches_per_sec?, syscalls_per_sec?, interrupts_per_sec? }`
   - `top_processes`：数组，元素结构为 `{ name: string, pid: number, cpu_percent: number }`
     - 取值：按 CPU% 降序的前 N（当前 N=5），范围 0..100；不可得进程名时 `name="(unknown)"`
     - 采样：差分 `Process.TotalProcessorTime`，按逻辑核数归一；内部 800ms 节流缓存
+  - `context_switches_per_sec?`：number | null（>=0）
+  - `syscalls_per_sec?`：number | null（>=0）
+  - `interrupts_per_sec?`：number | null（>=0）
+    - 来源：Windows Performance Counters，优先类别 `System`（`Context Switches/sec`、`System Calls/sec`、`Interrupts/sec`）；回退 `Processor Information` 的 `_Total` 实例
+    - 采样：读取速率型计数器，内部 200ms 节流缓存；读取异常/不可得时返回 `null`
 - `memory`：`{ total, used, available, pressure }`
 - `disk`：`{ read_bytes_per_sec, write_bytes_per_sec, read_iops, write_iops, busy_percent }`
 - `network`：`{ rx_bytes_per_sec, tx_bytes_per_sec, rx_errors, tx_errors }`

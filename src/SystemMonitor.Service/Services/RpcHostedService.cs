@@ -41,6 +41,88 @@ namespace SystemMonitor.Service.Services
             };
         }
 
+        // -------------------------
+        // 内核活动计数器采样器（每秒速率）
+        // -------------------------
+        private sealed class KernelActivitySampler
+        {
+            private static readonly Lazy<KernelActivitySampler> _inst = new(() => new KernelActivitySampler());
+            public static KernelActivitySampler Instance => _inst.Value;
+
+            private readonly object _lock = new();
+            private long _lastTicks;
+            private (double? ctx, double? sysc, double? intr) _lastValues;
+            private bool _initTried;
+
+            // PerformanceCounter 引用
+            private PerformanceCounter? _pcCtx;
+            private PerformanceCounter? _pcSyscalls;
+            private PerformanceCounter? _pcIntr;
+
+            public (double? contextSwitchesPerSec, double? syscallsPerSec, double? interruptsPerSec) Read()
+            {
+                var now = Environment.TickCount64;
+                lock (_lock)
+                {
+                    if (now - _lastTicks < 200)
+                    {
+                        return _lastValues;
+                    }
+
+                    EnsureInit();
+
+                    double? ctx = null, sysc = null, intr = null;
+                    try { if (_pcCtx != null) ctx = Math.Max(0, _pcCtx.NextValue()); } catch { ctx = null; }
+                    try { if (_pcSyscalls != null) sysc = Math.Max(0, _pcSyscalls.NextValue()); } catch { sysc = null; }
+                    try { if (_pcIntr != null) intr = Math.Max(0, _pcIntr.NextValue()); } catch { intr = null; }
+
+                    _lastValues = (ctx, sysc, intr);
+                    _lastTicks = now;
+                    return _lastValues;
+                }
+            }
+
+            private void EnsureInit()
+            {
+                if (_initTried) return;
+                _initTried = true;
+                try
+                {
+                    // 优先 System 类别
+                    _pcCtx = TryCreateCounter("System", "Context Switches/sec");
+                    _pcSyscalls = TryCreateCounter("System", "System Calls/sec");
+                    _pcIntr = TryCreateCounter("System", "Interrupts/sec");
+
+                    // 回退到 Processor Information/_Total 某些环境计数器
+                    if (_pcCtx == null)
+                        _pcCtx = TryCreateCounter("Processor Information", "Context Switches/sec", "_Total");
+                    if (_pcSyscalls == null)
+                        _pcSyscalls = TryCreateCounter("Processor Information", "System Calls/sec", "_Total");
+                    if (_pcIntr == null)
+                        _pcIntr = TryCreateCounter("Processor Information", "Interrupts/sec", "_Total");
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
+
+            private static PerformanceCounter? TryCreateCounter(string category, string counter, string? instance = null)
+            {
+                try
+                {
+                    if (instance == null)
+                        return new PerformanceCounter(category, counter, readOnly: true);
+                    else
+                        return new PerformanceCounter(category, counter, instance, readOnly: true);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
         private sealed class PerCoreCounters
         {
             private static readonly Lazy<PerCoreCounters> _inst = new(() => new PerCoreCounters());
@@ -1091,6 +1173,8 @@ namespace SystemMonitor.Service.Services
                 var (l1, l5, l15) = CpuLoadAverages.Instance.Update(usage);
                 // Top 进程（按 CPU%）
                 var top = TopProcSampler.Instance.Read(5);
+                // 内核活动计数器（每秒）
+                var (ctxSw, syscalls, intr) = KernelActivitySampler.Instance.Read();
 
                 return new
                 {
@@ -1107,7 +1191,10 @@ namespace SystemMonitor.Service.Services
                     per_core = perCore,
                     current_mhz = curMHz,
                     max_mhz = maxMHz,
-                    top_processes = top
+                    top_processes = top,
+                    context_switches_per_sec = ctxSw,
+                    syscalls_per_sec = syscalls,
+                    interrupts_per_sec = intr
                 };
             }
         }

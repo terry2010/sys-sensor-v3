@@ -396,6 +396,21 @@ public class EndToEndTests : IAsyncLifetime
                 }
             }
         }
+        // 内核活动计数器：存在且为数字时要求 >=0；允许缺失或为 Null
+        void AssertNonNegativeIfNumber(string key)
+        {
+            if (cpu.TryGetProperty(key, out var el))
+            {
+                if (el.ValueKind == System.Text.Json.JsonValueKind.Number)
+                {
+                    var v = el.GetDouble();
+                    Assert.True(v >= 0);
+                }
+            }
+        }
+        AssertNonNegativeIfNumber("context_switches_per_sec");
+        AssertNonNegativeIfNumber("syscalls_per_sec");
+        AssertNonNegativeIfNumber("interrupts_per_sec");
         // 频率字段允许为 null；若存在则为正数
         if (cpu.TryGetProperty("current_mhz", out var curEl) && curEl.ValueKind == System.Text.Json.JsonValueKind.Number)
         {
