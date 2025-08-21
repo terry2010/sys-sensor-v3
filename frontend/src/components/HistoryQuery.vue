@@ -1,17 +1,3 @@
-function applyWin(min: number) {
-  const end = toNow.value ? 0 : Date.now();
-  to.value = end;
-  from.value = (end === 0 ? Date.now() : end) - min * 60_000;
-}
-
-// 勾选“到现在”时，自动将 to 置为 0；取消勾选则保持当前时间
-watch(toNow, (v) => {
-  if (v) {
-    to.value = 0;
-  } else {
-    to.value = Date.now();
-  }
-});
 <template>
   <div class="card">
     <h3>History Query</h3>
@@ -19,6 +5,14 @@ watch(toNow, (v) => {
       <label>From(ms): <input type="number" v-model.number="from" /></label>
       <label>To(ms 0=now): <input type="number" v-model.number="to" :disabled="toNow" /></label>
       <label>Step(ms, optional): <input type="number" v-model.number="step" /></label>
+      <label>
+        聚合:
+        <select v-model="agg">
+          <option value="raw">raw(原始)</option>
+          <option value="10s">10秒</option>
+          <option value="1m">1分钟</option>
+        </select>
+      </label>
     </div>
     <div class="row">
       <button @click="applyWin(1)">近1分钟</button>
@@ -53,11 +47,27 @@ const to = ref<number>(0);
 const step = ref<number | null>(1000);
 const mods = ref<string[]>(['cpu','memory']);
 const toNow = ref<boolean>(true);
+const agg = ref<'raw' | '10s' | '1m'>('raw');
+
+function applyWin(min: number) {
+  const end = toNow.value ? 0 : Date.now();
+  to.value = end;
+  from.value = (end === 0 ? Date.now() : end) - min * 60_000;
+}
+
+// 勾选“到现在”时，自动将 to 置为 0；取消勾选则保持当前时间
+watch(toNow, (v) => {
+  if (v) {
+    to.value = 0;
+  } else {
+    to.value = Date.now();
+  }
+});
 
 const items = ref<any[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
-const preview = computed(() => JSON.stringify({ from: from.value, to: to.value, step: step.value ?? undefined, modules: mods.value, items: items.value.slice(0, 5) }, null, 2));
+const preview = computed(() => JSON.stringify({ from: from.value, to: to.value, step: step.value ?? undefined, modules: mods.value, agg: agg.value, items: items.value.slice(0, 5) }, null, 2));
 const hq = useHistoryQueryStore();
 let reqSeq = 0;
 const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
@@ -79,13 +89,14 @@ async function onQuery() {
     to_ts: to.value,
     step_ms: step.value ?? undefined,
     modules: mods.value,
+    agg: agg.value,
   } as any));
 
   p.then((r) => {
     const arr = (r as any)?.items ?? [];
     if (my === reqSeq) {
       items.value = Array.isArray(arr) ? arr : [];
-      hq.setResult({ from_ts: from.value, to_ts: to.value, step_ms: step.value ?? undefined, modules: mods.value }, items.value);
+      hq.setResult({ from_ts: from.value, to_ts: to.value, step_ms: step.value ?? undefined, modules: mods.value, agg: agg.value }, items.value);
     }
   }).catch((e: any) => {
     if (my === reqSeq) error.value = e?.message || String(e);

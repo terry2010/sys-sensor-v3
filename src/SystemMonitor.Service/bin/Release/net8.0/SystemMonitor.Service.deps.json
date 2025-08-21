@@ -13,6 +13,9 @@
           "Microsoft.Extensions.Hosting.WindowsServices": "8.0.1",
           "Nerdbank.Streams": "2.12.90",
           "Serilog": "4.3.0",
+          "Serilog.Enrichers.Environment": "3.0.0",
+          "Serilog.Enrichers.Process": "3.0.0",
+          "Serilog.Enrichers.Thread": "3.1.0",
           "Serilog.Extensions.Hosting": "8.0.0",
           "Serilog.Settings.Configuration": "8.0.3",
           "Serilog.Sinks.File": "7.0.0",
@@ -582,6 +585,39 @@
           "lib/net8.0/Serilog.dll": {
             "assemblyVersion": "4.3.0.0",
             "fileVersion": "4.3.0.0"
+          }
+        }
+      },
+      "Serilog.Enrichers.Environment/3.0.0": {
+        "dependencies": {
+          "Serilog": "4.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/Serilog.Enrichers.Environment.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
+          }
+        }
+      },
+      "Serilog.Enrichers.Process/3.0.0": {
+        "dependencies": {
+          "Serilog": "4.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/Serilog.Enrichers.Process.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
+          }
+        }
+      },
+      "Serilog.Enrichers.Thread/3.1.0": {
+        "dependencies": {
+          "Serilog": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Serilog.Enrichers.Thread.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "3.1.0.0"
           }
         }
       },
@@ -1241,6 +1277,27 @@
       "sha512": "sha512-+cDryFR0GRhsGOnZSKwaDzRRl4MupvJ42FhCE4zhQRVanX0Jpg6WuCBk59OVhVDPmab1bB+nRykAnykYELA9qQ==",
       "path": "serilog/4.3.0",
       "hashPath": "serilog.4.3.0.nupkg.sha512"
+    },
+    "Serilog.Enrichers.Environment/3.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RKtJC4MkEpwapJFMtXUN2eeaxePSStllCM8388OmVH+bKn7rMvpTz5C9gzGH7+Aygk4iFTFOSPBrGCV13N7V8Q==",
+      "path": "serilog.enrichers.environment/3.0.0",
+      "hashPath": "serilog.enrichers.environment.3.0.0.nupkg.sha512"
+    },
+    "Serilog.Enrichers.Process/3.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/wPYz2PDCJGSHNI+Z0PAacZvrgZgrGduWqLXeC2wvW6pgGM/Bi45JrKy887MRcRPHIZVU0LAlkmJ7TkByC0boQ==",
+      "path": "serilog.enrichers.process/3.0.0",
+      "hashPath": "serilog.enrichers.process.3.0.0.nupkg.sha512"
+    },
+    "Serilog.Enrichers.Thread/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-85lWsGRJpRxvKT6j/H67no55SUBsBIvp556TKuBTGhjtoPeq+L7j/sDWbgAtvT0p7u7/phJyX6j35PQ4Vtqw0g==",
+      "path": "serilog.enrichers.thread/3.1.0",
+      "hashPath": "serilog.enrichers.thread.3.1.0.nupkg.sha512"
     },
     "Serilog.Extensions.Hosting/8.0.0": {
       "type": "package",

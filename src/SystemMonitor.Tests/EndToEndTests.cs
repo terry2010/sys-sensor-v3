@@ -36,7 +36,6 @@ public class EndToEndTests : IAsyncLifetime
                 var candidate = Path.Combine(_svcWorkDir!, "logs");
                 if (Directory.Exists(candidate)) logsDir = candidate;
             }
-
             if (logsDir == null)
             {
                 var root = FindRepoRoot();
@@ -608,6 +607,36 @@ public class EndToEndTests : IAsyncLifetime
             Assert.True(item.TryGetProperty("ts", out _));
             Assert.True(item.TryGetProperty("cpu", out _));
             Assert.True(item.TryGetProperty("memory", out _));
+        }
+    }
+
+    [Fact]
+    public async Task QueryHistory_Aggregations_10s_1m()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(20));
+        await Task.Delay(1200);
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // 10s 聚合
+        var q10 = new { from_ts = now - 65_000, to_ts = now, modules = new[] { "cpu", "memory" }, agg = "10s" };
+        var r10 = await rpc.InvokeAsync<System.Text.Json.JsonElement>("query_history", new object[] { q10 });
+        Assert.True(r10.GetProperty("ok").GetBoolean());
+        var items10 = r10.GetProperty("items");
+        foreach (var it in items10.EnumerateArray())
+        {
+            var ts = it.GetProperty("ts").GetInt64();
+            Assert.True(ts % 10_000 == 0, $"ts not aligned to 10s bucket: {ts}");
+        }
+
+        // 1m 聚合
+        var q60 = new { from_ts = now - 180_000, to_ts = now, modules = new[] { "cpu" }, agg = "1m" };
+        var r60 = await rpc.InvokeAsync<System.Text.Json.JsonElement>("query_history", new object[] { q60 });
+        Assert.True(r60.GetProperty("ok").GetBoolean());
+        var items60 = r60.GetProperty("items");
+        foreach (var it in items60.EnumerateArray())
+        {
+            var ts = it.GetProperty("ts").GetInt64();
+            Assert.True(ts % 60_000 == 0, $"ts not aligned to 1m bucket: {ts}");
         }
     }
 

@@ -143,3 +143,6 @@ C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\ru\System.Com
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\tr\System.CommandLine.resources.dll
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\zh-Hans\System.CommandLine.resources.dll
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\zh-Hant\System.CommandLine.resources.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\Serilog.Enrichers.Environment.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\Serilog.Enrichers.Process.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Release\net8.0\Serilog.Enrichers.Thread.dll

@@ -5,6 +5,7 @@ export type HistoryParams = {
   to_ts?: number;
   step_ms?: number;
   modules?: string[];
+  agg?: 'raw' | '10s' | '1m';
 };
 
 export type HistoryItem = {

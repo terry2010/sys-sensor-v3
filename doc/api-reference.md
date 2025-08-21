@@ -11,7 +11,7 @@
 - `burst_subscribe(params: { modules?: string[], interval_ms: number, ttl_ms: number })`
 - `start(params?: { modules?: string[] })`
 - `stop()`
-- `query_history(params: { from_ts: number, to_ts: number, modules?: string[], step_ms?: number })`
+- `query_history(params: { from_ts: number, to_ts: number, modules?: string[], step_ms?: number, agg?: "raw"|"10s"|"1m" })`
 - `subscribe_metrics(params: { enable: boolean })`
 
 ## 2. 事件（Service → UI）
@@ -154,7 +154,8 @@
     "from_ts":1710000000,
     "to_ts":1710003600,
     "modules":["cpu","memory"],
-    "step_ms":1000
+    "step_ms":1000,
+    "agg":"10s"
   },"id":7
 }
 ```
@@ -182,6 +183,7 @@
     - 约定：`to_ts = 0` 表示“到当前时刻”（服务端在查询时替换为当前 UTC 毫秒）。
   - `modules`：要返回的模块字段子集；缺省表示按当前启用模块动态裁剪。
   - `step_ms`：可选，>0 时按该步长聚合为时间桶，取每桶“最后一条记录”。
+  - `agg`：可选，历史聚合级别。`"raw"` 或省略表示查询原始表；`"10s"`/`"1m"` 表示查询对应的预聚合表。
 
 - 返回
   - `items`：按时间升序数组。元素结构：
@@ -193,9 +195,10 @@
   - 若 SQLite 中窗口内无记录，服务端会回退到内存缓存或即时快照，通常至少返回 1 条，确保 `items.length >= 1`（视实现策略）。
   - 当 `modules` 仅含部分模块时，其它模块字段省略为 `null`/缺失。
   - `step_ms` 生效时，每个桶仅保留该桶内最后一条；桶无数据则不补零。窗口很短或数据极其稀疏时，可能退化为仅 1 个桶。
+  - `agg` 与 `step_ms` 可同时指定，此时会在预聚合结果之上再次按 `step_ms` 进行分桶（等价于二次聚合）。后续版本可能约束为二选一。
 
 - 限制
-  - 历史已接入 SQLite 持久化（当前 M1 为单表 `metrics`，含 `ts/cpu/mem_total/mem_used`），配合保留策略定期清理；重启后历史可用。后续里程碑可能扩展为多粒度表。
+  - 历史已接入 SQLite 持久化，并提供 `metrics_10s` / `metrics_1m` 预聚合表；后续可能扩展更多指标字段与聚合口径。
 
 > 注：`set_log_level/update_*` 非 M1 范围，后续里程碑再补充。
 

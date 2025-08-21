@@ -754,8 +754,10 @@ namespace SystemMonitor.Service.Services
                 var to = p.to_ts <= 0 || p.to_ts < from ? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : p.to_ts;
                 var want = new HashSet<string>(p.modules ?? new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
                 object[] resultItems;
-                // 1) 先尝试从 SQLite 读取
-                var rows = await _store.QueryAsync(from, to).ConfigureAwait(false);
+                // 1) 先尝试从 SQLite 读取（支持聚合表）
+                var useAgg = !string.IsNullOrWhiteSpace(p.agg) && !string.Equals(p.agg, "raw", StringComparison.OrdinalIgnoreCase);
+                var rows = useAgg ? await _store.QueryAggAsync(p.agg!, from, to).ConfigureAwait(false)
+                                   : await _store.QueryAsync(from, to).ConfigureAwait(false);
                 if (rows.Count > 0)
                 {
                     if (p.step_ms.HasValue && p.step_ms.Value > 0)
@@ -886,6 +888,7 @@ namespace SystemMonitor.Service.Services
             public long to_ts { get; set; }
             public string[]? modules { get; set; }
             public int? step_ms { get; set; }
+            public string? agg { get; set; } // 'raw' | '10s' | '1m'
         }
         
         public sealed class SubscribeMetricsParams

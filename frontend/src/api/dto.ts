@@ -20,6 +20,7 @@ export type QueryHistoryParams = {
   to_ts: number;
   modules?: string[];
   step_ms?: number | null;
+  agg?: 'raw' | '10s' | '1m';
 };
 
 export type QueryHistoryItem = {
