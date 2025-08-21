@@ -26,7 +26,6 @@ namespace SystemMonitor.Service.Services
         private readonly JsonSerializerOptions _jsonOptions;
         private readonly HistoryStore _store;
         private static readonly object _collectorLock = new object();
-        private static Timer? _metricsTimer;
         private static readonly List<string> _activeModules = new List<string>();
         private static readonly List<JsonRpc> _bridgeConnections = new List<JsonRpc>();
 

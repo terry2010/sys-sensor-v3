@@ -56,7 +56,6 @@ if (Test-Path -LiteralPath $trx) {
         npm install
       }
     }
-    $feExit = $LASTEXITCODE
     npm run test:report
     $covDir = Resolve-Path (Join-Path $fe '../artifacts/test-results/frontend/coverage') -ErrorAction SilentlyContinue
     if (-not $covDir) { $covDir = Resolve-Path (Join-Path $fe 'coverage') -ErrorAction SilentlyContinue }
