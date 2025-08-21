@@ -3,6 +3,7 @@ import type {
   QueryHistoryParams,
   QueryHistoryResult,
   SnapshotResult,
+  SnapshotParams,
   HelloResult,
   SetConfigParams,
   StartParams,
@@ -26,7 +27,7 @@ async function rpcCall<T>(method: string, params?: any, timeoutMs = 6000): Promi
 
 export const tauriRpc = {
   async hello(): Promise<HelloResult> { return rpcCall<HelloResult>('hello', { app_version: 'fe-mock', protocol_version: 1, token: 'dev', capabilities: [] }); },
-  async snapshot(): Promise<SnapshotResult> { return rpcCall<SnapshotResult>('snapshot', {}); },
+  async snapshot(p?: SnapshotParams): Promise<SnapshotResult> { return rpcCall<SnapshotResult>('snapshot', p ?? {}); },
   async query_history(p: QueryHistoryParams): Promise<QueryHistoryResult> { return rpcCall<QueryHistoryResult>('query_history', p); },
   async set_config(p: SetConfigParams) { return rpcCall<any>('set_config', p); },
   async start(p?: StartParams) { return rpcCall<any>('start', p ?? {}); },

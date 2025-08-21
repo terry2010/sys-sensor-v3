@@ -1,5 +1,5 @@
 // Web Mock 实现：无 Tauri 环境下用于本地开发 UI
-import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult } from './dto';
+import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult, SnapshotParams } from './dto';
 
 class MockMetricsBus {
   private interval?: number;
@@ -35,11 +35,19 @@ export const mockRpc = {
       session_id: 'mock-session'
     };
   },
-  async snapshot(): Promise<SnapshotResult> {
+  async snapshot(p?: SnapshotParams): Promise<SnapshotResult> {
     const ts = Date.now();
     const cpu = Math.round((Math.random()*80)*10)/10;
     const total = 16000; const used = Math.round(8000 + Math.random()*2000);
-    return { ts, cpu: { usage_percent: cpu }, memory: { total, used } };
+    const mods = (p?.modules && p.modules.length) ? p.modules.map(m => m.toLowerCase()) : ['cpu','memory'];
+    const payload: any = { ts };
+    if (mods.includes('cpu')) payload.cpu = { usage_percent: cpu };
+    if (mods.includes('mem') || mods.includes('memory')) payload.memory = { total, used };
+    if (mods.includes('disk')) payload.disk = { read_bytes_per_sec: 0, write_bytes_per_sec: 0, queue_length: 0 };
+    if (mods.includes('network')) payload.network = { up_bytes_per_sec: 0, down_bytes_per_sec: 0 };
+    if (mods.includes('gpu')) {/* omit to mimic null */}
+    if (mods.includes('sensor')) {/* omit to mimic null */}
+    return payload as SnapshotResult;
   },
   async query_history(p: QueryHistoryParams): Promise<QueryHistoryResult> {
     const step = p.step_ms && p.step_ms > 0 ? p.step_ms : 500;

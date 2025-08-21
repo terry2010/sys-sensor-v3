@@ -11,6 +11,7 @@ using StreamJsonRpc;
 using System.Runtime.Versioning;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Linq;
 
 namespace SystemMonitor.Service.Services
 {
@@ -178,6 +179,14 @@ namespace SystemMonitor.Service.Services
                 // 从桥接连接列表中移除
                 lock (_collectorLock) { _bridgeConnections.RemoveAll(c => c == rpc || c.IsDisposed); }
                 _logger.LogInformation("客户端断开：{Reason} conn={ConnId}", e?.Description, connId);
+                try
+                {
+                    var reason = string.IsNullOrWhiteSpace(e?.Description) ? "disconnected" : e!.Description!;
+                    // 统一上报断线事件
+                    var payload = new { reason };
+                    rpcServer.NotifyBridge("bridge_disconnected", payload);
+                }
+                catch { /* ignore */ }
             };
 
             rpc.StartListening();
@@ -186,6 +195,9 @@ namespace SystemMonitor.Service.Services
             var metricsTask = Task.Run(async () =>
             {
                 var logEvery = GetMetricsLogEvery();
+                var consecutiveErrors = 0;
+                // 故障注入计数（仅当前会话内生效）
+                int simCount = 0; bool simTriggered = false;
                 while (!cts.Token.IsCancellationRequested)
                 {
                     try
@@ -200,28 +212,48 @@ namespace SystemMonitor.Service.Services
                         var enabled = rpcServer.GetEnabledModules();
                         double? cpuVal = null;
                         (long total, long used)? memVal = null;
+                        // 先准备 seq 值，再放入 payload
                         var payload = new Dictionary<string, object?>
                         {
                             ["ts"] = now,
                             ["seq"] = rpcServer.NextSeq(),
                         };
+                        // 通过采集器抽象生成各模块字段
+                        foreach (var c in s_collectors)
+                        {
+                            if (!enabled.Contains(c.Name)) continue;
+                            var val = c.Collect();
+                            if (val != null) payload[c.Name] = val;
+                        }
+                        // 维持历史/持久化所需的 CPU/Memory 数值（避免从匿名对象中反射）
                         if (enabled.Contains("cpu"))
                         {
                             var cpu = GetCpuUsagePercent();
                             cpuVal = cpu;
-                            payload["cpu"] = new { usage_percent = cpu };
                         }
                         if (enabled.Contains("memory"))
                         {
                             var mem = GetMemoryInfoMb();
                             memVal = (mem.total_mb, mem.used_mb);
-                            payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
                         }
                         if (cpuVal.HasValue || memVal.HasValue)
                         {
                             rpcServer.AppendHistory(now, cpuVal, memVal);
                             // 持久化到 SQLite（忽略错误，不影响推送）
                             try { await rpcServer.PersistHistoryAsync(now, cpuVal, memVal).ConfigureAwait(false); } catch { }
+                        }
+                        // 故障注入：当设置 SIM_METRICS_ERROR 时，在达到阈值的第 N 次推送前抛出一次异常
+                        var sim = Environment.GetEnvironmentVariable("SIM_METRICS_ERROR");
+                        if (!string.IsNullOrEmpty(sim))
+                        {
+                            int threshold = 3;
+                            if (int.TryParse(sim, out var n) && n > 0) threshold = n;
+                            simCount++;
+                            if (!simTriggered && simCount >= threshold)
+                            {
+                                simTriggered = true;
+                                throw new Exception("simulated metrics push error");
+                            }
                         }
                         await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
                         var pushed = rpcServer.IncrementMetricsCount();
@@ -231,14 +263,20 @@ namespace SystemMonitor.Service.Services
                         }
                         var delay = rpcServer.GetCurrentIntervalMs(now);
                         await Task.Delay(delay, cts.Token).ConfigureAwait(false);
+                        consecutiveErrors = 0; // 只要成功一次就清零
                     }
                     catch (OperationCanceledException)
                     {
+                        // 推送循环被取消，一般是服务器停止或会话结束
+                        try { rpcServer.NotifyBridge("bridge_disconnected", new { reason = "operation_canceled" }); } catch { }
                         break;
                     }
                     catch (Exception ex)
                     {
                         _logger.LogDebug(ex, "metrics 推送异常（忽略并继续）");
+                        // 尝试上报 bridge_error，带原因
+                        try { rpcServer.NotifyBridge("bridge_error", new { reason = "metrics_push_exception", message = ex.Message }); } catch { }
+                        consecutiveErrors++;
                         await Task.Delay(1000, cts.Token).ConfigureAwait(false);
                     }
                 }
@@ -359,6 +397,17 @@ namespace SystemMonitor.Service.Services
             public void SetJsonRpc(JsonRpc rpc)
             {
                 _rpc = rpc;
+            }
+
+            // 发送桥接层事件（如 bridge_error/bridge_disconnected）。
+            // 注意：若连接已断开，通知可能无法送达。
+            internal void NotifyBridge(string @event, object payload)
+            {
+                try
+                {
+                    _ = _rpc?.NotifyAsync(@event, payload);
+                }
+                catch { /* 忽略通知失败 */ }
             }
 
             // 发送最小版 state 事件（通知）。字段：ts, phase, 可选 reason/extra。
@@ -529,17 +578,25 @@ namespace SystemMonitor.Service.Services
             public Task<object> snapshot(SnapshotParams? p)
             {
                 var ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                var mem = GetMemoryInfoMb();
-                var cpu = GetCpuUsagePercent();
-                var result = new
+                // 规范化模块名（mem -> memory），未指定则默认 cpu/memory
+                HashSet<string> want;
+                if (p?.modules != null && p.modules.Length > 0)
                 {
-                    ts,
-                    cpu = new { usage_percent = cpu },
-                    memory = new { total = mem.total_mb, used = mem.used_mb },
-                    disk = new { read_bytes_per_sec = 1024, write_bytes_per_sec = 2048 }
-                };
+                    want = new HashSet<string>(p.modules.Select(m => (m ?? string.Empty).Trim().ToLowerInvariant() == "mem" ? "memory" : (m ?? string.Empty).Trim()), StringComparer.OrdinalIgnoreCase);
+                }
+                else
+                {
+                    want = new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
+                }
+                var payload = new Dictionary<string, object?> { ["ts"] = ts };
+                foreach (var c in s_collectors)
+                {
+                    if (!want.Contains(c.Name)) continue;
+                    var val = c.Collect();
+                    if (val != null) payload[c.Name] = val;
+                }
                 _logger.LogInformation("snapshot called, modules={Modules}", p?.modules == null ? "*" : string.Join(',', p.modules));
-                return Task.FromResult<object>(result);
+                return Task.FromResult<object>(payload);
             }
 
             /// <summary>
@@ -836,6 +893,83 @@ namespace SystemMonitor.Service.Services
             public bool enable { get; set; }
         }
         #endregion
+
+        // 统一采集接口与内置采集器
+        private interface IMetricsCollector
+        {
+            string Name { get; }
+            object? Collect();
+        }
+
+        private sealed class CpuCollector : IMetricsCollector
+        {
+            public string Name => "cpu";
+            public object? Collect()
+            {
+                var cpu = GetCpuUsagePercent();
+                return new { usage_percent = cpu };
+            }
+        }
+
+        private sealed class MemoryCollector : IMetricsCollector
+        {
+            public string Name => "memory";
+            public object? Collect()
+            {
+                var mem = GetMemoryInfoMb();
+                return new { total = mem.total_mb, used = mem.used_mb };
+            }
+        }
+
+        private sealed class DiskCollector : IMetricsCollector
+        {
+            public string Name => "disk";
+            public object? Collect()
+            {
+                // 占位实现：后续接入 Windows 性能计数器或 ETW
+                return new { read_bytes_per_sec = 0L, write_bytes_per_sec = 0L, queue_length = 0.0 };
+            }
+        }
+
+        private sealed class NetworkCollector : IMetricsCollector
+        {
+            public string Name => "network";
+            public object? Collect()
+            {
+                // 占位实现：后续接入网络接口统计
+                return new { up_bytes_per_sec = 0L, down_bytes_per_sec = 0L };
+            }
+        }
+
+        private sealed class GpuCollector : IMetricsCollector
+        {
+            public string Name => "gpu";
+            public object? Collect()
+            {
+                // 占位实现
+                return null;
+            }
+        }
+
+        private sealed class SensorCollector : IMetricsCollector
+        {
+            public string Name => "sensor";
+            public object? Collect()
+            {
+                // 占位实现
+                return null;
+            }
+        }
+
+        private static readonly List<IMetricsCollector> s_collectors = new()
+        {
+            new CpuCollector(),
+            new MemoryCollector(),
+            new DiskCollector(),
+            new NetworkCollector(),
+            new GpuCollector(),
+            new SensorCollector()
+        };
 
         // Helpers
         private static (long total_mb, long used_mb) GetMemoryInfoMb()

@@ -3,6 +3,7 @@
   流程：清理 -> 构建(重试) -> 启动后端 -> 等待命名管道 -> 启动前端 -> 等待 -> 清理
 #>
 
+
 $ErrorActionPreference = 'Continue'
 
 # 统一控制台与 PowerShell 的编码为 UTF-8，避免中文输出在不同控制台出现乱码（精简为无 try/catch 以提升兼容性）

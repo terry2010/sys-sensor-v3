@@ -1,9 +1,9 @@
-import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult } from './dto';
+import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult, SnapshotParams } from './dto';
 import { rpc } from './rpc';
 
 export const service = {
   hello(): Promise<HelloResult> { return rpc.hello(); },
-  snapshot(): Promise<SnapshotResult> { return rpc.snapshot(); },
+  snapshot(p?: SnapshotParams): Promise<SnapshotResult> { return p ? rpc.snapshot(p) : rpc.snapshot(); },
   queryHistory(p: QueryHistoryParams): Promise<QueryHistoryResult> { return rpc.query_history(p); },
   onMetrics: rpc.onMetrics,
   // new methods

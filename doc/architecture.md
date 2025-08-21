@@ -99,3 +99,28 @@ flowchart LR
 - UI 运行在便携化场景下的数据路径策略
  - 多窗口间状态同步与资源占用上限
  - 调试模式下的诊断端口是否需要（默认不开端口）
+
+## 8. 事件桥生命周期（状态机 - 文本）
+
+- __初始化__：
+  - UI 启动后通过 `hello` 握手，声明 `capabilities` 含 `metrics_stream`。
+  - 服务端将该连接标记为“事件桥”，默认开启 metrics 推流订阅。
+
+- __推流中__：
+  - 周期采集 → 聚合 → 通过 `metrics` 事件推送。
+  - 任意时刻可通过 `subscribe_metrics({ enable })` 开关全局推流。
+
+- __错误（bridge_error）__：
+  - 推送循环遇到异常（例如网络/序列化/管道）会发送 `bridge_error`，payload 含 `reason` 与可选 `message`。
+  - 故障注入：设置 `SIM_METRICS_ERROR` 可在第 N 次推送抛出一次模拟异常。
+
+- __断开（bridge_disconnected）__：
+  - RPC 连接断开回调，或服务停止/取消，发送 `bridge_disconnected`，payload `reason` 典型为 `operation_canceled|disconnected|rpc_disconnected|client_closed`。
+
+- __重试/重连（前端策略）__：
+  - 前端负责重连（当前实现为定时重试；后续可能调整为指数退避）。
+  - 重连成功后重新进入“推流中”。
+
+- __可观测性__：
+  - 后端日志：包含 `{MachineName} {ProcessId}/{ThreadId}` 与事件关键字，落盘 `logs/service-*.log`。
+  - 前端：在状态 Store/控制台订阅 `bridge_error/bridge_disconnected/metrics` 观察状态变化。

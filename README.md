@@ -115,6 +115,16 @@ Get-Content .\logs\service.out.log -Wait
 Get-Content .\logs\service.err.log -Wait
 ```
 
+## 事件桥与错误观测（总览）
+
+- __事件索引__：详见 `doc/api-reference.md` 的“2.1 桥接状态与错误”
+  - `bridge_error`：推送链路异常，典型 `reason=metrics_push_exception`，含可选 `message`
+  - `bridge_disconnected`：断线通知，典型 `reason=operation_canceled|disconnected|rpc_disconnected|client_closed`
+- __触发与验证__：可使用“模拟 metrics 推送异常（故障注入）”，见本文档对应章节；同时在 `logs/service-*.log` 中观察日志（模板已包含 `MachineName`、`ProcessId`、`ThreadId` 字段）
+- __定位建议__：
+  - 前端 DevTools 观察事件流/Toast 与状态 store
+  - 后端日志中检索关键字：`bridge_error`/`bridge_disconnected`，结合异常堆栈与连接 ID
+
 ## 构建与打包脚本
 我们提供 `scripts/build.ps1` 进行构建与可选打包，具备失败即停（fail-fast）。
 
@@ -230,6 +240,13 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install-service.ps1 -BinaryPa
 
 安装后日志仍输出到仓库根目录下的 `logs/`（若以服务账户运行，请确保目录权限可写，或在 `appsettings.json` 中调整路径）。
 
+### 命名管道 ACL 与权限提示
+
+- 服务端管道：`\\.\pipe\sys_sensor_v3.rpc` 使用严格 ACL；建议在管理员 PowerShell 下运行开发环境脚本，以避免权限不足导致的连接失败。
+- 若前端报连接/权限错误，请排查：
+  - 当前用户是否有访问命名管道的权限（尤其在作为服务运行时）
+  - 是否存在残留的旧进程占用管道（可使用 `scripts/kill-service.ps1` 清理）
+
 ## API 参考与契约测试
 - API 规范与示例：见 `doc/api-reference.md`
 - 序列化策略：`snake_case`（`System.Text.Json` 自定义命名策略）
@@ -318,3 +335,40 @@ __经验总结__
 - 使用能力文件集中声明权限，避免在 `tauri.conf.json` 里堆叠自定义字段。
 - 打开 `withGlobalTauri` 便于调试与临时验证事件桥。
 - 后端握手即订阅可降低“前端未及时订阅导致看不到数据”的问题。
+
+## 模拟 metrics 推送异常（故障注入）
+
+为便于联调与排障，后端在 `RpcHostedService.cs` 的 metrics 推送循环中加入了受环境变量控制的故障注入点：当设置 `SIM_METRICS_ERROR` 时，将在到达第 N 次推送（默认 3）时抛出一次模拟异常，后端会上报 `bridge_error`（`reason=metrics_push_exception`，`message=simulated metrics push error`）。
+
+- 生效范围：当前进程/会话。重启后如仍设置该环境变量，将在新会话再次于第 N 次触发一次。
+- 不设置该变量时，不会注入任何异常，生产环境不受影响。
+
+### 一键启动（推荐，团队偏好脚本）
+
+```powershell
+# 在当前 PowerShell 会话设置：第 3 次推送触发一次错误（可改为 1 立即触发）
+$env:SIM_METRICS_ERROR = '3'
+
+# 启动一体化前后端开发环境
+./scripts/dev.ps1
+```
+
+前端预期：事件流/Toast 出现 `bridge_error`，payload 含 `reason=metrics_push_exception`。
+
+### 仅启动后端（可选）
+
+```powershell
+$env:SIM_METRICS_ERROR = '3'
+dotnet run --project src\SystemMonitor.Service\SystemMonitor.Service.csproj
+```
+
+随后按常规方式启动前端并观察相同现象。
+
+### 关闭/调整注入
+
+```powershell
+# 关闭注入（当前会话）
+Remove-Item Env:SIM_METRICS_ERROR
+
+# 或调整为“立即触发一次”
+$env:SIM_METRICS_ERROR = '1'

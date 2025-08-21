@@ -22,6 +22,49 @@
 - `ping`（预留，M1 未实现）: `{}`（可选心跳）
 - `update_ready`（预留，M1 未实现）: `{ component: string, version: string }`
 
+### 2.1 桥接状态与错误（已实现）
+
+- `bridge_error`：统一的桥接错误事件（例如推送异常）
+  - Payload：
+    - `ts`: number（UTC 毫秒）
+    - `reason`: string（典型值：`metrics_push_exception` | `send_failed` | `unknown`）
+    - `message?`: string（可选，异常/错误的简述）
+    - `extra?`: any（可选，调试附加信息）
+  - 触发示例：metrics 推送循环发生未捕获异常；或启用故障注入 `SIM_METRICS_ERROR` 后到达阈值。
+  - 示例：
+    ```json
+    {
+      "event": "bridge_error",
+      "payload": {
+        "ts": 1710000123456,
+        "reason": "metrics_push_exception",
+        "message": "simulated metrics push error"
+      }
+    }
+    ```
+
+- `bridge_disconnected`：桥接断开事件（带断开原因）
+  - Payload：
+    - `ts`: number（UTC 毫秒）
+    - `reason`: string（典型值：
+      - `operation_canceled`（服务停止/取消）
+      - `disconnected`（无具体描述的断连）
+      - `rpc_disconnected`（RPC 管道断开）
+      - `client_closed`（客户端显式关闭）
+      ）
+    - `extra?`: any（可选）
+  - 触发示例：RPC 连接断开回调；服务端取消推流任务。
+  - 示例：
+    ```json
+    {
+      "event": "bridge_disconnected",
+      "payload": {
+        "ts": 1710000222333,
+        "reason": "operation_canceled"
+      }
+    }
+    ```
+
 ## 3. 请求/响应示例
 ```json
 // hello
@@ -187,6 +230,8 @@
 - internal: -32099
 
 > 说明：M1 阶段实现侧可能返回框架默认错误码；上述取值为推荐值，后续里程碑将对齐具体 code。
+
+> 注：`bridge_error` 与 `bridge_disconnected` 属于服务端主动通知的“事件桥”事件，不走 JSON-RPC `error` 通道，不影响当前正在进行的 RPC 请求-响应序列。
 
 ## 5. 字段命名校验
 - 服务端序列化策略：.NET `System.Text.Json` + `JsonNamingPolicy.SnakeCaseLower`

@@ -11,6 +11,10 @@ export type SnapshotResult = {
   memory?: { total: number; used: number };
 };
 
+export type SnapshotParams = {
+  modules?: string[];
+};
+
 export type QueryHistoryParams = {
   from_ts: number;
   to_ts: number;

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "YDcxw/0gEDI=",
+  "dgSpecHash": "Ge8Zlu/UBL4=",
   "success": true,
   "projectFilePath": "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj",
   "expectedPackageFiles": [
@@ -44,6 +44,9 @@
     "C:\\Users\\terry\\.nuget\\packages\\nerdbank.streams\\2.12.90\\nerdbank.streams.2.12.90.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\serilog\\4.3.0\\serilog.4.3.0.nupkg.sha512",
+    "C:\\Users\\terry\\.nuget\\packages\\serilog.enrichers.environment\\3.0.0\\serilog.enrichers.environment.3.0.0.nupkg.sha512",
+    "C:\\Users\\terry\\.nuget\\packages\\serilog.enrichers.process\\3.0.0\\serilog.enrichers.process.3.0.0.nupkg.sha512",
+    "C:\\Users\\terry\\.nuget\\packages\\serilog.enrichers.thread\\3.1.0\\serilog.enrichers.thread.3.1.0.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\serilog.extensions.hosting\\8.0.0\\serilog.extensions.hosting.8.0.0.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\serilog.extensions.logging\\8.0.0\\serilog.extensions.logging.8.0.0.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\serilog.settings.configuration\\8.0.3\\serilog.settings.configuration.8.0.3.nupkg.sha512",
