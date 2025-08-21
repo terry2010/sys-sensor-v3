@@ -41,6 +41,93 @@ namespace SystemMonitor.Service.Services
             };
         }
 
+        private sealed class PerCoreCounters
+        {
+            private static readonly Lazy<PerCoreCounters> _inst = new(() => new PerCoreCounters());
+            public static PerCoreCounters Instance => _inst.Value;
+            private System.Diagnostics.PerformanceCounter[]? _cores;
+            private long _lastTicks;
+            private double[] _last = Array.Empty<double>();
+            private bool _initTried;
+            private void EnsureInit()
+            {
+                if (_initTried) return; _initTried = true;
+                try
+                {
+                    var cat = new System.Diagnostics.PerformanceCounterCategory("Processor");
+                    var names = cat.GetInstanceNames();
+                    var coreNames = names.Where(n => !string.Equals(n, "_Total", StringComparison.OrdinalIgnoreCase)).OrderBy(n => n).ToArray();
+                    var list = new List<System.Diagnostics.PerformanceCounter>();
+                    foreach (var n in coreNames)
+                    {
+                        try { list.Add(new System.Diagnostics.PerformanceCounter("Processor", "% Processor Time", n, readOnly: true)); } catch { }
+                    }
+                    _cores = list.ToArray();
+                    if (_cores != null) foreach (var c in _cores) { try { _ = c.NextValue(); } catch { } }
+                    _last = new double[_cores?.Length ?? 0];
+                    _lastTicks = Environment.TickCount64;
+                } catch { }
+            }
+            public double[] Read()
+            {
+                EnsureInit(); var now = Environment.TickCount64;
+                if (now - _lastTicks < 500) return _last;
+                if (_cores == null || _cores.Length == 0) { _last = Array.Empty<double>(); _lastTicks = now; return _last; }
+                var vals = new double[_cores.Length];
+                for (int i = 0; i < _cores.Length; i++)
+                {
+                    try { vals[i] = Math.Clamp(_cores[i].NextValue(), 0.0f, 100.0f); } catch { vals[i] = 0.0; }
+                }
+                _last = vals; _lastTicks = now; return _last;
+            }
+        }
+
+        private sealed class CpuFrequency
+        {
+            private static readonly Lazy<CpuFrequency> _inst = new(() => new CpuFrequency());
+            public static CpuFrequency Instance => _inst.Value;
+            private long _lastTicks;
+            private (int? cur, int? max) _last;
+            public (int? cur, int? max) Read()
+            {
+                var now = Environment.TickCount64;
+                if (now - _lastTicks < 5_000) return _last;
+                int? cur = null, max = null;
+                try
+                {
+                    // WMI 查询（需要 System.Management）
+                    using var searcher = new System.Management.ManagementObjectSearcher("SELECT CurrentClockSpeed, MaxClockSpeed FROM Win32_Processor");
+                    foreach (System.Management.ManagementObject obj in searcher.Get())
+                    {
+                        try { cur = Math.Max(cur ?? 0, Convert.ToInt32(obj["CurrentClockSpeed"])) ; } catch { }
+                        try { max = Math.Max(max ?? 0, Convert.ToInt32(obj["MaxClockSpeed"])) ; } catch { }
+                    }
+                }
+                catch { /* ignore */ }
+                _last = (cur, max); _lastTicks = now; return _last;
+            }
+        }
+
+        private sealed class CpuLoadAverages
+        {
+            private static readonly Lazy<CpuLoadAverages> _inst = new(() => new CpuLoadAverages());
+            public static CpuLoadAverages Instance => _inst.Value;
+            private double _l1, _l5, _l15;
+            private long _lastTs;
+            public (double l1, double l5, double l15) Update(double usagePercent)
+            {
+                var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                var dtSec = Math.Max(0.05, (now - _lastTs) / 1000.0);
+                // 将 usage_percent(0~100) 归一化到 0~1 再做 EWMA
+                var x = Math.Clamp(usagePercent / 100.0, 0.0, 1.0);
+                double step(double last, double win) { var alpha = 1 - Math.Exp(-dtSec / win); return last + alpha * (x - last); }
+                _l1 = step(_l1, 60.0); _l5 = step(_l5, 300.0); _l15 = step(_l15, 900.0);
+                _lastTs = now;
+                // 输出仍然以 0~100 百分比表示
+                return (_l1 * 100.0, _l5 * 100.0, _l15 * 100.0);
+            }
+        }
+
         /// <summary>
         /// 采集系统指标并推送给所有桥接连接。
         /// </summary>
@@ -155,6 +242,47 @@ namespace SystemMonitor.Service.Services
                 // 等待所有会话结束
                 try { await Task.WhenAll(sessions).ConfigureAwait(false); } catch { }
             }
+        }
+
+        // CPU breakdown（user/system/idle）
+        private static readonly object _cpuBkLock = new();
+        private static bool _cpuBkInit;
+        private static ulong _bkPrevIdle, _bkPrevKernel, _bkPrevUser;
+        private static (double user, double sys, double idle) GetCpuBreakdownPercent()
+        {
+            try
+            {
+                if (!GetSystemTimes(out var idle, out var kernel, out var user)) return (0, 0, 0);
+                static ulong ToU64(FILETIME ft) => ((ulong)ft.dwHighDateTime << 32) | ft.dwLowDateTime;
+                var iNow = ToU64(idle); var kNow = ToU64(kernel); var uNow = ToU64(user);
+                double u = 0, s = 0, id = 0;
+                lock (_cpuBkLock)
+                {
+                    if (_cpuBkInit)
+                    {
+                        var iD = iNow - _bkPrevIdle;
+                        var kD = kNow - _bkPrevKernel;
+                        var uD = uNow - _bkPrevUser;
+                        var total = kD + uD;
+                        if (total > 0)
+                        {
+                            var busy = total > iD ? (total - iD) : 0UL;
+                            // kernel 部分的 busy 近似为 (kD - iD)，user 为 uD
+                            var kBusy = kD > iD ? (kD - iD) : 0UL;
+                            u = 100.0 * uD / total;
+                            s = 100.0 * kBusy / total;
+                            var used = busy;
+                            id = 100.0 * (total - used) / total;
+                            u = Math.Clamp(u, 0.0, 100.0);
+                            s = Math.Clamp(s, 0.0, 100.0);
+                            id = Math.Clamp(id, 0.0, 100.0);
+                        }
+                    }
+                    _bkPrevIdle = iNow; _bkPrevKernel = kNow; _bkPrevUser = uNow; _cpuBkInit = true;
+                }
+                return (u, s, id);
+            }
+            catch { return (0, 0, 0); }
         }
 
         private async Task HandleClientAsync(NamedPipeServerStream serverStream, CancellationToken stoppingToken)
@@ -947,8 +1075,40 @@ namespace SystemMonitor.Service.Services
             public string Name => "cpu";
             public object? Collect()
             {
-                var cpu = GetCpuUsagePercent();
-                return new { usage_percent = cpu };
+                // 总使用率
+                var usage = GetCpuUsagePercent();
+                // 分解 user/system/idle
+                var (userPct, sysPct, idlePct) = GetCpuBreakdownPercent();
+                // uptime 秒
+                long uptimeSec = Math.Max(0, (long)(Environment.TickCount64 / 1000));
+                // 进程/线程计数
+                var (proc, threads) = SystemCounters.Instance.ReadProcThread();
+                // per-core
+                var perCore = PerCoreCounters.Instance.Read();
+                // 频率（MHz）
+                var (curMHz, maxMHz) = CpuFrequency.Instance.Read();
+                // 负载平均（EWMA）
+                var (l1, l5, l15) = CpuLoadAverages.Instance.Update(usage);
+                // Top 进程（按 CPU%）
+                var top = TopProcSampler.Instance.Read(5);
+
+                return new
+                {
+                    usage_percent = usage,
+                    user_percent = userPct,
+                    system_percent = sysPct,
+                    idle_percent = idlePct,
+                    uptime_sec = uptimeSec,
+                    load_avg_1m = l1,
+                    load_avg_5m = l5,
+                    load_avg_15m = l15,
+                    process_count = proc,
+                    thread_count = threads,
+                    per_core = perCore,
+                    current_mhz = curMHz,
+                    max_mhz = maxMHz,
+                    top_processes = top
+                };
             }
         }
 
@@ -967,8 +1127,15 @@ namespace SystemMonitor.Service.Services
             public string Name => "disk";
             public object? Collect()
             {
-                // 占位实现：后续接入 Windows 性能计数器或 ETW
-                return new { read_bytes_per_sec = 0L, write_bytes_per_sec = 0L, queue_length = 0.0 };
+                // 使用 Windows 性能计数器（_Total）。失败则回退 0 值。
+                try
+                {
+                    return DiskCounters.Instance.Read();
+                }
+                catch
+                {
+                    return new { read_bytes_per_sec = 0L, write_bytes_per_sec = 0L, queue_length = 0.0 };
+                }
             }
         }
 
@@ -977,8 +1144,15 @@ namespace SystemMonitor.Service.Services
             public string Name => "network";
             public object? Collect()
             {
-                // 占位实现：后续接入网络接口统计
-                return new { up_bytes_per_sec = 0L, down_bytes_per_sec = 0L };
+                // 读取所有有效网卡的 Bytes Sent/Received/sec 汇总。失败回退 0。
+                try
+                {
+                    return NetCounters.Instance.Read();
+                }
+                catch
+                {
+                    return new { up_bytes_per_sec = 0L, down_bytes_per_sec = 0L };
+                }
             }
         }
 
@@ -1031,6 +1205,102 @@ namespace SystemMonitor.Service.Services
             }
             // 回退到固定值，保证接口不失败
             return (16_000, 8_000);
+        }
+
+        // -------------------------
+        // Top 进程 CPU% 采样器
+        // -------------------------
+        private sealed class TopProcSampler
+        {
+            private static readonly Lazy<TopProcSampler> _inst = new(() => new TopProcSampler());
+            public static TopProcSampler Instance => _inst.Value;
+
+            private readonly object _lock = new();
+            private readonly Dictionary<int, TimeSpan> _lastCpu = new();
+            private long _lastTicks;
+            private object[] _last = Array.Empty<object>();
+
+            public object[] Read(int topN)
+            {
+                var nowTicks = Environment.TickCount64;
+                // 节流：小于 800ms 返回上次结果
+                lock (_lock)
+                {
+                    if (nowTicks - _lastTicks < 800)
+                    {
+                        return _last;
+                    }
+                }
+
+                var sw = Stopwatch.StartNew();
+                var logical = Math.Max(1, Environment.ProcessorCount);
+                var snapshotAt = DateTime.UtcNow;
+                var items = new List<(string name, int pid, double cpu)>();
+                TimeSpan? elapsedRef = null;
+
+                Process[] procs;
+                try { procs = Process.GetProcesses(); }
+                catch { procs = Array.Empty<Process>(); }
+
+                foreach (var p in procs)
+                {
+                    try
+                    {
+                        var pid = p.Id;
+                        var name = string.Empty;
+                        try { name = string.IsNullOrWhiteSpace(p.ProcessName) ? "(unknown)" : p.ProcessName; } catch { name = "(unknown)"; }
+
+                        var total = p.TotalProcessorTime; // 可能抛异常（访问拒绝/已退出）
+
+                        TimeSpan prev;
+                        lock (_lock)
+                        {
+                            _lastCpu.TryGetValue(pid, out prev);
+                            _lastCpu[pid] = total;
+                        }
+
+                        if (!elapsedRef.HasValue)
+                        {
+                            // 估算采样间隔（与上次样本的 Tick 差）
+                            var dtMs = Math.Max(200, nowTicks - _lastTicks);
+                            elapsedRef = TimeSpan.FromMilliseconds(dtMs);
+                        }
+
+                        var delta = total - prev;
+                        if (delta < TimeSpan.Zero) delta = TimeSpan.Zero;
+                        var elapsed = elapsedRef!.Value;
+                        if (elapsed.TotalMilliseconds <= 0) continue;
+                        var pct = 100.0 * (delta.TotalMilliseconds / (elapsed.TotalMilliseconds * logical));
+                        pct = Math.Clamp(pct, 0.0, 100.0);
+                        if (pct > 0.01)
+                        {
+                            items.Add((name, pid, Math.Round(pct, 2)));
+                        }
+                    }
+                    catch
+                    {
+                        // ignore per-process exception
+                    }
+                    finally
+                    {
+                        try { p.Dispose(); } catch { }
+                    }
+                }
+
+                var top = items
+                    .OrderByDescending(i => i.cpu)
+                    .ThenBy(i => i.pid)
+                    .Take(Math.Max(1, topN))
+                    .Select(i => (object)new { name = i.name, pid = i.pid, cpu_percent = i.cpu })
+                    .ToArray();
+
+                lock (_lock)
+                {
+                    _last = top;
+                    _lastTicks = nowTicks;
+                }
+                return top;
+            }
         }
 
         // CPU usage via GetSystemTimes
@@ -1113,6 +1383,173 @@ namespace SystemMonitor.Service.Services
             status = new MEMORYSTATUSEX();
             status.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
             return GlobalMemoryStatusEx(ref status);
+        }
+
+        // -------------------------
+        // 性能计数器封装（带节流与懒加载）
+        // -------------------------
+        private sealed class SystemCounters
+        {
+            private static readonly Lazy<SystemCounters> _inst = new(() => new SystemCounters());
+            public static SystemCounters Instance => _inst.Value;
+            private System.Diagnostics.PerformanceCounter? _proc;
+            private System.Diagnostics.PerformanceCounter? _threads;
+            private long _lastTicks;
+            private (int proc, int threads) _last;
+            private bool _initTried;
+            private void EnsureInit()
+            {
+                if (_initTried) return; _initTried = true;
+                try
+                {
+                    _proc = new System.Diagnostics.PerformanceCounter("System", "Processes", readOnly: true);
+                    _threads = new System.Diagnostics.PerformanceCounter("System", "Threads", readOnly: true);
+                    _ = _proc.NextValue(); _ = _threads.NextValue();
+                    _lastTicks = Environment.TickCount64; _last = (0, 0);
+                } catch { }
+            }
+            public (int, int) ReadProcThread()
+            {
+                EnsureInit(); var now = Environment.TickCount64;
+                if (now - _lastTicks < 500) return _last;
+                int p = 0, t = 0; try { if (_proc != null) p = (int)_proc.NextValue(); } catch { }
+                try { if (_threads != null) t = (int)_threads.NextValue(); } catch { }
+                _last = (p, t); _lastTicks = now; return _last;
+            }
+        }
+
+        private sealed class DiskCounters
+        {
+            private static readonly Lazy<DiskCounters> _inst = new(() => new DiskCounters());
+            public static DiskCounters Instance => _inst.Value;
+
+            private System.Diagnostics.PerformanceCounter? _read;
+            private System.Diagnostics.PerformanceCounter? _write;
+            private System.Diagnostics.PerformanceCounter? _queue;
+            private long _lastTicks;
+            private (long read, long write, double queue) _last;
+            private bool _initTried;
+
+            private void EnsureInit()
+            {
+                if (_initTried) return;
+                _initTried = true;
+                try
+                {
+                    _read = new System.Diagnostics.PerformanceCounter("PhysicalDisk", "Disk Read Bytes/sec", "_Total", readOnly: true);
+                    _write = new System.Diagnostics.PerformanceCounter("PhysicalDisk", "Disk Write Bytes/sec", "_Total", readOnly: true);
+                    _queue = new System.Diagnostics.PerformanceCounter("PhysicalDisk", "Current Disk Queue Length", "_Total", readOnly: true);
+                    // 首次 NextValue 通常返回 0，允许后续采样平滑
+                    _ = _read.NextValue();
+                    _ = _write.NextValue();
+                    _ = _queue.NextValue();
+                    _lastTicks = Environment.TickCount64;
+                    _last = (0, 0, 0.0);
+                }
+                catch
+                {
+                    // ignore; 使用回退
+                }
+            }
+
+            public object Read()
+            {
+                EnsureInit();
+                var now = Environment.TickCount64;
+                if (now - _lastTicks < 200)
+                {
+                    return new { read_bytes_per_sec = _last.read, write_bytes_per_sec = _last.write, queue_length = _last.queue };
+                }
+                long r = 0, w = 0; double q = 0.0;
+                try { if (_read != null) r = (long)_read.NextValue(); } catch { r = 0; }
+                try { if (_write != null) w = (long)_write.NextValue(); } catch { w = 0; }
+                try { if (_queue != null) q = _queue.NextValue(); } catch { q = 0.0; }
+                _last = (r, w, q);
+                _lastTicks = now;
+                return new { read_bytes_per_sec = r, write_bytes_per_sec = w, queue_length = q };
+            }
+        }
+
+        private sealed class NetCounters
+        {
+            private static readonly Lazy<NetCounters> _inst = new(() => new NetCounters());
+            public static NetCounters Instance => _inst.Value;
+
+            private System.Diagnostics.PerformanceCounter[]? _sent;
+            private System.Diagnostics.PerformanceCounter[]? _recv;
+            private long _lastTicks;
+            private (long up, long down) _last;
+            private bool _initTried;
+
+            private static bool IsValidInterface(string name)
+            {
+                if (string.IsNullOrWhiteSpace(name)) return false;
+                var n = name.ToLowerInvariant();
+                if (n.Contains("loopback") || n.Contains("isatap") || n.Contains("teredo")) return false;
+                return true;
+            }
+
+            private void EnsureInit()
+            {
+                if (_initTried) return;
+                _initTried = true;
+                try
+                {
+                    var cat = new System.Diagnostics.PerformanceCounterCategory("Network Interface");
+                    var instances = cat.GetInstanceNames();
+                    var valid = instances.Where(IsValidInterface).ToArray();
+                    var sent = new List<System.Diagnostics.PerformanceCounter>();
+                    var recv = new List<System.Diagnostics.PerformanceCounter>();
+                    foreach (var inst in valid)
+                    {
+                        try
+                        {
+                            sent.Add(new System.Diagnostics.PerformanceCounter("Network Interface", "Bytes Sent/sec", inst, readOnly: true));
+                            recv.Add(new System.Diagnostics.PerformanceCounter("Network Interface", "Bytes Received/sec", inst, readOnly: true));
+                        }
+                        catch { /* ignore this instance */ }
+                    }
+                    _sent = sent.ToArray();
+                    _recv = recv.ToArray();
+                    // 预热
+                    if (_sent != null) foreach (var c in _sent) { try { _ = c.NextValue(); } catch { } }
+                    if (_recv != null) foreach (var c in _recv) { try { _ = c.NextValue(); } catch { } }
+                    _lastTicks = Environment.TickCount64;
+                    _last = (0, 0);
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
+
+            public object Read()
+            {
+                EnsureInit();
+                var now = Environment.TickCount64;
+                if (now - _lastTicks < 200)
+                {
+                    return new { up_bytes_per_sec = _last.up, down_bytes_per_sec = _last.down };
+                }
+                long up = 0, down = 0;
+                if (_sent != null)
+                {
+                    foreach (var c in _sent)
+                    {
+                        try { up += (long)c.NextValue(); } catch { }
+                    }
+                }
+                if (_recv != null)
+                {
+                    foreach (var c in _recv)
+                    {
+                        try { down += (long)c.NextValue(); } catch { }
+                    }
+                }
+                _last = (up, down);
+                _lastTicks = now;
+                return new { up_bytes_per_sec = up, down_bytes_per_sec = down };
+            }
         }
     }
 }

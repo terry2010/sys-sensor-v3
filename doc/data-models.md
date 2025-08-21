@@ -123,7 +123,10 @@ CREATE TABLE IF NOT EXISTS config (
 3) 对 Schema（如 `query_history` 返回）进行 JSON Schema 校验
 
 ### 5.1 模块字段清单（占位）
-- `cpu`：`{ usage_percent, user, system, idle, load_avg_1m, load_avg_5m, load_avg_15m }`
+- `cpu`：`{ usage_percent, user, system, idle, load_avg_1m, load_avg_5m, load_avg_15m, process_count, thread_count, per_core[], current_mhz?, max_mhz?, top_processes?[] }`
+  - `top_processes`：数组，元素结构为 `{ name: string, pid: number, cpu_percent: number }`
+    - 取值：按 CPU% 降序的前 N（当前 N=5），范围 0..100；不可得进程名时 `name="(unknown)"`
+    - 采样：差分 `Process.TotalProcessorTime`，按逻辑核数归一；内部 800ms 节流缓存
 - `memory`：`{ total, used, available, pressure }`
 - `disk`：`{ read_bytes_per_sec, write_bytes_per_sec, read_iops, write_iops, busy_percent }`
 - `network`：`{ rx_bytes_per_sec, tx_bytes_per_sec, rx_errors, tx_errors }`

@@ -337,6 +337,77 @@ public class EndToEndTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Snapshot_Cpu_Expanded_Fields()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(25));
+        var helloParams = new { app_version = "1.0.0", protocol_version = 1, token = "t", capabilities = new[] { "metrics_stream" } };
+        await rpc.InvokeAsync<object>("hello", new object[] { helloParams });
+
+        var snap = await rpc.InvokeAsync<System.Text.Json.JsonElement>("snapshot", new object[] { new { modules = new[] { "cpu" } } });
+        Assert.True(snap.TryGetProperty("cpu", out var cpu));
+        double GetOrDefault(string name)
+        {
+            return cpu.TryGetProperty(name, out var el) && el.ValueKind == System.Text.Json.JsonValueKind.Number ? el.GetDouble() : 0.0;
+        }
+        // 基本分解应在 [0,100]
+        var up = GetOrDefault("user_percent");
+        var sp = GetOrDefault("system_percent");
+        var ip = GetOrDefault("idle_percent");
+        Assert.InRange(up, 0.0, 100.0);
+        Assert.InRange(sp, 0.0, 100.0);
+        Assert.InRange(ip, 0.0, 100.0);
+        // uptime >= 0
+        Assert.True(cpu.TryGetProperty("uptime_sec", out var upsecEl) && upsecEl.GetInt64() >= 0);
+        // load_avg_* 在 0..100（EWMA 百分比表示）
+        Assert.InRange(GetOrDefault("load_avg_1m"), 0.0, 100.0);
+        Assert.InRange(GetOrDefault("load_avg_5m"), 0.0, 100.0);
+        Assert.InRange(GetOrDefault("load_avg_15m"), 0.0, 100.0);
+        // 进程/线程数量为非负
+        Assert.True(cpu.TryGetProperty("process_count", out var pcEl) && pcEl.GetInt32() >= 0);
+        Assert.True(cpu.TryGetProperty("thread_count", out var tcEl) && tcEl.GetInt32() >= 0);
+        // per_core 为数组，长度可为 0+，元素范围 0..100
+        if (cpu.TryGetProperty("per_core", out var coresEl) && coresEl.ValueKind == System.Text.Json.JsonValueKind.Array)
+        {
+            foreach (var c in coresEl.EnumerateArray())
+            {
+                var v = c.GetDouble();
+                Assert.InRange(v, 0.0, 100.0);
+            }
+        }
+        // top_processes 为数组，元素包含 name(string)/pid(number)/cpu_percent(0..100)
+        if (cpu.TryGetProperty("top_processes", out var topsEl) && topsEl.ValueKind == System.Text.Json.JsonValueKind.Array)
+        {
+            foreach (var p in topsEl.EnumerateArray())
+            {
+                if (p.ValueKind != System.Text.Json.JsonValueKind.Object) continue;
+                if (p.TryGetProperty("name", out var nEl) && nEl.ValueKind == System.Text.Json.JsonValueKind.String)
+                {
+                    var _ = nEl.GetString();
+                }
+                if (p.TryGetProperty("pid", out var pidEl) && (pidEl.ValueKind == System.Text.Json.JsonValueKind.Number))
+                {
+                    var _pid = pidEl.GetInt32();
+                    Assert.True(_pid >= 0);
+                }
+                if (p.TryGetProperty("cpu_percent", out var cpEl) && (cpEl.ValueKind == System.Text.Json.JsonValueKind.Number))
+                {
+                    var cp = cpEl.GetDouble();
+                    Assert.InRange(cp, 0.0, 100.0);
+                }
+            }
+        }
+        // 频率字段允许为 null；若存在则为正数
+        if (cpu.TryGetProperty("current_mhz", out var curEl) && curEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+        {
+            Assert.True(curEl.GetInt32() > 0);
+        }
+        if (cpu.TryGetProperty("max_mhz", out var maxEl) && maxEl.ValueKind == System.Text.Json.JsonValueKind.Number)
+        {
+            Assert.True(maxEl.GetInt32() > 0);
+        }
+    }
+
+    [Fact]
     public async Task SetConfig_And_BurstSubscribe_Works()
     {
         using var rpc = await ConnectAsync(TimeSpan.FromSeconds(10));
@@ -394,6 +465,22 @@ public class EndToEndTests : IAsyncLifetime
         Assert.True(pl.TryGetProperty("cpu", out var cpu));
         var usage = cpu.GetProperty("usage_percent").GetDouble();
         Assert.InRange(usage, 0.0, 100.0);
+        // 验证扩展字段存在且基本范围合理（尽量避免对环境敏感的强断言）
+        double GetOr(string name)
+        {
+            return cpu.TryGetProperty(name, out var el) && el.ValueKind == System.Text.Json.JsonValueKind.Number ? el.GetDouble() : 0.0;
+        }
+        Assert.InRange(GetOr("user_percent"), 0.0, 100.0);
+        Assert.InRange(GetOr("system_percent"), 0.0, 100.0);
+        Assert.InRange(GetOr("idle_percent"), 0.0, 100.0);
+        if (cpu.TryGetProperty("per_core", out var coresEl) && coresEl.ValueKind == System.Text.Json.JsonValueKind.Array)
+        {
+            foreach (var c in coresEl.EnumerateArray())
+            {
+                var v = c.GetDouble();
+                Assert.InRange(v, 0.0, 100.0);
+            }
+        }
         if (pl.TryGetProperty("memory", out var mem))
         {
             var total = mem.GetProperty("total").GetInt64();

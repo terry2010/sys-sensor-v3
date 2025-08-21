@@ -141,7 +141,25 @@
 {
   "jsonrpc":"2.0","result": {
     "ts": 1710000000,
-    "cpu": { "usage_percent": 12.5 },
+    "cpu": {
+      "usage_percent": 12.5,
+      "user_percent": 6.1,
+      "system_percent": 4.3,
+      "idle_percent": 89.6,
+      "uptime_sec": 123456,
+      "load_avg_1m": 10.2,
+      "load_avg_5m": 9.8,
+      "load_avg_15m": 8.4,
+      "process_count": 230,
+      "thread_count": 3100,
+      "per_core": [5.0,7.2,12.0,10.1],
+      "current_mhz": 4200,
+      "max_mhz": 4800,
+      "top_processes": [
+        { "name": "chrome", "pid": 1234, "cpu_percent": 22.5 },
+        { "name": "code", "pid": 5678, "cpu_percent": 12.0 }
+      ]
+    },
     "memory": { "total": 16000, "used": 2048 }
   },"id":6
 }

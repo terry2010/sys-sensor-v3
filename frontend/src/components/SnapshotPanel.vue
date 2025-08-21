@@ -24,7 +24,7 @@
       <label class="toggle"><input type="checkbox" v-model="showRaw" /> 显示原始 JSON</label>
     </div>
     <pre v-if="showRaw" class="raw">{{ rawJson }}</pre>
-    <div v-else class="small">
+    <div v-else class="small kv-list">
       <!-- 仅展示返回的字段：动态渲染（排除 ts） -->
       <div v-if="snap">
         <div v-for="(val, key) in filteredEntries" :key="key">
@@ -57,7 +57,14 @@ const filteredEntries = computed(() => {
 });
 const pretty = (v: any) => {
   if (v == null) return '';
-  if (typeof v === 'object') return JSON.stringify(v);
+  if (typeof v === 'object') {
+    try {
+      const s = JSON.stringify(v);
+      return s.length > 300 ? s.slice(0, 300) + '…' : s;
+    } catch {
+      return '[object]';
+    }
+  }
   return String(v);
 };
 const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
@@ -119,4 +126,7 @@ onMounted(async () => {
 label.toggle { user-select: none; }
 pre.raw { background: #f6f8fa; padding: 8px; border-radius: 6px; margin-top: 8px; max-height: 360px; overflow: auto; }
 button { padding: 6px 12px; }
+.kv-list { max-height: 260px; overflow: auto; background: #fafafa; border-radius: 6px; padding: 6px; }
+.kv-list strong { color: #333; }
+.kv-list div { white-space: pre-wrap; word-break: break-all; }
 </style>

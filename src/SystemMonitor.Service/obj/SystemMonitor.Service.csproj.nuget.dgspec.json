@@ -95,9 +95,17 @@
               "target": "Package",
               "version": "[2.0.0-beta4.22272.1, )"
             },
+            "System.Diagnostics.PerformanceCounter": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "System.IO.Pipes.AccessControl": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "System.Management": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [

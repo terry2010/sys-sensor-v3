@@ -17,6 +17,7 @@
     </header>
 
     <section class="cards">
+      <CpuPanel />
       <SnapshotPanel />
       <HistoryChart />
       <ControlPanel />
@@ -30,6 +31,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, computed } from 'vue';
 import SnapshotPanel from './components/SnapshotPanel.vue';
+import CpuPanel from './components/CpuPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
@@ -54,6 +56,7 @@ onMounted(async () => {
   // 统一初始化顺序：先探测并尝试启动事件桥 -> 再进行会话与 metrics 订阅
   const w: any = typeof window !== 'undefined' ? window : {};
   try {
+    // @ts-ignore: 某些环境下未安装类型声明，动态导入用于运行时探测
     await import('@tauri-apps/api/core');
     w.__IS_TAURI__ = true;
     // 先设置订阅开关（通过 bridge_subscribe），确保事件桥首次握手后的初始订阅为 enable=true
