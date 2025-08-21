@@ -42,6 +42,70 @@ namespace SystemMonitor.Service.Services
         }
 
         // -------------------------
+        // 每核频率采样器（MHz）
+        // 基于 Processor Information/% Processor Performance 的每核百分比，乘以 max_mhz 估算当前 MHz
+        // -------------------------
+        private sealed class PerCoreFrequency
+        {
+            private static readonly Lazy<PerCoreFrequency> _inst = new(() => new PerCoreFrequency());
+            public static PerCoreFrequency Instance => _inst.Value;
+
+            private System.Diagnostics.PerformanceCounter[]? _perfPct;
+            private long _lastTicks;
+            private int?[] _last = Array.Empty<int?>();
+            private bool _initTried;
+
+            private void EnsureInit()
+            {
+                if (_initTried) return; _initTried = true;
+                try
+                {
+                    var cat = new System.Diagnostics.PerformanceCounterCategory("Processor Information");
+                    var instances = cat.GetInstanceNames()
+                        .Where(n => !string.Equals(n, "_Total", StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                        .ToArray();
+                    _perfPct = instances
+                        .Select(n => new System.Diagnostics.PerformanceCounter("Processor Information", "% Processor Performance", n, readOnly: true))
+                        .ToArray();
+                    // 预热
+                    foreach (var c in _perfPct) { try { _ = c.NextValue(); } catch { } }
+                    _lastTicks = Environment.TickCount64;
+                    _last = new int?[instances.Length];
+                }
+                catch
+                {
+                    _perfPct = Array.Empty<System.Diagnostics.PerformanceCounter>();
+                    _last = Array.Empty<int?>();
+                }
+            }
+
+            public int?[] Read()
+            {
+                EnsureInit();
+                var now = Environment.TickCount64;
+                if (now - _lastTicks < 500) return _last;
+
+                var (_, maxMHz) = CpuFrequency.Instance.Read();
+                if (_perfPct == null || _perfPct.Length == 0 || !maxMHz.HasValue)
+                {
+                    _lastTicks = now; return _last;
+                }
+                var arr = new int?[_perfPct.Length];
+                for (int i = 0; i < _perfPct.Length; i++)
+                {
+                    try
+                    {
+                        var pct = Math.Clamp(_perfPct[i].NextValue(), 0.0f, 200.0f); // 允许睿频 >100%
+                        arr[i] = (int)Math.Max(0, Math.Round(maxMHz.Value * (pct / 100.0)));
+                    }
+                    catch { arr[i] = null; }
+                }
+                _last = arr; _lastTicks = now; return _last;
+            }
+        }
+
+        // -------------------------
         // 内核活动计数器采样器（每秒速率）
         // -------------------------
         private sealed class KernelActivitySampler
@@ -170,23 +234,72 @@ namespace SystemMonitor.Service.Services
             public static CpuFrequency Instance => _inst.Value;
             private long _lastTicks;
             private (int? cur, int? max) _last;
+            private bool _initTried;
+            private System.Diagnostics.PerformanceCounter? _pcFreq; // Processor Frequency (_Total)
+            private System.Diagnostics.PerformanceCounter? _pcPerfPct; // % Processor Performance (_Total)
             public (int? cur, int? max) Read()
             {
                 var now = Environment.TickCount64;
-                if (now - _lastTicks < 5_000) return _last;
+                if (now - _lastTicks < 1_000) return _last;
+                EnsureInit();
                 int? cur = null, max = null;
+                // 优先使用 PerformanceCounter 的动态频率
+                try { if (_pcFreq != null) cur = Math.Max(0, Convert.ToInt32(_pcFreq.NextValue())); } catch { cur = null; }
+                // 使用 WMI 作为回退，并同时获取 max
                 try
                 {
-                    // WMI 查询（需要 System.Management）
                     using var searcher = new System.Management.ManagementObjectSearcher("SELECT CurrentClockSpeed, MaxClockSpeed FROM Win32_Processor");
                     foreach (System.Management.ManagementObject obj in searcher.Get())
                     {
-                        try { cur = Math.Max(cur ?? 0, Convert.ToInt32(obj["CurrentClockSpeed"])) ; } catch { }
-                        try { max = Math.Max(max ?? 0, Convert.ToInt32(obj["MaxClockSpeed"])) ; } catch { }
+                        try { var wCur = Convert.ToInt32(obj["CurrentClockSpeed"]); cur = cur ?? Math.Max(0, wCur); } catch { }
+                        try { var wMax = Convert.ToInt32(obj["MaxClockSpeed"]); max = Math.Max(max ?? 0, wMax); } catch { }
                     }
                 }
                 catch { /* ignore */ }
+                // 若仍缺少当前频率，尝试用 % Processor Performance * max_mhz 估算
+                if (cur == null)
+                {
+                    try
+                    {
+                        if (_pcPerfPct != null)
+                        {
+                            var pct = Math.Max(0.0f, Math.Min(100.0f, _pcPerfPct.NextValue()));
+                            if (max.HasValue)
+                            {
+                                cur = (int)Math.Max(0, Math.Round(max.Value * (pct / 100.0)));
+                            }
+                        }
+                    }
+                    catch { /* ignore */ }
+                }
                 _last = (cur, max); _lastTicks = now; return _last;
+            }
+            private void EnsureInit()
+            {
+                if (_initTried) return; _initTried = true;
+                try
+                {
+                    _pcFreq = TryCreateCounter("Processor Information", "Processor Frequency", "_Total");
+                    if (_pcFreq == null)
+                        _pcFreq = TryCreateCounter("Processor", "Processor Frequency", "_Total");
+                    // 预备：% Processor Performance
+                    _pcPerfPct = TryCreateCounter("Processor Information", "% Processor Performance", "_Total");
+                }
+                catch { /* ignore */ }
+            }
+            private static System.Diagnostics.PerformanceCounter? TryCreateCounter(string category, string counter, string? instance = null)
+            {
+                try
+                {
+                    if (instance == null)
+                        return new System.Diagnostics.PerformanceCounter(category, counter, readOnly: true);
+                    else
+                        return new System.Diagnostics.PerformanceCounter(category, counter, instance, readOnly: true);
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
 
@@ -1168,7 +1281,16 @@ namespace SystemMonitor.Service.Services
                 // per-core
                 var perCore = PerCoreCounters.Instance.Read();
                 // 频率（MHz）
-                var (curMHz, maxMHz) = CpuFrequency.Instance.Read();
+                var (curMHzRaw, maxMHz) = CpuFrequency.Instance.Read();
+                var perCoreFreq = PerCoreFrequency.Instance.Read();
+                // 若有每核频率，则以平均值作为 current_mhz
+                int? curMHz = curMHzRaw;
+                if (perCoreFreq.Length > 0)
+                {
+                    var vals = perCoreFreq.Where(v => v.HasValue).Select(v => v!.Value).ToArray();
+                    if (vals.Length > 0)
+                        curMHz = (int)Math.Round(vals.Average());
+                }
                 // 负载平均（EWMA）
                 var (l1, l5, l15) = CpuLoadAverages.Instance.Update(usage);
                 // Top 进程（按 CPU%）
@@ -1189,6 +1311,7 @@ namespace SystemMonitor.Service.Services
                     process_count = proc,
                     thread_count = threads,
                     per_core = perCore,
+                    per_core_mhz = perCoreFreq,
                     current_mhz = curMHz,
                     max_mhz = maxMHz,
                     top_processes = top,

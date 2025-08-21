@@ -23,14 +23,16 @@
         <div><span class="k">load 1/5/15</span><span class="v">{{ pct(cpu?.load_avg_1m) }} / {{ pct(cpu?.load_avg_5m) }} / {{ pct(cpu?.load_avg_15m) }}</span></div>
         <div><span class="k">proc/thread</span><span class="v">{{ num(cpu?.process_count) }} / {{ num(cpu?.thread_count) }}</span></div>
         <div><span class="k">freq</span><span class="v">{{ mhz(cpu?.current_mhz) }} / {{ mhz(cpu?.max_mhz) }}</span></div>
+        <div v-if="hasKernelCounters"><span class="k">ctx/sys/irq</span><span class="v">{{ perSec(cpu?.context_switches_per_sec) }} / {{ perSec(cpu?.syscalls_per_sec) }} / {{ perSec(cpu?.interrupts_per_sec) }}</span></div>
       </div>
       <div v-if="Array.isArray(cpu?.per_core) && cpu!.per_core.length" class="per-core">
-        <div class="pc-head">per-core</div>
+        <div class="pc-head">per-core (usage / MHz)</div>
         <div class="pc-list">
           <div v-for="(v, idx) in cpu!.per_core" :key="idx" class="pc-row">
             <span class="pc-idx">#{{ idx }}</span>
             <div class="pc-bar"><div class="pc-fill" :style="{ width: pctNum(v) + '%' }"></div></div>
             <span class="pc-val">{{ pct(v) }}</span>
+            <span class="pc-mhz" v-if="hasPerCoreMhz">{{ mhz((cpu as any).per_core_mhz?.[idx]) }}</span>
           </div>
         </div>
       </div>
@@ -57,7 +59,22 @@ const cpu = computed(() => (metrics.latest as any)?.cpu ?? null);
 const pctNum = (v: any) => typeof v === 'number' ? Math.max(0, Math.min(100, v)) : 0;
 const pct = (v: any) => typeof v === 'number' ? `${v.toFixed(1)}%` : '-';
 const num = (v: any) => typeof v === 'number' ? v : (typeof v === 'string' ? v : '-');
-const mhz = (v: any) => v == null ? '-' : `${v}`;
+const mhz = (v: any) => {
+  if (v == null || typeof v !== 'number') return '-';
+  return `${Math.round(v).toLocaleString()} MHz`;
+};
+const perSec = (v: any) => {
+  if (v == null || typeof v !== 'number' || !isFinite(v)) return '-';
+  const n = Math.max(0, v);
+  if (n >= 1_000_000) return `${(n/1_000_000).toFixed(2)}M/s`;
+  if (n >= 1_000) return `${(n/1_000).toFixed(1)}k/s`;
+  return `${Math.round(n)}/s`;
+};
+const hasKernelCounters = computed(() => {
+  const c = cpu.value as any;
+  return c && (typeof c.context_switches_per_sec === 'number' || typeof c.syscalls_per_sec === 'number' || typeof c.interrupts_per_sec === 'number');
+});
+const hasPerCoreMhz = computed(() => Array.isArray((cpu.value as any)?.per_core_mhz));
 const uptime = (sec: any) => {
   const s = typeof sec === 'number' ? Math.max(0, Math.floor(sec)) : null;
   if (s == null) return '-';
@@ -86,11 +103,12 @@ const uptime = (sec: any) => {
 .per-core { margin-top: 6px; }
 .pc-head { font-size: 12px; color: #666; margin-bottom: 4px; }
 .pc-list { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow: auto; }
-.pc-row { display: grid; grid-template-columns: 36px 1fr 56px; align-items: center; gap: 8px; font-size: 12px; }
+.pc-row { display: grid; grid-template-columns: 36px 1fr 56px 84px; align-items: center; gap: 8px; font-size: 12px; }
 .pc-idx { color: #888; text-align: right; }
 .pc-bar { height: 8px; background: #f0f0f0; border-radius: 6px; overflow: hidden; }
 .pc-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #ff9800); }
 .pc-val { text-align: right; font-variant-numeric: tabular-nums; }
+.pc-mhz { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; color: #333; }
 /* top processes */
 .top-proc { margin-top: 8px; }
 .tp-head { font-size: 12px; color: #666; margin-bottom: 4px; }
