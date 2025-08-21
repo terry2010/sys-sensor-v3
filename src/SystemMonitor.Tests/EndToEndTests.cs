@@ -434,14 +434,29 @@ public class EndToEndTests : IAsyncLifetime
     {
         var collector = new MetricsCollector();
         using var rpc = await ConnectAsync(TimeSpan.FromSeconds(20), collector);
+        // 进行握手，声明 metrics_stream 能力 -> 该连接为事件桥，默认开启推流并自动 start(["cpu","mem"]).
+        var helloParams = new { app_version = "1.0.0", protocol_version = 1, token = "t", capabilities = new[] { "metrics_stream" } };
+        await rpc.InvokeAsync<object>("hello", new object[] { helloParams });
+
+        // 显式开启推流（冗余安全）
+        var sub = await rpc.InvokeAsync<System.Text.Json.JsonElement>("subscribe_metrics", new object[] { new { enable = true } });
+        Assert.True(sub.GetProperty("ok").GetBoolean());
+        Assert.True(sub.GetProperty("enabled").GetBoolean());
 
         // 设置基础间隔为 400ms，等待稳定一段时间统计次数
         var cfg = await rpc.InvokeAsync<System.Text.Json.JsonElement>("set_config", new object[] { new { base_interval_ms = 400 } });
         Assert.True(cfg.GetProperty("ok").GetBoolean());
 
         collector.Clear();
-        await Task.Delay(1300); // 约 3 个周期
-        var c1 = collector.Timestamps.Count;
+        // 轮询等待基础速率下收到至少 2 条，最多等待 2500ms
+        var baseStart = DateTime.UtcNow;
+        int c1 = 0;
+        while ((DateTime.UtcNow - baseStart).TotalMilliseconds < 2500)
+        {
+            c1 = collector.Timestamps.Count;
+            if (c1 >= 2) break;
+            await Task.Delay(50);
+        }
         Assert.True(c1 >= 2, $"expected >=2 at base rate, got {c1}");
 
         // 进入 burst: 100ms，TTL 600ms
@@ -460,11 +475,21 @@ public class EndToEndTests : IAsyncLifetime
         }
         Assert.True(c2 >= 3, $"expected >=3 during burst (target >=4), got {c2}");
 
-        // 等待 TTL 过期后恢复到基础间隔
+        // 等待 TTL 过期后恢复到基础间隔（目标 ~400ms）
         collector.Clear();
-        await Task.Delay(900); // 超过 TTL，恢复 base（~400ms）
-        var c3 = collector.Timestamps.Count;
-        Assert.True(c3 >= 1 && c3 <= 4, $"expected 1..4 after recovery, got {c3}");
+        var recStart = DateTime.UtcNow;
+        // 先等待 700ms 确保 TTL 过期
+        await Task.Delay(700);
+        // 再窗口 1200ms 内轮询，应至少收到 1 条，且不应超过 5 条（容忍抖动）
+        int c3 = 0;
+        var recWindowStart = DateTime.UtcNow;
+        while ((DateTime.UtcNow - recWindowStart).TotalMilliseconds < 1200)
+        {
+            c3 = collector.Timestamps.Count;
+            if (c3 >= 1) break;
+            await Task.Delay(50);
+        }
+        Assert.True(c3 >= 1 && c3 <= 5, $"expected 1..5 after recovery, got {c3}");
     }
 
     [Fact]

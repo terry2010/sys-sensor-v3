@@ -98,17 +98,26 @@ public class ContractTests
     [Fact]
     public void QueryHistory_Request_Serializes_To_SnakeCase()
     {
-        var req = new { StartTs = 1710000000, EndTs = 1710003600, Modules = new[] { "cpu" }, Granularity = "10s" };
+        var req = new { FromTs = 1710000000, ToTs = 1710003600, Modules = new[] { "cpu", "memory" }, StepMs = 1000 };
         var json = JsonSerializer.Serialize(req, Snake);
-        Assert.Contains("start_ts", json);
-        Assert.Contains("end_ts", json);
+        Assert.Contains("from_ts", json);
+        Assert.Contains("to_ts", json);
         Assert.Contains("modules", json);
-        Assert.Contains("granularity", json);
-        Assert.DoesNotContain("StartTs", json);
-        Assert.DoesNotContain("EndTs", json);
+        Assert.Contains("step_ms", json);
+        Assert.DoesNotContain("FromTs", json);
+        Assert.DoesNotContain("ToTs", json);
     }
 
     [Fact]
+    public void SubscribeMetrics_Request_Serializes_To_SnakeCase()
+    {
+        var req = new { Enable = true };
+        var json = JsonSerializer.Serialize(req, Snake);
+        Assert.Contains("enable", json);
+        Assert.DoesNotContain("Enable", json);
+    }
+
+    [Fact(Skip = "非 M1：后续里程碑接口")]
     public void SetLogLevel_Request_Serializes_To_SnakeCase()
     {
         var req = new { Level = "warning" };
@@ -117,7 +126,7 @@ public class ContractTests
         Assert.DoesNotContain("Level", json);
     }
 
-    [Fact]
+    [Fact(Skip = "非 M1：后续里程碑接口")]
     public void UpdateCheck_Request_Serializes_To_SnakeCase()
     {
         var req = new { };
@@ -125,7 +134,7 @@ public class ContractTests
         Assert.Equal("{}", json);
     }
 
-    [Fact]
+    [Fact(Skip = "非 M1：后续里程碑接口")]
     public void UpdateApply_Request_Serializes_To_SnakeCase()
     {
         var req = new { Version = "1.1.0" };

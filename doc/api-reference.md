@@ -12,13 +12,14 @@
 - `start(params?: { modules?: string[] })`
 - `stop(params: {})`
 - `query_history(params: { from_ts: number, to_ts: number, modules?: string[], step_ms?: number })`
+- `subscribe_metrics(params: { enable: boolean })`
 
 ## 2. 事件（Service → UI）
-- `metrics`: `{ ts: number, seq: number, cpu?: {...}, memory?: {...}, ... }`（按启用模块动态裁剪）
-- `state`: `{ running: boolean, clients: number, effective_intervals: Record<string, number> }`
-- `alert`: `{ level: "info"|"warn"|"error", metric: string, value: number, threshold?: number, rule_id?: string, message: string, ts: number }`
-- `ping`: `{}`（可选心跳）
-- `update_ready`: `{ component: string, version: string }`
+- `metrics`: `{ ts: number, seq: number, cpu?: {...}, memory?: {...}, ... }`（按启用模块动态裁剪；仅在“事件桥”连接且推流开关启用时发送）
+- `state`（预留，M1 未实现）: `{ running: boolean, clients: number, effective_intervals: Record<string, number> }`
+- `alert`（预留，M1 未实现）: `{ level: "info"|"warn"|"error", metric: string, value: number, threshold?: number, rule_id?: string, message: string, ts: number }`
+- `ping`（预留，M1 未实现）: `{}`（可选心跳）
+- `update_ready`（预留，M1 未实现）: `{ component: string, version: string }`
 
 ## 3. 请求/响应示例
 ```json
@@ -61,8 +62,8 @@
 { "jsonrpc":"2.0","method":"start","params": { "modules": ["cpu","memory"] }, "id":3 }
 ```
 ```json
-// start response
-{ "jsonrpc":"2.0","result": { "running": true }, "id":3 }
+// start response（与实现对齐）
+{ "jsonrpc":"2.0","result": { "ok": true, "started_modules": ["cpu","mem"] }, "id":3 }
 ```
 
 ```json
@@ -70,8 +71,8 @@
 { "jsonrpc":"2.0","method":"stop","params": {}, "id":4 }
 ```
 ```json
-// stop response
-{ "jsonrpc":"2.0","result": { "running": false }, "id":4 }
+// stop response（与实现对齐）
+{ "jsonrpc":"2.0","result": { "ok": true }, "id":4 }
 ```
 
 ```json
@@ -125,11 +126,16 @@
 }
 ```
 
+```json
+// subscribe_metrics（可控全局推流开关；桥接连接默认已开启）
+{ "jsonrpc":"2.0","method":"subscribe_metrics","params": { "enable": true }, "id":8 }
+```
+
 ### query_history 语义说明
 
 - 参数
   - `from_ts`/`to_ts`：毫秒级 UTC 时间戳，闭区间 `[from_ts, to_ts]`。
-    - 约定：`to_ts = 0` 表示“到当前时刻”（服务端在查询时替换为 `DateTimeOffset.Now`）。
+    - 约定：`to_ts = 0` 表示“到当前时刻”（服务端在查询时替换为当前 UTC 毫秒）。
   - `modules`：要返回的模块字段子集；缺省表示按当前启用模块动态裁剪。
   - `step_ms`：可选，>0 时按该步长聚合为时间桶，取每桶“最后一条记录”。
 
@@ -145,17 +151,22 @@
   - `step_ms` 生效时，每个桶仅保留该桶内最后一条；桶无数据则不补零。
 
 - 限制
-  - 历史已接入 SQLite 持久化（`metrics_1s/10s/1m`），配合保留策略定期清理；重启后历史可用。
-  - 大窗口+小步长可能返回较多点位，建议客户端根据可视化需要合理设置 `step_ms`。
+  - 历史已接入 SQLite 持久化（当前 M1 为单表 `metrics`，含 `ts/cpu/mem_total/mem_used`），配合保留策略定期清理；重启后历史可用。后续里程碑可能扩展为多粒度表。
 
 > 注：`set_log_level/update_*` 非 M1 范围，后续里程碑再补充。
 
 > 注：字段名以指标文档为准；所有键名均为 `snake_case`。
 
 > 握手约束：
-> - `token` 必须为非空字符串，否则返回 `unauthorized` 错误码。
-> - 仅支持 `protocol_version = 1`，否则返回 `not_supported`（或明确的 `unsupported_version` 自定义码）。
+> - `token` 必须为非空字符串，否则返回 `unauthorized` 错误。
+> - 仅支持 `protocol_version = 1`，否则返回 `not_supported`。
 > - `capabilities` 如包含未知能力，返回 `not_supported`。
+> - 当 `capabilities` 含 `metrics_stream` 时，该连接被视为“事件桥”，服务端默认开启推流，并自动 `start({ modules: ["cpu","mem"] })`。
+> - `subscribe_metrics` 可显式开关推流（全局）。
+
+> 说明：
+> - `set_config.persist` 在 M1 中暂不生效（忽略）。
+> - `burst_subscribe.modules` 在 M1 中暂不使用（按全局速率控制）。
 
 ## 4. 错误响应与错误码
 统一采用 JSON-RPC error 对象，`message` 为机器可读短语，`data` 可包含细节：
@@ -173,6 +184,8 @@
 - not_supported / unsupported_version: -32050
 - rate_limited: -32060
 - internal: -32099
+
+> 说明：M1 阶段实现侧可能返回框架默认错误码；上述取值为推荐值，后续里程碑将对齐具体 code。
 
 ## 5. 字段命名校验
 - 服务端序列化策略：.NET `System.Text.Json` + `JsonNamingPolicy.SnakeCaseLower`

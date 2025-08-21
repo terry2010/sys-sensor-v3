@@ -6,7 +6,7 @@
 - 目录与前端分层（api/service/组件/stores）
 - DTO 类型与 Service 接口（与 `doc/api-reference.md` 对齐）
 - 页面最小骨架（App + SnapshotPanel + HistoryChart 占位）
-- 尚未创建 `src-tauri/`（需要本机 Rust 工具链），请见下方“环境准备与初始化”。
+ 已包含 `src-tauri/`（最小 Rust 宿主已就绪，后续在此内实现 Windows 命名管道 JSON-RPC 客户端与事件桥）。
 
 ## 环境准备（Windows 10）
 1) Node.js 18+（LTS 推荐）
@@ -19,18 +19,17 @@
    ```
 
 ## 初始化
-在本目录下执行：
+在本目录下执行依赖安装：
 ```powershell
 npm install
 ```
 
-首次初始化 Tauri（生成 `src-tauri/`）— 待确认已安装 Rust 后执行：
+## 开发与运行
+推荐使用仓库统一脚本在仓库根目录启动本地联调（会自动构建后端并等待命名管道就绪，再启动前端 Tauri 开发模式）：
 ```powershell
-# 生成最小 Rust 宿主（Windows 命名管道桥接后续补充）
-# 我来在确认环境后为你自动生成 src-tauri 代码
+./scripts/dev.ps1
 ```
-
-## 开发与运行（待生成 src-tauri 后）
+如需仅在前端目录单独启动（要求服务端已单独运行）：
 ```powershell
 npm run dev   # 启动 Vite + Tauri 开发模式
 ```
@@ -43,4 +42,4 @@ npm run dev   # 启动 Vite + Tauri 开发模式
 - src/components/：UI 组件，不直接依赖传输细节
 
 ## 下一步
-- 确认你已安装 Node 与 Rust，我将生成 `src-tauri/` 并实现 Windows 命名管道 JSON-RPC 客户端，然后把 `rpc.ts` 接到 Tauri invoke/event。
+- 在 `src-tauri/` 内完善 Windows 命名管道 JSON-RPC 客户端与自动重连逻辑，并把 `src/api/rpc.ts` 接到 Tauri invoke/event。
