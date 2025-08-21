@@ -29,6 +29,7 @@ import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
 import { useSessionStore } from './stores/session';
 import { useMetricsStore } from './stores/metrics';
+import { service } from './api/service';
 import { ensureEventBridge } from './api/rpc.tauri';
 
 const session = useSessionStore();
@@ -39,13 +40,15 @@ onMounted(async () => {
   const w: any = typeof window !== 'undefined' ? window : {};
   try {
     await import('@tauri-apps/api/core');
-    // 非阻塞：不要等待事件桥建立，避免后端异常导致 UI 等待
-    void ensureEventBridge();
     w.__IS_TAURI__ = true;
+    // 先设置订阅开关（通过 bridge_subscribe），确保事件桥首次握手后的初始订阅为 enable=true
+    try { void service.subscribeMetrics(true); } catch {}
+    // 再非阻塞启动事件桥（不要等待，避免后端异常导致 UI 等待）
+    void ensureEventBridge();
   } catch {
     w.__IS_TAURI__ = false;
   }
-  // 非阻塞：优先启动 metrics，session.init() 不阻塞主流程
+  // 非阻塞：优先启动 metrics 监听；session.init() 不阻塞主流程
   metrics.start();
   void session.init();
 });

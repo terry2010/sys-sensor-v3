@@ -130,6 +130,9 @@ const logMetrics = ref(false);
 let unlisten: (() => void) | null = null;
 let unlistenBridge: (() => void) | null = null;
 let unlistenBridgeAck: (() => void) | null = null;
+let unlistenBridgeRx: (() => void) | null = null;
+let unlistenBridgeErr: (() => void) | null = null;
+let unlistenBridgeDisc: (() => void) | null = null;
 function toggleMetricsLog() {
   if (unlisten) { try { unlisten(); } catch {} unlisten = null; }
   if (logMetrics.value) {
@@ -150,6 +153,9 @@ onMounted(async () => {
     const { listen } = await import('@tauri-apps/api/event');
     unlistenBridge = await listen('bridge_subscribe', (e:any) => log({ event: 'bridge_subscribe', payload: e?.payload }));
     unlistenBridgeAck = await listen('bridge_subscribe_ack', (e:any) => log({ event: 'bridge_subscribe_ack', payload: e?.payload }));
+    unlistenBridgeRx = await listen('bridge_rx', (e:any) => log({ event: 'bridge_rx', payload: e?.payload }));
+    unlistenBridgeErr = await listen('bridge_error', (e:any) => log({ event: 'bridge_error', payload: e?.payload }));
+    unlistenBridgeDisc = await listen('bridge_disconnected', (e:any) => log({ event: 'bridge_disconnected', payload: e?.payload }));
   } catch {}
   // 首次记录宿主
   try { isTauri.value = isTauriHost(); } catch {}
@@ -167,6 +173,9 @@ onUnmounted(() => {
   if (unlisten) { try { unlisten(); } catch {} unlisten = null; }
   if (unlistenBridge) { try { unlistenBridge(); } catch {} unlistenBridge = null; }
   if (unlistenBridgeAck) { try { unlistenBridgeAck(); } catch {} unlistenBridgeAck = null; }
+  if (unlistenBridgeRx) { try { unlistenBridgeRx(); } catch {} unlistenBridgeRx = null; }
+  if (unlistenBridgeErr) { try { unlistenBridgeErr(); } catch {} unlistenBridgeErr = null; }
+  if (unlistenBridgeDisc) { try { unlistenBridgeDisc(); } catch {} unlistenBridgeDisc = null; }
 });
 </script>
 

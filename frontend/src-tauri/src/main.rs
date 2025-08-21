@@ -23,18 +23,29 @@ struct JsonRpcRequest<'a> {
     params: Option<Value>,
 }
 
+fn call_hello_over_pipe(file: &mut std::fs::File) -> Result<()> {
+    // 发送 hello，携带 metrics_stream 能力以表明该连接是事件桥
+    let params = serde_json::json!({
+        "app_version": "tauri-bridge",
+        "protocol_version": 1,
+        "token": "dev",
+        "capabilities": ["metrics_stream"]
+    });
+    let (payload, _id) = build_request("hello", Some(params));
+    file.write_all(&payload)?;
+    file.flush()?;
+    let resp = read_response(file)?;
+    if resp.error.is_some() { return Err(anyhow!("hello error")); }
+    Ok(())
+}
+
 // 在同一事件桥连接上切换订阅状态（避免与短连接会话不一致）
-// 同时使用一次性短连接直接调用服务端 subscribe_metrics，确保在读循环被阻塞时也能立即生效
+// 不再使用短连接直接调用，统一由桥接读循环在同一连接内发送 subscribe_metrics
 #[tauri::command]
 fn bridge_set_subscribe(enable: bool) -> Result<(), String> {
     WANT_SUBSCRIBE.store(enable, Ordering::SeqCst);
     SUBSCRIBE_DIRTY.store(true, Ordering::SeqCst);
-    // 直接通过短连接调用一次，确保服务端状态立即更新
-    let params = serde_json::json!({ "enable": enable });
-    match call_over_named_pipe("subscribe_metrics", Some(params)) {
-        Ok(_) => Ok(()),
-        Err(e) => Err(e.to_string()),
-    }
+    Ok(())
 }
 
 #[derive(Deserialize)]
@@ -180,15 +191,38 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
             // 尝试连接命名管道
             match OpenOptions::new().read(true).write(true).open(PIPE_PATH) {
                 Ok(mut file) => {
-                    // 连接建立后，先订阅 metrics 推送，避免服务端在其它短连接上推送导致混流
-                    // 仅做一次请求并读取其响应，忽略错误（服务端老版本可能没有该方法）
+                    // 建立事件桥握手：hello(capabilities: ["metrics_stream"]) -> 订阅
+                    let _ = app.emit("bridge_handshake", serde_json::json!({"stage":"hello"}));
+                    if let Err(e) = call_hello_over_pipe(&mut file) {
+                        let _ = app.emit(
+                            "bridge_error",
+                            serde_json::json!({
+                                "stage": "hello",
+                                "error": e.to_string()
+                            }),
+                        );
+                        // 退出当前连接循环，等待重连
+                        continue;
+                    }
+                    // 初始订阅状态
+                    let _ = app.emit("bridge_subscribe", serde_json::json!({"stage":"init","enable": WANT_SUBSCRIBE.load(Ordering::SeqCst)}));
                     let sub_params = serde_json::json!({ "enable": WANT_SUBSCRIBE.load(Ordering::SeqCst) });
                     let (sub_payload, _id) = build_request("subscribe_metrics", Some(sub_params));
-                    let _ = app.emit("bridge_subscribe", serde_json::json!({"stage":"init","enable": WANT_SUBSCRIBE.load(Ordering::SeqCst)}));
                     let _ = file.write_all(&sub_payload);
                     let _ = file.flush();
                     let init_resp = read_response(&mut file);
                     let _ = app.emit("bridge_subscribe_ack", serde_json::json!({"stage":"init","ok": init_resp.is_ok()}));
+                    if let Err(e) = init_resp {
+                        let _ = app.emit(
+                            "bridge_error",
+                            serde_json::json!({
+                                "stage": "init_subscribe",
+                                "error": e.to_string()
+                            }),
+                        );
+                        // 订阅失败，断开并重连
+                        continue;
+                    }
 
                     // 持续读取通知帧（HeaderDelimited + JSON）
                     loop {
@@ -206,7 +240,16 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                         // 读取直到空行
                         let header = match read_exact_until(&mut file, b"\r\n\r\n") {
                             Ok(h) => h,
-                            Err(_) => { break; }
+                            Err(e) => {
+                                let _ = app.emit(
+                                    "bridge_error",
+                                    serde_json::json!({
+                                        "stage": "read_header",
+                                        "error": e.to_string()
+                                    }),
+                                );
+                                break;
+                            }
                         };
                         let header_str = String::from_utf8_lossy(&header);
                         let mut content_length: usize = 0;
@@ -219,14 +262,41 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                 }
                             }
                         }
-                        if content_length == 0 { break; }
+                        if content_length == 0 {
+                            let _ = app.emit(
+                                "bridge_error",
+                                serde_json::json!({
+                                    "stage": "parse_header",
+                                    "error": "missing or zero content-length"
+                                }),
+                            );
+                            break;
+                        }
                         let mut body = vec![0u8; content_length];
                         let mut read = 0;
                         while read < content_length {
                             match file.read(&mut body[read..]) {
-                                Ok(0) => { break; }
+                                Ok(0) => {
+                                    let _ = app.emit(
+                                        "bridge_error",
+                                        serde_json::json!({
+                                            "stage": "read_body",
+                                            "error": "connection closed"
+                                        }),
+                                    );
+                                    break;
+                                }
                                 Ok(n) => { read += n; }
-                                Err(_) => { break; }
+                                Err(e) => {
+                                    let _ = app.emit(
+                                        "bridge_error",
+                                        serde_json::json!({
+                                            "stage": "read_body",
+                                            "error": e.to_string()
+                                        }),
+                                    );
+                                    break;
+                                }
                             }
                         }
                         // 解析 JSON 并分发
@@ -235,14 +305,45 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                             let has_id = v.get("id").is_some();
                             if method.is_some() && !has_id {
                                 let event = method.unwrap();
-                                let payload = v.get("params").cloned().unwrap_or(Value::Null);
+                                // 先发一条桥接调试事件，便于前端观测是否有通知到达
+                                let _ = app.emit(
+                                    "bridge_rx",
+                                    serde_json::json!({
+                                        "method": event,
+                                        "has_id": has_id
+                                    }),
+                                );
+                                // 兼容 StreamJsonRpc 的位置参数：如果 params 是单元素数组，则解包为该元素
+                                let raw_params = v.get("params").cloned().unwrap_or(Value::Null);
+                                let payload = match &raw_params {
+                                    Value::Array(arr) if arr.len() == 1 => arr[0].clone(),
+                                    _ => raw_params,
+                                };
                                 let _ = app.emit(event, payload);
                             }
+                        } else {
+                            // JSON 解析失败，发出错误事件，包含部分 body 预览
+                            let take = body.len().min(400);
+                            let preview = String::from_utf8_lossy(&body[..take]).to_string();
+                            let _ = app.emit(
+                                "bridge_error",
+                                serde_json::json!({
+                                    "stage": "decode_json",
+                                    "body_preview": preview
+                                }),
+                            );
                         }
                     }
                 }
-                Err(_) => {
+                Err(e) => {
                     // 未连接上服务端，稍后重试
+                    let _ = app.emit(
+                        "bridge_disconnected",
+                        serde_json::json!({
+                            "error": e.to_string(),
+                            "retry_in_ms": 1000
+                        }),
+                    );
                     std::thread::sleep(Duration::from_millis(1000));
                 }
             }

@@ -4,7 +4,8 @@ import { tauriRpc } from './rpc.tauri';
 
 export function isTauriHost(): boolean {
   const w: any = typeof window !== 'undefined' ? window : {};
-  return !!w.__IS_TAURI__;
+  // 三重探测：显式标记 或 全局 __TAURI__/__TAURI_INTERNALS__（Tauri 环境会注入）
+  return !!(w.__IS_TAURI__ || w.__TAURI__ || w.__TAURI_INTERNALS__);
 }
 
 export function getRpc() {

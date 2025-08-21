@@ -122,7 +122,8 @@ namespace SystemMonitor.Service.Services
                     try
                     {
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                        if (!rpcServer.MetricsPushEnabled)
+                        // 仅向“事件桥”连接推送，避免与短连接响应混流
+                        if (!rpcServer.MetricsPushEnabled || !rpcServer.IsBridgeConnection)
                         {
                             await Task.Delay(300, cts.Token).ConfigureAwait(false);
                             continue;
@@ -256,6 +257,8 @@ namespace SystemMonitor.Service.Services
             private long _seq;
             private readonly object _lock = new();
             private readonly Guid _connId;
+            // 标记该连接是否为“事件桥”：默认 false；仅当 hello(capabilities 含 metrics_stream) 后才视为桥接
+            private bool _isBridge = false;
             // 全局订阅开关（跨会话共享），确保任意连接的 subscribe_metrics 立即影响事件桥推流
             private static readonly object _subLock = new();
             private static bool _s_metricsEnabled = false;
@@ -286,6 +289,11 @@ namespace SystemMonitor.Service.Services
             public bool MetricsPushEnabled
             {
                 get { lock (_subLock) { return _s_metricsEnabled; } }
+            }
+
+            public bool IsBridgeConnection
+            {
+                get { lock (_lock) { return _isBridge; } }
             }
 
             public int GetCurrentIntervalMs(long now)
@@ -387,7 +395,16 @@ namespace SystemMonitor.Service.Services
                     capabilities = _supportedCapabilities.ToArray(),
                     session_id = sessionId
                 };
-                _logger.LogInformation("hello ok: app={App} proto={Proto} caps=[{Caps}] session_id={SessionId} conn={ConnId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId, _connId);
+                // 若声明支持 metrics_stream，则将该连接标记为事件桥
+                if (p.capabilities != null && p.capabilities.Any(c => string.Equals(c, "metrics_stream", StringComparison.OrdinalIgnoreCase)))
+                {
+                    lock (_lock) { _isBridge = true; }
+                    _logger.LogInformation("hello ok (bridge): app={App} proto={Proto} caps=[{Caps}] session_id={SessionId} conn={ConnId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId, _connId);
+                }
+                else
+                {
+                    _logger.LogInformation("hello ok: app={App} proto={Proto} caps=[{Caps}] session_id={SessionId} conn={ConnId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId, _connId);
+                }
                 return Task.FromResult<object>(result);
             }
 
@@ -396,6 +413,7 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> snapshot(SnapshotParams? p)
             {
+                lock (_lock) { _isBridge = false; }
                 var ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 var mem = GetMemoryInfoMb();
                 var cpu = GetCpuUsagePercent();
@@ -415,6 +433,7 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> burst_subscribe(BurstParams p)
             {
+                lock (_lock) { _isBridge = false; }
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (p == null || p.interval_ms <= 0 || p.ttl_ms <= 0)
                 {
@@ -449,6 +468,7 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> set_config(SetConfigParams p)
             {
+                lock (_lock) { _isBridge = false; }
                 if (p == null)
                 {
                     throw new ArgumentNullException(nameof(p));
@@ -514,6 +534,7 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> start(StartParams? p)
             {
+                lock (_lock) { _isBridge = false; }
                 return Task.FromResult<object>(new { ok = true, started_modules = p?.modules ?? Array.Empty<string>() });
             }
 
@@ -522,6 +543,7 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> stop()
             {
+                lock (_lock) { _isBridge = false; }
                 return Task.FromResult<object>(new { ok = true });
             }
 
@@ -530,6 +552,7 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public async Task<object> query_history(QueryHistoryParams p)
             {
+                lock (_lock) { _isBridge = false; }
                 if (p == null) throw new ArgumentNullException(nameof(p));
                 var from = p.from_ts;
                 var to = p.to_ts <= 0 || p.to_ts < from ? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : p.to_ts;
