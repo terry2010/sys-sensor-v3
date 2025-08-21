@@ -50,6 +50,7 @@ frontend/.vite/
 frontend/.vue-global-types/
 frontend/.tauri-target/
 frontend/src-tauri/target/
+frontend/src-tauri/target-tauri/
 frontend/src-tauri/gen/
 
 ###############################################################################
