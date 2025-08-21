@@ -106,6 +106,44 @@ namespace SystemMonitor.Service.Services
         }
 
         // -------------------------
+        // CPU 传感器（最小可行：包温度）
+        // -------------------------
+        private sealed class CpuSensors
+        {
+            private static readonly Lazy<CpuSensors> _inst = new(() => new CpuSensors());
+            public static CpuSensors Instance => _inst.Value;
+            private long _lastTicks;
+            private double? _lastPackageTempC;
+
+            public double? Read()
+            {
+                var now = Environment.TickCount64;
+                if (now - _lastTicks < 2_000) return _lastPackageTempC;
+                double? pkg = null;
+                try
+                {
+                    using var searcher = new System.Management.ManagementObjectSearcher("ROOT\\WMI", "SELECT CurrentTemperature, InstanceName FROM MSAcpi_ThermalZoneTemperature");
+                    foreach (System.Management.ManagementObject obj in searcher.Get())
+                    {
+                        try
+                        {
+                            var tenthKelvin = Convert.ToInt64(obj["CurrentTemperature"]); // 0.1 Kelvin
+                            if (tenthKelvin > 0)
+                            {
+                                var c = (tenthKelvin / 10.0) - 273.15;
+                                if (!double.IsNaN(c) && c > -50 && c < 150)
+                                    pkg = Math.Max(pkg ?? double.MinValue, c);
+                            }
+                        }
+                        catch { }
+                    }
+                }
+                catch { /* ignore */ }
+                _lastPackageTempC = pkg; _lastTicks = now; return _lastPackageTempC;
+            }
+        }
+
+        // -------------------------
         // 内核活动计数器采样器（每秒速率）
         // -------------------------
         private sealed class KernelActivitySampler
@@ -237,6 +275,8 @@ namespace SystemMonitor.Service.Services
             private bool _initTried;
             private System.Diagnostics.PerformanceCounter? _pcFreq; // Processor Frequency (_Total)
             private System.Diagnostics.PerformanceCounter? _pcPerfPct; // % Processor Performance (_Total)
+            private int? _busMhz; // ExtClock from WMI
+            private int? _minMhz; // MinClockSpeed from WMI (if available)
             public (int? cur, int? max) Read()
             {
                 var now = Environment.TickCount64;
@@ -273,6 +313,34 @@ namespace SystemMonitor.Service.Services
                     catch { /* ignore */ }
                 }
                 _last = (cur, max); _lastTicks = now; return _last;
+            }
+            public int? ReadBusMhz()
+            {
+                if (_busMhz.HasValue) return _busMhz;
+                try
+                {
+                    using var searcher = new System.Management.ManagementObjectSearcher("SELECT ExtClock FROM Win32_Processor");
+                    foreach (System.Management.ManagementObject obj in searcher.Get())
+                    {
+                        try { var v = Convert.ToInt32(obj["ExtClock"]); if (v > 0) { _busMhz = v; break; } } catch { }
+                    }
+                }
+                catch { }
+                return _busMhz;
+            }
+            public int? ReadMinMhz()
+            {
+                if (_minMhz.HasValue) return _minMhz;
+                try
+                {
+                    using var searcher = new System.Management.ManagementObjectSearcher("SELECT MinClockSpeed FROM Win32_Processor");
+                    foreach (System.Management.ManagementObject obj in searcher.Get())
+                    {
+                        try { var v = Convert.ToInt32(obj["MinClockSpeed"]); if (v > 0) { _minMhz = v; break; } } catch { }
+                    }
+                }
+                catch { }
+                return _minMhz;
             }
             private void EnsureInit()
             {
@@ -1291,6 +1359,16 @@ namespace SystemMonitor.Service.Services
                     if (vals.Length > 0)
                         curMHz = (int)Math.Round(vals.Average());
                 }
+                // Bus 与倍频
+                var busMhz = CpuFrequency.Instance.ReadBusMhz();
+                double? multiplier = null;
+                if (busMhz.HasValue && busMhz.Value > 0 && curMHz.HasValue)
+                {
+                    multiplier = Math.Round(curMHz.Value / (double)busMhz.Value, 2);
+                }
+                int? minMhz = CpuFrequency.Instance.ReadMinMhz();
+                // 传感器：包温度
+                var pkgTempC = CpuSensors.Instance.Read();
                 // 负载平均（EWMA）
                 var (l1, l5, l15) = CpuLoadAverages.Instance.Update(usage);
                 // Top 进程（按 CPU%）
@@ -1314,6 +1392,10 @@ namespace SystemMonitor.Service.Services
                     per_core_mhz = perCoreFreq,
                     current_mhz = curMHz,
                     max_mhz = maxMHz,
+                    min_mhz = minMhz,
+                    bus_mhz = busMhz,
+                    multiplier = multiplier,
+                    package_temp_c = pkgTempC,
                     top_processes = top,
                     context_switches_per_sec = ctxSw,
                     syscalls_per_sec = syscalls,

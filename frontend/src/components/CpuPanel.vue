@@ -24,6 +24,9 @@
         <div><span class="k">proc/thread</span><span class="v">{{ num(cpu?.process_count) }} / {{ num(cpu?.thread_count) }}</span></div>
         <div><span class="k">freq</span><span class="v">{{ mhz(cpu?.current_mhz) }} / {{ mhz(cpu?.max_mhz) }}</span></div>
         <div v-if="hasKernelCounters"><span class="k">ctx/sys/irq</span><span class="v">{{ perSec(cpu?.context_switches_per_sec) }} / {{ perSec(cpu?.syscalls_per_sec) }} / {{ perSec(cpu?.interrupts_per_sec) }}</span></div>
+        <div v-if="cpu && (cpu as any).bus_mhz"><span class="k">bus/mult</span><span class="v">{{ mhz((cpu as any).bus_mhz) }} / {{ mult((cpu as any).multiplier) }}</span></div>
+        <div v-if="cpu && (cpu as any).min_mhz"><span class="k">min freq</span><span class="v">{{ mhz((cpu as any).min_mhz) }}</span></div>
+        <div v-if="cpu && (cpu as any).package_temp_c != null"><span class="k">pkg temp</span><span class="v">{{ degC((cpu as any).package_temp_c) }}</span></div>
       </div>
       <div v-if="Array.isArray(cpu?.per_core) && cpu!.per_core.length" class="per-core">
         <div class="pc-head">per-core (usage / MHz)</div>
@@ -69,6 +72,14 @@ const perSec = (v: any) => {
   if (n >= 1_000_000) return `${(n/1_000_000).toFixed(2)}M/s`;
   if (n >= 1_000) return `${(n/1_000).toFixed(1)}k/s`;
   return `${Math.round(n)}/s`;
+};
+const mult = (v: any) => {
+  if (v == null || typeof v !== 'number' || !isFinite(v)) return '-';
+  return `${v.toFixed(2)}×`;
+};
+const degC = (v: any) => {
+  if (v == null || typeof v !== 'number' || !isFinite(v)) return '-';
+  return `${v.toFixed(1)} °C`;
 };
 const hasKernelCounters = computed(() => {
   const c = cpu.value as any;
