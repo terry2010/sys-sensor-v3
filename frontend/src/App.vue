@@ -18,6 +18,44 @@
 
     <section class="cards">
       <CpuPanel />
+      <div class="card" v-if="Array.isArray(sensors) && sensors.length">
+        <h3>Hardware Sensors (LibreHardwareMonitor)</h3>
+        <div class="sub">total: {{ sensors.length }}</div>
+        <div class="filters">
+          <label>
+            hw_type
+            <select v-model="filterHwType">
+              <option value="">All</option>
+              <option v-for="t in hwTypes" :key="t" :value="t">{{ t }}</option>
+            </select>
+          </label>
+          <label>
+            sensor_type
+            <select v-model="filterSensorType">
+              <option value="">All</option>
+              <option v-for="t in sensorTypes" :key="t" :value="t">{{ t }}</option>
+            </select>
+          </label>
+          <label class="grow">
+            keyword
+            <input v-model.trim="keyword" placeholder="name contains..." />
+          </label>
+          <button class="btn" @click="showJson = !showJson">{{ showJson ? 'Hide JSON' : 'View JSON' }}</button>
+        </div>
+        <details v-if="showJson" open class="json-box">
+          <summary>JSON</summary>
+          <pre><code>{{ sensorsJson }}</code></pre>
+        </details>
+        <div class="sensor-list">
+          <div class="sensor-row" v-for="(s, i) in sensorsFiltered" :key="i">
+            <span class="t">{{ s.hw_type }}</span>
+            <span class="n">{{ s.hw_name }}</span>
+            <span class="t">{{ s.sensor_type }}</span>
+            <span class="n">{{ s.sensor_name }}</span>
+            <span class="v">{{ sensorVal(s) }}</span>
+          </div>
+        </div>
+      </div>
       <SnapshotPanel />
       <HistoryChart />
       <ControlPanel />
@@ -177,6 +215,35 @@ const rpcSource = computed(() => {
 });
 const rpcSourceClass = computed(() => rpcSource.value === 'tauri' ? 'ok' : 'warn');
 
+// LHM 传感器列表（来自 metrics.latest.cpu.lhm_sensors）
+const sensors = computed<any[]>(() => {
+  const cpu: any = metrics.latest?.cpu;
+  const arr = cpu?.lhm_sensors;
+  return Array.isArray(arr) ? arr : [];
+});
+const sensorVal = (s: any) => (typeof s?.value === 'number' && isFinite(s.value)) ? s.value.toFixed(3) : String(s?.value ?? '-');
+
+// 过滤与下拉选项
+const filterHwType = ref<string>('');
+const filterSensorType = ref<string>('');
+const keyword = ref<string>('');
+const showJson = ref<boolean>(false);
+const hwTypes = computed<string[]>(() => Array.from(new Set(sensors.value.map(s => String(s.hw_type || '')))).filter(Boolean).sort());
+const sensorTypes = computed<string[]>(() => Array.from(new Set(sensors.value.map(s => String(s.sensor_type || '')))).filter(Boolean).sort());
+const sensorsFiltered = computed<any[]>(() => {
+  let arr = sensors.value;
+  if (filterHwType.value) arr = arr.filter(s => String(s.hw_type) === filterHwType.value);
+  if (filterSensorType.value) arr = arr.filter(s => String(s.sensor_type) === filterSensorType.value);
+  const kw = keyword.value?.toLowerCase().trim();
+  if (kw) {
+    arr = arr.filter(s => String(s.sensor_name || '').toLowerCase().includes(kw) || String(s.hw_name || '').toLowerCase().includes(kw));
+  }
+  return arr;
+});
+const sensorsJson = computed<string>(() => {
+  try { return JSON.stringify(sensorsFiltered.value, null, 2); } catch { return '[]'; }
+});
+
 // 探测逻辑已合并进上面的 onMounted 初始化
 </script>
 
@@ -200,4 +267,18 @@ header {
 @media (min-width: 900px) {
   .cards { grid-template-columns: 1fr 1fr; }
 }
+.card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+.sensor-list { max-height: 300px; overflow: auto; border-top: 1px dashed #eee; margin-top: 8px; }
+.sensor-row { display: grid; grid-template-columns: 90px 1fr 110px 1fr 120px; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12px; }
+.sensor-row .t { color: #666; }
+.sensor-row .n { color: #333; }
+.sensor-row .v { font-weight: 600; text-align: right; }
+.filters { display: flex; gap: 8px; align-items: end; margin: 8px 0; flex-wrap: wrap; }
+.filters label { display: flex; flex-direction: column; font-size: 12px; color: #555; }
+.filters .grow { flex: 1; }
+.filters input, .filters select { padding: 4px 6px; font-size: 12px; }
+.btn { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; background: #fafafa; cursor: pointer; }
+.btn:hover { background: #f0f0f0; }
+.json-box { margin: 8px 0; }
+.json-box pre { max-height: 300px; overflow: auto; background: #0b1020; color: #cde2ff; padding: 8px; border-radius: 6px; }
 </style>

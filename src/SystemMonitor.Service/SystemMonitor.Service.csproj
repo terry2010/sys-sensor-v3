@@ -24,5 +24,6 @@
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.0" />
     <PackageReference Include="System.Management" Version="9.0.0" />
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.3" />
   </ItemGroup>
 </Project>

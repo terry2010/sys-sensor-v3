@@ -27,6 +27,9 @@
         <div v-if="cpu && (cpu as any).bus_mhz"><span class="k">bus/mult</span><span class="v">{{ mhz((cpu as any).bus_mhz) }} / {{ mult((cpu as any).multiplier) }}</span></div>
         <div v-if="cpu && (cpu as any).min_mhz"><span class="k">min freq</span><span class="v">{{ mhz((cpu as any).min_mhz) }}</span></div>
         <div v-if="cpu && (cpu as any).package_temp_c != null"><span class="k">pkg temp</span><span class="v">{{ degC((cpu as any).package_temp_c) }}</span></div>
+        <div v-if="cpu && Array.isArray((cpu as any).cores_temp_c) && (cpu as any).cores_temp_c.length"><span class="k">core temp</span><span class="v">{{ coresTempSummary((cpu as any).cores_temp_c) }}</span></div>
+        <div v-if="cpu && Array.isArray((cpu as any).fan_rpm) && (cpu as any).fan_rpm.length"><span class="k">fan</span><span class="v">{{ fans((cpu as any).fan_rpm) }}</span></div>
+        <div v-if="cpu && (cpu as any).package_power_w != null"><span class="k">pkg power</span><span class="v">{{ watts((cpu as any).package_power_w) }}</span></div>
       </div>
       <div v-if="Array.isArray(cpu?.per_core) && cpu!.per_core.length" class="per-core">
         <div class="pc-head">per-core (usage / MHz)</div>
@@ -93,7 +96,23 @@ const uptime = (sec: any) => {
   const m = Math.floor((s % 3600) / 60);
   const ss = s % 60;
   const pad = (n: number) => n < 10 ? `0${n}` : `${n}`;
-  return `${pad(h)}:${pad(m)}:${pad(ss)}`;
+  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${ss.toString().padStart(2,'0')}`;
+};
+const coresTempSummary = (arr: any) => {
+  if (!Array.isArray(arr) || arr.length === 0) return '-';
+  const vals = arr.filter((v: any) => typeof v === 'number' && isFinite(v));
+  if (!vals.length) return '-';
+  const min = Math.min(...vals), max = Math.max(...vals), avg = vals.reduce((a,b)=>a+b,0)/vals.length;
+  return `${avg.toFixed(1)} °C (min ${min.toFixed(0)}, max ${max.toFixed(0)})`;
+};
+const fans = (arr: any) => {
+  if (!Array.isArray(arr) || arr.length === 0) return '-';
+  const vals = arr.map((v: any) => (typeof v === 'number' && isFinite(v)) ? `${Math.max(0, Math.round(v))} RPM` : '-');
+  return vals.join(', ');
+};
+const watts = (v: any) => {
+  if (typeof v !== 'number' || !isFinite(v)) return '-';
+  return `${v.toFixed(1)} W`;
 };
 </script>
 <style scoped>

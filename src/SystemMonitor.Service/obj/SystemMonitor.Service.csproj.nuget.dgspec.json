@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "LibreHardwareMonitorLib": {
+              "target": "Package",
+              "version": "[0.9.3, )"
+            },
             "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[9.0.8, )"
