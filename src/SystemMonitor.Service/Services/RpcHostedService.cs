@@ -762,10 +762,12 @@ namespace SystemMonitor.Service.Services
                 {
                     if (p.step_ms.HasValue && p.step_ms.Value > 0)
                     {
-                        var step = p.step_ms.Value;
                         static long BucketEnd(long t, long bucketMs) => ((t - 1) / bucketMs + 1) * bucketMs;
+                        var bucketMs = useAgg
+                            ? (string.Equals(p.agg, "10s", StringComparison.OrdinalIgnoreCase) ? 10_000L : 60_000L)
+                            : p.step_ms.Value;
                         resultItems = rows
-                            .GroupBy(r => BucketEnd(r.Ts, step))
+                            .GroupBy(r => BucketEnd(r.Ts, bucketMs))
                             .OrderBy(g => g.Key)
                             .Select(g =>
                             {
@@ -801,16 +803,20 @@ namespace SystemMonitor.Service.Services
                     }
                     if (p.step_ms.HasValue && p.step_ms.Value > 0)
                     {
-                        var step = p.step_ms.Value;
+                        static long BucketEnd(long t, long bucketMs) => ((t - 1) / bucketMs + 1) * bucketMs;
+                        var useAggFallback = !string.IsNullOrWhiteSpace(p.agg) && !string.Equals(p.agg, "raw", StringComparison.OrdinalIgnoreCase);
+                        var bucketMs = useAggFallback
+                            ? (string.Equals(p.agg, "10s", StringComparison.OrdinalIgnoreCase) ? 10_000L : 60_000L)
+                            : p.step_ms.Value;
                         resultItems = slice
-                            .GroupBy(h => (h.ts - from) / step)
+                            .GroupBy(h => BucketEnd(h.ts, bucketMs))
                             .OrderBy(g => g.Key)
                             .Select(g =>
                             {
                                 var last = g.Last();
                                 return new
                                 {
-                                    ts = from + (g.Key + 1) * step,
+                                    ts = g.Key,
                                     cpu = want.Contains("cpu") && last.cpu.HasValue ? new { usage_percent = last.cpu.Value } : null,
                                     memory = want.Contains("memory") && last.mem_total.HasValue ? new { total = last.mem_total.Value, used = last.mem_used!.Value } : null
                                 } as object;
@@ -854,19 +860,25 @@ namespace SystemMonitor.Service.Services
                         }
                     }
                 }
-                // 回退：当窗口内没有历史数据时，返回一条当前即时值，避免空结果
+                // 回退：当窗口内没有历史数据
+                // - 若未指定聚合（raw 查询），返回一条当前即时值，避免空结果；
+                // - 若指定了聚合（10s/1m），返回空数组，保持对齐语义（测试亦允许为空）。
                 if (resultItems.Length == 0)
                 {
-                    var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                    var cpu = GetCpuUsagePercent();
-                    var mem = GetMemoryInfoMb();
-                    var item = new
+                    var useAggFinal = !string.IsNullOrWhiteSpace(p.agg) && !string.Equals(p.agg, "raw", StringComparison.OrdinalIgnoreCase);
+                    if (!useAggFinal)
                     {
-                        ts = now,
-                        cpu = want.Contains("cpu") ? new { usage_percent = cpu } : null,
-                        memory = want.Contains("memory") ? new { total = mem.total_mb, used = mem.used_mb } : null
-                    } as object;
-                    resultItems = new[] { item };
+                        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        var cpu = GetCpuUsagePercent();
+                        var mem = GetMemoryInfoMb();
+                        var item = new
+                        {
+                            ts = now,
+                            cpu = want.Contains("cpu") ? new { usage_percent = cpu } : null,
+                            memory = want.Contains("memory") ? new { total = mem.total_mb, used = mem.used_mb } : null
+                        } as object;
+                        resultItems = new[] { item };
+                    }
                 }
                 return new { ok = true, items = resultItems };
             }
