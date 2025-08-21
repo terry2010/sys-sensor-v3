@@ -8,6 +8,7 @@ using Serilog.Debugging;
 using System.CommandLine;
 using System.IO;
 using System.Threading.Tasks;
+using Serilog.Events;
 
 try
 {
@@ -26,15 +27,46 @@ try
             hostBuilder.UseWindowsService();
         }
 
-        // 确保日志目录存在（相对于工作目录）
-        try { Directory.CreateDirectory("logs"); } catch { }
+        // 解析仓库根目录（向上查找包含标志文件的目录），并确保 logs 目录存在
+        static string ResolveRepoRoot()
+        {
+            try
+            {
+                var dir = new DirectoryInfo(AppContext.BaseDirectory);
+                while (dir != null)
+                {
+                    var hasSln = File.Exists(Path.Combine(dir.FullName, "SysSensorV3.sln"));
+                    var hasGit = Directory.Exists(Path.Combine(dir.FullName, ".git"));
+                    var hasReadme = File.Exists(Path.Combine(dir.FullName, "README.md"));
+                    if (hasSln || hasGit || hasReadme)
+                    {
+                        return dir.FullName;
+                    }
+                    dir = dir.Parent;
+                }
+            }
+            catch { }
+            // 回退到当前工作目录
+            return Directory.GetCurrentDirectory();
+        }
+
+        var repoRoot = ResolveRepoRoot();
+        var logDir = Path.Combine(repoRoot, "logs");
+        try { Directory.CreateDirectory(logDir); } catch { }
 
         // 启用 Serilog 自诊断到标准错误
         try { SelfLog.Enable(m => Console.Error.WriteLine("[SERILOG] " + m)); } catch { }
 
         hostBuilder.UseSerilog((ctx, services, lc) =>
         {
-            lc.ReadFrom.Configuration(ctx.Configuration);
+            lc.ReadFrom.Configuration(ctx.Configuration)
+              .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+              .MinimumLevel.Override("System", LogEventLevel.Warning)
+              .Enrich.FromLogContext()
+              .WriteTo.File(
+                  path: Path.Combine(logDir, "service-.log"),
+                  rollingInterval: RollingInterval.Day,
+                  outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {MachineName} {ProcessId}/{ThreadId} {SourceContext} {Message:lj}{NewLine}{Exception}");
         });
 
         hostBuilder.ConfigureServices((ctx, services) =>

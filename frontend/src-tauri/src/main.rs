@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
+use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 use std::time::Instant;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -13,6 +14,33 @@ use tauri::Emitter;
 use tauri::async_runtime;
 
 const PIPE_PATH: &str = r"\\.\pipe\sys_sensor_v3.rpc";
+
+fn resolve_repo_root() -> PathBuf {
+    // 从可执行目录向上查找，遇到 SysSensorV3.sln / .git / README.md 之一即认为是仓库根
+    let mut dir = std::env::current_exe().ok()
+        .and_then(|p| p.parent().map(|p| p.to_path_buf()))
+        .unwrap_or_else(|| std::env::current_dir().unwrap_or_else(|_| PathBuf::from(".")));
+    for _ in 0..8 {
+        let has_sln = dir.join("SysSensorV3.sln").exists();
+        let has_git = dir.join(".git").is_dir();
+        let has_readme = dir.join("README.md").exists();
+        if has_sln || has_git || has_readme { return dir; }
+        if let Some(parent) = dir.parent() { dir = parent.to_path_buf(); } else { break; }
+    }
+    // 回退到当前工作目录
+    std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
+}
+
+fn log_line(level: &str, msg: &str) {
+    let root = resolve_repo_root();
+    let log_dir = root.join("logs");
+    let _ = std::fs::create_dir_all(&log_dir);
+    let path = log_dir.join("frontend.log");
+    if let Ok(mut f) = OpenOptions::new().create(true).append(true).open(path) {
+        let ts = now_millis();
+        let _ = writeln!(f, "{} [{}] {}", ts, level, msg);
+    }
+}
 
 #[derive(Serialize)]
 struct JsonRpcRequest<'a> {
@@ -194,6 +222,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                     // 建立事件桥握手：hello(capabilities: ["metrics_stream"]) -> 订阅
                     let _ = app.emit("bridge_handshake", serde_json::json!({"stage":"hello"}));
                     if let Err(e) = call_hello_over_pipe(&mut file) {
+                        log_line("ERROR", &format!("bridge hello failed: {}", e));
                         let _ = app.emit(
                             "bridge_error",
                             serde_json::json!({
@@ -204,6 +233,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                         // 退出当前连接循环，等待重连
                         continue;
                     }
+                    log_line("INFO", "bridge hello ok");
                     // 初始订阅状态
                     let _ = app.emit("bridge_subscribe", serde_json::json!({"stage":"init","enable": WANT_SUBSCRIBE.load(Ordering::SeqCst)}));
                     let sub_params = serde_json::json!({ "enable": WANT_SUBSCRIBE.load(Ordering::SeqCst) });
@@ -212,7 +242,9 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                     let _ = file.flush();
                     let init_resp = read_response(&mut file);
                     let _ = app.emit("bridge_subscribe_ack", serde_json::json!({"stage":"init","ok": init_resp.is_ok()}));
+                    log_line("INFO", &format!("bridge subscribe(init) ack ok={}", init_resp.is_ok()));
                     if let Err(e) = init_resp {
+                        log_line("ERROR", &format!("bridge subscribe(init) failed: {}", e));
                         let _ = app.emit(
                             "bridge_error",
                             serde_json::json!({
@@ -236,6 +268,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                             let _ = file.flush();
                             let resp = read_response(&mut file);
                             let _ = app.emit("bridge_subscribe_ack", serde_json::json!({"stage":"toggle","ok": resp.is_ok()}));
+                            log_line("INFO", &format!("bridge subscribe(toggle enable={}) ack ok={}", enable, resp.is_ok()));
                         }
                         // 读取直到空行
                         let header = match read_exact_until(&mut file, b"\r\n\r\n") {
@@ -270,6 +303,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                     "error": "missing or zero content-length"
                                 }),
                             );
+                            log_line("ERROR", "bridge parse_header: missing or zero content-length");
                             break;
                         }
                         let mut body = vec![0u8; content_length];
@@ -284,6 +318,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                             "error": "connection closed"
                                         }),
                                     );
+                                    log_line("ERROR", "bridge read_body: connection closed");
                                     break;
                                 }
                                 Ok(n) => { read += n; }
@@ -295,6 +330,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                             "error": e.to_string()
                                         }),
                                     );
+                                    log_line("ERROR", &format!("bridge read_body error: {}", e));
                                     break;
                                 }
                             }
@@ -332,6 +368,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                     "body_preview": preview
                                 }),
                             );
+                            log_line("ERROR", "bridge decode_json failed");
                         }
                     }
                 }
@@ -344,6 +381,7 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                             "retry_in_ms": 1000
                         }),
                     );
+                    log_line("WARN", &format!("bridge disconnected: {}", e));
                     std::thread::sleep(Duration::from_millis(1000));
                 }
             }
@@ -355,11 +393,13 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
 #[tauri::command]
 async fn rpc_call(method: String, params: Option<Value>) -> Result<Value, String> {
     // 将阻塞的命名管道调用放到后台线程，避免阻塞 UI/事件循环
-    let task = async_runtime::spawn_blocking(move || call_over_named_pipe(&method, params));
+    // 注意：避免 move 后再次使用 method，先克隆一份给闭包使用
+    let method_for_task = method.clone();
+    let task = async_runtime::spawn_blocking(move || call_over_named_pipe(&method_for_task, params));
     match task.await {
         Ok(Ok(v)) => Ok(v),
-        Ok(Err(e)) => Err(e.to_string()),
-        Err(join_err) => Err(format!("rpc task join error: {}", join_err)),
+        Ok(Err(e)) => { log_line("ERROR", &format!("rpc_call {} failed: {}", method, e)); Err(e.to_string()) },
+        Err(join_err) => { log_line("ERROR", &format!("rpc task join error: {}", join_err)); Err(format!("rpc task join error: {}", join_err)) },
     }
 }
 

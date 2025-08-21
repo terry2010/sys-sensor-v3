@@ -509,7 +509,7 @@ namespace SystemMonitor.Service.Services
             {
                 if (p == null)
                 {
-                    throw new ArgumentNullException(nameof(p));
+                    throw new InvalidOperationException("invalid_params: missing body");
                 }
                 if (string.IsNullOrWhiteSpace(p.token))
                 {
@@ -607,7 +607,7 @@ namespace SystemMonitor.Service.Services
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (p == null || p.interval_ms <= 0 || p.ttl_ms <= 0)
                 {
-                    throw new ArgumentException("invalid burst params");
+                    throw new InvalidOperationException("invalid_params: interval_ms>0 && ttl_ms>0 required");
                 }
                 lock (_lock)
                 {
@@ -642,7 +642,7 @@ namespace SystemMonitor.Service.Services
             {
                 if (p == null)
                 {
-                    throw new ArgumentNullException(nameof(p));
+                    throw new InvalidOperationException("invalid_params: missing body");
                 }
                 _logger.LogInformation("set_config 收到: base_interval_ms={Base}, module_intervals=[{Mods}]",
                     p.base_interval_ms,
@@ -654,7 +654,7 @@ namespace SystemMonitor.Service.Services
                     var v = p.base_interval_ms.Value;
                     if (v <= 0)
                     {
-                        throw new ArgumentException("base_interval_ms must be positive");
+                        throw new InvalidOperationException("invalid_params: base_interval_ms must be positive");
                     }
                     // 基础保护：至少 100ms，避免过低导致 CPU 抢占
                     newBase = Math.Max(100, v);
@@ -677,7 +677,7 @@ namespace SystemMonitor.Service.Services
                         var name = (kv.Key ?? string.Empty).Trim();
                         var val = kv.Value;
                         if (string.IsNullOrWhiteSpace(name)) continue;
-                        if (val <= 0) throw new ArgumentException($"module_intervals[{name}] must be positive");
+                        if (val <= 0) throw new InvalidOperationException($"invalid_params: module_intervals[{name}] must be positive");
                         sanitized[name] = Math.Max(100, val);
                     }
                     lock (_lock)
