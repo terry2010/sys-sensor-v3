@@ -7,9 +7,10 @@
         <span>events: {{ metrics.count }}</span>
         <span :class="{ stale: isStale }">last: {{ lastDeltaSec }}s</span>
         <span class="badge" :class="rpcSourceClass">RPC: {{ rpcSource }}</span>
-        <span v-if="bridge.rx > 0" class="badge ok">bridge_rx: {{ bridge.rx }}</span>
-        <span v-if="bridge.err > 0" class="badge warn">bridge_err: {{ bridge.err }}</span>
-        <span v-if="state.phase" class="badge" :class="stateBadgeClass">state: {{ state.phase }}</span>
+        <span class="badge" :class="bridgeStatusClass">Bridge: {{ bridgeStore.status }}</span>
+        <span v-if="bridgeStore.rx > 0" class="badge ok">bridge_rx: {{ bridgeStore.rx }}</span>
+        <span v-if="bridgeStore.err > 0" class="badge warn">bridge_err: {{ bridgeStore.err }}</span>
+        <span v-if="state.phase" class="badge" :class="stateBadgeClass">state: {{ state.phase }} ({{ stateDeltaSec }}s)</span>
       </div>
       <div v-if="session.error" class="error">会话失败：{{ session.error }}</div>
       <div v-else-if="isStale" class="warn">未收到 metrics，请确认后端是否运行，或稍候片刻…</div>
@@ -37,6 +38,7 @@ import ToastList from './components/ToastList.vue';
 import { useSessionStore } from './stores/session';
 import { useMetricsStore } from './stores/metrics';
 import { useEventsStore } from './stores/events';
+import { useBridgeStore } from './stores/bridge';
 import { useToastStore } from './stores/toast';
 import { service } from './api/service';
 import { ensureEventBridge } from './api/rpc.tauri';
@@ -45,7 +47,7 @@ const session = useSessionStore();
 const metrics = useMetricsStore();
 const events = useEventsStore();
 const toast = useToastStore();
-const bridge = ref({ rx: 0, err: 0 });
+const bridgeStore = useBridgeStore();
 const state = ref<{ phase: string | null; ts: number | null }>({ phase: null, ts: null });
 
 onMounted(async () => {
@@ -69,8 +71,8 @@ onMounted(async () => {
         events.push({ ts: Date.now(), type: 'warn', payload: { evt: 'bridge_disconnected' } });
         toast.push('事件桥已断开，将重试连接…', 'warn');
       });
-      void listen('bridge_rx', (_e: any) => { bridge.value.rx++; events.push({ ts: Date.now(), type: 'bridge_rx' }); });
-      void listen('bridge_error', (_e: any) => { bridge.value.err++; events.push({ ts: Date.now(), type: 'bridge_error' }); toast.push('事件桥错误', 'error'); });
+      void listen('bridge_rx', (_e: any) => { bridgeStore.rx++; events.push({ ts: Date.now(), type: 'bridge_rx' }); });
+      void listen('bridge_error', (_e: any) => { bridgeStore.err++; events.push({ ts: Date.now(), type: 'bridge_error' }); toast.push('事件桥错误', 'error'); });
       // 直接监听 metrics，写入 store（用于绕过 service.onMetrics 的链路验证）
       void listen('metrics', (e: any) => {
         const p = e?.payload as any;
@@ -81,7 +83,10 @@ onMounted(async () => {
         metrics.lastAt = Date.now();
         metrics.count += 1;
         const w: any = typeof window !== 'undefined' ? window : {};
-        if (!w.__METRICS_READY) w.__METRICS_READY = true;
+        if (!w.__METRICS_READY) {
+          w.__METRICS_READY = true;
+          try { toast.push('事件桥已连接', 'success'); } catch {}
+        }
         events.push({ ts: Date.now(), type: 'metrics', payload: { cpu: p?.cpu?.usage_percent, mem_used: p?.memory?.used, ts: p?.ts } });
       });
       // 监听 state 事件，展示生命周期状态角标
@@ -93,12 +98,32 @@ onMounted(async () => {
         events.push({ ts: Date.now(), type: 'state', payload: p });
       });
     } catch { /* ignore */ }
+    // 兜底：监听由 rpcBridge.ts 派发的自定义断线/错误事件
+    try {
+      const onBridgeStatus = (e: any) => {
+        const s = e?.detail?.status as string | undefined;
+        if (!s) return;
+        if (s === 'disconnected') {
+          events.push({ ts: Date.now(), type: 'warn', payload: { evt: 'bridge_disconnected' } });
+          toast.push('事件桥已断开，将重试连接…', 'warn');
+        } else if (s === 'error') {
+          events.push({ ts: Date.now(), type: 'bridge_error' });
+          toast.push('事件桥错误', 'error');
+        } else if (s === 'connected') {
+          events.push({ ts: Date.now(), type: 'info', payload: { evt: 'bridge_connected' } });
+        }
+      };
+      window.addEventListener('bridge_status', onBridgeStatus as any);
+      onUnmounted(() => window.removeEventListener('bridge_status', onBridgeStatus as any));
+    } catch { /* ignore */ }
   } catch {
     w.__IS_TAURI__ = false;
   }
   // 非阻塞：优先启动 metrics 监听；session.init() 不阻塞主流程
   metrics.start();
   void session.init();
+  // 初始化桥接状态 store（监听事件）
+  try { bridgeStore.init(); } catch {}
   // 自动启动默认采集模块，确保有数据可推送
   setTimeout(async () => {
     try {
@@ -125,6 +150,19 @@ const stateBadgeClass = computed(() => {
   if (!ts) return 'warn';
   const age = Date.now() - ts;
   return age <= 10_000 ? 'ok' : 'warn';
+});
+// state 相对时间（秒）
+const stateDeltaSec = computed(() => {
+  void tick.value; // 依赖时钟
+  const ts = state.value.ts ?? 0;
+  if (!ts) return -1;
+  return Math.floor((Date.now() - ts) / 1000);
+});
+
+// Bridge 状态颜色
+const bridgeStatusClass = computed(() => {
+  const s = bridgeStore.status;
+  return s === 'connected' ? 'ok' : 'warn';
 });
 
 // RPC 来源徽标（mock / tauri）

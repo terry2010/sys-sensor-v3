@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useEventsStore } from '../stores/events';
 const events = useEventsStore();
@@ -35,6 +35,7 @@ const { items } = storeToRefs(events);
 const reversed = computed(() => [...items.value].reverse());
 // 可过滤的事件类型
 const types = ['metrics','state','bridge_rx','bridge_error','info','warn','error'] as const;
+const LS_KEY = 'debug_events_selected_types';
 const selected = ref<string[]>([...types]);
 const isAll = computed(() => selected.value.length === types.length);
 const filtered = computed(() => reversed.value.filter(ev => selected.value.includes(ev.type as any)));
@@ -45,6 +46,18 @@ function short(p: any) {
 function clear() { events.clear(); }
 function toggleAll() { selected.value = isAll.value ? [] : [...types]; }
 function onlyState() { selected.value = ['state']; }
+
+onMounted(() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    if (Array.isArray(saved) && saved.length > 0) {
+      selected.value = saved.filter((x: any) => (types as any).includes(x));
+    }
+  } catch { /* ignore */ }
+});
+watch(selected, (v) => {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch { /* ignore */ }
+}, { deep: true });
 </script>
 
 <style scoped>

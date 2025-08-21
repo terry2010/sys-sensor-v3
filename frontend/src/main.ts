@@ -9,7 +9,15 @@ try {
     w.__IS_TAURI__ = true;
     // 异步启动事件桥（不阻塞首屏挂载）
     (async () => {
-      try { const { ensureEventBridge } = await import('./api/rpc.tauri'); await ensureEventBridge(); } catch {}
+      try {
+        const { ensureEventBridge } = await import('./api/rpc.tauri');
+        await ensureEventBridge();
+      } catch {}
+      // 启动桥管理器：指数退避重连 + 心跳
+      try {
+        const { startBridgeManager } = await import('./api/rpcBridge');
+        await startBridgeManager({ heartbeatMs: 30_000, maxBackoffMs: 10_000 });
+      } catch {}
     })();
   }
 } catch {}
