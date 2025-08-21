@@ -763,15 +763,16 @@ namespace SystemMonitor.Service.Services
                     if (p.step_ms.HasValue && p.step_ms.Value > 0)
                     {
                         var step = p.step_ms.Value;
+                        static long BucketEnd(long t, long bucketMs) => ((t - 1) / bucketMs + 1) * bucketMs;
                         resultItems = rows
-                            .GroupBy(r => (r.Ts - from) / step)
+                            .GroupBy(r => BucketEnd(r.Ts, step))
                             .OrderBy(g => g.Key)
                             .Select(g =>
                             {
                                 var last = g.Last();
                                 return new
                                 {
-                                    ts = from + (g.Key + 1) * step,
+                                    ts = g.Key,
                                     cpu = want.Contains("cpu") && last.Cpu.HasValue ? new { usage_percent = last.Cpu.Value } : null,
                                     memory = want.Contains("memory") && last.MemTotal.HasValue ? new { total = last.MemTotal.Value, used = last.MemUsed!.Value } : null
                                 } as object;
@@ -818,14 +819,39 @@ namespace SystemMonitor.Service.Services
                     }
                     else
                     {
-                        resultItems = slice
-                            .Select(h => (object)new
-                            {
-                                ts = h.ts,
-                                cpu = want.Contains("cpu") && h.cpu.HasValue ? new { usage_percent = h.cpu.Value } : null,
-                                memory = want.Contains("memory") && h.mem_total.HasValue ? new { total = h.mem_total.Value, used = h.mem_used!.Value } : null
-                            })
-                            .ToArray();
+                        // 若请求指定了 agg（10s/1m），但 SQLite 无数据，按聚合粒度在内存中对齐到“桶结束时间”，每桶取最后一条
+                        var useAggFallback = !string.IsNullOrWhiteSpace(p.agg) && !string.Equals(p.agg, "raw", StringComparison.OrdinalIgnoreCase);
+                        if (useAggFallback)
+                        {
+                            static long BucketEnd(long t, long bucketMs) => ((t - 1) / bucketMs + 1) * bucketMs;
+                            var bucketMs = string.Equals(p.agg, "10s", StringComparison.OrdinalIgnoreCase) ? 10_000L : 60_000L;
+                            var buckets = slice
+                                .GroupBy(h => BucketEnd(h.ts, bucketMs))
+                                .OrderBy(g => g.Key)
+                                .Select(g =>
+                                {
+                                    var last = g.Last();
+                                    return new
+                                    {
+                                        ts = g.Key,
+                                        cpu = want.Contains("cpu") && last.cpu.HasValue ? new { usage_percent = last.cpu.Value } : null,
+                                        memory = want.Contains("memory") && last.mem_total.HasValue ? new { total = last.mem_total.Value, used = last.mem_used!.Value } : null
+                                    } as object;
+                                })
+                                .ToArray();
+                            resultItems = buckets;
+                        }
+                        else
+                        {
+                            resultItems = slice
+                                .Select(h => (object)new
+                                {
+                                    ts = h.ts,
+                                    cpu = want.Contains("cpu") && h.cpu.HasValue ? new { usage_percent = h.cpu.Value } : null,
+                                    memory = want.Contains("memory") && h.mem_total.HasValue ? new { total = h.mem_total.Value, used = h.mem_used!.Value } : null
+                                })
+                                .ToArray();
+                        }
                     }
                 }
                 // 回退：当窗口内没有历史数据时，返回一条当前即时值，避免空结果
