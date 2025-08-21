@@ -15,6 +15,18 @@
 
 ## 硬性约束与通用约定
 
+### 计划变更（2025-08-21）
+为聚焦“监控展示指标”的交付，当前周期内暂不开展任何“桌面宠物”相关工作；待指标采集/历史查询/展示组件全部完成并通过验收（涵盖里程碑3/4/5相关交付）后，再启动桌面宠物的设计与实现。
+
+影响范围：
+- 文档：`### 3. 桌面宠物状态机` 保留为后置说明，不纳入当前验收范围。
+- 里程碑：`里程碑6` 中“桌面宠物”改为“延期（依赖监控展示指标完成）”。
+- 前端：与宠物相关目录（如 `frontend/src/components/DesktopPet.vue`、`frontend/src/windows/pet/`）的实现工作后置。
+
+不变事项：与指标采集、功耗管理、数据存储与聚合、历史查询、UI核心展示组件相关的工作继续优先推进。
+
+## 硬性约束与通用约定
+
 1. **命名规范（强制）**
    - 外部数据（IPC消息/持久化存储/对外文档）统一使用`snake_case`
    - 内部代码遵循语言惯例（C# PascalCase/camelCase；TypeScript camelCase）
@@ -333,30 +345,31 @@ C:\code\sys-sensor-v3\
 ## 开发计划（里程碑）—
 
 ### 里程碑1：后端最小可用骨架（第1周）
-- [ ] Named Pipe 服务端 + ACL 配置（仅本机）
-- [ ] JSON-RPC 协议骨架（hello/snapshot/set_config/start/stop）
-- [ ] 双形态运行（Windows 服务 + 控制台）
-- [ ] Serilog 日志、基础配置热重载
-- [ ] Mock 指标生成器（用于打通 UI）
-- [ ] 基础单元测试（协议/服务生命周期）
+- [x] Named Pipe 服务端 + ACL 配置（仅本机） — 已实现（`src/SystemMonitor.Service/Services/RpcHostedService.cs::CreateSecuredPipe()`）
+- [x] JSON-RPC 协议骨架（hello/snapshot/set_config/start/stop） — 已实现（`RpcHostedService.RpcServer`）
+- [x] 双形态运行（Windows 服务 + 控制台） — 已实现（`src/SystemMonitor.Service/Program.cs`，支持 `--service`）
+- [x] Serilog 日志接入 — 已实现（`Program.cs` 使用 `UseSerilog`）
+- [ ] 基础配置热重载 — Host 默认支持，具体配置与监控待完善
+- [x] Mock 指标生成器（用于打通 UI） — 已在 `RpcHostedService` 推流循环与 `snapshot()` 提供 CPU/MEM 最小返回
+- [ ] 基础单元测试（协议/服务生命周期） — 已有 `EndToEndTests/ContractTests/SchemaTests`，单元测试补充中
 
 验收：控制台模式下可接受 hello/snapshot，日志正常，Mock 数据可返回。
 
 ### 里程碑2：Tauri 最小界面（第2周）
-- [ ] Tauri 2.x 项目初始化（单窗口）
-- [ ] Rust pipe 客户端最小实现（或临时 Node IPC 方案）
-- [ ] JSON-RPC 客户端封装 + 自动重连
-- [ ] 最小“调试窗口”：仅显示连接状态与 snapshot 原始 JSON
-- [ ] 设置持久化最小实现（interval 等）
+- [x] Tauri 2.x 项目初始化（单窗口） — 已实现（`frontend/src-tauri/Cargo.toml`、`frontend/src-tauri/tauri.conf.json` 单窗口配置）
+- [x] Rust pipe 客户端最小实现（或临时 Node IPC 方案） — 已实现（`frontend/src-tauri/src/main.rs` 命名管道 RPC + 事件桥）
+- [x] JSON-RPC 客户端封装 + 自动重连 — 已实现（`frontend/src/api/rpc.ts`/`rpc.tauri.ts` + `ensureEventBridge()`；事件桥断线重连 + 周期重试）
+- [x] 最小“调试窗口”：仅显示连接状态与 snapshot 原始 JSON — 已实现（`frontend/src/App.vue`、`frontend/src/components/SnapshotPanel.vue`）
+- [ ] 设置持久化最小实现（interval 等） — 已有 UI 与 RPC 管道（`ControlPanel.vue` → `service.setConfig()`），持久化存储与回读策略待验证
 
 验收：启动 UI 可连接服务并每秒显示 snapshot 原始数据。
 
 ### 里程碑3：C# 指标模块与数据面（第3-5周）
 - [ ] 采集器全集：CPU/Memory/Disk/Network/GPU/Sensor（字段以“指标文档”为唯一来源）采集器都需要异步调用不阻塞主线程
 - [ ] 采集调度与功耗管理（Active/Standby/LowPower/Suspended）
-- [ ] SQLite 存储与聚合（1s 原始、10s/1m 聚合）
-- [ ] 历史查询 `query_history`、事件 `metrics/state`
-- [ ] 内存快照与统一读取接口
+- [ ] SQLite 存储与聚合（1s 原始、10s/1m 聚合） — 原始表与读写已实现（`src/SystemMonitor.Service/Services/HistoryStore.cs`），聚合待实现
+- [ ] 历史查询 `query_history`、事件 `metrics/state` — `query_history` 与 `metrics` 推流已实现；`state` 事件预留
+- [ ] 内存快照与统一读取接口 — `snapshot` 已实现，统一接口待抽象
 - [ ] 错误码/异常与日志打点完善
 - [ ] 针对采集器与协议的单元/集成测试
 
@@ -380,7 +393,7 @@ C:\code\sys-sensor-v3\
 
 ### 里程碑6：高级功能（第9-10周）
 - [ ] 阈值规则与告警事件、通知
-- [ ] 桌面宠物（状态机/动画/脚本“可选”）
+- [ ] 桌面宠物（状态机/动画/脚本）—延期：待“监控展示指标”完成后启动（gated by 里程碑3/4/5验收）
 - [ ] 更新系统（UI 与服务），签名校验
 - [ ] 性能优化（AOT/内存/帧率）
 
