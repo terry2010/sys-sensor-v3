@@ -134,19 +134,22 @@ ACL配置:
 | `set_config` | `{base_interval_ms?, module_intervals?, persist?}` | `{ok, effective_intervals}` | 配置采集参数 |
 | `start` | `{modules?}` | `{ok, started_modules}` | 启动采集 |
 | `stop` | `{}` | `{ok}` | 停止采集 |
+| `subscribe_metrics` | `{enable}` | `{ok, enabled}` | 开关推流（全局） |
 | `burst_subscribe` | `{modules, interval_ms, ttl_ms}` | `{ok, expires_at}` | 临时高频订阅 |
 | `snapshot` | `{modules?}` | `{ts, ...各模块字段}` | 获取即时快照 |
-| `query_history` | `{start_ts, end_ts, modules?, granularity?}` | `{data:[]}` | 查询历史数据 |
+| `query_history` | `{from_ts, to_ts, modules?, step_ms?}` | `{ok, items:[]}` | 查询历史数据 |
 | `set_log_level` | `{level}` | `{ok, previous_level}` | 调整日志级别 |
 | `update_check` | `{}` | `{available, version?, notes?}` | 检查更新 |
 | `update_apply` | `{version?}` | `{ok}` | 应用更新 |
 
+> 说明：当 `hello` 的 `capabilities` 包含 `"metrics_stream"` 时，该连接将被视为“事件桥（event bridge）”。服务端会自动开启指标推流（默认模块为 `["cpu","mem"]`），无需显式调用 `start`。如需显式控制，可使用 `subscribe_metrics({ enable })` 开关推流。
+
 ### 事件通知（Service → UI）
-- `metrics`: `{ts, seq, ...各模块字段}`（推流数据，字段严格按指标文档）
-- `state`: `{running, clients, effective_intervals}`（服务状态）
-- `alert`: `{level, metric, value, threshold?, rule_id?, message, ts}`（告警事件）
-- `update_ready`: `{component, version}`（更新就绪）
-- `ping`: `{}`（可选心跳）
+- `metrics`: `{ts, seq, ...各模块字段}`（推流数据，字段严格按指标文档，M1：已实现）
+- `state`: `{running, clients, effective_intervals}`（服务状态，M1：预留）
+- `alert`: `{level, metric, value, threshold?, rule_id?, message, ts}`（告警事件，M1：预留）
+- `update_ready`: `{component, version}`（更新就绪，M1：预留）
+- `ping`: `{}`（可选心跳，M1：预留）
 
 ### 错误码规范
 
@@ -158,6 +161,8 @@ ACL配置:
 | -32004 | rate_limited | 降低请求频率 |
 | -32005 | module_unavailable | 检查硬件支持 |
 | -32006 | internal_error | 查看服务日志 |
+
+> 说明：以上错误码为推荐值，用于对齐常见错误语义。M1 阶段不强制具体 code，实际以异常语义与消息为准，后续里程碑将逐步收敛并固化。
 
 ## 功能模块详细设计
 
