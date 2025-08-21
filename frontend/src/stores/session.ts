@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia';
 import type { HelloResult } from '../api/dto';
 import { service } from '../api/service';
+import { useEventsStore } from './events';
 
 export const useSessionStore = defineStore('session', {
   state: () => ({ session: null as HelloResult | null, loading: false, error: '' as string | '' }),
   actions: {
     async init() {
       this.loading = true; this.error = '';
+      const events = useEventsStore();
       const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
       const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
         let timer: any;
@@ -17,8 +19,10 @@ export const useSessionStore = defineStore('session', {
       let lastErr: any = null;
       for (let i = 0; i < 5; i++) {
         try {
-          this.session = await withTimeout(service.hello());
+          const r = await withTimeout(service.hello());
+          this.session = r;
           this.error = '';
+          try { events.push({ ts: Date.now(), type: 'info', payload: { evt: 'hello_ok', server: r?.server_version, proto: r?.protocol_version } }); } catch {}
           break;
         } catch (e: any) {
           lastErr = e;
@@ -32,6 +36,7 @@ export const useSessionStore = defineStore('session', {
       }
       if (!this.session && lastErr) {
         this.error = String(lastErr?.message || lastErr);
+        try { events.push({ ts: Date.now(), type: 'error', payload: { evt: 'hello_fail', err: this.error } }); } catch {}
       }
       this.loading = false;
     }

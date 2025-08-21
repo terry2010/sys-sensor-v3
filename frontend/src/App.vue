@@ -20,7 +20,9 @@
       <HistoryChart />
       <ControlPanel />
       <HistoryQuery />
+      <DebugEvents />
     </section>
+    <ToastList />
   </div>
 </template>
 
@@ -30,13 +32,19 @@ import SnapshotPanel from './components/SnapshotPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
+import DebugEvents from './components/DebugEvents.vue';
+import ToastList from './components/ToastList.vue';
 import { useSessionStore } from './stores/session';
 import { useMetricsStore } from './stores/metrics';
+import { useEventsStore } from './stores/events';
+import { useToastStore } from './stores/toast';
 import { service } from './api/service';
 import { ensureEventBridge } from './api/rpc.tauri';
 
 const session = useSessionStore();
 const metrics = useMetricsStore();
+const events = useEventsStore();
+const toast = useToastStore();
 const bridge = ref({ rx: 0, err: 0 });
 const state = ref<{ phase: string | null; ts: number | null }>({ phase: null, ts: null });
 
@@ -53,8 +61,16 @@ onMounted(async () => {
     // 调试监听：观察桥接是否有事件/错误到达
     try {
       const { listen } = await import('@tauri-apps/api/event');
-      void listen('bridge_rx', (_e: any) => { bridge.value.rx++; });
-      void listen('bridge_error', (_e: any) => { bridge.value.err++; });
+      void listen('bridge_handshake', (_e: any) => {
+        events.push({ ts: Date.now(), type: 'info', payload: { evt: 'bridge_handshake' } });
+        toast.push('事件桥已连接', 'success');
+      });
+      void listen('bridge_disconnected', (_e: any) => {
+        events.push({ ts: Date.now(), type: 'warn', payload: { evt: 'bridge_disconnected' } });
+        toast.push('事件桥已断开，将重试连接…', 'warn');
+      });
+      void listen('bridge_rx', (_e: any) => { bridge.value.rx++; events.push({ ts: Date.now(), type: 'bridge_rx' }); });
+      void listen('bridge_error', (_e: any) => { bridge.value.err++; events.push({ ts: Date.now(), type: 'bridge_error' }); toast.push('事件桥错误', 'error'); });
       // 直接监听 metrics，写入 store（用于绕过 service.onMetrics 的链路验证）
       void listen('metrics', (e: any) => {
         const p = e?.payload as any;
@@ -66,6 +82,7 @@ onMounted(async () => {
         metrics.count += 1;
         const w: any = typeof window !== 'undefined' ? window : {};
         if (!w.__METRICS_READY) w.__METRICS_READY = true;
+        events.push({ ts: Date.now(), type: 'metrics', payload: { cpu: p?.cpu?.usage_percent, mem_used: p?.memory?.used, ts: p?.ts } });
       });
       // 监听 state 事件，展示生命周期状态角标
       void listen('state', (e: any) => {
@@ -73,6 +90,7 @@ onMounted(async () => {
         if (!p) return;
         state.value.phase = p.phase ?? null;
         state.value.ts = typeof p.ts === 'number' ? p.ts : Date.now();
+        events.push({ ts: Date.now(), type: 'state', payload: p });
       });
     } catch { /* ignore */ }
   } catch {
