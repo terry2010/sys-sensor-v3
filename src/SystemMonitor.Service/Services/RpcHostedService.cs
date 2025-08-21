@@ -41,6 +41,16 @@ namespace SystemMonitor.Service.Services
                 WriteIndented = false
             };
         }
+        
+        // DTO for LibreHardwareMonitor sensor dump
+        public sealed class LhmSensorDto
+        {
+            public string? hw_type { get; set; }
+            public string? hw_name { get; set; }
+            public string? sensor_type { get; set; }
+            public string? sensor_name { get; set; }
+            public double? value { get; set; }
+        }
 
         // -------------------------
         // LibreHardwareMonitor 采集器（CPU 包温/核心温/包功率，主板风扇）
@@ -199,10 +209,10 @@ namespace SystemMonitor.Service.Services
                 _lastTicks = now; return _last;
             }
 
-            public object[] DumpAll()
+            public LhmSensorDto[] DumpAll()
             {
                 EnsureInit();
-                if (_comp == null) return Array.Empty<object>();
+                if (_comp == null) return Array.Empty<LhmSensorDto>();
                 try
                 {
                     foreach (var hw in _comp.Hardware)
@@ -212,17 +222,17 @@ namespace SystemMonitor.Service.Services
                     }
                 }
                 catch { }
-                var list = new List<object>();
+                var list = new List<LhmSensorDto>();
                 try
                 {
                     foreach (var hw in _comp.Hardware)
                     {
                         foreach (var s in hw.Sensors)
-                            list.Add(new { hw_type = hw.HardwareType.ToString(), hw_name = hw.Name, sensor_type = s.SensorType.ToString(), sensor_name = s.Name, value = s.Value });
+                            list.Add(new LhmSensorDto { hw_type = hw.HardwareType.ToString(), hw_name = hw.Name, sensor_type = s.SensorType.ToString(), sensor_name = s.Name, value = s.Value });
                         foreach (var sh in hw.SubHardware)
                         {
                             foreach (var s in sh.Sensors)
-                                list.Add(new { hw_type = sh.HardwareType.ToString(), hw_name = sh.Name, sensor_type = s.SensorType.ToString(), sensor_name = s.Name, value = s.Value });
+                                list.Add(new LhmSensorDto { hw_type = sh.HardwareType.ToString(), hw_name = sh.Name, sensor_type = s.SensorType.ToString(), sensor_name = s.Name, value = s.Value });
                         }
                     }
                 }
@@ -1559,10 +1569,46 @@ namespace SystemMonitor.Service.Services
                 int? minMhz = CpuFrequency.Instance.ReadMinMhz();
                 // 传感器：优先 LHM，其次 WMI 温区
                 var lhm = LhmSensors.Instance.Read();
+                var lhmAll = LhmSensors.Instance.DumpAll();
                 var pkgTempC = lhm.pkgTemp ?? CpuSensors.Instance.Read();
                 var coresTempC = lhm.cores;
                 var pkgPowerW = lhm.pkgPower;
                 var fanRpm = lhm.fans;
+
+                // 从 LHM 全量列表中提取更多 CPU 温度与功率轨道，以及风扇高级字段
+                double? cpuDie = null, cpuProximity = null;
+                double? pIA = null, pGT = null, pUncore = null, pDRAM = null;
+                List<int?> fanMin = new();
+                List<int?> fanMax = new();
+                List<int?> fanTarget = new();
+                List<double?> fanDuty = new();
+
+                try
+                {
+                    var cpuTemps = lhmAll.Where(s => s.sensor_type == "Temperature" && s.hw_type == "Cpu").ToArray();
+                    cpuDie = cpuTemps.FirstOrDefault(s => s.sensor_name.IndexOf("die", StringComparison.OrdinalIgnoreCase) >= 0)?.value;
+                    cpuProximity = cpuTemps.FirstOrDefault(s => s.sensor_name.IndexOf("proximity", StringComparison.OrdinalIgnoreCase) >= 0)?.value;
+
+                    var cpuPowers = lhmAll.Where(s => s.sensor_type == "Power" && s.hw_type == "Cpu").ToArray();
+                    pIA = cpuPowers.FirstOrDefault(s => s.sensor_name.IndexOf("IA", StringComparison.OrdinalIgnoreCase) >= 0 || s.sensor_name.IndexOf("cores", StringComparison.OrdinalIgnoreCase) >= 0)?.value;
+                    pGT = cpuPowers.FirstOrDefault(s => s.sensor_name.IndexOf("GT", StringComparison.OrdinalIgnoreCase) >= 0 || s.sensor_name.IndexOf("graphics", StringComparison.OrdinalIgnoreCase) >= 0)?.value;
+                    pUncore = cpuPowers.FirstOrDefault(s => s.sensor_name.IndexOf("uncore", StringComparison.OrdinalIgnoreCase) >= 0)?.value;
+                    pDRAM = cpuPowers.FirstOrDefault(s => s.sensor_name.IndexOf("dram", StringComparison.OrdinalIgnoreCase) >= 0 || s.sensor_name.IndexOf("memory", StringComparison.OrdinalIgnoreCase) >= 0)?.value;
+
+                    // 风扇高级字段：min/max/target（RPM），duty（Control 百分比）
+                    var fanAll = lhmAll.Where(s => s.hw_type == "Motherboard" || s.hw_type == "Controller" || s.sensor_type == "Fan" || s.sensor_type == "Control").ToArray();
+                    var fanMinItems = fanAll.Where(s => s.sensor_type == "Fan" && s.sensor_name.IndexOf("min", StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                    var fanMaxItems = fanAll.Where(s => s.sensor_type == "Fan" && s.sensor_name.IndexOf("max", StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                    var fanTargetItems = fanAll.Where(s => s.sensor_type == "Fan" && s.sensor_name.IndexOf("target", StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+                    var fanDutyItems = fanAll.Where(s => s.sensor_type == "Control").ToList();
+
+                    // 保持顺序：按名称自然序
+                    foreach (var it in fanMinItems.OrderBy(x => x.sensor_name)) fanMin.Add((int?)Math.Round(it.value ?? double.NaN));
+                    foreach (var it in fanMaxItems.OrderBy(x => x.sensor_name)) fanMax.Add((int?)Math.Round(it.value ?? double.NaN));
+                    foreach (var it in fanTargetItems.OrderBy(x => x.sensor_name)) fanTarget.Add((int?)Math.Round(it.value ?? double.NaN));
+                    foreach (var it in fanDutyItems.OrderBy(x => x.sensor_name)) fanDuty.Add(it.value);
+                }
+                catch { }
                 // 负载平均（EWMA）
                 var (l1, l5, l15) = CpuLoadAverages.Instance.Update(usage);
                 // Top 进程（按 CPU%）
@@ -1593,7 +1639,17 @@ namespace SystemMonitor.Service.Services
                     cores_temp_c = coresTempC,
                     package_power_w = pkgPowerW,
                     fan_rpm = fanRpm,
-                    lhm_sensors = LhmSensors.Instance.DumpAll(),
+                    cpu_die_temp_c = cpuDie,
+                    cpu_proximity_temp_c = cpuProximity,
+                    cpu_power_ia_w = pIA,
+                    cpu_power_gt_w = pGT,
+                    cpu_power_uncore_w = pUncore,
+                    cpu_power_dram_w = pDRAM,
+                    fan_min_rpm = fanMin.Count > 0 ? fanMin.ToArray() : null,
+                    fan_max_rpm = fanMax.Count > 0 ? fanMax.ToArray() : null,
+                    fan_target_rpm = fanTarget.Count > 0 ? fanTarget.ToArray() : null,
+                    fan_duty_percent = fanDuty.Count > 0 ? fanDuty.ToArray() : null,
+                    lhm_sensors = lhmAll,
                     top_processes = top,
                     context_switches_per_sec = ctxSw,
                     syscalls_per_sec = syscalls,

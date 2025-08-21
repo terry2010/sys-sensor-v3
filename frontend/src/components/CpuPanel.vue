@@ -28,8 +28,18 @@
         <div v-if="cpu && (cpu as any).min_mhz"><span class="k">min freq</span><span class="v">{{ mhz((cpu as any).min_mhz) }}</span></div>
         <div v-if="cpu && (cpu as any).package_temp_c != null"><span class="k">pkg temp</span><span class="v">{{ degC((cpu as any).package_temp_c) }}</span></div>
         <div v-if="cpu && Array.isArray((cpu as any).cores_temp_c) && (cpu as any).cores_temp_c.length"><span class="k">core temp</span><span class="v">{{ coresTempSummary((cpu as any).cores_temp_c) }}</span></div>
+        <div v-if="cpu && (cpu as any).cpu_die_temp_c != null"><span class="k">die temp</span><span class="v">{{ degC((cpu as any).cpu_die_temp_c) }}</span></div>
+        <div v-if="cpu && (cpu as any).cpu_proximity_temp_c != null"><span class="k">prox temp</span><span class="v">{{ degC((cpu as any).cpu_proximity_temp_c) }}</span></div>
         <div v-if="cpu && Array.isArray((cpu as any).fan_rpm) && (cpu as any).fan_rpm.length"><span class="k">fan</span><span class="v">{{ fans((cpu as any).fan_rpm) }}</span></div>
         <div v-if="cpu && (cpu as any).package_power_w != null"><span class="k">pkg power</span><span class="v">{{ watts((cpu as any).package_power_w) }}</span></div>
+        <div v-if="cpu && (cpu as any).cpu_power_ia_w != null"><span class="k">IA power</span><span class="v">{{ watts((cpu as any).cpu_power_ia_w) }}</span></div>
+        <div v-if="cpu && (cpu as any).cpu_power_gt_w != null"><span class="k">GT power</span><span class="v">{{ watts((cpu as any).cpu_power_gt_w) }}</span></div>
+        <div v-if="cpu && (cpu as any).cpu_power_uncore_w != null"><span class="k">Uncore power</span><span class="v">{{ watts((cpu as any).cpu_power_uncore_w) }}</span></div>
+        <div v-if="cpu && (cpu as any).cpu_power_dram_w != null"><span class="k">DRAM power</span><span class="v">{{ watts((cpu as any).cpu_power_dram_w) }}</span></div>
+        <div v-if="cpu && Array.isArray((cpu as any).fan_min_rpm) && (cpu as any).fan_min_rpm.length"><span class="k">fan min</span><span class="v">{{ fans((cpu as any).fan_min_rpm) }}</span></div>
+        <div v-if="cpu && Array.isArray((cpu as any).fan_max_rpm) && (cpu as any).fan_max_rpm.length"><span class="k">fan max</span><span class="v">{{ fans((cpu as any).fan_max_rpm) }}</span></div>
+        <div v-if="cpu && Array.isArray((cpu as any).fan_target_rpm) && (cpu as any).fan_target_rpm.length"><span class="k">fan target</span><span class="v">{{ fans((cpu as any).fan_target_rpm) }}</span></div>
+        <div v-if="cpu && Array.isArray((cpu as any).fan_duty_percent) && (cpu as any).fan_duty_percent.length"><span class="k">fan duty</span><span class="v">{{ percents((cpu as any).fan_duty_percent) }}</span></div>
       </div>
       <div v-if="Array.isArray(cpu?.per_core) && cpu!.per_core.length" class="per-core">
         <div class="pc-head">per-core (usage / MHz)</div>
@@ -113,6 +123,11 @@ const fans = (arr: any) => {
 const watts = (v: any) => {
   if (typeof v !== 'number' || !isFinite(v)) return '-';
   return `${v.toFixed(1)} W`;
+};
+const percents = (arr: any) => {
+  if (!Array.isArray(arr) || arr.length === 0) return '-';
+  const vals = arr.map((v: any) => (typeof v === 'number' && isFinite(v)) ? `${v.toFixed(0)}%` : '-');
+  return vals.join(', ');
 };
 </script>
 <style scoped>
