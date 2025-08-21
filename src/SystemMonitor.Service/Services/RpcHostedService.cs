@@ -101,12 +101,14 @@ namespace SystemMonitor.Service.Services
             formatter.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
             var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
 
-            var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), _store);
+            var connId = Guid.NewGuid();
+            _logger.LogInformation("客户端会话建立: conn={ConnId}", connId);
+            var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), _store, connId);
             var rpc = new JsonRpc(handler, rpcServer);
 
             rpc.Disconnected += (s, e) =>
             {
-                _logger.LogInformation("客户端断开：{Reason}", e?.Description);
+                _logger.LogInformation("客户端断开：{Reason} conn={ConnId}", e?.Description, connId);
             };
 
             rpc.StartListening();
@@ -253,23 +255,28 @@ namespace SystemMonitor.Service.Services
             private readonly ILogger _logger;
             private long _seq;
             private readonly object _lock = new();
+            private readonly Guid _connId;
+            // 全局订阅开关（跨会话共享），确保任意连接的 subscribe_metrics 立即影响事件桥推流
+            private static readonly object _subLock = new();
+            private static bool _s_metricsEnabled = false;
             private int _baseIntervalMs = 1000;
             private int? _burstIntervalMs;
             private long _burstExpiresAt;
             private long _metricsPushed;
             private readonly Dictionary<string, int> _moduleIntervals = new(StringComparer.OrdinalIgnoreCase);
-            private bool _metricsEnabled = false; // 需订阅后才开始推送
+            // 移除实例级 _metricsEnabled，改为使用全局 _s_metricsEnabled
             // 简易内存历史缓冲区（环形，最多保留最近 MaxHistory 条）
             private readonly List<HistoryItem> _history = new();
             private const int MaxHistory = 10_000;
             private static readonly HashSet<string> _supportedCapabilities = new(new[] { "metrics_stream", "burst_mode", "history_query" }, StringComparer.OrdinalIgnoreCase);
             private readonly HistoryStore _store;
 
-            public RpcServer(ILogger logger, long initialSeq, HistoryStore store)
+            public RpcServer(ILogger logger, long initialSeq, HistoryStore store, Guid connId)
             {
                 _logger = logger;
                 _seq = initialSeq;
                 _store = store;
+                _connId = connId;
             }
 
             public long NextSeq() => Interlocked.Increment(ref _seq);
@@ -278,7 +285,7 @@ namespace SystemMonitor.Service.Services
 
             public bool MetricsPushEnabled
             {
-                get { lock (_lock) { return _metricsEnabled; } }
+                get { lock (_subLock) { return _s_metricsEnabled; } }
             }
 
             public int GetCurrentIntervalMs(long now)
@@ -380,7 +387,7 @@ namespace SystemMonitor.Service.Services
                     capabilities = _supportedCapabilities.ToArray(),
                     session_id = sessionId
                 };
-                _logger.LogInformation("hello ok: app={App} proto={Proto} caps=[{Caps}] session_id={SessionId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId);
+                _logger.LogInformation("hello ok: app={App} proto={Proto} caps=[{Caps}] session_id={SessionId} conn={ConnId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId, _connId);
                 return Task.FromResult<object>(result);
             }
 
@@ -427,12 +434,14 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> subscribe_metrics(SubscribeMetricsParams p)
             {
-                lock (_lock)
+                bool enabled;
+                lock (_subLock)
                 {
-                    _metricsEnabled = p != null && p.enable;
+                    _s_metricsEnabled = p != null && p.enable;
+                    enabled = _s_metricsEnabled;
                 }
-                _logger.LogInformation("subscribe_metrics: enable={Enable}", _metricsEnabled);
-                return Task.FromResult<object>(new { ok = true, enabled = _metricsEnabled });
+                _logger.LogInformation("subscribe_metrics: enable={Enable} conn={ConnId}", enabled, _connId);
+                return Task.FromResult<object>(new { ok = true, enabled });
             }
 
             /// <summary>

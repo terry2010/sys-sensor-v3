@@ -23,6 +23,20 @@ struct JsonRpcRequest<'a> {
     params: Option<Value>,
 }
 
+// 在同一事件桥连接上切换订阅状态（避免与短连接会话不一致）
+// 同时使用一次性短连接直接调用服务端 subscribe_metrics，确保在读循环被阻塞时也能立即生效
+#[tauri::command]
+fn bridge_set_subscribe(enable: bool) -> Result<(), String> {
+    WANT_SUBSCRIBE.store(enable, Ordering::SeqCst);
+    SUBSCRIBE_DIRTY.store(true, Ordering::SeqCst);
+    // 直接通过短连接调用一次，确保服务端状态立即更新
+    let params = serde_json::json!({ "enable": enable });
+    match call_over_named_pipe("subscribe_metrics", Some(params)) {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
 #[derive(Deserialize)]
 struct JsonRpcResponse {
     #[allow(dead_code)]
@@ -152,6 +166,9 @@ fn call_over_named_pipe(method: &str, params: Option<Value>) -> Result<Value> {
 }
 
 static EVENT_BRIDGE_STARTED: AtomicBool = AtomicBool::new(false);
+// 通过命令动态控制订阅状态（在同一条事件桥连接上发送 subscribe_metrics）
+static WANT_SUBSCRIBE: AtomicBool = AtomicBool::new(false);
+static SUBSCRIBE_DIRTY: AtomicBool = AtomicBool::new(false);
 
 #[tauri::command]
 fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
@@ -165,14 +182,27 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                 Ok(mut file) => {
                     // 连接建立后，先订阅 metrics 推送，避免服务端在其它短连接上推送导致混流
                     // 仅做一次请求并读取其响应，忽略错误（服务端老版本可能没有该方法）
-                    let sub_params = serde_json::json!({ "enable": true });
+                    let sub_params = serde_json::json!({ "enable": WANT_SUBSCRIBE.load(Ordering::SeqCst) });
                     let (sub_payload, _id) = build_request("subscribe_metrics", Some(sub_params));
+                    let _ = app.emit("bridge_subscribe", serde_json::json!({"stage":"init","enable": WANT_SUBSCRIBE.load(Ordering::SeqCst)}));
                     let _ = file.write_all(&sub_payload);
                     let _ = file.flush();
-                    let _ = read_response(&mut file);
+                    let init_resp = read_response(&mut file);
+                    let _ = app.emit("bridge_subscribe_ack", serde_json::json!({"stage":"init","ok": init_resp.is_ok()}));
 
                     // 持续读取通知帧（HeaderDelimited + JSON）
                     loop {
+                        // 若收到订阅变更指令，则在同一连接上发送
+                        if SUBSCRIBE_DIRTY.swap(false, Ordering::SeqCst) {
+                            let enable = WANT_SUBSCRIBE.load(Ordering::SeqCst);
+                            let params = serde_json::json!({ "enable": enable });
+                            let (buf, _id) = build_request("subscribe_metrics", Some(params));
+                            let _ = app.emit("bridge_subscribe", serde_json::json!({"stage":"toggle","enable": enable}));
+                            let _ = file.write_all(&buf);
+                            let _ = file.flush();
+                            let resp = read_response(&mut file);
+                            let _ = app.emit("bridge_subscribe_ack", serde_json::json!({"stage":"toggle","ok": resp.is_ok()}));
+                        }
                         // 读取直到空行
                         let header = match read_exact_until(&mut file, b"\r\n\r\n") {
                             Ok(h) => h,
@@ -234,7 +264,7 @@ async fn rpc_call(method: String, params: Option<Value>) -> Result<Value, String
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![rpc_call, start_event_bridge])
+        .invoke_handler(tauri::generate_handler![rpc_call, start_event_bridge, bridge_set_subscribe])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -33,11 +33,19 @@ export const tauriRpc = {
   async stop(p: StopParams = {}) { return rpcCall<any>('stop', p); },
   async burst_subscribe(p: BurstSubscribeParams) { return rpcCall<any>('burst_subscribe', p); },
   async subscribe_metrics(enable: boolean = true) { return rpcCall<any>('subscribe_metrics', { enable }); },
+  async bridge_subscribe(enable: boolean = true) {
+    const { invoke } = await import('@tauri-apps/api/core');
+    return invoke('bridge_set_subscribe', { enable });
+  },
   onMetrics(listener: (payload: any) => void) {
     let unlisten: (() => void) | null = null;
     // 动态引入事件 API，避免在纯 Web 环境编译/运行报错
     import('@tauri-apps/api/event')
-      .then(({ listen }) => listen('metrics', (evt: any) => listener(evt?.payload)))
+      .then(({ listen }) => listen('metrics', (evt: any) => {
+        // 标记已收到 metrics，停止 ensureEventBridge 的重试/强制订阅
+        try { const w: any = typeof window !== 'undefined' ? window : {}; w.__METRICS_READY = true; } catch {}
+        listener(evt?.payload);
+      }))
       .then((fn) => { unlisten = fn; })
       .catch(() => { /* 非 Tauri 环境或事件桥未就绪，忽略 */ });
     return () => { if (unlisten) unlisten(); };
@@ -50,8 +58,6 @@ export async function ensureEventBridge() {
     try {
       const { invoke } = await import('@tauri-apps/api/core');
       await invoke('start_event_bridge');
-      // 事件桥建立后，冗余调用一次 subscribe_metrics，确保后端开始推送
-      try { await tauriRpc.subscribe_metrics(true); } catch {}
       // 标记宿主为 Tauri（首次成功后）
       const w: any = typeof window !== 'undefined' ? window : {};
       if (!w.__IS_TAURI__) w.__IS_TAURI__ = true;

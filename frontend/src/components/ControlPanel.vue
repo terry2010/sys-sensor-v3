@@ -21,6 +21,14 @@
       <label>ttl_ms: <input type="number" v-model.number="burstTtl" min="1000" step="500" /></label>
       <button @click="onBurst" :disabled="burstLoading">burstSubscribe()</button>
     </div>
+    <div class="row">
+      <label><input type="checkbox" v-model="subEnable" /> subscribe_metrics.enable</label>
+      <button @click="onSubscribe" :disabled="subLoading">subscribe_metrics()</button>
+      <span v-if="!isTauri" style="color:#888; font-size:12px;">(Web Mock 环境下此按钮无效)</span>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" v-model="logMetrics" @change="toggleMetricsLog" /> 日志记录 metrics 推送</label>
+    </div>
     <div class="log">
       <textarea :value="logs.join('\n')" readonly></textarea>
     </div>
@@ -28,8 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { service as api } from '../api/service';
+import { ensureEventBridge } from '../api/rpc.tauri';
+import { isTauriHost } from '../api/rpc';
 
 const logs = ref<string[]>([]);
 const baseInterval = ref<number>(1000);
@@ -101,6 +111,63 @@ function onBurst() {
     .catch((e:any) => log(e?.message || e))
     .finally(() => { clearTimeout(lt); burstLoading.value = false; });
 }
+
+const subEnable = ref<boolean>(false);
+const subLoading = ref(false);
+const isTauri = ref<boolean>(isTauriHost());
+function onSubscribe() {
+  subLoading.value = true; const lt = setTimeout(() => { subLoading.value = false; }, 800);
+  // 记录用户点击触发及当前 enable 值
+  try { log({ event: 'user_click_subscribe', enable: subEnable.value }); } catch {}
+  withTimeout(Promise.resolve(api.subscribeMetrics?.({ enable: subEnable.value }) as any))
+    .then(r => log(r ?? 'ok'))
+    .catch((e:any) => log(e?.message || e))
+    .finally(() => { clearTimeout(lt); subLoading.value = false; });
+}
+
+// Metrics 推送日志开关
+const logMetrics = ref(false);
+let unlisten: (() => void) | null = null;
+let unlistenBridge: (() => void) | null = null;
+let unlistenBridgeAck: (() => void) | null = null;
+function toggleMetricsLog() {
+  if (unlisten) { try { unlisten(); } catch {} unlisten = null; }
+  if (logMetrics.value) {
+    try {
+      unlisten = api.onMetrics?.((p: any) => log({ event: 'metrics', payload: p }));
+      log('metrics log enabled');
+    } catch (e:any) { log(e?.message || e); }
+  } else {
+    log('metrics log disabled');
+  }
+}
+
+onMounted(async () => {
+  // 启动事件桥（Tauri 可用，Web 环境会静默忽略内部调用）
+  try { await ensureEventBridge(); } catch {}
+  // 监听桥接订阅调试事件
+  try {
+    const { listen } = await import('@tauri-apps/api/event');
+    unlistenBridge = await listen('bridge_subscribe', (e:any) => log({ event: 'bridge_subscribe', payload: e?.payload }));
+    unlistenBridgeAck = await listen('bridge_subscribe_ack', (e:any) => log({ event: 'bridge_subscribe_ack', payload: e?.payload }));
+  } catch {}
+  // 首次记录宿主
+  try { isTauri.value = isTauriHost(); } catch {}
+  log({ host: isTauri.value ? 'tauri' : 'web-mock' });
+  // 事件桥为异步建立，延时复查一次宿主标记，若发生变化再记录一次
+  setTimeout(() => {
+    const before = isTauri.value;
+    try { isTauri.value = isTauriHost(); } catch {}
+    if (isTauri.value !== before) {
+      log({ host: isTauri.value ? 'tauri' : 'web-mock' });
+    }
+  }, 1200);
+});
+onUnmounted(() => {
+  if (unlisten) { try { unlisten(); } catch {} unlisten = null; }
+  if (unlistenBridge) { try { unlistenBridge(); } catch {} unlistenBridge = null; }
+  if (unlistenBridgeAck) { try { unlistenBridgeAck(); } catch {} unlistenBridgeAck = null; }
+});
 </script>
 
 <style scoped>
