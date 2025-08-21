@@ -9,7 +9,12 @@ param(
 # Normalize paths
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $TrxFull = Resolve-Path -Path $TrxPath -ErrorAction Stop
-$OutDirFull = Join-Path -Path (Resolve-Path -Path ".").Path -ChildPath $OutDir
+$cwd = (Resolve-Path -Path ".").Path
+if ([System.IO.Path]::IsPathRooted($OutDir)) {
+  $OutDirFull = $OutDir
+} else {
+  $OutDirFull = Join-Path -Path $cwd -ChildPath $OutDir
+}
 $null = New-Item -ItemType Directory -Force -Path $OutDirFull | Out-Null
 $outPath = Join-Path $OutDirFull $OutFile
 

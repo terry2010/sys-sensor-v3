@@ -20,6 +20,20 @@ $cmd = @(
 )
 & dotnet @cmd
 
+# 生成并打开 HTML 测试报告（基于 TRX），避免使用 try/catch 以兼容 WinPS 5.1 解析
+$trx = Join-Path -Path $results -ChildPath "TestResults.trx"
+if (Test-Path -LiteralPath $trx) {
+  $reportScript = Join-Path -Path $PSScriptRoot -ChildPath "trx-report.ps1"
+  if (Test-Path -LiteralPath $reportScript) {
+    Log "generate html report from $trx"
+    & $reportScript -TrxPath $trx -OutDir (Join-Path $results 'report') -OutFile 'index.html' -Lang 'zh-CN' -Open
+  } else {
+    Log "report script not found: $reportScript"
+  }
+} else {
+  Log "no TRX found at $trx"
+}
+
 # 前端 Vitest
 $fe = Join-Path -Path $root -ChildPath "frontend"
 if ([string]::IsNullOrWhiteSpace($fe)) {

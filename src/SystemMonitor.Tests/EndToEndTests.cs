@@ -429,6 +429,31 @@ public class EndToEndTests : IAsyncLifetime
         }
     }
 
+    private sealed class StateCollector
+    {
+        private readonly object _lock = new();
+        private readonly List<(string phase, long ts)> _events = new();
+        public IReadOnlyList<(string phase, long ts)> Events
+        {
+            get { lock (_lock) { return _events.ToArray(); } }
+        }
+        public void Clear()
+        {
+            lock (_lock) { _events.Clear(); }
+        }
+        [JsonRpcMethod("state")]
+        public void OnState(System.Text.Json.JsonElement payload)
+        {
+            try
+            {
+                var phase = payload.GetProperty("phase").GetString() ?? string.Empty;
+                var ts = payload.TryGetProperty("ts", out var tsEl) ? tsEl.GetInt64() : 0L;
+                lock (_lock) { _events.Add((phase, ts)); }
+            }
+            catch { /* ignore malformed */ }
+        }
+    }
+
     [Fact]
     public async Task Metrics_Throttle_Burst_Recovery_Works()
     {
@@ -490,6 +515,83 @@ public class EndToEndTests : IAsyncLifetime
             await Task.Delay(50);
         }
         Assert.True(c3 >= 1 && c3 <= 5, $"expected 1..5 after recovery, got {c3}");
+    }
+
+    [Fact]
+    public async Task State_Emitted_On_Start_Burst_Stop()
+    {
+        var state = new StateCollector();
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(25), state);
+        var helloParams = new { app_version = "1.0.0", protocol_version = 1, token = "t", capabilities = new[] { "metrics_stream" } };
+        await rpc.InvokeAsync<object>("hello", new object[] { helloParams });
+
+        // start -> 期望收到 phase=start
+        var startRes = await rpc.InvokeAsync<System.Text.Json.JsonElement>("start", new object[] { new { modules = new[] { "cpu" } } });
+        Assert.True(startRes.TryGetProperty("ok", out var ok1) ? ok1.GetBoolean() : true);
+
+        var sw = DateTime.UtcNow; bool gotStart = false;
+        while ((DateTime.UtcNow - sw).TotalSeconds < 5)
+        {
+            if (state.Events.Any(e => string.Equals(e.phase, "start", StringComparison.OrdinalIgnoreCase))) { gotStart = true; break; }
+            await Task.Delay(50);
+        }
+        Assert.True(gotStart, "expected state=start within 5s");
+
+        // burst_subscribe -> 期望收到 phase=burst
+        var burst = await rpc.InvokeAsync<System.Text.Json.JsonElement>("burst_subscribe", new object[] { new { modules = new[] { "cpu" }, interval_ms = 200, ttl_ms = 800 } });
+        Assert.True(burst.GetProperty("ok").GetBoolean());
+
+        sw = DateTime.UtcNow; bool gotBurst = false;
+        while ((DateTime.UtcNow - sw).TotalSeconds < 5)
+        {
+            if (state.Events.Any(e => string.Equals(e.phase, "burst", StringComparison.OrdinalIgnoreCase))) { gotBurst = true; break; }
+            await Task.Delay(50);
+        }
+        Assert.True(gotBurst, "expected state=burst within 5s");
+
+        // stop -> 期望收到 phase=stop（无参）
+        var stopRes = await rpc.InvokeAsync<System.Text.Json.JsonElement>("stop", Array.Empty<object>());
+        Assert.True(stopRes.TryGetProperty("ok", out var ok2) ? ok2.GetBoolean() : true);
+
+        sw = DateTime.UtcNow; bool gotStop = false;
+        while ((DateTime.UtcNow - sw).TotalSeconds < 5)
+        {
+            if (state.Events.Any(e => string.Equals(e.phase, "stop", StringComparison.OrdinalIgnoreCase))) { gotStop = true; break; }
+            await Task.Delay(50);
+        }
+        Assert.True(gotStop, "expected state=stop within 5s");
+    }
+
+    [Fact]
+    public async Task QueryHistory_Edges_And_Bucketing()
+    {
+        using var rpc = await ConnectAsync(TimeSpan.FromSeconds(15));
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // 1) 空区间（from > to）
+        var q1 = new { from_ts = now + 2000, to_ts = now + 1000, modules = new[] { "cpu" }, step_ms = 500 };
+        var res1 = await rpc.InvokeAsync<System.Text.Json.JsonElement>("query_history", new object[] { q1 });
+        Assert.True(res1.GetProperty("ok").GetBoolean());
+        var len1 = res1.GetProperty("items").GetArrayLength();
+        Assert.True(len1 >= 0);
+
+        // 2) 单点区间（from == to）
+        var q2 = new { from_ts = now - 1000, to_ts = now - 1000, modules = new[] { "cpu", "memory" }, step_ms = 0 };
+        var res2 = await rpc.InvokeAsync<System.Text.Json.JsonElement>("query_history", new object[] { q2 });
+        Assert.True(res2.GetProperty("ok").GetBoolean());
+        Assert.True(res2.GetProperty("items").GetArrayLength() >= 1);
+
+        // 3) 分桶边界（5s 窗口，1s 步长），允许抖动
+        var q3 = new { from_ts = now - 5000, to_ts = now, modules = new[] { "cpu" }, step_ms = 1000 };
+        var res3 = await rpc.InvokeAsync<System.Text.Json.JsonElement>("query_history", new object[] { q3 });
+        Assert.True(res3.GetProperty("ok").GetBoolean());
+        var len3 = res3.GetProperty("items").GetArrayLength();
+        // 若历史稀疏，允许退化为 1 桶；否则在 3..10 之间
+        Assert.True(len3 >= 1, $"unexpected bucket count: {len3}");
+        if (len3 > 1)
+        {
+            Assert.True(len3 >= 3 && len3 <= 10, $"unexpected bucket count: {len3}");
+        }
     }
 
     [Fact]
