@@ -1,0 +1,317 @@
+﻿[smoke] start: 20250821-181500
+[smoke] step: hello
+连接到命名管道: sys_sensor_v3.rpc …（最多等待30秒）
+已连接。
+调用 hello() …
+hello 参数:
+{
+  "app_version": "client-smoke-0.1",
+  "protocol_version": 1,
+  "token": "510c8ed0baae4067b4663f9d75d8da80",
+  "capabilities": []
+}
+hello 返回:
+{
+  "server_version": "1.0.0",
+  "protocol_version": 1,
+  "capabilities": [
+    "metrics_stream",
+    "burst_mode",
+    "history_query"
+  ],
+  "session_id": "94a262d2-fc68-4d8f-8775-40c08a75037f"
+}
+调用 snapshot() …
+snapshot 返回:
+{
+  "ts": 1755771305352,
+  "cpu": {
+    "usage_percent": 34.29054054054054
+  },
+  "memory": {
+    "total": 49020,
+    "used": 23564
+  },
+  "disk": {
+    "read_bytes_per_sec": 1024,
+    "write_bytes_per_sec": 2048
+  }
+}
+调用 burst_subscribe(interval_ms=200, ttl_ms=3000) …
+burst_subscribe 返回:
+{
+  "ok": true,
+  "expires_at": 1755771308358
+}
+收到 metrics 通知条数: 0
+调用 query_history(最近3秒) …
+query_history 返回:
+{
+  "ok": true,
+  "items": [
+    {
+      "ts": 1755771308882,
+      "cpu": {
+        "usage_percent": 19.029850746268657
+      },
+      "memory": {
+        "total": 49020,
+        "used": 23544
+      }
+    }
+  ]
+}
+
+[smoke] step: snapshot
+连接到命名管道: sys_sensor_v3.rpc …（最多等待30秒）
+已连接。
+调用 hello() …
+hello 参数:
+{
+  "app_version": "client-smoke-0.1",
+  "protocol_version": 1,
+  "token": "510c8ed0baae4067b4663f9d75d8da80",
+  "capabilities": []
+}
+hello 返回:
+{
+  "server_version": "1.0.0",
+  "protocol_version": 1,
+  "capabilities": [
+    "metrics_stream",
+    "burst_mode",
+    "history_query"
+  ],
+  "session_id": "efe9d043-80f1-4b79-875c-343ac1f899d1"
+}
+调用 snapshot() …
+snapshot 返回:
+{
+  "ts": 1755771309123,
+  "cpu": {
+    "usage_percent": 53.90625
+  },
+  "memory": {
+    "total": 49020,
+    "used": 23511
+  },
+  "disk": {
+    "read_bytes_per_sec": 1024,
+    "write_bytes_per_sec": 2048
+  }
+}
+调用 burst_subscribe(interval_ms=200, ttl_ms=3000) …
+burst_subscribe 返回:
+{
+  "ok": true,
+  "expires_at": 1755771312128
+}
+收到 metrics 通知条数: 0
+调用 query_history(最近3秒) …
+query_history 返回:
+{
+  "ok": true,
+  "items": [
+    {
+      "ts": 1755771312645,
+      "cpu": {
+        "usage_percent": 13.008130081300813
+      },
+      "memory": {
+        "total": 49020,
+        "used": 23497
+      }
+    }
+  ]
+}
+
+[smoke] step: set_config base_interval_ms=1000 cpu=300 memory=1200
+连接到命名管道: sys_sensor_v3.rpc …（最多等待30秒）
+已连接。
+调用 hello() …
+hello 参数:
+{
+  "app_version": "client-smoke-0.1",
+  "protocol_version": 1,
+  "token": "510c8ed0baae4067b4663f9d75d8da80",
+  "capabilities": []
+}
+hello 返回:
+{
+  "server_version": "1.0.0",
+  "protocol_version": 1,
+  "capabilities": [
+    "metrics_stream",
+    "burst_mode",
+    "history_query"
+  ],
+  "session_id": "1e231f57-c262-4316-8dd3-f43534b03f0b"
+}
+调用 snapshot() …
+snapshot 返回:
+{
+  "ts": 1755771312854,
+  "cpu": {
+    "usage_percent": 17.307692307692307
+  },
+  "memory": {
+    "total": 49020,
+    "used": 23492
+  },
+  "disk": {
+    "read_bytes_per_sec": 1024,
+    "write_bytes_per_sec": 2048
+  }
+}
+调用 burst_subscribe(interval_ms=200, ttl_ms=3000) …
+burst_subscribe 返回:
+{
+  "ok": true,
+  "expires_at": 1755771315858
+}
+收到 metrics 通知条数: 0
+调用 query_history(最近3秒) …
+query_history 返回:
+{
+  "ok": true,
+  "items": [
+    {
+      "ts": 1755771316386,
+      "cpu": {
+        "usage_percent": 14.285714285714286
+      },
+      "memory": {
+        "total": 49020,
+        "used": 23461
+      }
+    }
+  ]
+}
+
+[smoke] step: burst_subscribe(200ms, 3s)
+连接到命名管道: sys_sensor_v3.rpc …（最多等待30秒）
+已连接。
+调用 hello() …
+hello 参数:
+{
+  "app_version": "client-smoke-0.1",
+  "protocol_version": 1,
+  "token": "510c8ed0baae4067b4663f9d75d8da80",
+  "capabilities": []
+}
+hello 返回:
+{
+  "server_version": "1.0.0",
+  "protocol_version": 1,
+  "capabilities": [
+    "metrics_stream",
+    "burst_mode",
+    "history_query"
+  ],
+  "session_id": "e9e19f89-ab14-4b2c-9f3c-10474c6942b0"
+}
+调用 snapshot() …
+snapshot 返回:
+{
+  "ts": 1755771316846,
+  "cpu": {
+    "usage_percent": 72.5
+  },
+  "memory": {
+    "total": 49020,
+    "used": 23660
+  },
+  "disk": {
+    "read_bytes_per_sec": 1024,
+    "write_bytes_per_sec": 2048
+  }
+}
+调用 burst_subscribe(interval_ms=200, ttl_ms=3000) …
+burst_subscribe 返回:
+{
+  "ok": true,
+  "expires_at": 1755771319850
+}
+收到 metrics 通知条数: 0
+调用 query_history(最近3秒) …
+query_history 返回:
+{
+  "ok": true,
+  "items": [
+    {
+      "ts": 1755771320364,
+      "cpu": {
+        "usage_percent": 13.777777777777779
+      },
+      "memory": {
+        "total": 49020,
+        "used": 23665
+      }
+    }
+  ]
+}
+
+[smoke] step: query_history last 3s
+连接到命名管道: sys_sensor_v3.rpc …（最多等待30秒）
+已连接。
+调用 hello() …
+hello 参数:
+{
+  "app_version": "client-smoke-0.1",
+  "protocol_version": 1,
+  "token": "510c8ed0baae4067b4663f9d75d8da80",
+  "capabilities": []
+}
+hello 返回:
+{
+  "server_version": "1.0.0",
+  "protocol_version": 1,
+  "capabilities": [
+    "metrics_stream",
+    "burst_mode",
+    "history_query"
+  ],
+  "session_id": "df7f3058-7b9e-4f34-9e65-2cb3715c6f2c"
+}
+调用 snapshot() …
+snapshot 返回:
+{
+  "ts": 1755771320590,
+  "cpu": {
+    "usage_percent": 22.321428571428573
+  },
+  "memory": {
+    "total": 49020,
+    "used": 23666
+  },
+  "disk": {
+    "read_bytes_per_sec": 1024,
+    "write_bytes_per_sec": 2048
+  }
+}
+调用 burst_subscribe(interval_ms=200, ttl_ms=3000) …
+burst_subscribe 返回:
+{
+  "ok": true,
+  "expires_at": 1755771323594
+}
+收到 metrics 通知条数: 0
+调用 query_history(最近3秒) …
+query_history 返回:
+{
+  "ok": true,
+  "items": [
+    {
+      "ts": 1755771324112,
+      "cpu": {
+        "usage_percent": 15.783410138248849
+      },
+      "memory": {
+        "total": 49020,
+        "used": 23651
+      }
+    }
+  ]
+}
+
+

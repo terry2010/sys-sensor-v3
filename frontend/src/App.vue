@@ -7,6 +7,8 @@
         <span>events: {{ metrics.count }}</span>
         <span :class="{ stale: isStale }">last: {{ lastDeltaSec }}s</span>
         <span class="badge" :class="rpcSourceClass">RPC: {{ rpcSource }}</span>
+        <span v-if="bridge.rx > 0" class="badge ok">bridge_rx: {{ bridge.rx }}</span>
+        <span v-if="bridge.err > 0" class="badge warn">bridge_err: {{ bridge.err }}</span>
       </div>
       <div v-if="session.error" class="error">会话失败：{{ session.error }}</div>
       <div v-else-if="isStale" class="warn">未收到 metrics，请确认后端是否运行，或稍候片刻…</div>
@@ -34,6 +36,7 @@ import { ensureEventBridge } from './api/rpc.tauri';
 
 const session = useSessionStore();
 const metrics = useMetricsStore();
+const bridge = ref({ rx: 0, err: 0 });
 
 onMounted(async () => {
   // 统一初始化顺序：先探测并尝试启动事件桥 -> 再进行会话与 metrics 订阅
@@ -45,12 +48,40 @@ onMounted(async () => {
     try { void service.subscribeMetrics(true); } catch {}
     // 再非阻塞启动事件桥（不要等待，避免后端异常导致 UI 等待）
     void ensureEventBridge();
+    // 调试监听：观察桥接是否有事件/错误到达
+    try {
+      const { listen } = await import('@tauri-apps/api/event');
+      void listen('bridge_rx', (_e: any) => { bridge.value.rx++; });
+      void listen('bridge_error', (_e: any) => { bridge.value.err++; });
+      // 直接监听 metrics，写入 store（用于绕过 service.onMetrics 的链路验证）
+      void listen('metrics', (e: any) => {
+        const p = e?.payload as any;
+        if (!p) return;
+        metrics.latest = p;
+        metrics.history.push(p);
+        if (metrics.history.length > 300) metrics.history.shift();
+        metrics.lastAt = Date.now();
+        metrics.count += 1;
+        const w: any = typeof window !== 'undefined' ? window : {};
+        if (!w.__METRICS_READY) w.__METRICS_READY = true;
+      });
+    } catch { /* ignore */ }
   } catch {
     w.__IS_TAURI__ = false;
   }
   // 非阻塞：优先启动 metrics 监听；session.init() 不阻塞主流程
   metrics.start();
   void session.init();
+  // 自动启动默认采集模块，确保有数据可推送
+  setTimeout(async () => {
+    try {
+      console.log('[App] 尝试自动启动采集模块...');
+      const result = await service.start?.({ modules: ['cpu', 'mem'] });
+      console.log('[App] 自动启动采集模块成功:', result);
+    } catch (e) {
+      console.error('[App] 自动启动采集模块失败:', e);
+    }
+  }, 2000); // 延迟 2 秒，确保桥接已建立
 });
 
 // 健康状态（每秒刷新）

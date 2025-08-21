@@ -5,6 +5,12 @@
 
 $ErrorActionPreference = 'Continue'
 
+# 统一控制台与 PowerShell 的编码为 UTF-8，避免中文输出在不同控制台出现乱码（精简为无 try/catch 以提升兼容性）
+chcp 65001 1>$null 2>$null
+[Console]::InputEncoding  = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..'))
 Set-Location $root
 

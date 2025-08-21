@@ -10,6 +10,7 @@ using Nerdbank.Streams;
 using StreamJsonRpc;
 using System.Runtime.Versioning;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace SystemMonitor.Service.Services
 {
@@ -24,6 +25,10 @@ namespace SystemMonitor.Service.Services
         private readonly ILogger<RpcHostedService> _logger;
         private readonly JsonSerializerOptions _jsonOptions;
         private readonly HistoryStore _store;
+        private static readonly object _collectorLock = new object();
+        private static Timer? _metricsTimer;
+        private static readonly List<string> _activeModules = new List<string>();
+        private static readonly List<JsonRpc> _bridgeConnections = new List<JsonRpc>();
 
         public RpcHostedService(ILogger<RpcHostedService> logger, HistoryStore store)
         {
@@ -34,6 +39,68 @@ namespace SystemMonitor.Service.Services
                 PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
                 WriteIndented = false
             };
+        }
+
+        /// <summary>
+        /// 采集系统指标并推送给所有桥接连接。
+        /// </summary>
+        private static void CollectAndPushMetrics(object? state)
+        {
+            try
+            {
+                List<string> modules;
+                List<JsonRpc> connections;
+                
+                lock (_collectorLock)
+                {
+                    if (_activeModules.Count == 0) return;
+                    modules = new List<string>(_activeModules);
+                    connections = new List<JsonRpc>(_bridgeConnections.Where(c => !c.IsDisposed));
+                }
+
+                if (connections.Count == 0) return;
+
+                var metrics = new Dictionary<string, object>();
+                var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+                foreach (var module in modules)
+                {
+                    switch (module.ToLowerInvariant())
+                    {
+                        case "cpu":
+                            using (var process = Process.GetCurrentProcess())
+                            {
+                                var cpuTime = process.TotalProcessorTime.TotalMilliseconds;
+                                metrics["cpu"] = new { usage_percent = Math.Round(cpuTime / 1000.0 % 100, 2) };
+                            }
+                            break;
+                        case "mem":
+                            var workingSet = GC.GetTotalMemory(false);
+                            metrics["mem"] = new { used_bytes = workingSet, used_mb = Math.Round(workingSet / 1024.0 / 1024.0, 2) };
+                            break;
+                    }
+                }
+
+                var payload = new { timestamp, metrics };
+
+                // 推送给所有桥接连接
+                foreach (var connection in connections)
+                {
+                    try
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                await connection.NotifyAsync("metrics", payload);
+                            }
+                            catch { /* 忽略推送失败 */ }
+                        });
+                    }
+                    catch { /* 忽略连接异常 */ }
+                }
+            }
+            catch { /* 忽略采集异常 */ }
         }
 
         /// <summary>
@@ -105,9 +172,12 @@ namespace SystemMonitor.Service.Services
             _logger.LogInformation("客户端会话建立: conn={ConnId}", connId);
             var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), _store, connId);
             var rpc = new JsonRpc(handler, rpcServer);
+            rpcServer.SetJsonRpc(rpc);
 
             rpc.Disconnected += (s, e) =>
             {
+                // 从桥接连接列表中移除
+                lock (_collectorLock) { _bridgeConnections.RemoveAll(c => c == rpc || c.IsDisposed); }
                 _logger.LogInformation("客户端断开：{Reason} conn={ConnId}", e?.Description, connId);
             };
 
@@ -273,6 +343,7 @@ namespace SystemMonitor.Service.Services
             private const int MaxHistory = 10_000;
             private static readonly HashSet<string> _supportedCapabilities = new(new[] { "metrics_stream", "burst_mode", "history_query" }, StringComparer.OrdinalIgnoreCase);
             private readonly HistoryStore _store;
+        private JsonRpc? _rpc;
 
             public RpcServer(ILogger logger, long initialSeq, HistoryStore store, Guid connId)
             {
@@ -285,6 +356,11 @@ namespace SystemMonitor.Service.Services
             public long NextSeq() => Interlocked.Increment(ref _seq);
 
             public long IncrementMetricsCount() => Interlocked.Increment(ref _metricsPushed);
+            
+            public void SetJsonRpc(JsonRpc rpc)
+            {
+                _rpc = rpc;
+            }
 
             public bool MetricsPushEnabled
             {
@@ -399,7 +475,26 @@ namespace SystemMonitor.Service.Services
                 if (p.capabilities != null && p.capabilities.Any(c => string.Equals(c, "metrics_stream", StringComparison.OrdinalIgnoreCase)))
                 {
                     lock (_lock) { _isBridge = true; }
+                    // 为稳妥起见：桥接握手成功即默认开启推送（即使订阅指令尚未来得及发出）
+                    lock (_subLock) { _s_metricsEnabled = true; }
+                    // 连接不再加入全局连接表，metrics 仅由本会话的推送循环负责
                     _logger.LogInformation("hello ok (bridge): app={App} proto={Proto} caps=[{Caps}] session_id={SessionId} conn={ConnId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId, _connId);
+                    
+                    // 桥接连接建立后自动启动采集（默认采集CPU和内存）
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            // 延迟500毫秒，确保桥接连接完全建立
+                            await Task.Delay(500);
+                            await start(new StartParams { modules = new[] { "cpu", "mem" } });
+                            _logger.LogInformation("自动启动采集模块成功");
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "自动启动采集模块失败");
+                        }
+                    });
                 }
                 else
                 {
@@ -413,7 +508,6 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> snapshot(SnapshotParams? p)
             {
-                lock (_lock) { _isBridge = false; }
                 var ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 var mem = GetMemoryInfoMb();
                 var cpu = GetCpuUsagePercent();
@@ -433,7 +527,6 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> burst_subscribe(BurstParams p)
             {
-                lock (_lock) { _isBridge = false; }
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 if (p == null || p.interval_ms <= 0 || p.ttl_ms <= 0)
                 {
@@ -468,7 +561,6 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public Task<object> set_config(SetConfigParams p)
             {
-                lock (_lock) { _isBridge = false; }
                 if (p == null)
                 {
                     throw new ArgumentNullException(nameof(p));
@@ -530,20 +622,42 @@ namespace SystemMonitor.Service.Services
             }
 
             /// <summary>
-            /// 启动采集（占位）。
+            /// 启动采集模块。
             /// </summary>
             public Task<object> start(StartParams? p)
             {
-                lock (_lock) { _isBridge = false; }
-                return Task.FromResult<object>(new { ok = true, started_modules = p?.modules ?? Array.Empty<string>() });
+                var modules = p?.modules ?? new[] { "cpu", "mem" };
+                // 将外部传入的模块名规范化到内部命名（mem -> memory）并写入实例模块配置
+                var map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                foreach (var m in modules)
+                {
+                    if (string.IsNullOrWhiteSpace(m)) continue;
+                    var name = m.Trim().ToLowerInvariant() == "mem" ? "memory" : m.Trim();
+                    map[name] = Math.Max(100, _baseIntervalMs);
+                }
+                lock (_lock)
+                {
+                    _moduleIntervals.Clear();
+                    foreach (var kv in map)
+                    {
+                        _moduleIntervals[kv.Key] = kv.Value;
+                    }
+                }
+                _logger.LogInformation("start called, modules={modules}", string.Join(",", modules));
+                return Task.FromResult<object>(new { ok = true, started_modules = modules });
             }
 
             /// <summary>
-            /// 停止采集（占位）。
+            /// 停止采集模块。
             /// </summary>
             public Task<object> stop()
             {
-                lock (_lock) { _isBridge = false; }
+                // 清空模块设置，推送循环将依据空集合回退到默认模块或停止
+                lock (_lock)
+                {
+                    _moduleIntervals.Clear();
+                }
+                _logger.LogInformation("stop called, metrics collection stopped");
                 return Task.FromResult<object>(new { ok = true });
             }
 
@@ -552,7 +666,6 @@ namespace SystemMonitor.Service.Services
             /// </summary>
             public async Task<object> query_history(QueryHistoryParams p)
             {
-                lock (_lock) { _isBridge = false; }
                 if (p == null) throw new ArgumentNullException(nameof(p));
                 var from = p.from_ts;
                 var to = p.to_ts <= 0 || p.to_ts < from ? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : p.to_ts;

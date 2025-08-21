@@ -1,0 +1,9 @@
+{
+  "identifier": "core-event",
+  "description": "Allow listening to Tauri core events in dev.",
+  "windows": ["*"],
+  "webviews": ["*"],
+  "permissions": [
+    "core:event:default"
+  ]
+}

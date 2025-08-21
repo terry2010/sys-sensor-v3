@@ -61,6 +61,8 @@ export async function ensureEventBridge() {
       // 标记宿主为 Tauri（首次成功后）
       const w: any = typeof window !== 'undefined' ? window : {};
       if (!w.__IS_TAURI__) w.__IS_TAURI__ = true;
+      // 补强：桥接建立后，再次强制开启订阅，避免首个 subscribe 早于桥建立而丢失
+      try { await invoke('bridge_set_subscribe', { enable: true }); } catch { /* ignore */ }
     }
     catch (e) { /* 忽略重复启动等错误 */ }
   };

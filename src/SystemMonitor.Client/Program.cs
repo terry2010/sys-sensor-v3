@@ -64,6 +64,21 @@ internal class Program
                 }
             }
 
+            // 解析 capabilities：支持 --cap <name> (可多次) 与 --smoke-cap 便捷开关
+            var caps = new List<string>();
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (string.Equals(args[i], "--cap", StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
+                {
+                    var cap = args[i + 1];
+                    if (!string.IsNullOrWhiteSpace(cap)) caps.Add(cap);
+                }
+                else if (string.Equals(args[i], "--smoke-cap", StringComparison.OrdinalIgnoreCase))
+                {
+                    caps.Add("smoke_test");
+                }
+            }
+
             TextWriter? fileWriter = null;
             TextWriter? originalOut = Console.Out;
             if (!string.IsNullOrWhiteSpace(logPath))
@@ -153,8 +168,10 @@ internal class Program
                 appVersion = "client-smoke-0.1",
                 protocolVersion = 1,
                 token = token,
-                capabilities = new[] { "smoke_test" }
+                capabilities = (caps.Count > 0 ? caps.ToArray() : Array.Empty<string>())
             };
+            Console.WriteLine("hello 参数:");
+            Console.WriteLine(JsonSerializer.Serialize(helloParams, SnakeCase));
             var hello = await rpc.InvokeAsync<JsonElement>("hello", new object?[] { helloParams }).ConfigureAwait(false);
             Console.WriteLine("hello 返回:");
             Console.WriteLine(JsonSerializer.Serialize(hello, SnakeCase));
