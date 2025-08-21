@@ -246,3 +246,75 @@ dotnet run --project src\SystemMonitor.Client -c Debug
 # 或重定向到日志
 dotnet run --project src\SystemMonitor.Client -c Debug *> .\logs\client.out.log
 Get-Content .\logs\client.out.log
+```
+
+## 前端（Tauri v2）事件桥配置与排障经验
+
+__背景__
+
+- 桌面端使用 Tauri v2 + Vue 3（目录 `frontend/`）。
+- 后端（`SystemMonitor.Service`）通过 JSON-RPC 与前端通讯，并通过事件桥向前端持续推送 metrics。
+
+__关键配置__
+
+- 配置文件 `frontend/src-tauri/tauri.conf.json`
+  - 在 `app` 下开启全局注入：`withGlobalTauri: true`，这样 DevTools 和前端都能使用 `window.__TAURI__`。
+  - 不要在该文件中添加 `app.permissions` 或 `app.capabilities` 字段（Tauri v2 schema 不接受，可能导致 `tauri dev` 报错）。
+
+- 能力文件 `frontend/src-tauri/capabilities/core-event.json`
+  - 放置于 `src-tauri/capabilities/` 目录，Tauri CLI 会自动加载。
+  - 示例：
+    ```json
+    {
+      "identifier": "core-event",
+      "description": "Allow listening to Tauri core events in dev.",
+      "windows": ["*"],
+      "webviews": ["*"],
+      "permissions": [
+        "core:event:default"
+      ]
+    }
+    ```
+  - 说明：`core:event:default` 已包含 `allow-listen`、`allow-unlisten`、`allow-emit`、`allow-emit-to` 等常用事件权限；通常无需再显式添加 `core:event:allow-listen`。
+
+__后端调整__
+
+- 文件 `src/SystemMonitor.Service/Services/RpcHostedService.cs`
+  - 修正：不要在普通 RPC 调用里清空事件桥标记，避免误将桥连接当作短连。
+  - 优化：`hello()` 握手成功后默认开启 metrics 推送订阅（避免前端订阅命令尚未到达时没有数据）。
+
+__启动与验证__
+
+- 启动（团队偏好，统一脚本）：
+  ```powershell
+  .\scripts\dev.ps1
+  ```
+- 在 Tauri 主窗口 DevTools Console 验证：
+  ```js
+  // 1) 确认全局可用
+  typeof window.__TAURI__ === 'object'
+
+  // 2) 建立事件桥（示例命令，按项目实际 RPC 命名为准）
+  await window.__TAURI__.core.invoke('start_event_bridge')
+
+  // 3) 监听桥事件
+  await window.__TAURI__.event.listen('bridge_handshake', e => console.log('[bridge_handshake]', e))
+  await window.__TAURI__.event.listen('bridge_rx', e => console.log('[bridge_rx]', e))
+
+  // 4) 开启订阅并做一次 RPC 取数
+  await window.__TAURI__.core.invoke('bridge_set_subscribe', { enable: true })
+  await window.__TAURI__.core.invoke('rpc_call', { method: 'snapshot', params: {} }).then(console.log)
+  ```
+- 预期：前端 UI 的 `events`/`last`/`bridge_rx` 持续更新；后端日志可见握手与订阅开启。
+
+__常见问题与排障__
+
+- __DevTools 无法 import `@tauri-apps/api/...`__：在 DevTools 里请直接使用 `window.__TAURI__`，无需 `import`。
+- __权限相关报错（not allowed to listen）__：确认 `core-event.json` 中的 `windows`/`webviews` 与 `permissions` 正确，通常 `core:event:default` 已足够；若仍报错，将完整错误贴出以便精确放权。
+- __IDE 对 `permissions`/`capabilities` 的 schema 警告__：如果配置位于能力文件而非 `tauri.conf.json`，可忽略编辑器警告；以 Tauri CLI 的构建结果为准。
+
+__经验总结__
+
+- 使用能力文件集中声明权限，避免在 `tauri.conf.json` 里堆叠自定义字段。
+- 打开 `withGlobalTauri` 便于调试与临时验证事件桥。
+- 后端握手即订阅可降低“前端未及时订阅导致看不到数据”的问题。
