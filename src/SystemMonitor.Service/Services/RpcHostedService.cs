@@ -362,6 +362,27 @@ namespace SystemMonitor.Service.Services
                 _rpc = rpc;
             }
 
+            // 发送最小版 state 事件（通知）。字段：ts, phase, 可选 reason/extra。
+            private void EmitState(string phase, string? reason = null, object? extra = null)
+            {
+                try
+                {
+                    var payload = new
+                    {
+                        ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                        phase,
+                        reason,
+                        extra
+                    };
+                    _ = _rpc?.NotifyAsync("state", payload);
+                    _logger.LogInformation("state emitted: phase={Phase} reason={Reason}", phase, reason);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogDebug(ex, "emit state failed (ignored)");
+                }
+            }
+
             public bool MetricsPushEnabled
             {
                 get { lock (_subLock) { return _s_metricsEnabled; } }
@@ -538,6 +559,8 @@ namespace SystemMonitor.Service.Services
                     _burstExpiresAt = now + p.ttl_ms;
                 }
                 _logger.LogInformation("burst_subscribe: interval={Interval}ms ttl={Ttl}ms -> expires_at={Expires}", p.interval_ms, p.ttl_ms, _burstExpiresAt);
+                // 发出状态事件：burst
+                EmitState("burst", null, new { interval_ms = p.interval_ms, ttl_ms = p.ttl_ms, expires_at = _burstExpiresAt });
                 return Task.FromResult<object>(new { ok = true, expires_at = _burstExpiresAt });
             }
 
@@ -644,6 +667,8 @@ namespace SystemMonitor.Service.Services
                     }
                 }
                 _logger.LogInformation("start called, modules={modules}", string.Join(",", modules));
+                // 发出状态事件：start
+                EmitState("start", null, new { modules });
                 return Task.FromResult<object>(new { ok = true, started_modules = modules });
             }
 
@@ -658,6 +683,8 @@ namespace SystemMonitor.Service.Services
                     _moduleIntervals.Clear();
                 }
                 _logger.LogInformation("stop called, metrics collection stopped");
+                // 发出状态事件：stop
+                EmitState("stop");
                 return Task.FromResult<object>(new { ok = true });
             }
 

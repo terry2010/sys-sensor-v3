@@ -9,7 +9,8 @@ export const service = {
   // new methods
   setConfig(p: import('./dto').SetConfigParams) { return (rpc as any).set_config?.(p); },
   start(p?: import('./dto').StartParams) { return (rpc as any).start?.(p); },
-  stop(p: import('./dto').StopParams = {}) { return (rpc as any).stop?.(p); },
+  // stop 为无参方法，严禁传参（否则被识别为 stop/1）
+  stop() { return (rpc as any).stop?.(); },
   burstSubscribe(p: import('./dto').BurstSubscribeParams) { return (rpc as any).burst_subscribe?.(p); },
   async subscribeMetrics(p: boolean | { enable: boolean } = true) {
     const enable = typeof p === 'boolean' ? p : !!p?.enable;

@@ -96,7 +96,7 @@ function onStart() {
 const stopLoading = ref(false);
 function onStop() {
   stopLoading.value = true; const lt = setTimeout(() => { stopLoading.value = false; }, 800);
-  withTimeout(Promise.resolve(api.stop?.({}) as any))
+  withTimeout(Promise.resolve(api.stop?.() as any))
     .then(r => log(r ?? 'ok'))
     .catch((e:any) => log(e?.message || e))
     .finally(() => { clearTimeout(lt); stopLoading.value = false; });

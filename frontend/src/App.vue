@@ -9,6 +9,7 @@
         <span class="badge" :class="rpcSourceClass">RPC: {{ rpcSource }}</span>
         <span v-if="bridge.rx > 0" class="badge ok">bridge_rx: {{ bridge.rx }}</span>
         <span v-if="bridge.err > 0" class="badge warn">bridge_err: {{ bridge.err }}</span>
+        <span v-if="state.phase" class="badge" :class="stateBadgeClass">state: {{ state.phase }}</span>
       </div>
       <div v-if="session.error" class="error">会话失败：{{ session.error }}</div>
       <div v-else-if="isStale" class="warn">未收到 metrics，请确认后端是否运行，或稍候片刻…</div>
@@ -37,6 +38,7 @@ import { ensureEventBridge } from './api/rpc.tauri';
 const session = useSessionStore();
 const metrics = useMetricsStore();
 const bridge = ref({ rx: 0, err: 0 });
+const state = ref<{ phase: string | null; ts: number | null }>({ phase: null, ts: null });
 
 onMounted(async () => {
   // 统一初始化顺序：先探测并尝试启动事件桥 -> 再进行会话与 metrics 订阅
@@ -65,6 +67,13 @@ onMounted(async () => {
         const w: any = typeof window !== 'undefined' ? window : {};
         if (!w.__METRICS_READY) w.__METRICS_READY = true;
       });
+      // 监听 state 事件，展示生命周期状态角标
+      void listen('state', (e: any) => {
+        const p = e?.payload as any;
+        if (!p) return;
+        state.value.phase = p.phase ?? null;
+        state.value.ts = typeof p.ts === 'number' ? p.ts : Date.now();
+      });
     } catch { /* ignore */ }
   } catch {
     w.__IS_TAURI__ = false;
@@ -91,6 +100,14 @@ onMounted(() => { t = setInterval(() => tick.value++, 1000); });
 onUnmounted(() => { if (t) clearInterval(t); });
 const lastDeltaSec = computed(() => metrics.lastAt ? Math.floor((Date.now() - metrics.lastAt) / 1000) : -1);
 const isStale = computed(() => lastDeltaSec.value < 0 || lastDeltaSec.value > 5);
+
+// state 角标新鲜度（>10s 视为过期，黄色提示）
+const stateBadgeClass = computed(() => {
+  const ts = state.value.ts ?? 0;
+  if (!ts) return 'warn';
+  const age = Date.now() - ts;
+  return age <= 10_000 ? 'ok' : 'warn';
+});
 
 // RPC 来源徽标（mock / tauri）
 const rpcSource = computed(() => {

@@ -30,7 +30,8 @@ export const tauriRpc = {
   async query_history(p: QueryHistoryParams): Promise<QueryHistoryResult> { return rpcCall<QueryHistoryResult>('query_history', p); },
   async set_config(p: SetConfigParams) { return rpcCall<any>('set_config', p); },
   async start(p?: StartParams) { return rpcCall<any>('start', p ?? {}); },
-  async stop(p: StopParams = {}) { return rpcCall<any>('stop', p); },
+  // stop 为后端无参方法，此处必须不传递 params，否则会被识别为 stop/1
+  async stop() { return rpcCall<any>('stop'); },
   async burst_subscribe(p: BurstSubscribeParams) { return rpcCall<any>('burst_subscribe', p); },
   async subscribe_metrics(enable: boolean = true) { return rpcCall<any>('subscribe_metrics', { enable }); },
   async bridge_subscribe(enable: boolean = true) {
