@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Diagnostics;
 using SystemMonitor.Service.Services;
 using SystemMonitor.Service.Services.Samplers;
 using Xunit;

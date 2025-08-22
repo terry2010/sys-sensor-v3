@@ -19,6 +19,7 @@
     <section class="cards">
       <CpuPanel />
       <MemoryPanel />
+      <DiskPanel />
       <div class="card" v-if="Array.isArray(sensors) && sensors.length">
         <h3>Hardware Sensors (LibreHardwareMonitor)</h3>
         <div class="sub">total: {{ sensors.length }}</div>
@@ -72,6 +73,7 @@ import { onMounted, onUnmounted, ref, computed } from 'vue';
 import SnapshotPanel from './components/SnapshotPanel.vue';
 import CpuPanel from './components/CpuPanel.vue';
 import MemoryPanel from './components/MemoryPanel.vue';
+import DiskPanel from './components/DiskPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
@@ -171,7 +173,7 @@ onMounted(async () => {
   setTimeout(async () => {
     try {
       console.log('[App] 尝试自动启动采集模块...');
-      const result = await service.start?.({ modules: ['cpu', 'mem'] });
+      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk'] });
       console.log('[App] 自动启动采集模块成功:', result);
     } catch (e) {
       console.error('[App] 自动启动采集模块失败:', e);

@@ -191,6 +191,10 @@
               "target": "Package",
               "version": "[2.22.11, )"
             },
+            "System.Diagnostics.PerformanceCounter": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "coverlet.collector": {
               "target": "Package",
               "version": "[6.0.0, )"

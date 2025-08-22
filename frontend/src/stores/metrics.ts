@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { service } from '../api/service';
+import type { SnapshotResult } from '../api/dto';
 
-export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total_mb: number; used_mb: number } };
+export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total_mb: number; used_mb: number }; disk?: SnapshotResult['disk'] };
 
 let started = false;
 

@@ -12,6 +12,7 @@
           "Microsoft.NET.Test.Sdk": "17.8.0",
           "Nerdbank.Streams": "2.12.90",
           "StreamJsonRpc": "2.22.11",
+          "System.Diagnostics.PerformanceCounter": "9.0.0",
           "SystemMonitor.Service": "1.0.0",
           "coverlet.collector": "6.0.0",
           "xunit": "2.5.3",
