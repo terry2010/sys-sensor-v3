@@ -38,6 +38,7 @@ export type SnapshotResult = {
     read_bytes_per_sec: number;
     write_bytes_per_sec: number;
     queue_length: number;
+    totals_source?: 'per_volume' | 'per_physical' | 'totals_raw';
     totals?: DiskIOTotals;
     per_physical_disk_io?: DiskPerPhysical[];
     per_volume_io?: DiskPerVolumeIO[];

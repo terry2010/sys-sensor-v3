@@ -59,15 +59,18 @@ namespace SystemMonitor.Service.Services.Collectors
 
                 long finalRead = totalsRead;
                 long finalWrite = totalsWrite;
+                string totalsSource = "totals_raw";
                 if (hasVol)
                 {
                     finalRead = sumVolRead;
                     finalWrite = sumVolWrite;
+                    totalsSource = "per_volume";
                 }
                 else if (hasInst)
                 {
                     finalRead = sumInstRead;
                     finalWrite = sumInstWrite;
+                    totalsSource = "per_physical";
                 }
 
                 // 生成对外 totals（保持字段齐全）
@@ -90,6 +93,7 @@ namespace SystemMonitor.Service.Services.Collectors
                     read_bytes_per_sec = finalRead,
                     write_bytes_per_sec = finalWrite,
                     queue_length = (double)basic.GetType().GetProperty("queue_length")!.GetValue(basic)!,
+                    totals_source = totalsSource,
                     // 扩展输出
                     totals,
                     per_physical_disk_io = perInst,

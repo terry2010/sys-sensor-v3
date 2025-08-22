@@ -13,6 +13,7 @@
             <div><label>Queue</label><span>{{ fmtNum(disk.totals?.queue_length ?? disk.queue_length) }}</span></div>
             <div><label>Avg Read Lat</label><span>{{ fmtMs(disk.totals?.avg_read_latency_ms) }}</span></div>
             <div><label>Avg Write Lat</label><span>{{ fmtMs(disk.totals?.avg_write_latency_ms) }}</span></div>
+            <div><label>Source</label><span>{{ disk.totals_source ?? 'unknown' }}</span></div>
           </div>
         </div>
         <div>
