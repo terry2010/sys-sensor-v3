@@ -12,7 +12,7 @@ namespace SystemMonitor.Service.Services
         int? CpuFrequencyBusMhz();
         int? CpuFrequencyMinMhz();
         double? CpuSensorsRead();
-        object TopProcSamplerRead(int topN);
+        object[] TopProcSamplerRead(int topN);
         (double? ctxSw, double? syscalls, double? intr) KernelActivitySamplerRead();
         (double l1, double l5, double l15) CpuLoadAveragesUpdate(double usagePercent);
     }

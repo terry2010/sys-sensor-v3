@@ -92,3 +92,29 @@ Phase 5（一致性与回归）
 ## 执行计划
 - 立即开始 Phase 1，并在每个 Phase 完成后产出简要变更摘要与测试结果。
 - 所有重构过程中不修改对外 JSON-RPC 契约；若需新增字段/模块，将在独立 PR/提交中进行。
+
+## 当前进度（2025-08-22 20:56）
+- 【p1】已完成：精简 `RpcHostedService`（仅保留宿主/管道/会话 wiring），移除重复 DTO/Helper/Interop，新增启动阶段日志；解决编译与结构完整性问题。
+- 【p2】已完成：`Samplers/*` 与 `Hardware/LhmSensors.cs` 已抽离；补强 `ISamplersProvider.TopProcSamplerRead()` 返回类型为 `object[]`，提升类型一致性与序列化清晰度；保持 Lazy 单例与节流逻辑不变。
+- 【p3】已完成：`Collectors/*` 与 `MetricsRegistry.cs` 已落地，集中注册替代旧静态集合，提供只读访问。
+- 【p4】已完成：`RpcServer.*` 已拆分为多个分部类文件，`RpcHostedService` 仅保留宿主/管道/会话 wiring 与会话生命周期管理。
+- 【p5】已完成：统一日志关键字与错误码，修复 `query_history` 中 `memory` 字段空值判定，补充 `hello:` 入口日志；端到端与契约测试全部通过。
+
+## 日志关键字段对齐清单（Phase 5）
+- conn_id：连接标识（命名管道会话），来源 `RpcHostedService.HandleClientAsync()`。
+- session_id：握手完成后的会话标识，来源 `RpcServer.hello()` 返回体。
+- req：RPC 方法名或通知名，统一小写，例如 `hello`、`snapshot`、`notify.metrics`。
+- phase：启动阶段与处理阶段标注，例如 `startup:history_store`、`startup:pipe_ready`、`accept`、`dispose`。
+- interval_ms：推流/采样/聚合周期毫秒数（存在即记录）。
+- expires_at：窗口抑制/订阅到期时间（存在即记录）。
+- modules：启动/停止模块列表（如 `["cpu","memory"]`）。
+- count：批量项数量（如历史查询返回条数、推送数组大小）。
+- ts/seq：UTC 毫秒时间戳、推送序列号（桥接预热/推送路径记录）。
+
+## DoD（完成定义，Phase 5）
+- 所有端到端与契约测试通过（含 `hello`、`snapshot`、`query_history`、metrics push）。
+- JSON 命名策略一致：服务端与测试均为 `SnakeCaseLower`；新增/返回对象均为 snake_case。
+- `hello()` 必定产生日志，包含关键字 `hello:` 与结构化字段（app、proto、caps、conn）。
+- `query_history` 返回 `memory` 字段时，仅在 `total` 与 `used` 同时存在才返回对象；否则返回 `null`，避免序列化异常。
+- 启动阶段日志完整：`startup:history_store` → `startup:pipe_ready` → `accept` → `dispose` 等关键节点可检索。
+- 桥接连接（`metrics_stream` 能力）在握手后触发预热通知（含 `ts`/`seq`），并默认启动 `cpu/mem` 模块。

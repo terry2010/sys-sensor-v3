@@ -11,7 +11,7 @@ namespace SystemMonitor.Service.Services
         public int? CpuFrequencyBusMhz() => CpuFrequency.Instance.ReadBusMhz();
         public int? CpuFrequencyMinMhz() => CpuFrequency.Instance.ReadMinMhz();
         public double? CpuSensorsRead() => CpuSensors.Instance.Read();
-        public object TopProcSamplerRead(int topN) => TopProcSampler.Instance.Read(topN);
+        public object[] TopProcSamplerRead(int topN) => TopProcSampler.Instance.Read(topN);
         public (double? ctxSw, double? syscalls, double? intr) KernelActivitySamplerRead() => KernelActivitySampler.Instance.Read();
         public (double l1, double l5, double l15) CpuLoadAveragesUpdate(double usagePercent) => CpuLoadAverages.Instance.Update(usagePercent);
     }
