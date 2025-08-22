@@ -172,6 +172,10 @@ namespace SystemMonitor.Service.Services.Collectors
                     var physList = physOut as IEnumerable<object>;
                     if (physList != null)
                     {
+                        // 环境变量开关
+                        bool disableNative = string.Equals(System.Environment.GetEnvironmentVariable("SYS_SENSOR_DISABLE_NATIVE_SMART"), "1", System.StringComparison.OrdinalIgnoreCase);
+                        bool smartDebug = string.Equals(System.Environment.GetEnvironmentVariable("SYS_SENSOR_SMART_DEBUG"), "1", System.StringComparison.OrdinalIgnoreCase);
+
                         var lhm = SensorsProvider.Current.DumpAll();
                         // 将 Storage 硬件的传感器按硬件名分组，便于按型号模糊匹配后查找具体指标
                         var storageGroups = lhm
@@ -208,20 +212,62 @@ namespace SystemMonitor.Service.Services.Collectors
                         {
                             var id = GetStringN(p, "id") ?? string.Empty;
                             var model = GetStringN(p, "model") ?? string.Empty;
+                            var serial = GetStringN(p, "serial") ?? string.Empty;
                             var iface = GetStringN(p, "interface_type") ?? GetStringN(p, "bus_type") ?? string.Empty;
                             string? matchedHw = null;
                             List<SystemMonitor.Service.Services.LhmSensorDto>? sensors = null;
-                            if (!string.IsNullOrWhiteSpace(model))
+                            // 1) 优先用序列号匹配（部分厂牌 LHM 硬件名中包含序列号）
+                            if (!string.IsNullOrWhiteSpace(serial))
+                            {
+                                var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(serial, System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
+                            }
+                            // 2) 其次用型号匹配
+                            if (sensors == null && !string.IsNullOrWhiteSpace(model))
                             {
                                 // 找到第一个硬件名包含型号字符串的组
                                 var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(model, System.StringComparison.OrdinalIgnoreCase) >= 0);
                                 if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
                             }
-                            // 若按型号没匹配到，尝试用 id 进行兜底（例如包含 PhysicalDriveN / NVMe 等）
+                            // 3) 兜底：用 id（例如包含 PhysicalDriveN / NVMe 等）
                             if (sensors == null && !string.IsNullOrWhiteSpace(id))
                             {
                                 var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(id, System.StringComparison.OrdinalIgnoreCase) >= 0);
                                 if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
+                            }
+
+                            // 若仍未匹配，且判定为 NVMe，尝试通过 Identify 获取 SN/MN 再匹配
+                            int? idxForNvme = TryExtractIndex(id);
+                            if (sensors == null && !string.IsNullOrWhiteSpace(iface) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0 && idxForNvme.HasValue)
+                            {
+                                try
+                                {
+                                    var idf = StorageIoctlHelper.TryReadNvmeIdentifyStrings(idxForNvme.Value);
+                                    if (idf.HasValue)
+                                    {
+                                        var (sn2, mn2, fr2) = idf.Value;
+                                        if (!string.IsNullOrWhiteSpace(sn2))
+                                        {
+                                            var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(sn2, System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                            if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
+                                        }
+                                        if (sensors == null && !string.IsNullOrWhiteSpace(mn2))
+                                        {
+                                            var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(mn2, System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                            if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
+                                        }
+                                        if (smartDebug)
+                                        {
+                                            try { Serilog.Log.Information("[SMART] NVMe Identify idx={Idx} SN={SN} MN={MN} FR={FR} matchedHw={Matched}", idxForNvme, sn2, mn2, fr2, matchedHw); } catch { }
+                                        }
+                                    }
+                                }
+                                catch { }
+                            }
+
+                            if (smartDebug)
+                            {
+                                try { Serilog.Log.Information("[SMART] match disk id={Id} iface={Iface} serial={Serial} model={Model} => matchedHw={Matched}", id, iface, serial, model, matchedHw); } catch { }
                             }
 
                             double? temperature = null;
@@ -237,11 +283,11 @@ namespace SystemMonitor.Service.Services.Collectors
                             double? throttleEvents = null;
                             string? overall = null;
 
-                            // Phase B：原生 IOCTL 优先
+                            // Phase B：原生 IOCTL 优先（可通过环境变量禁用）
                             try
                             {
                                 var idx = TryExtractIndex(id);
-                                if (idx.HasValue)
+                                if (!disableNative && idx.HasValue)
                                 {
                                     StorageIoctlHelper.SmartSummary? native = null;
                                     if (!string.IsNullOrWhiteSpace(iface) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0)
@@ -262,6 +308,14 @@ namespace SystemMonitor.Service.Services.Collectors
                                         ctrlBusyMin ??= native.nvme_controller_busy_time_min;
                                         unsafeShutdowns ??= native.unsafe_shutdowns;
                                         throttleEvents ??= native.thermal_throttle_events;
+                                        if (smartDebug)
+                                        {
+                                            try { Serilog.Log.Information("[SMART] native ok disk id={Id} iface={Iface} idx={Idx} temp={T} used%={U} readGB={R} writeGB={W}", id, iface, idx, temperature, nvmePctUsed, dataRead, dataWritten); } catch { }
+                                        }
+                                    }
+                                    else if (smartDebug)
+                                    {
+                                        try { Serilog.Log.Information("[SMART] native fail disk id={Id} iface={Iface} idx={Idx}", id, iface, idx); } catch { }
                                     }
                                 }
                             }

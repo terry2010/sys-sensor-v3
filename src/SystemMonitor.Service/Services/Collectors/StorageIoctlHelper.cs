@@ -34,7 +34,6 @@ namespace SystemMonitor.Service.Services.Collectors
                     System.Diagnostics.Trace.WriteLine($"[StorageIoctlHelper] USB speed unknown by heuristic. model={model} pnp={pnp}");
                     return null;
                 }
-
                 // 其余总线：阶段A返回 null，占位（后续阶段B实现）
                 return null;
             }
@@ -42,6 +41,78 @@ namespace SystemMonitor.Service.Services.Collectors
             {
                 return null;
             }
+        }
+
+        // 读取 NVMe Identify（Controller）字符串（序列号/型号/固件），失败返回 null
+        public static (string serial, string model, string firmware)? TryReadNvmeIdentifyStrings(int physicalDriveIndex)
+        {
+            try
+            {
+                using var h = OpenPhysicalDrive(physicalDriveIndex);
+                var query = new STORAGE_PROPERTY_QUERY
+                {
+                    PropertyId = STORAGE_PROPERTY_ID.StorageDeviceProtocolSpecificProperty,
+                    QueryType = STORAGE_QUERY_TYPE.PropertyStandardQuery
+                };
+                var proto = new STORAGE_PROTOCOL_SPECIFIC_DATA
+                {
+                    ProtocolType = STORAGE_PROTOCOL_TYPE.ProtocolTypeNvme,
+                    DataType = (uint)STORAGE_PROTOCOL_NVME_DATA_TYPE.NVMeDataTypeIdentify,
+                    ProtocolDataRequestValue = 0x02, // CNS = 0x02 -> Identify Controller
+                    ProtocolDataRequestSubValue = 0, // NamespaceId not used for controller
+                    ProtocolDataOffset = (uint)Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>(),
+                    ProtocolDataLength = 4096
+                };
+
+                int inSize = Marshal.SizeOf<STORAGE_PROPERTY_QUERY>() + Marshal.SizeOf<STORAGE_PROTOCOL_SPECIFIC_DATA>();
+                int outSize = Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>() + (int)proto.ProtocolDataLength;
+
+                var inBuf = Marshal.AllocHGlobal(inSize);
+                var outBuf = Marshal.AllocHGlobal(outSize);
+                try
+                {
+                    Marshal.StructureToPtr(query, inBuf, false);
+                    Marshal.StructureToPtr(proto, (IntPtr)(inBuf.ToInt64() + Marshal.SizeOf<STORAGE_PROPERTY_QUERY>()), false);
+
+                    if (!DeviceIoControl(h,
+                        IOCTL_STORAGE_QUERY_PROPERTY,
+                        inBuf, (uint)inSize,
+                        outBuf, (uint)outSize,
+                        out _,
+                        IntPtr.Zero))
+                    {
+                        return null;
+                    }
+
+                    var desc = Marshal.PtrToStructure<STORAGE_PROTOCOL_DATA_DESCRIPTOR>(outBuf);
+                    var sp = desc.ProtocolSpecific;
+                    if (sp.ProtocolDataLength < 512 || sp.ProtocolDataOffset == 0)
+                        return null;
+
+                    var dataPtr = (IntPtr)(outBuf.ToInt64() + (int)sp.ProtocolDataOffset);
+                    // NVMe Identify Controller 字段（ASCII, space-padded）：
+                    // SN @ 4..23 (20 bytes), MN @ 24..63 (40 bytes), FR @ 64..71 (8 bytes)
+                    static string ReadAsciiTrim(IntPtr basePtr, int offset, int len)
+                    {
+                        var bytes = new byte[len];
+                        Marshal.Copy((IntPtr)(basePtr.ToInt64() + offset), bytes, 0, len);
+                        var s = System.Text.Encoding.ASCII.GetString(bytes);
+                        return s.Trim('\0', ' ');
+                    }
+                    string sn = ReadAsciiTrim(dataPtr, 4, 20);
+                    string mn = ReadAsciiTrim(dataPtr, 24, 40);
+                    string fr = ReadAsciiTrim(dataPtr, 64, 8);
+                    if (string.IsNullOrWhiteSpace(sn) && string.IsNullOrWhiteSpace(mn) && string.IsNullOrWhiteSpace(fr))
+                        return null;
+                    return (sn, mn, fr);
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(inBuf);
+                    Marshal.FreeHGlobal(outBuf);
+                }
+            }
+            catch { return null; }
         }
 
         // 阶段B：原生 SMART 读取占位（后续填充 IOCTL 逻辑）
