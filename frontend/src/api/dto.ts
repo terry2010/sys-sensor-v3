@@ -28,6 +28,23 @@ export type DiskVolumeInfo = {
 export type DiskPhysicalInfo = {
   id: string; model?: string | null; serial?: string | null; firmware?: string | null; size_total_bytes?: number | null;
   partitions?: number | null; media_type?: string | null; spindle_speed_rpm?: number | null; interface_type?: string | null; trim_supported?: boolean | null;
+  bus_type?: string | null; negotiated_link_speed?: string | null; is_removable?: boolean | null; eject_capable?: boolean | null;
+};
+
+export type SmartHealth = {
+  disk_id: string;
+  overall_health?: string | null;
+  temperature_c?: number | null;
+  power_on_hours?: number | null;
+  reallocated_sector_count?: number | null;
+  pending_sector_count?: number | null;
+  udma_crc_error_count?: number | null;
+  nvme_percentage_used?: number | null;
+  nvme_data_units_read?: number | null;
+  nvme_data_units_written?: number | null;
+  nvme_controller_busy_time_min?: number | null;
+  unsafe_shutdowns?: number | null;
+  thermal_throttle_events?: number | null;
 };
 
 export type SnapshotResult = {
@@ -46,6 +63,7 @@ export type SnapshotResult = {
     vm_swapfiles_bytes?: number | null;
     per_volume?: DiskVolumeInfo[];
     per_physical_disk?: DiskPhysicalInfo[];
+    smart_health?: SmartHealth[];
   };
 };
 

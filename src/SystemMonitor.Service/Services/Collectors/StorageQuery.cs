@@ -29,6 +29,32 @@ namespace SystemMonitor.Service.Services.Collectors
             public double? free_percent { get; set; }
         }
 
+        // 从诸如 \\ \\ . \\ PHYSICALDRIVE0 或 \\ . \PHYSICALDRIVE12 的字符串中提取数字索引
+        private static int? ExtractPhysicalDriveIndex(string? deviceId)
+        {
+            if (string.IsNullOrWhiteSpace(deviceId)) return null;
+            try
+            {
+                // 常见格式："\\\\.\\PHYSICALDRIVE0" 或 "\\\\?\\IDE#..."（后者无索引）
+                var s = deviceId.ToUpperInvariant();
+                const string key = "PHYSICALDRIVE";
+                var p = s.LastIndexOf(key, StringComparison.Ordinal);
+                if (p >= 0)
+                {
+                    var start = p + key.Length;
+                    var i = start;
+                    while (i < s.Length && char.IsDigit(s[i])) i++;
+                    if (i > start)
+                    {
+                        if (int.TryParse(s.Substring(start, i - start), NumberStyles.Integer, CultureInfo.InvariantCulture, out var idx))
+                            return idx;
+                    }
+                }
+            }
+            catch { }
+            return null;
+        }
+
         // 统计分页/休眠文件大小总和（单位：字节），失败时返回 null
         public long? ReadVmSwapfilesBytes()
         {
@@ -102,12 +128,45 @@ namespace SystemMonitor.Service.Services.Collectors
             public int? spindle_speed_rpm { get; set; }
             public string? interface_type { get; set; } // SATA/NVMe/USB/...
             public bool? trim_supported { get; set; }
+            public string? bus_type { get; set; } // duplicate of interface_type for schema alignment
+            public string? negotiated_link_speed { get; set; } // e.g., "PCIe Gen4 x4" / "6 Gbps" (not implemented -> null)
+            public bool? is_removable { get; set; }
+            public bool? eject_capable { get; set; }
         }
 
         public (IReadOnlyList<VolumeInfo> volumes, (long? total, long? used, long? free) totals) ReadVolumes()
         {
             var list = new List<VolumeInfo>();
             long total = 0, used = 0, free = 0;
+            // 预读取 BitLocker 状态映射（盘符 -> on/off/unknown）
+            var bitlocker = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                // 尝试连接 BitLocker WMI 命名空间
+                var scope = new ManagementScope(@"\\.\ROOT\CIMV2\Security\MicrosoftVolumeEncryption");
+                scope.Connect();
+                using var blSearcher = new ManagementObjectSearcher(scope, new ObjectQuery("SELECT ProtectionStatus, DriveLetter, MountPoint FROM Win32_EncryptableVolume"));
+                foreach (ManagementObject mo in blSearcher.Get())
+                {
+                    string? drive = Convert.ToString(mo["DriveLetter"], CultureInfo.InvariantCulture);
+                    if (string.IsNullOrWhiteSpace(drive)) drive = Convert.ToString(mo["MountPoint"], CultureInfo.InvariantCulture);
+                    // 统一为如 "C:" 的形式
+                    if (!string.IsNullOrWhiteSpace(drive))
+                    {
+                        var key = drive!;
+                        try
+                        {
+                            while (!string.IsNullOrEmpty(key) && (key.EndsWith("\\") || key.EndsWith("/")))
+                                key = key.Substring(0, key.Length - 1);
+                        }
+                        catch { }
+                        int? ps = TryInt32(mo["ProtectionStatus"]); // 0 Unknown, 1 Off, 2 On
+                        string val = ps == 2 ? "on" : ps == 1 ? "off" : "unknown";
+                        bitlocker[key] = val;
+                    }
+                }
+            }
+            catch { }
             try
             {
                 using var searcher = new ManagementObjectSearcher("SELECT DeviceID, FileSystem, Size, FreeSpace, DriveType, Access FROM Win32_LogicalDisk");
@@ -124,6 +183,12 @@ namespace SystemMonitor.Service.Services.Collectors
                     // Access: 0 (Unknown), 1 (Readable), 2 (Writable), 3 (Read/Write). Some systems may not populate.
                     int? access = TryInt32(mo["Access"]);
                     bool? readOnly = access.HasValue ? access.Value == 1 : (bool?)null;
+                    string? bl = null;
+                    try
+                    {
+                        if (bitlocker.TryGetValue(id, out var s)) bl = s;
+                    }
+                    catch { }
 
                     var vi = new VolumeInfo
                     {
@@ -135,7 +200,7 @@ namespace SystemMonitor.Service.Services.Collectors
                         size_free_bytes = freeBytes,
                         read_only = readOnly,
                         is_removable = isRemovable,
-                        bitlocker_encryption = null
+                        bitlocker_encryption = bl
                     };
                     if (size.HasValue && size.Value > 0 && freeBytes.HasValue)
                     {
@@ -160,17 +225,20 @@ namespace SystemMonitor.Service.Services.Collectors
             var list = new List<PhysicalDiskInfo>();
             try
             {
-                using var searcher = new ManagementObjectSearcher("SELECT DeviceID, Index, Model, SerialNumber, FirmwareRevision, Size, Partitions, InterfaceType, Capabilities, CapabilitiesDescriptions, MediaType FROM Win32_DiskDrive");
+                using var searcher = new ManagementObjectSearcher("SELECT DeviceID, Index, Model, SerialNumber, FirmwareRevision, Size, Partitions, InterfaceType, Capabilities, CapabilitiesDescriptions, MediaType, PNPDeviceID FROM Win32_DiskDrive");
                 foreach (ManagementObject mo in searcher.Get())
                 {
-                    string id = Convert.ToString(mo["DeviceID"], CultureInfo.InvariantCulture) ?? string.Empty; // e.g., \\.-\PHYSICALDRIVE0
+                    string id = Convert.ToString(mo["DeviceID"], CultureInfo.InvariantCulture) ?? string.Empty; // e.g., \\.\PHYSICALDRIVE0
                     string? model = Convert.ToString(mo["Model"], CultureInfo.InvariantCulture);
+                    string? pnp = Convert.ToString(mo["PNPDeviceID"], CultureInfo.InvariantCulture);
                     string? serial = Convert.ToString(mo["SerialNumber"], CultureInfo.InvariantCulture);
                     string? fw = Convert.ToString(mo["FirmwareRevision"], CultureInfo.InvariantCulture);
                     long? size = TryInt64(mo["Size"]);
                     int? parts = TryInt32(mo["Partitions"]);
                     string? ifType = Convert.ToString(mo["InterfaceType"], CultureInfo.InvariantCulture);
                     string? mediaType = Convert.ToString(mo["MediaType"], CultureInfo.InvariantCulture);
+                    string[]? capsDesc = null;
+                    try { capsDesc = mo["CapabilitiesDescriptions"] as string[]; } catch { }
 
                     bool? trim = null;
                     try
@@ -207,8 +275,50 @@ namespace SystemMonitor.Service.Services.Collectors
                         else if (s.Contains("USB")) iface = "usb";
                         else if (s.Contains("SCSI") || s.Contains("SAS")) iface = "scsi";
                     }
+                    // 常见场景：UASP 设备在 InterfaceType 显示为 SCSI，但 PNPDeviceID 含 USBSTOR
+                    try
+                    {
+                        var pnpUpper = (pnp ?? string.Empty).ToUpperInvariant();
+                        var modelUpper = (model ?? string.Empty).ToUpperInvariant();
+                        if (pnpUpper.Contains("USBSTOR") || pnpUpper.Contains("USB\\") || modelUpper.Contains("USB") || modelUpper.Contains("UASP"))
+                        {
+                            iface = "usb";
+                        }
+                    }
+                    catch { }
 
-                    list.Add(new PhysicalDiskInfo
+                    bool? removable = null;
+                    bool? eject = null;
+                    try
+                    {
+                        if (capsDesc != null && capsDesc.Length > 0)
+                        {
+                            var anyRem = capsDesc.Any(x => !string.IsNullOrEmpty(x) && x!.IndexOf("Removable", StringComparison.OrdinalIgnoreCase) >= 0);
+                            var anyEject = capsDesc.Any(x => !string.IsNullOrEmpty(x) && x!.IndexOf("Eject", StringComparison.OrdinalIgnoreCase) >= 0);
+                            if (anyRem) removable = true;
+                            if (anyEject) eject = true;
+                        }
+                    }
+                    catch { }
+                    // 若 WMI 未提供明确能力或读取过程中异常，但判定为 USB（或 PNP/Model 显示 USB/UASP），则按启发式默认可移除/可弹出
+                    if (string.Equals(iface, "usb", StringComparison.OrdinalIgnoreCase) || ((pnp ?? string.Empty).ToUpperInvariant().Contains("USB") || (model ?? string.Empty).ToUpperInvariant().Contains("USB") || (model ?? string.Empty).ToUpperInvariant().Contains("UASP")))
+                    {
+                        if (!removable.HasValue) removable = true;
+                        if (!eject.HasValue) eject = true;
+                    }
+
+                    string? link = null;
+                    try
+                    {
+                        var idx = ExtractPhysicalDriveIndex(id);
+                        if (idx.HasValue)
+                        {
+                            link = StorageIoctlHelper.TryGetNegotiatedLinkSpeed(idx.Value, iface, model, pnp);
+                        }
+                    }
+                    catch { }
+
+                    var item = new PhysicalDiskInfo
                     {
                         id = id,
                         model = model,
@@ -219,8 +329,14 @@ namespace SystemMonitor.Service.Services.Collectors
                         media_type = normMedia,
                         spindle_speed_rpm = rpm,
                         interface_type = iface,
-                        trim_supported = trim
-                    });
+                        trim_supported = trim,
+                        bus_type = iface,
+                        negotiated_link_speed = link,
+                        is_removable = removable,
+                        eject_capable = eject
+                    };
+                    try { LogDiag($"  WMI disk id={item.id}, model={item.model}, pnp={pnp}, iface={item.interface_type}, removable={item.is_removable}, eject={item.eject_capable}, link={item.negotiated_link_speed}"); } catch { }
+                    list.Add(item);
                 }
             }
             catch
@@ -301,6 +417,25 @@ namespace SystemMonitor.Service.Services.Collectors
                         }
                         catch { }
 
+                        string? link = null;
+                        try
+                        {
+                            // MSFT_PhysicalDisk.DeviceId 通常是数字索引
+                            if (int.TryParse(id ?? string.Empty, NumberStyles.Integer, CultureInfo.InvariantCulture, out var idxNum))
+                            {
+                                link = StorageIoctlHelper.TryGetNegotiatedLinkSpeed(idxNum, iface);
+                            }
+                        }
+                        catch { }
+
+                        bool? removable = null;
+                        bool? eject = null;
+                        if (string.Equals(iface, "usb", StringComparison.OrdinalIgnoreCase))
+                        {
+                            removable = true;
+                            eject = true;
+                        }
+
                         list.Add(new PhysicalDiskInfo
                         {
                             id = id ?? Guid.NewGuid().ToString("N"),
@@ -312,7 +447,11 @@ namespace SystemMonitor.Service.Services.Collectors
                             media_type = media,
                             spindle_speed_rpm = rpm,
                             interface_type = iface,
-                            trim_supported = null
+                            trim_supported = null,
+                            bus_type = iface,
+                            negotiated_link_speed = link,
+                            is_removable = removable,
+                            eject_capable = eject
                         });
                     }
                 }
@@ -381,7 +520,7 @@ namespace SystemMonitor.Service.Services.Collectors
             }
             if (list.Count == 0)
             {
-                json = RunPwshJson("Get-CimInstance Win32_DiskDrive | Select-Object DeviceID,Model,SerialNumber,FirmwareRevision,Size,Partitions,InterfaceType,MediaType");
+                json = RunPwshJson("Get-CimInstance Win32_DiskDrive | Select-Object DeviceID,Model,SerialNumber,FirmwareRevision,Size,Partitions,InterfaceType,MediaType,CapabilitiesDescriptions,PNPDeviceID");
                 if (!string.IsNullOrWhiteSpace(json))
                 {
                     try { list.AddRange(ParseWin32DiskDriveJson(json)); } catch { }
@@ -449,6 +588,24 @@ namespace SystemMonitor.Service.Services.Collectors
                 string? media = mediaNum == 4 ? "ssd" : mediaNum == 3 ? "hdd" : null;
                 string? iface = busNum switch { 17 => "nvme", 11 => "sata", 10 => "scsi", 7 => "usb", 1 => "scsi", _ => null };
 
+                string? link = null;
+                try
+                {
+                    if (int.TryParse(id ?? string.Empty, NumberStyles.Integer, CultureInfo.InvariantCulture, out var idxNum))
+                    {
+                        link = StorageIoctlHelper.TryGetNegotiatedLinkSpeed(idxNum, iface, model, null);
+                    }
+                }
+                catch { }
+
+                bool? removable = null;
+                bool? eject = null;
+                if (string.Equals(iface, "usb", StringComparison.OrdinalIgnoreCase))
+                {
+                    removable = true;
+                    eject = true;
+                }
+
                 list.Add(new PhysicalDiskInfo
                 {
                     id = id ?? (model ?? "disk"),
@@ -460,7 +617,11 @@ namespace SystemMonitor.Service.Services.Collectors
                     media_type = media,
                     spindle_speed_rpm = rpm,
                     interface_type = iface,
-                    trim_supported = null
+                    trim_supported = null,
+                    bus_type = iface,
+                    negotiated_link_speed = link,
+                    is_removable = removable,
+                    eject_capable = eject
                 });
             }
             return list;
@@ -488,6 +649,8 @@ namespace SystemMonitor.Service.Services.Collectors
                 int? parts = el.TryGetProperty("Partitions", out var pParts) && pParts.TryGetInt32(out var pv) ? pv : (int?)null;
                 string? ifType = el.TryGetProperty("InterfaceType", out var pIf) ? pIf.ToString() : null;
                 string? mediaRaw = el.TryGetProperty("MediaType", out var pMt) ? pMt.ToString() : null;
+                string? pnp = el.TryGetProperty("PNPDeviceID", out var pPnp) ? pPnp.ToString() : null;
+                JsonElement capsEl;
 
                 string? iface = null;
                 if (!string.IsNullOrEmpty(ifType))
@@ -506,6 +669,54 @@ namespace SystemMonitor.Service.Services.Collectors
                     else if (mt.Contains("HDD") || mt.Contains("FIXED")) media = "hdd";
                 }
 
+                bool? removable = null;
+                bool? eject = null;
+                try
+                {
+                    if (el.TryGetProperty("CapabilitiesDescriptions", out capsEl))
+                    {
+                        if (capsEl.ValueKind == JsonValueKind.Array)
+                        {
+                            foreach (var ce in capsEl.EnumerateArray())
+                            {
+                                if (ce.ValueKind == JsonValueKind.String)
+                                {
+                                    var s = ce.GetString();
+                                    if (!string.IsNullOrEmpty(s))
+                                    {
+                                        if (s.IndexOf("Removable", StringComparison.OrdinalIgnoreCase) >= 0) removable = true;
+                                        if (s.IndexOf("Eject", StringComparison.OrdinalIgnoreCase) >= 0) eject = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { }
+
+                // 若判定为 USB 或 PNP 显示 USBSTOR，则默认可移除/可弹出
+                try
+                {
+                    var pnpUpper = (pnp ?? string.Empty).ToUpperInvariant();
+                    if (string.Equals(iface, "usb", StringComparison.OrdinalIgnoreCase) || pnpUpper.Contains("USBSTOR"))
+                    {
+                        if (!removable.HasValue) removable = true;
+                        if (!eject.HasValue) eject = true;
+                    }
+                }
+                catch { }
+
+                string? link = null;
+                try
+                {
+                    var idx = ExtractPhysicalDriveIndex(id);
+                    if (idx.HasValue)
+                    {
+                        link = StorageIoctlHelper.TryGetNegotiatedLinkSpeed(idx.Value, iface, model, pnp);
+                    }
+                }
+                catch { }
+
                 list.Add(new PhysicalDiskInfo
                 {
                     id = id,
@@ -517,7 +728,11 @@ namespace SystemMonitor.Service.Services.Collectors
                     media_type = media,
                     spindle_speed_rpm = null,
                     interface_type = iface,
-                    trim_supported = null
+                    trim_supported = null,
+                    bus_type = iface,
+                    negotiated_link_speed = link,
+                    is_removable = removable,
+                    eject_capable = eject
                 });
             }
             return list;

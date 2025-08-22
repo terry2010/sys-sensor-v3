@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Collections.Generic;
+using SystemMonitor.Service.Services;
 namespace SystemMonitor.Service.Services.Collectors
 {
     internal sealed class DiskCollector : IMetricsCollector
@@ -150,11 +152,65 @@ namespace SystemMonitor.Service.Services.Collectors
                                     media_type = (string?)null,
                                     spindle_speed_rpm = (int?)null,
                                     interface_type = (string?)null,
-                                    trim_supported = (bool?)null
+                                    trim_supported = (bool?)null,
+                                    bus_type = (string?)null,
+                                    negotiated_link_speed = (string?)null,
+                                    is_removable = (bool?)null,
+                                    eject_capable = (bool?)null
                                 });
                             }
                         }
                         if (fallback.Count > 0) physOut = fallback;
+                    }
+                }
+                catch { }
+
+                // smart/温度：使用 LibreHardwareMonitor 作为回退，按 model 名称模糊匹配
+                object[]? smartHealth = null;
+                try
+                {
+                    var physList = physOut as IEnumerable<object>;
+                    if (physList != null)
+                    {
+                        var lhm = SensorsProvider.Current.DumpAll();
+                        var storageTemps = new List<(string hwName, double val)>();
+                        foreach (var s in lhm)
+                        {
+                            if (string.Equals(s.hw_type, "Storage", System.StringComparison.OrdinalIgnoreCase) &&
+                                string.Equals(s.sensor_type, "Temperature", System.StringComparison.OrdinalIgnoreCase) && s.value.HasValue)
+                            {
+                                storageTemps.Add((s.hw_name ?? string.Empty, s.value.Value));
+                            }
+                        }
+                        var outList = new List<object>();
+                        foreach (var p in physList)
+                        {
+                            var id = GetStringN(p, "id") ?? string.Empty;
+                            var model = GetStringN(p, "model");
+                            double? temp = null;
+                            if (!string.IsNullOrWhiteSpace(model))
+                            {
+                                var cand = storageTemps.FirstOrDefault(t => t.hwName?.IndexOf(model, System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                if (!string.IsNullOrEmpty(cand.hwName)) temp = cand.val;
+                            }
+                            outList.Add(new
+                            {
+                                disk_id = id,
+                                overall_health = (string?)null,
+                                temperature_c = temp,
+                                power_on_hours = (double?)null,
+                                reallocated_sector_count = (double?)null,
+                                pending_sector_count = (double?)null,
+                                udma_crc_error_count = (double?)null,
+                                nvme_percentage_used = (double?)null,
+                                nvme_data_units_read = (double?)null,
+                                nvme_data_units_written = (double?)null,
+                                nvme_controller_busy_time_min = (double?)null,
+                                unsafe_shutdowns = (double?)null,
+                                thermal_throttle_events = (double?)null
+                            });
+                        }
+                        if (outList.Count > 0) smartHealth = outList.ToArray();
                     }
                 }
                 catch { }
@@ -175,7 +231,8 @@ namespace SystemMonitor.Service.Services.Collectors
                     capacity_totals = new { total_bytes = capTotals.total, used_bytes = capTotals.used, free_bytes = capTotals.free },
                     vm_swapfiles_bytes = vmSwapBytes,
                     per_volume = vols,
-                    per_physical_disk = physOut
+                    per_physical_disk = physOut,
+                    smart_health = (object[]?)smartHealth
                 };
             }
             catch

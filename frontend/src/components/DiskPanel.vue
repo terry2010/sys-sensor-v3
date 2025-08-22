@@ -48,11 +48,28 @@
         </table>
       </details>
       <details open>
+        <summary>Health</summary>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Disk</th><th>Temp(C)</th><th>Health</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="h in (disk.smart_health ?? [])" :key="h.disk_id">
+              <td>{{ h.disk_id }}</td>
+              <td>{{ h.temperature_c ?? '-' }}</td>
+              <td>{{ h.overall_health ?? '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details open>
         <summary>Per Physical (Info)</summary>
         <table class="tbl">
           <thead>
             <tr>
-              <th>ID</th><th>Model</th><th>Serial</th><th>FW</th><th>Total</th><th>Media</th><th>Interface</th><th>RPM</th><th>TRIM</th>
+              <th>ID</th><th>Model</th><th>Serial</th><th>FW</th><th>Total</th><th>Media</th><th>Interface</th><th>Bus</th><th>RPM</th><th>TRIM</th><th>Removable</th><th>Eject</th><th>LinkSpeed</th>
             </tr>
           </thead>
           <tbody>
@@ -64,8 +81,12 @@
               <td>{{ fmtBytes(pi.size_total_bytes) }}</td>
               <td>{{ pi.media_type ?? '-' }}</td>
               <td>{{ pi.interface_type ?? '-' }}</td>
+              <td>{{ pi.bus_type ?? '-' }}</td>
               <td>{{ fmtNum(pi.spindle_speed_rpm) }}</td>
               <td>{{ pi.trim_supported === true ? 'Yes' : pi.trim_supported === false ? 'No' : '-' }}</td>
+              <td>{{ pi.is_removable === true ? 'Yes' : pi.is_removable === false ? 'No' : '-' }}</td>
+              <td>{{ pi.eject_capable === true ? 'Yes' : pi.eject_capable === false ? 'No' : '-' }}</td>
+              <td>{{ pi.negotiated_link_speed ?? '-' }}</td>
             </tr>
           </tbody>
         </table>
@@ -97,7 +118,7 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th>Mount</th><th>FS</th><th>Total</th><th>Used</th><th>Free</th><th>Free%</th><th>RO</th><th>Removable</th>
+              <th>Mount</th><th>FS</th><th>Total</th><th>Used</th><th>Free</th><th>Free%</th><th>RO</th><th>Removable</th><th>BitLocker</th>
             </tr>
           </thead>
           <tbody>
@@ -110,6 +131,7 @@
               <td>{{ fmtPct(vi.free_percent) }}</td>
               <td>{{ vi.read_only === true ? 'Yes' : vi.read_only === false ? 'No' : '-' }}</td>
               <td>{{ vi.is_removable === true ? 'Yes' : vi.is_removable === false ? 'No' : '-' }}</td>
+              <td>{{ vi.bitlocker_encryption ?? '-' }}</td>
             </tr>
           </tbody>
         </table>
