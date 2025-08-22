@@ -123,6 +123,12 @@
 - 在 `frontend/src/components/MemoryPanel.vue` 展示分组：容量/虚拟/缓存/交换/动态/压力。
 - Tauri 主进程开发期临时打印本模块字段，联调完成后注释。
 
+### 5.1 前端显示策略
+
+- 可选字段为 `null` 时显示“未启用/不支持”（例如 `compressed_bytes_mb`, `working_set_total_mb`）。
+- 字段为 `undefined` 或非数字（NaN/Infinity）时显示 `-`，并在调试台打印一次告警（仅开发模式）。
+- UI 可选隐藏为 `null` 的指标行以精简视图；当前实现为保留并以提示文案显示。
+
 ---
 
 ## 6. 工作流程（逐指标落实）

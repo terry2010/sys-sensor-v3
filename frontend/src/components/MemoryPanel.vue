@@ -43,9 +43,18 @@ const memJson = computed(() => {
   try { return JSON.stringify(mem.value || {}, null, 2); } catch { return '{}'; }
 });
 
-const fmtMb = (v: any) => typeof v === 'number' && isFinite(v) ? `${Math.round(v)} MB` : '-';
-const fmtPct = (v: any) => typeof v === 'number' && isFinite(v) ? `${v.toFixed(1)}%` : '-';
-const fmtNum = (v: any) => typeof v === 'number' && isFinite(v) ? v.toFixed(2) : '-';
+const fmtMb = (v: any) => {
+  if (v === null) return '未启用/不支持';
+  return typeof v === 'number' && isFinite(v) ? `${Math.round(v)} MB` : '-';
+};
+const fmtPct = (v: any) => {
+  if (v === null) return '未启用/不支持';
+  return typeof v === 'number' && isFinite(v) ? `${v.toFixed(1)}%` : '-';
+};
+const fmtNum = (v: any) => {
+  if (v === null) return '未启用/不支持';
+  return typeof v === 'number' && isFinite(v) ? v.toFixed(2) : '-';
+};
 const pressureClass = computed(() => {
   const lvl = String(mem.value?.memory_pressure_level || '').toLowerCase();
   return lvl === 'red' ? 'bad' : (lvl === 'yellow' ? 'warn' : 'ok');

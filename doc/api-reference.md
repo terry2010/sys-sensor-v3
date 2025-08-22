@@ -163,7 +163,7 @@
       "syscalls_per_sec": 450000.0,
       "interrupts_per_sec": 15000.0
     },
-    "memory": { "total": 16000, "used": 2048 }
+    "memory": { "total_mb": 16000, "used_mb": 2048 }
   },"id":6
 }
 ```
@@ -186,7 +186,7 @@
   "jsonrpc":"2.0","result": {
     "ok": true,
     "items": [
-      { "ts":1710000000, "cpu": { "usage_percent": 10.1 }, "memory": { "total": 16000, "used": 7650 } }
+      { "ts":1710000000, "cpu": { "usage_percent": 10.1 }, "memory": { "total_mb": 16000, "used_mb": 7650 } }
     ]
   },"id":7
 }
@@ -210,7 +210,7 @@
   - `items`：按时间升序数组。元素结构：
     - `ts`: number
     - `cpu?`: `{ usage_percent: number }`
-    - `memory?`: `{ total: number, used: number }`（单位 MB）
+    - `memory?`: `{ total_mb: number, used_mb: number }`（单位 MB）
 
 - 边界与回退
   - 若 SQLite 中窗口内无记录，服务端会回退到内存缓存或即时快照，通常至少返回 1 条，确保 `items.length >= 1`（视实现策略）。

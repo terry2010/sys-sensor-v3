@@ -355,16 +355,6 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                     Value::Array(arr) if arr.len() == 1 => arr[0].clone(),
                                     _ => raw_params,
                                 };
-                                // 临时内存指标日志，便于校验字段命名与取值范围
-                                if event == "metrics" {
-                                    if let Some(mem) = payload.get("memory") {
-                                        let total = mem.get("total_mb").and_then(|x| x.as_i64()).unwrap_or(-1);
-                                        let used = mem.get("used_mb").and_then(|x| x.as_i64()).unwrap_or(-1);
-                                        if total >= 0 && used >= 0 {
-                                            log_line("MEM", &format!("mem total_mb={} used_mb={} ts={}", total, used, now_millis()));
-                                        }
-                                    }
-                                }
                                 let _ = app.emit(event, payload);
                             }
                         } else {
