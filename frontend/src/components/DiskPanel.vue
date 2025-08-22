@@ -81,8 +81,8 @@
               <td>{{ fmtNum(h.pending_sector_count) }}</td>
               <td>{{ fmtNum(h.udma_crc_error_count) }}</td>
               <td>{{ fmtPct(h.nvme_percentage_used) }}</td>
-              <td>{{ fmtNum(h.nvme_data_units_read) }}</td>
-              <td>{{ fmtNum(h.nvme_data_units_written) }}</td>
+              <td>{{ fmtHealthDataUnits(h.nvme_data_units_read) }}</td>
+              <td>{{ fmtHealthDataUnits(h.nvme_data_units_written) }}</td>
               <td>{{ fmtNum(h.nvme_controller_busy_time_min) }}</td>
               <td>{{ fmtNum(h.unsafe_shutdowns) }}</td>
               <td>{{ fmtNum(h.thermal_throttle_events) }}</td>
@@ -199,6 +199,16 @@ const fmtBytes = (v: any) => {
   let val = n; let i= -1;
   do { val /= 1024; i++; } while (val >= 1024 && i < units.length-1);
   return `${val.toFixed(2)} ${units[i]}`;
+};
+// Health Data Units: LHM 多数以 GB/GiB 数值给出；若数值像“字节级”超大，则用字节格式，否则按 GB 显示
+const fmtHealthDataUnits = (v: any) => {
+  if (v==null || !isFinite(v)) return '-';
+  const n = Number(v);
+  // 经验阈值：超过 2^31 近似判为字节
+  if (n >= 2147483648) return fmtBytes(n);
+  // 以 GB 显示，两位小数
+  const gb = Math.round(n * 100) / 100;
+  return `${gb.toFixed(2)} GB`;
 };
 </script>
 <style scoped>

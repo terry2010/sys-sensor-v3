@@ -165,7 +165,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 }
                 catch { }
 
-                // smart/温度：使用 LibreHardwareMonitor 作为阶段A实现，按 model 名称模糊匹配并尽量映射常见 SMART/NVMe 字段
+                // smart/温度：阶段B线（优先原生 IOCTL），阶段A回退（LHM 模糊匹配）
                 object[]? smartHealth = null;
                 try
                 {
@@ -191,10 +191,24 @@ namespace SystemMonitor.Service.Services.Collectors
                         }
 
                         var outList = new List<object>();
+                        // 提取物理盘索引工具
+                        static int? TryExtractIndex(string? id)
+                        {
+                            if (string.IsNullOrWhiteSpace(id)) return null;
+                            try
+                            {
+                                // 常见形式："\\\\.\\PHYSICALDRIVE0" 或 "PhysicalDrive1" 或 "0"
+                                var s = new string(id.Where(char.IsDigit).ToArray());
+                                if (int.TryParse(s, out var v)) return v;
+                            }
+                            catch { }
+                            return null;
+                        }
                         foreach (var p in physList)
                         {
                             var id = GetStringN(p, "id") ?? string.Empty;
                             var model = GetStringN(p, "model") ?? string.Empty;
+                            var iface = GetStringN(p, "interface_type") ?? GetStringN(p, "bus_type") ?? string.Empty;
                             string? matchedHw = null;
                             List<SystemMonitor.Service.Services.LhmSensorDto>? sensors = null;
                             if (!string.IsNullOrWhiteSpace(model))
@@ -223,36 +237,69 @@ namespace SystemMonitor.Service.Services.Collectors
                             double? throttleEvents = null;
                             string? overall = null;
 
+                            // Phase B：原生 IOCTL 优先
+                            try
+                            {
+                                var idx = TryExtractIndex(id);
+                                if (idx.HasValue)
+                                {
+                                    StorageIoctlHelper.SmartSummary? native = null;
+                                    if (!string.IsNullOrWhiteSpace(iface) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                                        native = StorageIoctlHelper.TryReadNvmeSmartSummary(idx.Value);
+                                    else
+                                        native = StorageIoctlHelper.TryReadAtaSmartSummary(idx.Value);
+                                    if (native != null)
+                                    {
+                                        overall = overall ?? native.overall_health;
+                                        temperature ??= native.temperature_c;
+                                        pwrOnHours ??= native.power_on_hours;
+                                        realloc ??= native.reallocated_sector_count;
+                                        pending ??= native.pending_sector_count;
+                                        udmaCrc ??= native.udma_crc_error_count;
+                                        nvmePctUsed ??= native.nvme_percentage_used;
+                                        dataRead ??= native.nvme_data_units_read;
+                                        dataWritten ??= native.nvme_data_units_written;
+                                        ctrlBusyMin ??= native.nvme_controller_busy_time_min;
+                                        unsafeShutdowns ??= native.unsafe_shutdowns;
+                                        throttleEvents ??= native.thermal_throttle_events;
+                                    }
+                                }
+                            }
+                            catch { }
+
                             if (sensors != null)
                             {
                                 // 温度
-                                temperature = FindVal(sensors, "Temperature");
+                                temperature ??= FindVal(sensors, "Temperature");
 
                                 // SATA 常见 SMART
-                                pwrOnHours = FindVal(sensors, "Power On Hours");
-                                realloc = FindVal(sensors, "Reallocated Sectors", "Reallocated Sector");
-                                pending = FindVal(sensors, "Current Pending Sector", "Pending Sectors");
-                                udmaCrc = FindVal(sensors, "CRC Error", "UDMA CRC Error");
+                                pwrOnHours ??= FindVal(sensors, "Power On Hours", "Power-On Hours", "POH");
+                                realloc ??= FindVal(sensors, "Reallocated Sectors", "Reallocated Sector", "Realloc");
+                                pending ??= FindVal(sensors, "Current Pending Sector", "Pending Sectors", "C5", "Pending");
+                                udmaCrc ??= FindVal(sensors, "CRC Error", "UDMA CRC Error", "Interface CRC Error", "CRC Error Count");
 
                                 // NVMe 常见指标（不同固件/控制器命名略有差异，尽量覆盖）
                                 // 剩余寿命/已使用百分比：若存在 Remaining Life(%)，则 used = 100 - remaining
-                                var remainingLife = FindVal(sensors, "Remaining Life", "Life Remaining");
-                                var wearLevel = FindVal(sensors, "Wear", "Percentage Used");
-                                if (wearLevel.HasValue) nvmePctUsed = wearLevel; // 已直接是使用百分比
-                                else if (remainingLife.HasValue) nvmePctUsed = 100 - remainingLife;
+                                var remainingLife = FindVal(sensors, "Remaining Life", "Life Remaining", "Life Left", "Remaining Life(%)");
+                                var wearLevel = FindVal(sensors, "Wear", "Percentage Used", "Wear Level", "Media Wearout Indicator", "Wearout");
+                                if (!nvmePctUsed.HasValue)
+                                {
+                                    if (wearLevel.HasValue) nvmePctUsed = wearLevel; // 已直接是使用百分比
+                                    else if (remainingLife.HasValue) nvmePctUsed = 100 - remainingLife;
+                                }
 
                                 // 总读写量（一般单位是 GB 或者 GiB，由 LHM 规范化为数值，直接透传数值）
-                                dataRead = FindVal(sensors, "Total Host Reads", "Data Read", "Bytes Read", "Host Reads");
-                                dataWritten = FindVal(sensors, "Total Host Writes", "Data Written", "Bytes Written", "Host Writes");
+                                dataRead ??= FindVal(sensors, "Total Host Reads", "Data Read", "Bytes Read", "Host Reads", "Data Units Read", "Read Total");
+                                dataWritten ??= FindVal(sensors, "Total Host Writes", "Data Written", "Bytes Written", "Host Writes", "Data Units Written", "Write Total");
 
                                 // 控制器忙碌时间/非正常关机/热节流事件
-                                ctrlBusyMin = FindVal(sensors, "Controller Busy Time");
-                                unsafeShutdowns = FindVal(sensors, "Unsafe Shutdown");
-                                throttleEvents = FindVal(sensors, "Thermal Throttling", "Thermal Throttle");
+                                ctrlBusyMin ??= FindVal(sensors, "Controller Busy Time", "Busy Time");
+                                unsafeShutdowns ??= FindVal(sensors, "Unsafe Shutdown", "Unsafe Shutdowns");
+                                throttleEvents ??= FindVal(sensors, "Thermal Throttling", "Thermal Throttle", "Throttle Events");
 
                                 // 健康概览（若存在 Health 百分比等）
                                 var healthPct = FindVal(sensors, "Health");
-                                if (healthPct.HasValue)
+                                if (!string.IsNullOrEmpty(overall) == false && healthPct.HasValue)
                                 {
                                     overall = healthPct.Value >= 90 ? "good" : (healthPct.Value >= 50 ? "warning" : "critical");
                                 }

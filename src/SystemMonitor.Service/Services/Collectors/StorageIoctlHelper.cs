@@ -44,6 +44,236 @@ namespace SystemMonitor.Service.Services.Collectors
             }
         }
 
+        // 阶段B：原生 SMART 读取占位（后续填充 IOCTL 逻辑）
+        internal sealed class SmartSummary
+        {
+            public string? overall_health { get; set; }
+            public double? temperature_c { get; set; }
+            public double? power_on_hours { get; set; }
+            public double? reallocated_sector_count { get; set; }
+            public double? pending_sector_count { get; set; }
+            public double? udma_crc_error_count { get; set; }
+            public double? nvme_percentage_used { get; set; }
+            public double? nvme_data_units_read { get; set; }
+            public double? nvme_data_units_written { get; set; }
+            public double? nvme_controller_busy_time_min { get; set; }
+            public double? unsafe_shutdowns { get; set; }
+            public double? thermal_throttle_events { get; set; }
+        }
+
+        // SATA/ATA SMART（占位实现：返回 null）
+        public static SmartSummary? TryReadAtaSmartSummary(int physicalDriveIndex)
+        {
+            try
+            {
+                using var h = OpenPhysicalDrive(physicalDriveIndex);
+
+                // 先查询 SMART 版本，确认支持
+                int verSize = Marshal.SizeOf<GETVERSIONINPARAMS>();
+                var verBuf = Marshal.AllocHGlobal(verSize);
+                try
+                {
+                    if (!DeviceIoControl(h, SMART_GET_VERSION, IntPtr.Zero, 0, verBuf, (uint)verSize, out _, IntPtr.Zero))
+                    {
+                        return null;
+                    }
+                    var ver = Marshal.PtrToStructure<GETVERSIONINPARAMS>(verBuf);
+                    if ((ver.fCapabilities & CAP_SMART_CMD) == 0)
+                    {
+                        return null;
+                    }
+                }
+                finally { Marshal.FreeHGlobal(verBuf); }
+
+                // 读取 SMART Attributes（使用 READ_ATTRIBUTES 命令）
+                int inSize = Marshal.SizeOf<SENDCMDINPARAMS>() - 1; // bBuffer[1] 已包含在结构末尾
+                int outSize = Marshal.SizeOf<SENDCMDOUTPARAMS>() + 512; // 512 字节数据区
+                var inBuf = Marshal.AllocHGlobal(inSize);
+                var outBuf = Marshal.AllocHGlobal(outSize);
+                try
+                {
+                    var inParams = new SENDCMDINPARAMS();
+                    inParams.cBufferSize = 512;
+                    inParams.irDriveRegs.bFeaturesReg = SMART_READ_DATA; // 0xD0
+                    inParams.irDriveRegs.bSectorCountReg = 1;
+                    inParams.irDriveRegs.bSectorNumberReg = 1;
+                    inParams.irDriveRegs.bCylLowReg = 0x4F;
+                    inParams.irDriveRegs.bCylHighReg = 0xC2;
+                    inParams.irDriveRegs.bDriveHeadReg = 0xA0; // 主盘位，现代驱动忽略
+                    inParams.irDriveRegs.bCommandReg = SMART_CMD; // 0xB0
+                    Marshal.StructureToPtr(inParams, inBuf, false);
+
+                    if (!DeviceIoControl(h, SMART_RCV_DRIVE_DATA, inBuf, (uint)inSize, outBuf, (uint)outSize, out _, IntPtr.Zero))
+                    {
+                        return null;
+                    }
+
+                    // 从 SENDCMDOUTPARAMS 末尾的 512 字节缓冲读取属性表
+                    var dataPtr = (IntPtr)(outBuf.ToInt64() + Marshal.SizeOf<SENDCMDOUTPARAMS>());
+                    byte[] smartData = new byte[512];
+                    Marshal.Copy(dataPtr, smartData, 0, 512);
+
+                    // 解析 30 个条目，每条 12 字节，从偏移 2 开始
+                    double? tempC = null, poh = null, realloc = null, pending = null, crc = null;
+                    for (int i = 2; i < 2 + 12 * 30; i += 12)
+                    {
+                        byte id = smartData[i];
+                        if (id == 0) continue;
+                        // 原始值 6 字节位于偏移 i+5..i+10（LE）
+                        ulong raw = 0;
+                        for (int b = 0; b < 6; b++) raw |= ((ulong)smartData[i + 5 + b]) << (8 * b);
+
+                        switch (id)
+                        {
+                            case 0x09: // Power-On Hours
+                                poh = (double)raw;
+                                break;
+                            case 0x05: // Reallocated Sector Count
+                                realloc = (double)raw;
+                                break;
+                            case 0xC5: // Current Pending Sector Count
+                                pending = (double)raw;
+                                break;
+                            case 0xC7: // UDMA CRC Error Count
+                                crc = (double)raw;
+                                break;
+                            case 0xC2: // Temperature (value 字节通常在 i+3；raw 亦可能包含摄氏)
+                                // 优先取 Value 字节（常为摄氏温度）
+                                byte val = smartData[i + 3];
+                                if (val > 0 && val < 125) tempC = val; else tempC = (double)raw;
+                                break;
+                        }
+                    }
+
+                    return new SmartSummary
+                    {
+                        temperature_c = tempC,
+                        power_on_hours = poh,
+                        reallocated_sector_count = realloc,
+                        pending_sector_count = pending,
+                        udma_crc_error_count = crc
+                    };
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(inBuf);
+                    Marshal.FreeHGlobal(outBuf);
+                }
+            }
+            catch { return null; }
+        }
+
+        // NVMe SMART/Health（占位实现：返回 null）
+        public static SmartSummary? TryReadNvmeSmartSummary(int physicalDriveIndex)
+        {
+            try
+            {
+                using var h = OpenPhysicalDrive(physicalDriveIndex);
+                // 构造 NVMe 协议特定查询（Health Log Page 0x02）
+                var query = new STORAGE_PROPERTY_QUERY
+                {
+                    PropertyId = STORAGE_PROPERTY_ID.StorageDeviceProtocolSpecificProperty,
+                    QueryType = STORAGE_QUERY_TYPE.PropertyStandardQuery
+                };
+
+                var proto = new STORAGE_PROTOCOL_SPECIFIC_DATA
+                {
+                    ProtocolType = STORAGE_PROTOCOL_TYPE.ProtocolTypeNvme,
+                    DataType = (uint)STORAGE_PROTOCOL_NVME_DATA_TYPE.NVMeDataTypeLogPage,
+                    ProtocolDataRequestValue = 0x02, // Health Information Log
+                    ProtocolDataRequestSubValue = 0,
+                    ProtocolDataOffset = (uint)Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>(),
+                    ProtocolDataLength = 512
+                };
+
+                int inSize = Marshal.SizeOf<STORAGE_PROPERTY_QUERY>() + Marshal.SizeOf<STORAGE_PROTOCOL_SPECIFIC_DATA>();
+                int outSize = Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>() + (int)proto.ProtocolDataLength;
+
+                var inBuf = Marshal.AllocHGlobal(inSize);
+                var outBuf = Marshal.AllocHGlobal(outSize);
+                try
+                {
+                    // 将 query 与 proto 连续写入输入缓冲
+                    Marshal.StructureToPtr(query, inBuf, false);
+                    Marshal.StructureToPtr(proto, (IntPtr)(inBuf.ToInt64() + Marshal.SizeOf<STORAGE_PROPERTY_QUERY>()), false);
+
+                    if (!DeviceIoControl(h,
+                        IOCTL_STORAGE_QUERY_PROPERTY,
+                        inBuf, (uint)inSize,
+                        outBuf, (uint)outSize,
+                        out uint returned,
+                        IntPtr.Zero))
+                    {
+                        return null;
+                    }
+
+                    // 解析输出：STORAGE_PROTOCOL_DATA_DESCRIPTOR + 数据区
+                    var desc = Marshal.PtrToStructure<STORAGE_PROTOCOL_DATA_DESCRIPTOR>(outBuf);
+                    if (desc.Version != (uint)Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>() ||
+                        desc.Size != (uint)Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>())
+                    {
+                        return null;
+                    }
+
+                    var sp = desc.ProtocolSpecific;
+                    if (sp.ProtocolDataLength < 512 || sp.ProtocolDataOffset == 0)
+                    {
+                        return null;
+                    }
+
+                    var dataPtr = (IntPtr)(outBuf.ToInt64() + (int)sp.ProtocolDataOffset);
+                    // NVMe SMART/Health Log 布局（参照 NVMe Spec）：
+                    // Byte 1 温度(绝对值K?) 实际常见实现为摄氏 +273K 偏移，很多实现直接给摄氏。多数厂商也提供温度字段以摄氏。
+                    // 为兼容，读取 2 字节温度并尝试转化为摄氏（减 273 若值>273）。
+                    ushort tempRaw = ReadUInt16(dataPtr, 1);
+                    double? tempC = null;
+                    if (tempRaw > 0)
+                    {
+                        tempC = tempRaw > 273 ? (double)(tempRaw - 273) : (double)tempRaw;
+                    }
+
+                    // Percentage Used (byte 31)
+                    byte used = Marshal.ReadByte(dataPtr, 31);
+                    double? pctUsed = used <= 100 ? (double)used : (double)(used & 0x7F); // 简单裁剪
+
+                    // Data Units Read/Written (bytes 32..47, 48..63) 每单位 = 512,000 bytes per NVMe spec（有的实现 1000*512）
+                    // 我们先读取为 64-bit（低 8 字节），并换算为 GB（十进制）。
+                    ulong dur = ReadUInt64(dataPtr, 32);
+                    ulong duw = ReadUInt64(dataPtr, 48);
+                    // 转换：单位= 512,000 bytes（规范定义为 1000 * 512）
+                    const double BYTES_PER_DATA_UNIT = 512000.0;
+                    double dataReadGB = dur * BYTES_PER_DATA_UNIT / 1_000_000_000.0;
+                    double dataWriteGB = duw * BYTES_PER_DATA_UNIT / 1_000_000_000.0;
+
+                    // Controller Busy Time (minutes) bytes 112..127（取低 8 字节）
+                    ulong busyMin = ReadUInt64(dataPtr, 112);
+
+                    // Unsafe Shutdowns bytes 128..143（取低 8 字节）
+                    ulong unsafeCnt = ReadUInt64(dataPtr, 128);
+
+                    // Thermal Throttle Events bytes 184..199（取低 8 字节）
+                    ulong throttleCnt = ReadUInt64(dataPtr, 184);
+
+                    return new SmartSummary
+                    {
+                        temperature_c = tempC,
+                        nvme_percentage_used = pctUsed,
+                        nvme_data_units_read = Math.Round(dataReadGB, 2),
+                        nvme_data_units_written = Math.Round(dataWriteGB, 2),
+                        nvme_controller_busy_time_min = (double)busyMin,
+                        unsafe_shutdowns = (double)unsafeCnt,
+                        thermal_throttle_events = (double)throttleCnt
+                    };
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(inBuf);
+                    Marshal.FreeHGlobal(outBuf);
+                }
+            }
+            catch { return null; }
+        }
+
         // 下面是即将用于实现的 P/Invoke 框架；暂时未调用，保留以便后续实现
         private const uint FILE_SHARE_READ = 0x00000001;
         private const uint FILE_SHARE_WRITE = 0x00000002;
@@ -80,6 +310,140 @@ namespace SystemMonitor.Service.Services.Collectors
                 throw new Win32Exception(Marshal.GetLastWin32Error(), $"Open {path} failed");
             }
             return handle;
+        }
+
+        // ======= ATA/SATA SMART 所需 IOCTL 与结构 =======
+        private const uint SMART_GET_VERSION = 0x00074080;
+        private const uint SMART_RCV_DRIVE_DATA = 0x0007C088;
+        private const byte SMART_CMD = 0xB0;
+        private const byte SMART_READ_DATA = 0xD0;
+
+        private const uint CAP_SMART_CMD = 0x00000004;
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct GETVERSIONINPARAMS
+        {
+            public byte bVersion;
+            public byte bRevision;
+            public byte bReserved;
+            public byte bIDEDeviceMap;
+            public uint fCapabilities;
+            public uint dwReserved1;
+            public uint dwReserved2;
+            public uint dwReserved3;
+            public uint dwReserved4;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct IDEREGS
+        {
+            public byte bFeaturesReg;
+            public byte bSectorCountReg;
+            public byte bSectorNumberReg;
+            public byte bCylLowReg;
+            public byte bCylHighReg;
+            public byte bDriveHeadReg;
+            public byte bCommandReg;
+            public byte bReserved;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct DRIVERSTATUS
+        {
+            public byte bDriverError;
+            public byte bIDEStatus;
+            public byte bReserved0;
+            public byte bReserved1;
+            public uint dwReserved0;
+            public uint dwReserved1;
+        }
+
+        // 注意：结构末尾含有可变大小缓冲区 bBuffer[1]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct SENDCMDINPARAMS
+        {
+            public uint cBufferSize;
+            public IDEREGS irDriveRegs;
+            public byte bDriveNumber;
+            public byte bReserved1;
+            public byte bReserved2;
+            public byte bReserved3;
+            public uint dwReserved0;
+            public uint dwReserved1;
+            public uint dwReserved2;
+            public uint dwReserved3;
+            public byte bBuffer; // 占位，实际按需扩展
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct SENDCMDOUTPARAMS
+        {
+            public uint cBufferSize;
+            public DRIVERSTATUS DriverStatus;
+            public byte bBuffer; // 占位，实际后续紧跟数据区
+        }
+
+        // ======= 以下为 NVMe 协议特定查询所需结构/常量 =======
+        private const uint IOCTL_STORAGE_QUERY_PROPERTY = 0x002D1400;
+
+        private enum STORAGE_PROPERTY_ID
+        {
+            StorageDeviceProperty = 0,
+            StorageAdapterProperty = 1,
+            StorageDeviceIdProperty = 2,
+            StorageDeviceUniqueIdProperty = 3,
+            StorageDeviceWriteCacheProperty = 4,
+            StorageMiniportProperty = 5,
+            StorageAccessAlignmentProperty = 6,
+            StorageDeviceSeekPenaltyProperty = 7,
+            StorageDeviceTrimProperty = 8,
+            StorageDeviceProtocolSpecificProperty = 50
+        }
+        private enum STORAGE_QUERY_TYPE { PropertyStandardQuery = 0, PropertyExistsQuery, PropertyMaskQuery, PropertyQueryMaxDefined }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct STORAGE_PROPERTY_QUERY
+        {
+            public STORAGE_PROPERTY_ID PropertyId;
+            public STORAGE_QUERY_TYPE QueryType;
+            // 注意：真正的结构后可紧跟附加参数字节流。此处不内嵌，仅在缓冲区中紧随其后写入 STORAGE_PROTOCOL_SPECIFIC_DATA。
+        }
+
+        private enum STORAGE_PROTOCOL_TYPE { ProtocolTypeUnknown = 0, ProtocolTypeScsi, ProtocolTypeAta, ProtocolTypeNvme = 4 }
+        private enum STORAGE_PROTOCOL_NVME_DATA_TYPE { NVMeDataTypeUnknown = 0, NVMeDataTypeIdentify, NVMeDataTypeLogPage }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct STORAGE_PROTOCOL_SPECIFIC_DATA
+        {
+            public STORAGE_PROTOCOL_TYPE ProtocolType;
+            public uint DataType; // STORAGE_PROTOCOL_NVME_DATA_TYPE
+            public uint ProtocolDataRequestValue;
+            public uint ProtocolDataRequestSubValue;
+            public uint ProtocolDataOffset;
+            public uint ProtocolDataLength;
+            public uint FixedProtocolReturnData;
+            public uint ProtocolDataRequestSubValue2;
+            public uint ProtocolDataRequestSubValue3;
+            public uint ProtocolDataRequestSubValue4;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct STORAGE_PROTOCOL_DATA_DESCRIPTOR
+        {
+            public uint Version;
+            public uint Size;
+            public STORAGE_PROTOCOL_SPECIFIC_DATA ProtocolSpecific;
+        }
+
+        private static ushort ReadUInt16(IntPtr basePtr, int offset)
+        {
+            return (ushort)(Marshal.ReadByte(basePtr, offset) | (Marshal.ReadByte(basePtr, offset + 1) << 8));
+        }
+        private static ulong ReadUInt64(IntPtr basePtr, int offset)
+        {
+            ulong v = 0;
+            for (int i = 0; i < 8; i++) v |= ((ulong)Marshal.ReadByte(basePtr, offset + i)) << (8 * i);
+            return v;
         }
     }
 }
