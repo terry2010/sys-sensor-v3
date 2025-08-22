@@ -128,7 +128,17 @@ namespace SystemMonitor.Service.Services.Collectors
             public double? nvme_data_units_read { get; set; }
             public double? nvme_data_units_written { get; set; }
             public double? nvme_controller_busy_time_min { get; set; }
+            public double? nvme_power_cycles { get; set; }
+            public double? nvme_power_on_hours { get; set; }
             public double? unsafe_shutdowns { get; set; }
+            public double? nvme_media_errors { get; set; }
+            public double? nvme_available_spare { get; set; }
+            public double? nvme_spare_threshold { get; set; }
+            public byte? nvme_critical_warning { get; set; }
+            public double? nvme_temp_sensor1_c { get; set; }
+            public double? nvme_temp_sensor2_c { get; set; }
+            public double? nvme_temp_sensor3_c { get; set; }
+            public double? nvme_temp_sensor4_c { get; set; }
             public double? thermal_throttle_events { get; set; }
         }
 
@@ -234,7 +244,7 @@ namespace SystemMonitor.Service.Services.Collectors
             catch { return null; }
         }
 
-        // NVMe SMART/Health（占位实现：返回 null）
+        // NVMe SMART/Health
         public static SmartSummary? TryReadNvmeSmartSummary(int physicalDriveIndex)
         {
             try
@@ -293,9 +303,17 @@ namespace SystemMonitor.Service.Services.Collectors
                     }
 
                     var dataPtr = (IntPtr)(outBuf.ToInt64() + (int)sp.ProtocolDataOffset);
-                    // NVMe SMART/Health Log 布局（参照 NVMe Spec）：
-                    // Byte 1 温度(绝对值K?) 实际常见实现为摄氏 +273K 偏移，很多实现直接给摄氏。多数厂商也提供温度字段以摄氏。
-                    // 为兼容，读取 2 字节温度并尝试转化为摄氏（减 273 若值>273）。
+                    // NVMe SMART/Health Log 布局（NVMe 1.x 常见）：
+                    // 0 Critical Warning, 1..2 Composite Temp (K), 3 Avail Spare, 4 Avail Spare Threshold, 5 Percentage Used
+                    // 32..47 Data Units Read, 48..63 Data Units Written, 64..79 Host Read Cmds, 80..95 Host Write Cmds,
+                    // 96..111 Controller Busy Time (min), 112..127 Power Cycles, 128..143 Power On Hours,
+                    // 144..159 Unsafe Shutdowns, 160..175 Media Errors, 176..191 Number of Error Info Entries,
+                    // 192..195 Warning Temp Time, 196..199 Critical Temp Time,
+                    // 200..219 Temperature Sensors 1..8 (2 bytes each, K)
+
+                    byte crit = Marshal.ReadByte(dataPtr, 0);
+                    byte availSpare = Marshal.ReadByte(dataPtr, 3);
+                    byte spareTh = Marshal.ReadByte(dataPtr, 4);
                     ushort tempRaw = ReadUInt16(dataPtr, 1);
                     double? tempC = null;
                     if (tempRaw > 0)
@@ -303,8 +321,8 @@ namespace SystemMonitor.Service.Services.Collectors
                         tempC = tempRaw > 273 ? (double)(tempRaw - 273) : (double)tempRaw;
                     }
 
-                    // Percentage Used (byte 31)
-                    byte used = Marshal.ReadByte(dataPtr, 31);
+                    // Percentage Used (byte 5)
+                    byte used = Marshal.ReadByte(dataPtr, 5);
                     double? pctUsed = used <= 100 ? (double)used : (double)(used & 0x7F); // 简单裁剪
 
                     // Data Units Read/Written (bytes 32..47, 48..63) 每单位 = 512,000 bytes per NVMe spec（有的实现 1000*512）
@@ -316,14 +334,29 @@ namespace SystemMonitor.Service.Services.Collectors
                     double dataReadGB = dur * BYTES_PER_DATA_UNIT / 1_000_000_000.0;
                     double dataWriteGB = duw * BYTES_PER_DATA_UNIT / 1_000_000_000.0;
 
-                    // Controller Busy Time (minutes) bytes 112..127（取低 8 字节）
-                    ulong busyMin = ReadUInt64(dataPtr, 112);
+                    // Controller Busy Time (minutes) bytes 96..111（取低 8 字节）
+                    ulong busyMin = ReadUInt64(dataPtr, 96);
+                    // Power Cycles bytes 112..127
+                    ulong powerCycles = ReadUInt64(dataPtr, 112);
+                    // Power On Hours bytes 128..143
+                    ulong poh = ReadUInt64(dataPtr, 128);
+                    // Unsafe Shutdowns bytes 144..159
+                    ulong unsafeCnt = ReadUInt64(dataPtr, 144);
+                    // Media Errors bytes 160..175
+                    ulong mediaErr = ReadUInt64(dataPtr, 160);
+                    // Thermal Throttle Events: NVMe Health Log并无统一事件计数，此处沿用旧字段但置空
+                    double? throttleCnt = null;
 
-                    // Unsafe Shutdowns bytes 128..143（取低 8 字节）
-                    ulong unsafeCnt = ReadUInt64(dataPtr, 128);
-
-                    // Thermal Throttle Events bytes 184..199（取低 8 字节）
-                    ulong throttleCnt = ReadUInt64(dataPtr, 184);
+                    // Temperature sensors (1..4 常见)
+                    double? ts1 = null, ts2 = null, ts3 = null, ts4 = null;
+                    ushort s1 = ReadUInt16(dataPtr, 200);
+                    if (s1 != 0) ts1 = s1 > 273 ? (double)(s1 - 273) : (double)s1;
+                    ushort s2 = ReadUInt16(dataPtr, 202);
+                    if (s2 != 0) ts2 = s2 > 273 ? (double)(s2 - 273) : (double)s2;
+                    ushort s3 = ReadUInt16(dataPtr, 204);
+                    if (s3 != 0) ts3 = s3 > 273 ? (double)(s3 - 273) : (double)s3;
+                    ushort s4 = ReadUInt16(dataPtr, 206);
+                    if (s4 != 0) ts4 = s4 > 273 ? (double)(s4 - 273) : (double)s4;
 
                     return new SmartSummary
                     {
@@ -332,9 +365,79 @@ namespace SystemMonitor.Service.Services.Collectors
                         nvme_data_units_read = Math.Round(dataReadGB, 2),
                         nvme_data_units_written = Math.Round(dataWriteGB, 2),
                         nvme_controller_busy_time_min = (double)busyMin,
+                        nvme_power_cycles = (double)powerCycles,
+                        nvme_power_on_hours = (double)poh,
                         unsafe_shutdowns = (double)unsafeCnt,
-                        thermal_throttle_events = (double)throttleCnt
+                        nvme_media_errors = (double)mediaErr,
+                        nvme_available_spare = (double)availSpare,
+                        nvme_spare_threshold = (double)spareTh,
+                        nvme_critical_warning = crit,
+                        nvme_temp_sensor1_c = ts1,
+                        nvme_temp_sensor2_c = ts2,
+                        nvme_temp_sensor3_c = ts3,
+                        nvme_temp_sensor4_c = ts4,
+                        thermal_throttle_events = throttleCnt
                     };
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(inBuf);
+                    Marshal.FreeHGlobal(outBuf);
+                }
+            }
+            catch { return null; }
+        }
+
+        // ATA Identify Device（0xEC）读取序列号/型号/固件
+        public static (string serial, string model, string firmware)? TryReadAtaIdentifyStrings(int physicalDriveIndex)
+        {
+            try
+            {
+                using var h = OpenPhysicalDrive(physicalDriveIndex);
+                int inSize = Marshal.SizeOf<SENDCMDINPARAMS>() - 1;
+                int outSize = Marshal.SizeOf<SENDCMDOUTPARAMS>() + 512;
+                var inBuf = Marshal.AllocHGlobal(inSize);
+                var outBuf = Marshal.AllocHGlobal(outSize);
+                try
+                {
+                    var inParams = new SENDCMDINPARAMS();
+                    inParams.cBufferSize = 512;
+                    inParams.irDriveRegs.bFeaturesReg = 0;
+                    inParams.irDriveRegs.bSectorCountReg = 1;
+                    inParams.irDriveRegs.bSectorNumberReg = 1;
+                    inParams.irDriveRegs.bCylLowReg = 0;
+                    inParams.irDriveRegs.bCylHighReg = 0;
+                    inParams.irDriveRegs.bDriveHeadReg = 0xA0;
+                    inParams.irDriveRegs.bCommandReg = 0xEC; // IDENTIFY DEVICE
+                    Marshal.StructureToPtr(inParams, inBuf, false);
+
+                    if (!DeviceIoControl(h, SMART_RCV_DRIVE_DATA, inBuf, (uint)inSize, outBuf, (uint)outSize, out _, IntPtr.Zero))
+                        return null;
+
+                    var dataPtr = (IntPtr)(outBuf.ToInt64() + Marshal.SizeOf<SENDCMDOUTPARAMS>());
+                    byte[] idData = new byte[512];
+                    Marshal.Copy(dataPtr, idData, 0, 512);
+
+                    static string ReadAtaString(byte[] buf, int wordStart, int wordCount)
+                    {
+                        int offset = wordStart * 2;
+                        int bytes = wordCount * 2;
+                        byte[] tmp = new byte[bytes];
+                        Buffer.BlockCopy(buf, offset, tmp, 0, bytes);
+                        // 每个 word 内部字节高低位交换
+                        for (int i = 0; i < bytes; i += 2)
+                        {
+                            (tmp[i], tmp[i + 1]) = (tmp[i + 1], tmp[i]);
+                        }
+                        string s = System.Text.Encoding.ASCII.GetString(tmp).Trim('\0', ' ');
+                        return s;
+                    }
+
+                    string serial = ReadAtaString(idData, 10, 10);   // words 10-19
+                    string model = ReadAtaString(idData, 27, 20);    // words 27-46
+                    string firmware = ReadAtaString(idData, 23, 4);  // words 23-26
+                    if (string.IsNullOrWhiteSpace(serial) && string.IsNullOrWhiteSpace(model)) return null;
+                    return (serial, model, firmware);
                 }
                 finally
                 {

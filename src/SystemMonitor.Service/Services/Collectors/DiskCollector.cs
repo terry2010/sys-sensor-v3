@@ -281,6 +281,14 @@ namespace SystemMonitor.Service.Services.Collectors
                             double? ctrlBusyMin = null;
                             double? unsafeShutdowns = null;
                             double? throttleEvents = null;
+                            // 新增 NVMe 字段
+                            double? nvmePowerCycles = null;
+                            double? nvmePoh = null;
+                            double? nvmeMediaErrors = null;
+                            double? nvmeAvailSpare = null;
+                            double? nvmeSpareThreshold = null;
+                            byte? nvmeCriticalWarning = null;
+                            double? nvmeTs1 = null, nvmeTs2 = null, nvmeTs3 = null, nvmeTs4 = null;
                             string? overall = null;
 
                             // Phase B：原生 IOCTL 优先（可通过环境变量禁用）
@@ -308,6 +316,17 @@ namespace SystemMonitor.Service.Services.Collectors
                                         ctrlBusyMin ??= native.nvme_controller_busy_time_min;
                                         unsafeShutdowns ??= native.unsafe_shutdowns;
                                         throttleEvents ??= native.thermal_throttle_events;
+                                        // 新增 NVMe 字段
+                                        nvmePowerCycles ??= native.nvme_power_cycles;
+                                        nvmePoh ??= native.nvme_power_on_hours;
+                                        nvmeMediaErrors ??= native.nvme_media_errors;
+                                        nvmeAvailSpare ??= native.nvme_available_spare;
+                                        nvmeSpareThreshold ??= native.nvme_spare_threshold;
+                                        nvmeCriticalWarning ??= native.nvme_critical_warning;
+                                        nvmeTs1 ??= native.nvme_temp_sensor1_c;
+                                        nvmeTs2 ??= native.nvme_temp_sensor2_c;
+                                        nvmeTs3 ??= native.nvme_temp_sensor3_c;
+                                        nvmeTs4 ??= native.nvme_temp_sensor4_c;
                                         if (smartDebug)
                                         {
                                             try { Serilog.Log.Information("[SMART] native ok disk id={Id} iface={Iface} idx={Idx} temp={T} used%={U} readGB={R} writeGB={W}", id, iface, idx, temperature, nvmePctUsed, dataRead, dataWritten); } catch { }
@@ -373,6 +392,17 @@ namespace SystemMonitor.Service.Services.Collectors
                                 nvme_data_units_written = dataWritten,
                                 nvme_controller_busy_time_min = ctrlBusyMin,
                                 unsafe_shutdowns = unsafeShutdowns,
+                                // 新增 NVMe 字段输出（有值才返回数值，否则为 null）
+                                nvme_power_cycles = nvmePowerCycles,
+                                nvme_power_on_hours = nvmePoh,
+                                nvme_media_errors = nvmeMediaErrors,
+                                nvme_available_spare = nvmeAvailSpare,
+                                nvme_spare_threshold = nvmeSpareThreshold,
+                                nvme_critical_warning = nvmeCriticalWarning,
+                                nvme_temp_sensor1_c = nvmeTs1,
+                                nvme_temp_sensor2_c = nvmeTs2,
+                                nvme_temp_sensor3_c = nvmeTs3,
+                                nvme_temp_sensor4_c = nvmeTs4,
                                 thermal_throttle_events = throttleEvents
                             });
                         }
