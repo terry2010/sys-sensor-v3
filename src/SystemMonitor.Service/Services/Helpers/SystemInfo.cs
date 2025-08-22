@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using SystemMonitor.Service.Services;
 using static SystemMonitor.Service.Services.Win32Interop;
+using SystemMonitor.Service.Services.Samplers;
 
 namespace SystemMonitor.Service.Services
 {
@@ -108,6 +109,121 @@ namespace SystemMonitor.Service.Services
                 // ignore
             }
             return (16_000, 8_000);
+        }
+
+        // DTO for memory details (serialized with snake_case by System.Text.Json policy)
+        internal sealed class MemoryDetail
+        {
+            public long? TotalMb { get; init; }
+            public long? UsedMb { get; init; }
+            public long? AvailableMb { get; init; }
+            public double? PercentUsed { get; init; }
+
+            public long? CachedMb { get; init; }
+
+            public long? CommitLimitMb { get; init; }
+            public long? CommitUsedMb { get; init; }
+            public double? CommitPercent { get; init; }
+
+            public long? SwapTotalMb { get; init; }
+            public long? SwapUsedMb { get; init; }
+
+            public double? PagesInPerSec { get; init; }
+            public double? PagesOutPerSec { get; init; }
+            public double? PageFaultsPerSec { get; init; }
+
+            public long? CompressedBytesMb { get; init; }
+            public long? PoolPagedMb { get; init; }
+            public long? PoolNonpagedMb { get; init; }
+            public long? StandbyCacheMb { get; init; }
+            public long? WorkingSetTotalMb { get; init; }
+
+            public double? MemoryPressurePercent { get; init; }
+            public string? MemoryPressureLevel { get; init; }
+        }
+
+        internal static MemoryDetail GetMemoryDetail()
+        {
+            long? totalMb = null, availMb = null, usedMb = null;
+            double? percentUsed = null;
+            try
+            {
+                if (TryGetMemoryStatus(out var status))
+                {
+                    totalMb = (long)(status.ullTotalPhys / (1024 * 1024));
+                    availMb = (long)(status.ullAvailPhys / (1024 * 1024));
+                    if (totalMb.HasValue && availMb.HasValue)
+                    {
+                        usedMb = Math.Max(0, totalMb.Value - availMb.Value);
+                        if (totalMb.Value > 0)
+                        {
+                            percentUsed = Math.Clamp(100.0 * usedMb.Value / (double)totalMb.Value, 0.0, 100.0);
+                        }
+                    }
+                }
+            }
+            catch { /* ignore */ }
+
+            var mc = MemoryCounters.Instance.Read();
+
+            static long? ToLongMb(double? v) => v.HasValue ? (long?)Math.Round(v.Value) : null;
+
+            var cachedMb        = ToLongMb(mc.CacheMb);
+            var commitLimitMb   = ToLongMb(mc.CommitLimitMb);
+            var commitUsedMb    = ToLongMb(mc.CommitUsedMb);
+            var commitPercent   = mc.CommitPercent.HasValue ? Math.Clamp(mc.CommitPercent.Value, 0.0, 100.0) : (double?)null;
+
+            var swapTotalMb     = ToLongMb(mc.SwapTotalMb);
+            var swapUsedMb      = ToLongMb(mc.SwapUsedMb);
+
+            var pagesIn         = mc.PageReadsPerSec;
+            var pagesOut        = mc.PageWritesPerSec;
+            var pageFaults      = mc.PageFaultsPerSec;
+
+            var compressedMb    = ToLongMb(mc.CompressedMb);
+            var poolPagedMb     = ToLongMb(mc.PoolPagedMb);
+            var poolNonpagedMb  = ToLongMb(mc.PoolNonpagedMb);
+            var standbyCacheMb  = ToLongMb(mc.StandbyCacheMb);
+            var workingSetMb    = ToLongMb(mc.WorkingSetTotalMb);
+
+            // Memory pressure
+            double? pressure = null; string? level = null;
+            var candidates = new[] { percentUsed, commitPercent }.Where(x => x.HasValue).Select(x => x!.Value).ToArray();
+            if (candidates.Length > 0)
+            {
+                pressure = candidates.Max();
+                level = pressure < 70.0 ? "green" : (pressure <= 90.0 ? "yellow" : "red");
+            }
+
+            return new MemoryDetail
+            {
+                TotalMb = totalMb,
+                UsedMb = usedMb,
+                AvailableMb = availMb,
+                PercentUsed = percentUsed,
+
+                CachedMb = cachedMb,
+
+                CommitLimitMb = commitLimitMb,
+                CommitUsedMb = commitUsedMb,
+                CommitPercent = commitPercent,
+
+                SwapTotalMb = swapTotalMb,
+                SwapUsedMb = swapUsedMb,
+
+                PagesInPerSec = pagesIn,
+                PagesOutPerSec = pagesOut,
+                PageFaultsPerSec = pageFaults,
+
+                CompressedBytesMb = compressedMb,
+                PoolPagedMb = poolPagedMb,
+                PoolNonpagedMb = poolNonpagedMb,
+                StandbyCacheMb = standbyCacheMb,
+                WorkingSetTotalMb = workingSetMb,
+
+                MemoryPressurePercent = pressure,
+                MemoryPressureLevel = level
+            };
         }
 
         internal static bool TryGetMemoryStatus(out MEMORYSTATUSEX status)

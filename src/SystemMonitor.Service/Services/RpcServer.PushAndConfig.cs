@@ -55,8 +55,8 @@ namespace SystemMonitor.Service.Services
                             catch { }
                             try
                             {
-                                var mem = GetMemoryInfoMb();
-                                payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
+                                var mem = GetMemoryDetail();
+                                payload["memory"] = new { total_mb = mem.TotalMb, used_mb = mem.UsedMb };
                             }
                             catch { }
                             await _rpc!.NotifyAsync("metrics", payload).ConfigureAwait(false);
@@ -111,8 +111,8 @@ namespace SystemMonitor.Service.Services
                         catch { }
                         try
                         {
-                            var mem = GetMemoryInfoMb();
-                            payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
+                            var mem = GetMemoryDetail();
+                            payload["memory"] = new { total_mb = mem.TotalMb, used_mb = mem.UsedMb };
                         }
                         catch { }
                         await _rpc!.NotifyAsync("metrics", payload).ConfigureAwait(false);
@@ -213,8 +213,8 @@ namespace SystemMonitor.Service.Services
                     catch { }
                     try
                     {
-                        var mem = GetMemoryInfoMb();
-                        payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
+                        var mem = GetMemoryDetail();
+                        payload["memory"] = new { total_mb = mem.TotalMb, used_mb = mem.UsedMb };
                     }
                     catch { }
                     await _rpc!.NotifyAsync("metrics", payload).ConfigureAwait(false);

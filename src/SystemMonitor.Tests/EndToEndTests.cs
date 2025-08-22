@@ -327,10 +327,10 @@ public class EndToEndTests : IAsyncLifetime
         Assert.True(snap.TryGetProperty("cpu", out var cpu));
         var usage = cpu.GetProperty("usage_percent").GetDouble();
         Assert.InRange(usage, 0.0, 100.0);
-        // memory.used<=total and >=0
+        // memory.used_mb<=total_mb and >=0
         Assert.True(snap.TryGetProperty("memory", out var mem));
-        var total = mem.GetProperty("total").GetInt64();
-        var used = mem.GetProperty("used").GetInt64();
+        var total = mem.GetProperty("total_mb").GetInt64();
+        var used = mem.GetProperty("used_mb").GetInt64();
         Assert.True(total >= 0);
         Assert.True(used >= 0);
         Assert.True(used <= total);
@@ -498,8 +498,8 @@ public class EndToEndTests : IAsyncLifetime
         }
         if (pl.TryGetProperty("memory", out var mem))
         {
-            var total = mem.GetProperty("total").GetInt64();
-            var used = mem.GetProperty("used").GetInt64();
+            var total = mem.GetProperty("total_mb").GetInt64();
+            var used = mem.GetProperty("used_mb").GetInt64();
             Assert.True(total >= 0);
             Assert.True(used >= 0);
             Assert.True(used <= total);

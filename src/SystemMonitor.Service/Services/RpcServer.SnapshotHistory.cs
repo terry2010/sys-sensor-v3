@@ -111,7 +111,7 @@ namespace SystemMonitor.Service.Services
                             {
                                 ts = g.Key,
                                 cpu = want.Contains("cpu") && last.Cpu.HasValue ? new { usage_percent = last.Cpu.Value } : null,
-                                memory = want.Contains("memory") && last.MemTotal.HasValue && last.MemUsed.HasValue ? new { total = last.MemTotal.Value, used = last.MemUsed.Value } : null
+                                memory = want.Contains("memory") && last.MemTotal.HasValue && last.MemUsed.HasValue ? new { total_mb = last.MemTotal.Value, used_mb = last.MemUsed.Value } : null
                             } as object;
                         })
                         .ToArray();
@@ -123,7 +123,7 @@ namespace SystemMonitor.Service.Services
                         {
                             ts = r.Ts,
                             cpu = want.Contains("cpu") && r.Cpu.HasValue ? new { usage_percent = r.Cpu.Value } : null,
-                            memory = want.Contains("memory") && r.MemTotal.HasValue && r.MemUsed.HasValue ? new { total = r.MemTotal.Value, used = r.MemUsed.Value } : null
+                            memory = want.Contains("memory") && r.MemTotal.HasValue && r.MemUsed.HasValue ? new { total_mb = r.MemTotal.Value, used_mb = r.MemUsed.Value } : null
                         })
                         .ToArray();
                 }
@@ -153,7 +153,7 @@ namespace SystemMonitor.Service.Services
                             {
                                 ts = g.Key,
                                 cpu = want.Contains("cpu") && last.cpu.HasValue ? new { usage_percent = last.cpu.Value } : null,
-                                memory = want.Contains("memory") && last.mem_total.HasValue && last.mem_used.HasValue ? new { total = last.mem_total.Value, used = last.mem_used.Value } : null
+                                memory = want.Contains("memory") && last.mem_total.HasValue && last.mem_used.HasValue ? new { total_mb = last.mem_total.Value, used_mb = last.mem_used.Value } : null
                             } as object;
                         })
                         .ToArray();
@@ -176,7 +176,7 @@ namespace SystemMonitor.Service.Services
                                 {
                                     ts = g.Key,
                                     cpu = want.Contains("cpu") && last.cpu.HasValue ? new { usage_percent = last.cpu.Value } : null,
-                                    memory = want.Contains("memory") && last.mem_total.HasValue && last.mem_used.HasValue ? new { total = last.mem_total.Value, used = last.mem_used.Value } : null
+                                    memory = want.Contains("memory") && last.mem_total.HasValue && last.mem_used.HasValue ? new { total_mb = last.mem_total.Value, used_mb = last.mem_used.Value } : null
                                 } as object;
                             })
                             .ToArray();
@@ -189,7 +189,7 @@ namespace SystemMonitor.Service.Services
                             {
                                 ts = h.ts,
                                 cpu = want.Contains("cpu") && h.cpu.HasValue ? new { usage_percent = h.cpu.Value } : null,
-                                memory = want.Contains("memory") && h.mem_total.HasValue && h.mem_used.HasValue ? new { total = h.mem_total.Value, used = h.mem_used.Value } : null
+                                memory = want.Contains("memory") && h.mem_total.HasValue && h.mem_used.HasValue ? new { total_mb = h.mem_total.Value, used_mb = h.mem_used.Value } : null
                             })
                             .ToArray();
                     }
@@ -205,12 +205,12 @@ namespace SystemMonitor.Service.Services
                 {
                     var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                     var cpu = GetCpuUsagePercent();
-                    var mem = GetMemoryInfoMb();
+                    var mem = GetMemoryDetail();
                     var item = new
                     {
                         ts = now,
                         cpu = want.Contains("cpu") ? new { usage_percent = cpu } : null,
-                        memory = want.Contains("memory") ? new { total = mem.total_mb, used = mem.used_mb } : null
+                        memory = want.Contains("memory") ? new { total_mb = mem.TotalMb, used_mb = mem.UsedMb } : null
                     } as object;
                     resultItems = new[] { item };
                 }

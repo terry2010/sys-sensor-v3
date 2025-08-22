@@ -104,7 +104,7 @@ namespace SystemMonitor.Service.Services
                         try
                         {
                             var mem = GetMemoryInfoMb();
-                            payload["memory"] = new { total = mem.total_mb, used = mem.used_mb };
+                            payload["memory"] = new { total_mb = mem.total_mb, used_mb = mem.used_mb };
                         }
                         catch { /* ignore mem read error */ }
                         await _rpc!.NotifyAsync("metrics", payload).ConfigureAwait(false);
