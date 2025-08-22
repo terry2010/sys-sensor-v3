@@ -56,14 +56,36 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th>Disk</th><th>Temp(C)</th><th>Health</th>
+              <th>Disk</th>
+              <th>Temp(C)</th>
+              <th>Health</th>
+              <th>PowerOn(h)</th>
+              <th>Realloc</th>
+              <th>Pending</th>
+              <th>CRC</th>
+              <th>NVMe Used%</th>
+              <th>Data Read</th>
+              <th>Data Written</th>
+              <th>Ctrl Busy(min)</th>
+              <th>Unsafe Shutdowns</th>
+              <th>Throttle Events</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="h in (disk.smart_health ?? [])" :key="h.disk_id">
               <td>{{ h.disk_id }}</td>
-              <td>{{ h.temperature_c ?? '-' }}</td>
+              <td>{{ fmtNum(h.temperature_c) }}</td>
               <td>{{ h.overall_health ?? '-' }}</td>
+              <td>{{ fmtNum(h.power_on_hours) }}</td>
+              <td>{{ fmtNum(h.reallocated_sector_count) }}</td>
+              <td>{{ fmtNum(h.pending_sector_count) }}</td>
+              <td>{{ fmtNum(h.udma_crc_error_count) }}</td>
+              <td>{{ fmtPct(h.nvme_percentage_used) }}</td>
+              <td>{{ fmtNum(h.nvme_data_units_read) }}</td>
+              <td>{{ fmtNum(h.nvme_data_units_written) }}</td>
+              <td>{{ fmtNum(h.nvme_controller_busy_time_min) }}</td>
+              <td>{{ fmtNum(h.unsafe_shutdowns) }}</td>
+              <td>{{ fmtNum(h.thermal_throttle_events) }}</td>
             </tr>
           </tbody>
         </table>

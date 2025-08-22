@@ -165,7 +165,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 }
                 catch { }
 
-                // smart/温度：使用 LibreHardwareMonitor 作为回退，按 model 名称模糊匹配
+                // smart/温度：使用 LibreHardwareMonitor 作为阶段A实现，按 model 名称模糊匹配并尽量映射常见 SMART/NVMe 字段
                 object[]? smartHealth = null;
                 try
                 {
@@ -173,41 +173,106 @@ namespace SystemMonitor.Service.Services.Collectors
                     if (physList != null)
                     {
                         var lhm = SensorsProvider.Current.DumpAll();
-                        var storageTemps = new List<(string hwName, double val)>();
-                        foreach (var s in lhm)
+                        // 将 Storage 硬件的传感器按硬件名分组，便于按型号模糊匹配后查找具体指标
+                        var storageGroups = lhm
+                            .Where(s => string.Equals(s.hw_type, "Storage", System.StringComparison.OrdinalIgnoreCase) && s.hw_name != null)
+                            .GroupBy(s => s.hw_name!)
+                            .ToDictionary(g => g.Key, g => g.ToList(), System.StringComparer.OrdinalIgnoreCase);
+
+                        // 便捷函数：在一个硬件组里按名称子串查找第一个数值
+                        static double? FindVal(IEnumerable<SystemMonitor.Service.Services.LhmSensorDto> list, params string[] nameContains)
                         {
-                            if (string.Equals(s.hw_type, "Storage", System.StringComparison.OrdinalIgnoreCase) &&
-                                string.Equals(s.sensor_type, "Temperature", System.StringComparison.OrdinalIgnoreCase) && s.value.HasValue)
+                            foreach (var key in nameContains)
                             {
-                                storageTemps.Add((s.hw_name ?? string.Empty, s.value.Value));
+                                var hit = list.FirstOrDefault(x => (x.sensor_name ?? string.Empty).IndexOf(key, System.StringComparison.OrdinalIgnoreCase) >= 0 && x.value.HasValue);
+                                if (hit != null) return hit.value;
                             }
+                            return null;
                         }
+
                         var outList = new List<object>();
                         foreach (var p in physList)
                         {
                             var id = GetStringN(p, "id") ?? string.Empty;
-                            var model = GetStringN(p, "model");
-                            double? temp = null;
+                            var model = GetStringN(p, "model") ?? string.Empty;
+                            string? matchedHw = null;
+                            List<SystemMonitor.Service.Services.LhmSensorDto>? sensors = null;
                             if (!string.IsNullOrWhiteSpace(model))
                             {
-                                var cand = storageTemps.FirstOrDefault(t => t.hwName?.IndexOf(model, System.StringComparison.OrdinalIgnoreCase) >= 0);
-                                if (!string.IsNullOrEmpty(cand.hwName)) temp = cand.val;
+                                // 找到第一个硬件名包含型号字符串的组
+                                var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(model, System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
                             }
+                            // 若按型号没匹配到，尝试用 id 进行兜底（例如包含 PhysicalDriveN / NVMe 等）
+                            if (sensors == null && !string.IsNullOrWhiteSpace(id))
+                            {
+                                var m = storageGroups.Keys.FirstOrDefault(n => n.IndexOf(id, System.StringComparison.OrdinalIgnoreCase) >= 0);
+                                if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
+                            }
+
+                            double? temperature = null;
+                            double? pwrOnHours = null;
+                            double? realloc = null;
+                            double? pending = null;
+                            double? udmaCrc = null;
+                            double? nvmePctUsed = null;
+                            double? dataRead = null;
+                            double? dataWritten = null;
+                            double? ctrlBusyMin = null;
+                            double? unsafeShutdowns = null;
+                            double? throttleEvents = null;
+                            string? overall = null;
+
+                            if (sensors != null)
+                            {
+                                // 温度
+                                temperature = FindVal(sensors, "Temperature");
+
+                                // SATA 常见 SMART
+                                pwrOnHours = FindVal(sensors, "Power On Hours");
+                                realloc = FindVal(sensors, "Reallocated Sectors", "Reallocated Sector");
+                                pending = FindVal(sensors, "Current Pending Sector", "Pending Sectors");
+                                udmaCrc = FindVal(sensors, "CRC Error", "UDMA CRC Error");
+
+                                // NVMe 常见指标（不同固件/控制器命名略有差异，尽量覆盖）
+                                // 剩余寿命/已使用百分比：若存在 Remaining Life(%)，则 used = 100 - remaining
+                                var remainingLife = FindVal(sensors, "Remaining Life", "Life Remaining");
+                                var wearLevel = FindVal(sensors, "Wear", "Percentage Used");
+                                if (wearLevel.HasValue) nvmePctUsed = wearLevel; // 已直接是使用百分比
+                                else if (remainingLife.HasValue) nvmePctUsed = 100 - remainingLife;
+
+                                // 总读写量（一般单位是 GB 或者 GiB，由 LHM 规范化为数值，直接透传数值）
+                                dataRead = FindVal(sensors, "Total Host Reads", "Data Read", "Bytes Read", "Host Reads");
+                                dataWritten = FindVal(sensors, "Total Host Writes", "Data Written", "Bytes Written", "Host Writes");
+
+                                // 控制器忙碌时间/非正常关机/热节流事件
+                                ctrlBusyMin = FindVal(sensors, "Controller Busy Time");
+                                unsafeShutdowns = FindVal(sensors, "Unsafe Shutdown");
+                                throttleEvents = FindVal(sensors, "Thermal Throttling", "Thermal Throttle");
+
+                                // 健康概览（若存在 Health 百分比等）
+                                var healthPct = FindVal(sensors, "Health");
+                                if (healthPct.HasValue)
+                                {
+                                    overall = healthPct.Value >= 90 ? "good" : (healthPct.Value >= 50 ? "warning" : "critical");
+                                }
+                            }
+
                             outList.Add(new
                             {
                                 disk_id = id,
-                                overall_health = (string?)null,
-                                temperature_c = temp,
-                                power_on_hours = (double?)null,
-                                reallocated_sector_count = (double?)null,
-                                pending_sector_count = (double?)null,
-                                udma_crc_error_count = (double?)null,
-                                nvme_percentage_used = (double?)null,
-                                nvme_data_units_read = (double?)null,
-                                nvme_data_units_written = (double?)null,
-                                nvme_controller_busy_time_min = (double?)null,
-                                unsafe_shutdowns = (double?)null,
-                                thermal_throttle_events = (double?)null
+                                overall_health = overall,
+                                temperature_c = temperature,
+                                power_on_hours = pwrOnHours,
+                                reallocated_sector_count = realloc,
+                                pending_sector_count = pending,
+                                udma_crc_error_count = udmaCrc,
+                                nvme_percentage_used = nvmePctUsed,
+                                nvme_data_units_read = dataRead,
+                                nvme_data_units_written = dataWritten,
+                                nvme_controller_busy_time_min = ctrlBusyMin,
+                                unsafe_shutdowns = unsafeShutdowns,
+                                thermal_throttle_events = throttleEvents
                             });
                         }
                         if (outList.Count > 0) smartHealth = outList.ToArray();
