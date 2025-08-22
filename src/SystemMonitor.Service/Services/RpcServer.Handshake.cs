@@ -16,6 +16,13 @@ namespace SystemMonitor.Service.Services
         /// </summary>
         public Task<object> hello(HelloParams p)
         {
+            // 入口日志：用于测试与诊断（关键字：hello:）
+            try
+            {
+                var caps = p?.capabilities == null ? string.Empty : string.Join(',', p.capabilities);
+                _logger.LogInformation("hello: app={App} proto={Proto} caps=[{Caps}] conn={ConnId}", p?.app_version, p?.protocol_version, caps, _connId);
+            }
+            catch { /* ignore logging error */ }
             if (p == null)
             {
                 throw new InvalidOperationException("invalid_params: missing body");
