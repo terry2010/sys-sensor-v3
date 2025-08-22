@@ -64,6 +64,15 @@ namespace SystemMonitor.Service.Services
             get { lock (_lock) { return _isBridge; } }
         }
 
+        // 仅用于单元/集成测试，避免不同测试间的跨连接静态状态串扰
+        internal static void ResetForTests()
+        {
+            lock (_subLock)
+            {
+                _s_metricsEnabled = false;
+            }
+        }
+
         
 
         

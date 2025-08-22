@@ -29,10 +29,16 @@ namespace SystemMonitor.Service.Services
 
                 EnsureInit();
 
+                static double? Clean(double v)
+                {
+                    if (double.IsNaN(v) || double.IsInfinity(v)) return null;
+                    return v < 0 ? 0 : v;
+                }
+
                 double? ctx = null, sysc = null, intr = null;
-                try { if (_pcCtx != null) ctx = Math.Max(0, _pcCtx.NextValue()); } catch { ctx = null; }
-                try { if (_pcSyscalls != null) sysc = Math.Max(0, _pcSyscalls.NextValue()); } catch { sysc = null; }
-                try { if (_pcIntr != null) intr = Math.Max(0, _pcIntr.NextValue()); } catch { intr = null; }
+                try { if (_pcCtx != null) { var v = _pcCtx.NextValue(); ctx = Clean(v); } } catch { ctx = null; }
+                try { if (_pcSyscalls != null) { var v = _pcSyscalls.NextValue(); sysc = Clean(v); } } catch { sysc = null; }
+                try { if (_pcIntr != null) { var v = _pcIntr.NextValue(); intr = Clean(v); } } catch { intr = null; }
 
                 _lastValues = (ctx, sysc, intr);
                 _lastTicks = now;

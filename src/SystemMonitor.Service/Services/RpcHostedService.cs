@@ -206,7 +206,7 @@ namespace SystemMonitor.Service.Services
                         {
                             rpcServer.AppendHistory(now, cpuVal, memVal);
                             // 持久化到 SQLite（改为异步，不阻塞推送循环；忽略错误）
-                            Task.Run(async () => { try { await rpcServer.PersistHistoryAsync(now, cpuVal, memVal).ConfigureAwait(false); } catch { } });
+                            _ = Task.Run(async () => { try { await rpcServer.PersistHistoryAsync(now, cpuVal, memVal).ConfigureAwait(false); } catch { } });
                         }
                         // 故障注入：当设置 SIM_METRICS_ERROR 时，在达到阈值的第 N 次推送前抛出一次异常
                         var sim = Environment.GetEnvironmentVariable("SIM_METRICS_ERROR");

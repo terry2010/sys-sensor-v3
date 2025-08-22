@@ -15,7 +15,7 @@ namespace SystemMonitor.Service.Services
     }
 
     // LibreHardwareMonitor 采集器（CPU 包温/核心温/包功率，主板风扇）
-    internal sealed class LhmSensors
+    internal sealed class LhmSensors : ISensorsProvider
     {
         private static readonly Lazy<LhmSensors> _inst = new(() => new LhmSensors());
         public static LhmSensors Instance => _inst.Value;

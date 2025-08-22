@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace SystemMonitor.Service.Services
 {
@@ -20,6 +21,21 @@ namespace SystemMonitor.Service.Services
             lock (_lock)
             {
                 _suppressUntil = Math.Max(_suppressUntil, until);
+            }
+        }
+
+        /// <summary>
+        /// 等待抑制窗口结束（最多等待 maxWaitMs）。用于通知前避免与当前 RPC 响应交叉。
+        /// </summary>
+        /// <param name="maxWaitMs">最大等待时长（毫秒），默认 500ms。</param>
+        /// <param name="pollMs">轮询间隔（毫秒），默认 20ms。</param>
+        private async Task WaitForUnsuppressedAsync(int maxWaitMs = 500, int pollMs = 20)
+        {
+            var deadline = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + Math.Max(0, maxWaitMs);
+            while (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() < deadline)
+            {
+                if (!IsPushSuppressed(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())) return;
+                try { await Task.Delay(Math.Max(5, pollMs)).ConfigureAwait(false); } catch { return; }
             }
         }
     }

@@ -64,8 +64,16 @@ namespace SystemMonitor.Service.Services
             foreach (var c in MetricsRegistry.Collectors)
             {
                 if (!want.Contains(c.Name)) continue;
-                var val = c.Collect();
-                if (val != null) payload[c.Name] = val;
+                try
+                {
+                    var val = c.Collect();
+                    if (val != null) payload[c.Name] = val;
+                }
+                catch (Exception ex)
+                {
+                    // 避免单个采集器异常导致 snapshot 整体失败
+                    _logger.LogDebug(ex, "snapshot collector failed (ignored): {Collector}", c.Name);
+                }
             }
             _logger.LogInformation("snapshot called, modules={Modules}", p?.modules == null ? "*" : string.Join(',', p.modules));
             return Task.FromResult<object>(payload);

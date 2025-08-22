@@ -79,6 +79,8 @@ namespace SystemMonitor.Service.Services
                     try
                     {
                         await Task.Delay(100).ConfigureAwait(false);
+                        // 避免与 hello 响应交叉
+                        await WaitForUnsuppressedAsync(400).ConfigureAwait(false);
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                         var payload = new System.Collections.Generic.Dictionary<string, object?>
                         {

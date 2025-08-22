@@ -94,6 +94,8 @@ namespace SystemMonitor.Service.Services
                     try
                     {
                         await Task.Delay(300).ConfigureAwait(false);
+                        // 避免与 subscribe_metrics 响应交叉
+                        await WaitForUnsuppressedAsync(400).ConfigureAwait(false);
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                         var payload = new System.Collections.Generic.Dictionary<string, object?>
                         {
@@ -194,6 +196,8 @@ namespace SystemMonitor.Service.Services
                 try
                 {
                     await Task.Delay(120).ConfigureAwait(false);
+                    // 避免与 set_config 响应交叉
+                    await WaitForUnsuppressedAsync(400).ConfigureAwait(false);
                     var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                     var payload = new System.Collections.Generic.Dictionary<string, object?>
                     {
