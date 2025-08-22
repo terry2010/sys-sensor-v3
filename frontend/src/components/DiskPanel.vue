@@ -9,6 +9,8 @@
           <div class="kv">
             <div><label>Read</label><span>{{ fmtBps(disk.totals?.read_bytes_per_sec ?? disk.read_bytes_per_sec) }}</span></div>
             <div><label>Write</label><span>{{ fmtBps(disk.totals?.write_bytes_per_sec ?? disk.write_bytes_per_sec) }}</span></div>
+            <div><label>Read IOPS</label><span>{{ fmtNum(disk.totals?.read_iops) }}</span></div>
+            <div><label>Write IOPS</label><span>{{ fmtNum(disk.totals?.write_iops) }}</span></div>
             <div><label>Busy</label><span>{{ fmtPct(disk.totals?.busy_percent) }}</span></div>
             <div><label>Queue</label><span>{{ fmtNum(disk.totals?.queue_length ?? disk.queue_length) }}</span></div>
             <div><label>Avg Read Lat</label><span>{{ fmtMs(disk.totals?.avg_read_latency_ms) }}</span></div>
@@ -31,7 +33,7 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th>Device</th><th>Read</th><th>Write</th><th>Busy</th><th>Queue</th><th>R Lat</th><th>W Lat</th>
+              <th>Device</th><th>Read</th><th>Write</th><th>R IOPS</th><th>W IOPS</th><th>Busy</th><th>Queue</th><th>R Lat</th><th>W Lat</th>
             </tr>
           </thead>
           <tbody>
@@ -39,6 +41,8 @@
               <td>{{ d.disk_id ?? '#' + i }}</td>
               <td>{{ fmtBps(d.read_bytes_per_sec) }}</td>
               <td>{{ fmtBps(d.write_bytes_per_sec) }}</td>
+              <td>{{ fmtNum(d.read_iops) }}</td>
+              <td>{{ fmtNum(d.write_iops) }}</td>
               <td>{{ fmtPct(d.busy_percent) }}</td>
               <td>{{ fmtNum(d.queue_length) }}</td>
               <td>{{ fmtMs(d.avg_read_latency_ms) }}</td>
@@ -96,7 +100,7 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th>Volume</th><th>Read</th><th>Write</th><th>Busy</th><th>Queue</th><th>R Lat</th><th>W Lat</th><th>Free%</th>
+              <th>Volume</th><th>Read</th><th>Write</th><th>R IOPS</th><th>W IOPS</th><th>Busy</th><th>Queue</th><th>R Lat</th><th>W Lat</th><th>Free%</th>
             </tr>
           </thead>
           <tbody>
@@ -104,6 +108,8 @@
               <td>{{ v.volume_id }}</td>
               <td>{{ fmtBps(v.read_bytes_per_sec) }}</td>
               <td>{{ fmtBps(v.write_bytes_per_sec) }}</td>
+              <td>{{ fmtNum(v.read_iops) }}</td>
+              <td>{{ fmtNum(v.write_iops) }}</td>
               <td>{{ fmtPct(v.busy_percent) }}</td>
               <td>{{ fmtNum(v.queue_length) }}</td>
               <td>{{ fmtMs(v.avg_read_latency_ms) }}</td>
@@ -148,7 +154,7 @@ const disk = computed(() => metrics.latest?.disk);
 
 const perPhysicalSorted = computed(() => {
   const arr = (disk.value?.per_physical_disk_io ?? []) as any[];
-  return [...arr].sort((a, b) => (String(a.device_id||'')).localeCompare(String(b.device_id||'')));
+  return [...arr].sort((a, b) => (String(a.disk_id||'')).localeCompare(String(b.disk_id||'')));
 });
 const perVolumeSorted = computed(() => {
   const arr = (disk.value?.per_volume_io ?? []) as any[];
