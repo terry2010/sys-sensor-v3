@@ -355,29 +355,16 @@ fn start_event_bridge(app: tauri::AppHandle) -> Result<(), String> {
                                     Value::Array(arr) if arr.len() == 1 => arr[0].clone(),
                                     _ => raw_params,
                                 };
-                                // 临时 CPU 日志打印已完成联调，按流程停用（保留默认订阅）。
-                                // if event == "metrics" {
-                                //     if let Some(cpu) = payload.get("cpu") {
-                                //         let usage = cpu.get("usage_percent").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let userp = cpu.get("user_percent").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let sysp = cpu.get("system_percent").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let idlep = cpu.get("idle_percent").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let l1 = cpu.get("load_avg_1m").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let l5 = cpu.get("load_avg_5m").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let l15 = cpu.get("load_avg_15m").and_then(|x| x.as_f64()).unwrap_or(-1.0);
-                                //         let proc_cnt = cpu.get("process_count").and_then(|x| x.as_i64()).unwrap_or(-1);
-                                //         let thread_cnt = cpu.get("thread_count").and_then(|x| x.as_i64()).unwrap_or(-1);
-                                //         let cur = cpu.get("current_mhz").map(|x| x.to_string()).unwrap_or("null".to_string());
-                                //         let max = cpu.get("max_mhz").map(|x| x.to_string()).unwrap_or("null".to_string());
-                                //         log_line(
-                                //             "CPU",
-                                //             &format!(
-                                //                 "usage={:.1}% user={:.1}% sys={:.1}% idle={:.1}% load(1/5/15)={:.1}/{:.1}/{:.1} proc={} thread={} mhz(cur/max)={}/{}",
-                                //                 usage, userp, sysp, idlep, l1, l5, l15, proc_cnt, thread_cnt, cur, max
-                                //             ),
-                                //         );
-                                //     }
-                                // }
+                                // 临时内存指标日志，便于校验字段命名与取值范围
+                                if event == "metrics" {
+                                    if let Some(mem) = payload.get("memory") {
+                                        let total = mem.get("total_mb").and_then(|x| x.as_i64()).unwrap_or(-1);
+                                        let used = mem.get("used_mb").and_then(|x| x.as_i64()).unwrap_or(-1);
+                                        if total >= 0 && used >= 0 {
+                                            log_line("MEM", &format!("mem total_mb={} used_mb={} ts={}", total, used, now_millis()));
+                                        }
+                                    }
+                                }
                                 let _ = app.emit(event, payload);
                             }
                         } else {

@@ -18,6 +18,7 @@
 
     <section class="cards">
       <CpuPanel />
+      <MemoryPanel />
       <div class="card" v-if="Array.isArray(sensors) && sensors.length">
         <h3>Hardware Sensors (LibreHardwareMonitor)</h3>
         <div class="sub">total: {{ sensors.length }}</div>
@@ -70,6 +71,7 @@
 import { onMounted, onUnmounted, ref, computed } from 'vue';
 import SnapshotPanel from './components/SnapshotPanel.vue';
 import CpuPanel from './components/CpuPanel.vue';
+import MemoryPanel from './components/MemoryPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
@@ -128,7 +130,7 @@ onMounted(async () => {
           w.__METRICS_READY = true;
           try { toast.push('事件桥已连接', 'success'); } catch {}
         }
-        events.push({ ts: Date.now(), type: 'metrics', payload: { cpu: p?.cpu?.usage_percent, mem_used: p?.memory?.used, ts: p?.ts } });
+        events.push({ ts: Date.now(), type: 'metrics', payload: { cpu: p?.cpu?.usage_percent, mem_used: p?.memory?.used_mb, ts: p?.ts } });
       });
       // 监听 state 事件，展示生命周期状态角标
       void listen('state', (e: any) => {

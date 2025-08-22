@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { service } from '../api/service';
 
-export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total: number; used: number } };
+export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total_mb: number; used_mb: number } };
 
 let started = false;
 
