@@ -22,6 +22,7 @@
             <div><label>Total</label><span>{{ fmtBytes(disk.capacity_totals?.total_bytes) }}</span></div>
             <div><label>Used</label><span>{{ fmtBytes(disk.capacity_totals?.used_bytes) }}</span></div>
             <div><label>Free</label><span>{{ fmtBytes(disk.capacity_totals?.free_bytes) }}</span></div>
+            <div><label>VM Swapfiles</label><span>{{ fmtBytes(disk.vm_swapfiles_bytes) }}</span></div>
           </div>
         </div>
       </div>
@@ -35,13 +36,36 @@
           </thead>
           <tbody>
             <tr v-for="(d, i) in perPhysicalSorted" :key="i">
-              <td>{{ d.device_id ?? '#' + i }}</td>
+              <td>{{ d.disk_id ?? '#' + i }}</td>
               <td>{{ fmtBps(d.read_bytes_per_sec) }}</td>
               <td>{{ fmtBps(d.write_bytes_per_sec) }}</td>
               <td>{{ fmtPct(d.busy_percent) }}</td>
               <td>{{ fmtNum(d.queue_length) }}</td>
               <td>{{ fmtMs(d.avg_read_latency_ms) }}</td>
               <td>{{ fmtMs(d.avg_write_latency_ms) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details open>
+        <summary>Per Physical (Info)</summary>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>ID</th><th>Model</th><th>Serial</th><th>FW</th><th>Total</th><th>Media</th><th>Interface</th><th>RPM</th><th>TRIM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="pi in (disk.per_physical_disk ?? [])" :key="pi.id">
+              <td>{{ pi.id }}</td>
+              <td>{{ pi.model ?? '-' }}</td>
+              <td>{{ pi.serial ?? '-' }}</td>
+              <td>{{ pi.firmware ?? '-' }}</td>
+              <td>{{ fmtBytes(pi.size_total_bytes) }}</td>
+              <td>{{ pi.media_type ?? '-' }}</td>
+              <td>{{ pi.interface_type ?? '-' }}</td>
+              <td>{{ fmtNum(pi.spindle_speed_rpm) }}</td>
+              <td>{{ pi.trim_supported === true ? 'Yes' : pi.trim_supported === false ? 'No' : '-' }}</td>
             </tr>
           </tbody>
         </table>

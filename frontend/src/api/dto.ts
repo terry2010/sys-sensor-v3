@@ -16,7 +16,7 @@ export type DiskIOTotals = {
   avg_write_latency_ms: number | null;
 };
 
-export type DiskPerPhysical = DiskIOTotals & { device_id?: string } & Record<string, any>;
+export type DiskPerPhysical = DiskIOTotals & { disk_id?: string } & Record<string, any>;
 export type DiskPerVolumeIO = DiskIOTotals & { volume_id: string; free_percent: number | null };
 
 export type DiskCapacityTotals = { total_bytes: number | null; used_bytes: number | null; free_bytes: number | null };
@@ -43,6 +43,7 @@ export type SnapshotResult = {
     per_physical_disk_io?: DiskPerPhysical[];
     per_volume_io?: DiskPerVolumeIO[];
     capacity_totals?: DiskCapacityTotals;
+    vm_swapfiles_bytes?: number | null;
     per_volume?: DiskVolumeInfo[];
     per_physical_disk?: DiskPhysicalInfo[];
   };

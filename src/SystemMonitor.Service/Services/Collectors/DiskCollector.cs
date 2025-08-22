@@ -1,3 +1,4 @@
+using System.Linq;
 namespace SystemMonitor.Service.Services.Collectors
 {
     internal sealed class DiskCollector : IMetricsCollector
@@ -15,6 +16,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 var perVol = LogicalDiskCounters.Instance.ReadPerVolume();
                 // 阶段B：容量与静态信息
                 var (vols, capTotals) = StorageQuery.Instance.ReadVolumes();
+                var vmSwapBytes = StorageQuery.Instance.ReadVmSwapfilesBytes();
                 var phys = StorageQuery.Instance.ReadPhysicalDisks();
 
                 // 反射取值的小工具
@@ -29,6 +31,12 @@ namespace SystemMonitor.Service.Services.Collectors
                     var p = obj.GetType().GetProperty(name); if (p == null) return null;
                     var v = p.GetValue(obj); if (v == null) return null;
                     try { return System.Convert.ToDouble(v); } catch { return null; }
+                }
+                static string? GetStringN(object obj, string name)
+                {
+                    var p = obj.GetType().GetProperty(name); if (p == null) return null;
+                    var v = p.GetValue(obj); if (v == null) return null;
+                    try { return System.Convert.ToString(v); } catch { return null; }
                 }
 
                 // 读取 totals 原始值
@@ -86,6 +94,71 @@ namespace SystemMonitor.Service.Services.Collectors
                     avg_write_latency_ms = GetDoubleN(totalsRaw, "avg_write_latency_ms")
                 };
 
+                // enrich per_volume_io with free_percent from volumes
+                System.Collections.Generic.List<object>? perVolEnriched = null;
+                if (perVol != null && vols != null)
+                {
+                    perVolEnriched = new System.Collections.Generic.List<object>();
+                    foreach (var v in perVol)
+                    {
+                        var vid = GetStringN(v, "volume_id");
+                        double? freePct = null;
+                        try
+                        {
+                            var match = vols.FirstOrDefault(x => string.Equals(x.id, vid, System.StringComparison.OrdinalIgnoreCase));
+                            freePct = match?.free_percent;
+                        }
+                        catch { }
+                        perVolEnriched.Add(new
+                        {
+                            volume_id = vid ?? string.Empty,
+                            read_bytes_per_sec = GetLong(v, "read_bytes_per_sec"),
+                            write_bytes_per_sec = GetLong(v, "write_bytes_per_sec"),
+                            read_iops = GetDoubleN(v, "read_iops"),
+                            write_iops = GetDoubleN(v, "write_iops"),
+                            busy_percent = GetDoubleN(v, "busy_percent"),
+                            queue_length = GetDoubleN(v, "queue_length"),
+                            avg_read_latency_ms = GetDoubleN(v, "avg_read_latency_ms"),
+                            avg_write_latency_ms = GetDoubleN(v, "avg_write_latency_ms"),
+                            free_percent = freePct
+                        });
+                    }
+                }
+
+                // 兜底：若物理盘静态信息为空，则基于 per_physical_disk_io 的实例名生成最小占位列表
+                object? physOut = phys;
+                try
+                {
+                    if ((phys == null || phys.Count == 0) && perInst != null)
+                    {
+                        var seen = new System.Collections.Generic.HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+                        var fallback = new System.Collections.Generic.List<object>();
+                        foreach (var d in perInst)
+                        {
+                            var id = GetStringN(d, "disk_id") ?? GetStringN(d, "device_id") ?? string.Empty;
+                            if (string.IsNullOrWhiteSpace(id)) continue;
+                            if (seen.Add(id))
+                            {
+                                fallback.Add(new
+                                {
+                                    id = id,
+                                    model = (string?)null,
+                                    serial = (string?)null,
+                                    firmware = (string?)null,
+                                    size_total_bytes = (long?)null,
+                                    partitions = (int?)null,
+                                    media_type = (string?)null,
+                                    spindle_speed_rpm = (int?)null,
+                                    interface_type = (string?)null,
+                                    trim_supported = (bool?)null
+                                });
+                            }
+                        }
+                        if (fallback.Count > 0) physOut = fallback;
+                    }
+                }
+                catch { }
+
                 return new
                 {
                     // 顶层保持兼容
@@ -97,11 +170,12 @@ namespace SystemMonitor.Service.Services.Collectors
                     // 扩展输出
                     totals,
                     per_physical_disk_io = perInst,
-                    per_volume_io = perVol,
+                    per_volume_io = (object?)(perVolEnriched ?? perVol),
                     // 容量与静态信息
                     capacity_totals = new { total_bytes = capTotals.total, used_bytes = capTotals.used, free_bytes = capTotals.free },
+                    vm_swapfiles_bytes = vmSwapBytes,
                     per_volume = vols,
-                    per_physical_disk = phys
+                    per_physical_disk = physOut
                 };
             }
             catch
