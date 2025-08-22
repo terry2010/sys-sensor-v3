@@ -27,4 +27,8 @@
     <None Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SystemMonitor.Service\SystemMonitor.Service.csproj" />
+  </ItemGroup>
+
 </Project>

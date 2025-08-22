@@ -26,19 +26,14 @@ namespace SystemMonitor.Service.Services
         // 全局订阅开关（跨会话共享），确保任意连接的 subscribe_metrics 立即影响事件桥推流
         private static readonly object _subLock = new();
         private static bool _s_metricsEnabled = false;
-        private int _baseIntervalMs = 1000;
-        private int? _burstIntervalMs;
-        private long _burstExpiresAt;
         private long _metricsPushed;
-        private readonly Dictionary<string, int> _moduleIntervals = new(StringComparer.OrdinalIgnoreCase);
         // 简易内存历史缓冲区（环形，最多保留最近 MaxHistory 条）
         private readonly List<HistoryItem> _history = new();
         private const int MaxHistory = 10_000;
         private static readonly HashSet<string> _supportedCapabilities = new(new[] { "metrics_stream", "burst_mode", "history_query" }, StringComparer.OrdinalIgnoreCase);
         private readonly HistoryStore _store;
         private JsonRpc? _rpc;
-        // 在处理前台 RPC 响应期间抑制 metrics 推送的时间点（毫秒时间戳，now < _suppressUntil 时抑制）
-        private long _suppressUntil;
+        
 
         public RpcServer(ILogger logger, long initialSeq, HistoryStore store, Guid connId)
         {
@@ -69,50 +64,11 @@ namespace SystemMonitor.Service.Services
             get { lock (_lock) { return _isBridge; } }
         }
 
-        public bool IsPushSuppressed(long now)
-        {
-            lock (_lock) { return now < _suppressUntil; }
-        }
+        
 
-        public void SuppressPush(int ms)
-        {
-            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            var until = now + Math.Max(50, ms);
-            lock (_lock)
-            {
-                _suppressUntil = Math.Max(_suppressUntil, until);
-            }
-        }
+        
 
-        public int GetCurrentIntervalMs(long now)
-        {
-            lock (_lock)
-            {
-                if (_burstIntervalMs.HasValue && now < _burstExpiresAt)
-                {
-                    return Math.Max(50, _burstIntervalMs.Value);
-                }
-                var interval = _baseIntervalMs;
-                if (_moduleIntervals.Count > 0)
-                {
-                    var minMod = _moduleIntervals.Values.Min();
-                    interval = Math.Min(interval, minMod);
-                }
-                return interval;
-            }
-        }
-
-        public ISet<string> GetEnabledModules()
-        {
-            lock (_lock)
-            {
-                if (_moduleIntervals.Count == 0)
-                {
-                    return new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
-                }
-                return new HashSet<string>(_moduleIntervals.Keys, StringComparer.OrdinalIgnoreCase);
-            }
-        }
+        
 
         
 
