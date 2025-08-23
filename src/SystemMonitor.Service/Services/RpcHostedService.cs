@@ -3,6 +3,7 @@ using System.IO.Pipes;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using SystemMonitor.Service;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -128,6 +129,8 @@ namespace SystemMonitor.Service.Services
             var writer = serverStream.UsePipeWriter();
             var formatter = new SystemTextJsonFormatter();
             formatter.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+            // 允许命名浮点字面量（NaN/Infinity/-Infinity），避免极端值导致序列化失败
+            formatter.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
             var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
 
             var connId = Guid.NewGuid();
@@ -152,6 +155,19 @@ namespace SystemMonitor.Service.Services
             rpc.StartListening();
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+            // 后台慢路径预热：周期性刷新物理盘缓存，降低首次采集抖动
+            var slowWarmupTask = Task.Run(async () =>
+            {
+                while (!cts.Token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        SystemMonitor.Service.Services.Collectors.DiskCollector.RefreshPhysicalCache();
+                    }
+                    catch { }
+                    try { await Task.Delay(12000, cts.Token).ConfigureAwait(false); } catch { }
+                }
+            }, cts.Token);
             var metricsTask = Task.Run(async () =>
             {
                 var logEvery = GetMetricsLogEvery();

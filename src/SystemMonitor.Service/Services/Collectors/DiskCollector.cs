@@ -6,6 +6,41 @@ namespace SystemMonitor.Service.Services.Collectors
     internal sealed class DiskCollector : IMetricsCollector
     {
         public string Name => "disk";
+        // 慢路径缓存（物理盘/SMART）——降低每轮重 I/O 频率
+        private static readonly object _slowLock = new object();
+        private const int SLOW_MIN_INTERVAL_MS = 10000; // ≥10s 刷新
+        private static long _physAtMs = 0;
+        private static System.Collections.Generic.IReadOnlyList<SystemMonitor.Service.Services.Collectors.StorageQuery.PhysicalDiskInfo>? _physCache = null;
+        private static long _smartAtMs = 0;
+        private static object[]? _smartCache = null;
+
+        // 后台预热入口（供服务在后台定期调用）
+        public static void RefreshPhysicalCache()
+        {
+            try { _ = GetPhysicalDisksCached(forceRefresh: true); } catch { }
+        }
+
+        private static System.Collections.Generic.IReadOnlyList<SystemMonitor.Service.Services.Collectors.StorageQuery.PhysicalDiskInfo>? GetPhysicalDisksCached(bool forceRefresh = false)
+        {
+            var now = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            lock (_slowLock)
+            {
+                if (!forceRefresh && _physCache != null && (now - _physAtMs) < SLOW_MIN_INTERVAL_MS)
+                {
+                    return _physCache;
+                }
+            }
+            try
+            {
+                var fresh = StorageQuery.Instance.ReadPhysicalDisks();
+                lock (_slowLock) { _physCache = fresh; _physAtMs = now; }
+                return fresh;
+            }
+            catch
+            {
+                lock (_slowLock) { return _physCache; }
+            }
+        }
         public object? Collect()
         {
             try
@@ -19,7 +54,8 @@ namespace SystemMonitor.Service.Services.Collectors
                 // 阶段B：容量与静态信息
                 var (vols, capTotals) = StorageQuery.Instance.ReadVolumes();
                 var vmSwapBytes = StorageQuery.Instance.ReadVmSwapfilesBytes();
-                var phys = StorageQuery.Instance.ReadPhysicalDisks();
+                // 物理盘信息走缓存（≥10s）
+                var phys = GetPhysicalDisksCached();
 
                 // 反射取值的小工具
                 static long GetLong(object obj, string name)
@@ -202,10 +238,20 @@ namespace SystemMonitor.Service.Services.Collectors
 
                 // smart/温度：阶段B线（优先原生 IOCTL），阶段A回退（LHM 模糊匹配）
                 object[]? smartHealth = null;
+                var nowMs = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                bool smartFromCache = false;
+                lock (_slowLock)
+                {
+                    if (_smartCache != null && (nowMs - _smartAtMs) < SLOW_MIN_INTERVAL_MS)
+                    {
+                        smartHealth = _smartCache;
+                        smartFromCache = true;
+                    }
+                }
                 try
                 {
                     var physList = physOut as IEnumerable<object>;
-                    if (physList != null)
+                    if (!smartFromCache && physList != null)
                     {
                         // 环境变量开关
                         bool disableNative = string.Equals(System.Environment.GetEnvironmentVariable("SYS_SENSOR_DISABLE_NATIVE_SMART"), "1", System.StringComparison.OrdinalIgnoreCase);
@@ -663,6 +709,15 @@ namespace SystemMonitor.Service.Services.Collectors
                     }
                     if (outList.Count > 0) smartHealth = outList.ToArray();
                 }
+                }
+                catch { }
+                // 更新 SMART 缓存（若本轮成功构建）
+                try
+                {
+                    if (!smartFromCache && smartHealth != null)
+                    {
+                        lock (_slowLock) { _smartCache = smartHealth; _smartAtMs = nowMs; }
+                    }
                 }
                 catch { }
 
