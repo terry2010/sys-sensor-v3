@@ -15,6 +15,8 @@ try
     Console.WriteLine("[BOOT] Program start");
     var serviceOption = new Option<bool>("--service", description: "以 Windows 服务模式运行（用于服务托管场景）");
     var root = new RootCommand("SystemMonitor.Service - Windows 系统监控服务") { serviceOption };
+    // 允许传入未声明的参数（测试进程可能注入自定义参数），避免因解析错误导致进程提前退出
+    try { root.TreatUnmatchedTokensAsErrors = false; } catch { }
 
     root.SetHandler((bool isService) =>
     {

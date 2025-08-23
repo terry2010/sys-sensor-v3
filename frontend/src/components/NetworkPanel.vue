@@ -45,6 +45,50 @@
       </div>
       <pre><code>{{ netJson }}</code></pre>
     </details>
+
+    <details class="json-box">
+      <summary>per_interface_info</summary>
+      <div class="table info">
+        <div class="thead">
+          <span class="c if">if_id</span>
+          <span class="c name">name</span>
+          <span class="c stat">status</span>
+          <span class="c type">type</span>
+          <span class="c mac">mac</span>
+          <span class="c mtu">mtu</span>
+          <span class="c speed">link(Mbps)</span>
+        </div>
+        <div class="row" v-for="(it, idx) in infoList" :key="idx">
+          <span class="c if">{{ it.if_id }}</span>
+          <span class="c name">{{ it.name }}</span>
+          <span class="c stat">{{ it.status }}</span>
+          <span class="c type">{{ it.type }}</span>
+          <span class="c mac">{{ it.mac_address ?? '-' }}</span>
+          <span class="c mtu">{{ it.mtu ?? '-' }}</span>
+          <span class="c speed">{{ it.link_speed_mbps ?? '-' }}</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="json-box">
+      <summary>per_ethernet_info</summary>
+      <div class="table eth">
+        <div class="thead">
+          <span class="c if">if_id</span>
+          <span class="c name">name</span>
+          <span class="c speed">link(Mbps)</span>
+          <span class="c duplex">duplex</span>
+          <span class="c auto">auto_negotiation</span>
+        </div>
+        <div class="row" v-for="(it, idx) in ethList" :key="idx">
+          <span class="c if">{{ it.if_id }}</span>
+          <span class="c name">{{ it.name }}</span>
+          <span class="c speed">{{ it.link_speed_mbps ?? '-' }}</span>
+          <span class="c duplex">{{ it.duplex ?? '-' }}</span>
+          <span class="c auto">{{ String(it.auto_negotiation) }}</span>
+        </div>
+      </div>
+    </details>
   </div>
 </template>
 
@@ -57,6 +101,8 @@ const net = computed<any>(() => (metrics.latest as any)?.network || null);
 const totals = computed<any>(() => net.value?.io_totals || null);
 const list = computed<any[]>(() => Array.isArray(net.value?.per_interface_io) ? net.value.per_interface_io : []);
 const netJson = computed<string>(() => { try { return JSON.stringify(net.value || {}, null, 2); } catch { return '{}'; } });
+const infoList = computed<any[]>(() => Array.isArray(net.value?.per_interface_info) ? net.value.per_interface_info : []);
+const ethList = computed<any[]>(() => Array.isArray(net.value?.per_ethernet_info) ? net.value.per_ethernet_info : []);
 
 const fmtBps = (v: any) => {
   if (v === null || v === undefined) return '-';
@@ -90,4 +136,8 @@ const fmtPercent = (v: any) => {
 .thead { color: #666; font-weight: 600; }
 .c { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .json-box pre { max-height: 240px; overflow: auto; background: #0b1020; color: #cde2ff; padding: 8px; border-radius: 6px; margin-top: 8px; }
+
+/* info 与 eth 表格稍作列宽调整 */
+.table.info .thead, .table.info .row { grid-template-columns: 190px 1fr 110px 120px 160px 80px 110px; }
+.table.eth .thead, .table.eth .row { grid-template-columns: 190px 1fr 120px 90px 140px; }
 </style>

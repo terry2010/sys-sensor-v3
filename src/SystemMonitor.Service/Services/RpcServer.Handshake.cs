@@ -131,6 +131,7 @@ namespace SystemMonitor.Service.Services
             var modules = p?.modules ?? new[] { "cpu", "mem" };
             // 将外部传入的模块名规范化到内部命名（mem -> memory）并写入实例模块配置
             var map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var enabled = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var m in modules)
             {
                 if (string.IsNullOrWhiteSpace(m)) continue;
@@ -138,6 +139,7 @@ namespace SystemMonitor.Service.Services
                 int baseMs;
                 lock (s_cfgLock) { baseMs = s_baseIntervalMs; }
                 map[name] = Math.Max(100, baseMs);
+                enabled.Add(name);
             }
             lock (s_cfgLock)
             {
@@ -146,6 +148,8 @@ namespace SystemMonitor.Service.Services
                 {
                     s_moduleIntervals[kv.Key] = kv.Value;
                 }
+                // start 显式指定模块：更新启用集合，仅包含传入模块
+                s_enabledModules = enabled.Count == 0 ? null : enabled;
             }
             _logger.LogInformation("start called, modules={modules}", string.Join(",", modules));
             // 先返回响应，避免在同一请求通道上先收到通知导致客户端解码失败
@@ -171,6 +175,8 @@ namespace SystemMonitor.Service.Services
             lock (s_cfgLock)
             {
                 s_moduleIntervals.Clear();
+                // stop 后重置启用集合为全部（null 表示全部）
+                s_enabledModules = null;
             }
             _logger.LogInformation("stop called, metrics collection stopped");
             // 发出状态事件：stop

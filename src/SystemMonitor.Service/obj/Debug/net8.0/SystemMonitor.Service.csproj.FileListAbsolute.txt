@@ -1,3 +1,9 @@
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.csproj.AssemblyReference.cache
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.AssemblyInfoInputs.cache
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.AssemblyInfo.cs
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.csproj.CoreCompileInputs.cache
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.sourcelink.json
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\appsettings.Development.json
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\appsettings.json
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\SystemMonitor.Service.exe
@@ -169,12 +175,6 @@ C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\runtimes\unix\l
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.IO.Ports.dll
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Management.dll
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.ServiceProcess.ServiceController.dll
-C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.csproj.AssemblyReference.cache
-C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.GeneratedMSBuildEditorConfig.editorconfig
-C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.AssemblyInfoInputs.cache
-C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.AssemblyInfo.cs
-C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.csproj.CoreCompileInputs.cache
-C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.sourcelink.json
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMo.D900B1D3.Up2Date
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.dll
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\refint\SystemMonitor.Service.dll

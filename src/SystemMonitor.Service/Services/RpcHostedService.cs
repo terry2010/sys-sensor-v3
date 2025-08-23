@@ -445,7 +445,11 @@ namespace SystemMonitor.Service.Services
                         {
                             _logger.LogInformation("metrics 推送累计: {Count}", pushed);
                         }
-                        var delay = rpcServer.GetCurrentIntervalMs(now);
+                        // 使用“目标间隔 - 本次采集耗时”的补偿延迟，避免周期累加
+                        var now2 = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        var targetInterval = rpcServer.GetCurrentIntervalMs(now2);
+                        var spentMs = (int)Math.Max(0, swAll.ElapsedMilliseconds);
+                        var delay = Math.Max(0, targetInterval - spentMs);
                         await Task.Delay(delay, cts.Token).ConfigureAwait(false);
                         consecutiveErrors = 0; // 只要成功一次就清零
                     }

@@ -31,6 +31,31 @@ export type MetricPoint = {
       tx_drops_per_sec: number | null;
       utilization_percent: number | null;
     }>;
+    per_interface_info?: Array<{
+      if_id: string;
+      name: string;
+      type?: string | null;
+      status?: string | null;
+      mac_address?: string | null;
+      mtu?: number | null;
+      ip_addresses?: string[];
+      gateways?: string[];
+      dns_servers?: string[];
+      search_domains?: string[];
+      rx_errors?: number | null;
+      tx_errors?: number | null;
+      rx_drops?: number | null;
+      tx_drops?: number | null;
+      collisions?: number | null;
+      link_speed_mbps?: number | null;
+    }>;
+    per_ethernet_info?: Array<{
+      if_id: string;
+      name: string;
+      link_speed_mbps?: number | null;
+      duplex?: 'full' | 'half' | null | string;
+      auto_negotiation?: boolean | null;
+    }>;
   };
 };
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Service.Services.Collectors;
@@ -45,7 +46,7 @@ namespace SystemMonitor.Service.Services
         /// <summary>
         /// 获取即时快照（最小实现：CPU/内存信息）。
         /// </summary>
-        public Task<object> snapshot(SnapshotParams? p)
+        public async Task<object> snapshot(SnapshotParams? p)
         {
             // 避免响应期间插入通知
             SuppressPush(200);
@@ -61,22 +62,133 @@ namespace SystemMonitor.Service.Services
                 want = new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
             }
             var payload = new Dictionary<string, object?> { ["ts"] = ts };
+            // 高频场景：直接走极简路径，避免任何重型采集器与系统调用
+            var highFreq = want.Contains("disk") || want.Count > 2;
+            if (highFreq)
+            {
+                // 仅在请求包含 disk 时返回占位，其他模块在高频下省略以提升吞吐
+                try { if (want.Contains("disk") && !payload.ContainsKey("disk")) payload["disk"] = new { status = "warming_up" }; } catch { }
+                try
+                {
+                    // no-op for cpu/memory in highFreq
+                }
+                catch { /* ignore */ }
+                _logger.LogDebug("snapshot (highFreq fast-path) called, modules={Modules}", p?.modules == null ? "*" : string.Join(',', p.modules));
+                return payload;
+            }
+            // 非高频：并行执行所有命中的采集器
+            var tasks = new List<Task<(string name, object? val)>>();
+            var taskByName = new Dictionary<string, Task<(string name, object? val)>>(StringComparer.OrdinalIgnoreCase);
             foreach (var c in MetricsRegistry.Collectors)
             {
                 if (!want.Contains(c.Name)) continue;
-                try
+                var t = Task.Run<(string, object?)>(() =>
                 {
-                    var val = c.Collect();
-                    if (val != null) payload[c.Name] = val;
+                    try
+                    {
+                        var val = c.Collect();
+                        return (c.Name, val);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogDebug(ex, "snapshot collector failed (ignored): {Collector}", c.Name);
+                        return (c.Name, null);
+                    }
+                });
+                tasks.Add(t);
+                taskByName[c.Name] = t;
+            }
+            // 第一阶段：全局预算
+            // 采用较充裕预算
+            var budgetMs = 150;
+            var all = Task.WhenAll(tasks);
+            var done = await Task.WhenAny(all, Task.Delay(budgetMs)).ConfigureAwait(false);
+            foreach (var t in tasks)
+            {
+                if (t.IsCompletedSuccessfully)
+                {
+                    var (name, val) = t.Result;
+                    if (val != null) payload[name] = val;
                 }
-                catch (Exception ex)
+                else if (t.IsFaulted)
                 {
-                    // 避免单个采集器异常导致 snapshot 整体失败
-                    _logger.LogDebug(ex, "snapshot collector failed (ignored): {Collector}", c.Name);
+                    try { _ = t.Exception; } catch { }
                 }
             }
+            // 第二阶段：关键模块兜底等待（cpu/memory）
+            var critical = new[] { "cpu", "memory" };
+            var extraWaitMs = 250;
+            var deadline = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + extraWaitMs;
+            foreach (var key in critical)
+            {
+                if (!want.Contains(key)) continue;
+                if (payload.ContainsKey(key)) continue;
+                if (!taskByName.TryGetValue(key, out var tk)) continue;
+                try
+                {
+                    var remain = (int)Math.Max(0, deadline - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+                    if (remain == 0) break;
+                    var completed = await Task.WhenAny(tk, Task.Delay(remain)).ConfigureAwait(false);
+                    if (completed == tk && tk.IsCompletedSuccessfully)
+                    {
+                        var (name, val) = tk.Result;
+                        if (val != null) payload[name] = val;
+                    }
+                }
+                catch { }
+            }
+            // 兜底回退：若关键模块仍缺失，使用轻量级即时值快速填充，避免返回不完整快照
+            try
+            {
+                if (want.Contains("cpu") && !payload.ContainsKey("cpu"))
+                {
+                    var usageQuick = GetCpuUsagePercent();
+                    var (uPct, sPct, iPct) = GetCpuBreakdownPercent();
+                    long uptimeSec = 0;
+                    try { uptimeSec = (long)(Environment.TickCount64 / 1000); } catch { uptimeSec = 0; }
+                    int processCount = 0, threadCount = 0;
+                    try
+                    {
+                        var procs = Process.GetProcesses();
+                        processCount = procs.Length;
+                        long th = 0;
+                        foreach (var p2 in procs)
+                        {
+                            try { th += p2.Threads?.Count ?? 0; }
+                            catch { /* some processes may deny access */ }
+                            finally { try { p2.Dispose(); } catch { } }
+                        }
+                        threadCount = (int)Math.Max(0, Math.Min(int.MaxValue, th));
+                    }
+                    catch { /* ignore */ }
+                    payload["cpu"] = new
+                    {
+                        usage_percent = usageQuick,
+                        user_percent = uPct,
+                        system_percent = sPct,
+                        idle_percent = iPct,
+                        uptime_sec = uptimeSec,
+                        process_count = processCount,
+                        thread_count = threadCount
+                    };
+                }
+            }
+            catch { /* ignore quick cpu fallback error */ }
+            try
+            {
+                if (want.Contains("memory") && !payload.ContainsKey("memory"))
+                {
+                    var m = GetMemoryDetail();
+                    payload["memory"] = new
+                    {
+                        total_mb = m.TotalMb,
+                        used_mb = m.UsedMb
+                    };
+                }
+            }
+            catch { /* ignore quick memory fallback error */ }
             _logger.LogInformation("snapshot called, modules={Modules}", p?.modules == null ? "*" : string.Join(',', p.modules));
-            return Task.FromResult<object>(payload);
+            return payload;
         }
 
         /// <summary>

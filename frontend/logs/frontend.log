@@ -1,0 +1,1235 @@
+1755891484497 [INFO] bridge hello ok
+1755891484515 [INFO] bridge subscribe(init) ack ok=true
+1755891578948 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755891618495 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755891763865 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755891886529 [INFO] bridge hello ok
+1755891886542 [INFO] bridge subscribe(init) ack ok=true
+1755891973849 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755892039475 [INFO] bridge hello ok
+1755892039499 [INFO] bridge subscribe(init) ack ok=true
+1755892053399 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755892272288 [INFO] bridge hello ok
+1755892272304 [INFO] bridge subscribe(init) ack ok=true
+1755892281405 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755892704041 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755892712016 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755892863855 [INFO] bridge hello ok
+1755892863901 [INFO] bridge subscribe(init) ack ok=true
+1755892935185 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755893045461 [INFO] bridge hello ok
+1755893045487 [INFO] bridge subscribe(init) ack ok=true
+1755893051885 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755893052193 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755893243803 [INFO] bridge hello ok
+1755893243838 [INFO] bridge subscribe(init) ack ok=true
+1755893249956 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755893699698 [INFO] bridge hello ok
+1755893699715 [INFO] bridge subscribe(init) ack ok=true
+1755893708762 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755893998566 [INFO] bridge hello ok
+1755893998589 [INFO] bridge subscribe(init) ack ok=true
+1755894006927 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755894398413 [INFO] bridge hello ok
+1755894398426 [INFO] bridge subscribe(init) ack ok=true
+1755894406098 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755894508318 [INFO] bridge hello ok
+1755894508336 [INFO] bridge subscribe(init) ack ok=true
+1755894516797 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755894660179 [INFO] bridge hello ok
+1755894660193 [INFO] bridge subscribe(init) ack ok=true
+1755894673092 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755894963177 [INFO] bridge hello ok
+1755894963200 [INFO] bridge subscribe(init) ack ok=true
+1755894971332 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Utf8JsonWriter.WriteNumberValue(Double value)\r\n   at System.Text.Json.Serialization.Converters.NullableConverter`1.Write(Utf8JsonWriter writer, Nullable`1 value, JsonSerializerOptions options)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteUserData|17_5(Object value, Type declaredType, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.PipeMessageHandler.WriteCoreAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755894972062 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755894973813 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755895272245 [INFO] bridge hello ok
+1755895272261 [INFO] bridge subscribe(init) ack ok=true
+1755895280267 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755895650730 [INFO] bridge hello ok
+1755895650752 [INFO] bridge subscribe(init) ack ok=true
+1755895663813 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755896335813 [INFO] bridge hello ok
+1755896335843 [INFO] bridge subscribe(init) ack ok=true
+1755896349618 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755896513699 [INFO] bridge hello ok
+1755896513722 [INFO] bridge subscribe(init) ack ok=true
+1755896520591 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755896520902 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755896863314 [INFO] bridge hello ok
+1755896863346 [INFO] bridge subscribe(init) ack ok=true
+1755896881773 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755896928158 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755896928160 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896929162 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896930164 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896931167 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896932170 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896933172 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896934174 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755896963811 [INFO] bridge hello ok
+1755896963833 [INFO] bridge subscribe(init) ack ok=true
+1755896971943 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755928656809 [INFO] bridge hello ok
+1755928656839 [INFO] bridge subscribe(init) ack ok=true
+1755928662558 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755929758622 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755929905112 [INFO] bridge hello ok
+1755929905134 [INFO] bridge subscribe(init) ack ok=true
+1755929911241 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755930316336 [INFO] bridge hello ok
+1755930316355 [INFO] bridge subscribe(init) ack ok=true
+1755930325748 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755930641175 [INFO] bridge hello ok
+1755930641198 [INFO] bridge subscribe(init) ack ok=true
+1755930651775 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755931340591 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755931341435 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755931343178 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755931460460 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755931461129 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755931963294 [INFO] bridge hello ok
+1755931963309 [INFO] bridge subscribe(init) ack ok=true
+1755931969107 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755932205492 [INFO] bridge hello ok
+1755932205511 [INFO] bridge subscribe(init) ack ok=true
+1755932236567 [INFO] bridge hello ok
+1755932236589 [INFO] bridge subscribe(init) ack ok=true
+1755932245226 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755934644590 [INFO] bridge hello ok
+1755934644613 [INFO] bridge subscribe(init) ack ok=true
+1755934654183 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755936357429 [INFO] bridge hello ok
+1755936357445 [INFO] bridge subscribe(init) ack ok=true
+1755936362929 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755937052372 [INFO] bridge hello ok
+1755937052410 [INFO] bridge subscribe(init) ack ok=true
+1755937076982 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755937077379 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755937081968 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755937081969 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937082973 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937083979 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937112765 [INFO] bridge hello ok
+1755937112799 [INFO] bridge subscribe(init) ack ok=true
+1755937130144 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755937240533 [INFO] bridge hello ok
+1755937240570 [INFO] bridge subscribe(init) ack ok=true
+1755937258047 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755937443253 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755937443255 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937444256 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937445258 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937446262 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937447270 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937448271 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937449273 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937450433 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937451445 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937452447 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937453449 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937454451 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937455356 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937455456 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937456460 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937457466 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937458468 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937459469 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937460471 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937460554 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937461472 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937462473 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937463474 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937464476 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937465337 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937465478 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937466479 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937467481 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937468506 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937469509 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937470349 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937470510 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937471512 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937472514 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937473515 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937474517 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937475326 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937475518 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937475786 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937476533 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937477540 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937478557 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937479564 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937480371 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937480583 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937481584 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937482601 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937483631 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937484646 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937485339 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937485684 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937486700 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937487706 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937488735 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937489750 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937490380 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937490773 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937491775 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937492777 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937493779 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937494780 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937495327 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937495782 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937496784 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937497785 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937498787 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937499788 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937500333 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937500790 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937501792 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937502793 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937503796 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937504798 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937505342 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937505799 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755937505825 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755937530820 [INFO] bridge hello ok
+1755937530832 [INFO] bridge subscribe(init) ack ok=true
+1755937539212 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755938011180 [INFO] bridge hello ok
+1755938011215 [INFO] bridge subscribe(init) ack ok=true
+1755938025394 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755938696604 [INFO] bridge hello ok
+1755938696630 [INFO] bridge subscribe(init) ack ok=true
+1755938710356 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755938917410 [INFO] bridge hello ok
+1755938917421 [INFO] bridge subscribe(init) ack ok=true
+1755938919571 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755939134713 [INFO] bridge hello ok
+1755939134728 [INFO] bridge subscribe(init) ack ok=true
+1755939139300 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755940339392 [INFO] bridge hello ok
+1755940339428 [INFO] bridge subscribe(init) ack ok=true
+1755940345660 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755941051674 [INFO] bridge hello ok
+1755941051696 [INFO] bridge subscribe(init) ack ok=true
+1755941065512 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755942334383 [INFO] bridge hello ok
+1755942334414 [INFO] bridge subscribe(init) ack ok=true
+1755942339000 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755942341068 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Utf8JsonWriter.WriteNumberValue(Double value)\r\n   at System.Text.Json.Serialization.Converters.NullableConverter`1.Write(Utf8JsonWriter writer, Nullable`1 value, JsonSerializerOptions options)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteUserData|17_5(Object value, Type declaredType, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.PipeMessageHandler.WriteCoreAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755942343443 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755942551275 [INFO] bridge hello ok
+1755942551292 [INFO] bridge subscribe(init) ack ok=true
+1755942560090 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755943321284 [INFO] bridge hello ok
+1755943321301 [INFO] bridge subscribe(init) ack ok=true
+1755943330713 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755943923506 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755943923507 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943924507 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943925509 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943926513 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943927515 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943928516 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943929517 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755943953618 [INFO] bridge hello ok
+1755943953632 [INFO] bridge subscribe(init) ack ok=true
+1755943958455 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755945557028 [INFO] bridge hello ok
+1755945557054 [INFO] bridge subscribe(init) ack ok=true
+1755945558936 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755945785801 [INFO] bridge hello ok
+1755945785814 [INFO] bridge subscribe(init) ack ok=true
+1755945788186 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755946781915 [INFO] bridge hello ok
+1755946781927 [INFO] bridge subscribe(init) ack ok=true
+1755946786691 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755947707621 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755947746742 [INFO] bridge hello ok
+1755947746799 [INFO] bridge subscribe(init) ack ok=true
+1755947753199 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755947933778 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteUserData|17_5(Object value, Type declaredType, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755947935360 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755947938664 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755949823523 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755949824486 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755949827116 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755950818634 [INFO] bridge hello ok
+1755950818647 [INFO] bridge subscribe(init) ack ok=true
+1755950824023 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755951290590 [INFO] bridge hello ok
+1755951290615 [INFO] bridge subscribe(init) ack ok=true
+1755951303913 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755952471677 [INFO] bridge hello ok
+1755952471694 [INFO] bridge subscribe(init) ack ok=true
+1755952477468 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755953566059 [INFO] bridge hello ok
+1755953566083 [INFO] bridge subscribe(init) ack ok=true
+1755953575453 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755953934924 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755953935578 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755954198940 [INFO] bridge hello ok
+1755954198955 [INFO] bridge subscribe(init) ack ok=true
+1755954206296 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Utf8JsonWriter.WriteNumberValue(Double value)\r\n   at System.Text.Json.Serialization.Converters.NullableConverter`1.Write(Utf8JsonWriter writer, Nullable`1 value, JsonSerializerOptions options)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteUserData|17_5(Object value, Type declaredType, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.PipeMessageHandler.WriteCoreAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755954207042 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755954208868 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755954265751 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755954265752 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954266753 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954267755 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954268756 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954283299 [INFO] bridge hello ok
+1755954283315 [INFO] bridge subscribe(init) ack ok=true
+1755954287948 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755954394488 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954395489 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954396492 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954397494 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954398497 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954399502 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954400503 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954401504 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954402505 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954403507 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954404508 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954405509 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954406511 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954407311 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954407512 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954408518 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954409530 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954410534 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954411537 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954412276 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954412539 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954413544 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954414548 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954415549 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954416551 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954417273 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954417552 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954417671 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954418554 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954419559 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954420561 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954421562 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954422324 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954422563 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954423564 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954424565 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954425566 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954426568 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954427262 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954427569 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954428571 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954429572 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954430573 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954431575 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954432256 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954432577 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954433578 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954434589 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954435593 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954436594 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954437249 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954437595 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954438686 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954439689 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954440691 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954441692 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954442315 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954442694 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954443696 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954444699 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954445700 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954446702 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954447308 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954447632 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954447704 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954448708 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954449716 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954450718 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954451720 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954452303 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954452740 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954453742 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954454744 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954455746 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954456748 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954457263 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954457749 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954458751 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954459754 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954460756 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954461769 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954462294 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954462774 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954463776 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954464778 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954465780 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954466782 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954467300 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954467783 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954468785 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954469787 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954470788 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954471790 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954472249 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954472791 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954473792 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954474798 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954475800 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954476803 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954477248 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954477629 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954477806 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954478808 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954479809 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954480812 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954481814 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954482295 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954482816 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954483818 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954484819 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954485821 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954486823 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954487258 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954487826 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954488827 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954489828 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954490830 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954491839 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954492252 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954492843 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954493845 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954494846 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954495848 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954496850 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954497304 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954497853 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954498862 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954499864 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954500865 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954501866 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954502271 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954502868 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954503870 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954504872 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954505878 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954506884 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954507279 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954507619 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954507886 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954508888 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954509891 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954510925 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954511942 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954512310 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954512944 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954513955 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954514975 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954515978 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954516983 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954517255 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954517999 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954519003 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954520006 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954521011 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954522015 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954522286 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954523017 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954524019 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954525021 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954526023 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954527025 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954527266 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954528026 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954529028 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954530030 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954531032 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954532034 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954532235 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954533036 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954534037 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954535038 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954536039 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954537041 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954537322 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954537656 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954538042 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954539044 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954540046 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954541046 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954542048 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954542248 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954543049 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954544051 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954545052 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954546053 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954547055 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954547321 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954548057 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954549059 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954550061 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954551062 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954552063 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954552306 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954553065 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954554066 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954555067 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954556069 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954557070 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954557306 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954558071 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954559073 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954560075 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954561075 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954562077 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954562291 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954563078 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954564079 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954565080 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954566081 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954567083 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954567255 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954567658 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954568085 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954569093 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954570094 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954571096 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954572098 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954572298 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954573099 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954574101 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954575103 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954576104 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954577105 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954577288 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954578107 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954579108 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954580110 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954581111 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954582112 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954582320 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954583113 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954584115 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954585115 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954586117 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954587119 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954587304 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954588120 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954589122 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954590124 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954591126 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954592128 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954592241 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954593129 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954594132 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954595133 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954596134 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954597136 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954597323 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954597684 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954598137 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954599139 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954600141 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954601142 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954602144 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954602271 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954603146 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954604148 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954605150 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954606151 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954607154 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954607259 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954608156 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954609158 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954610160 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954611162 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954612164 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954612248 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954613165 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954614167 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954615169 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954616171 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954617172 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954617278 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954618175 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954619176 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954620177 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954621179 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954622187 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954622262 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954623188 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954624189 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954625191 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954626192 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954627195 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954627272 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954627605 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954628196 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954629198 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954630199 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954631201 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954632203 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954632308 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954633205 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954634206 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954635207 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954636494 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954637290 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954637702 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954638705 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954639707 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954640708 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954641709 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954642319 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954642711 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954643712 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954644714 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954645716 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954646717 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954647310 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954647719 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954648720 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954649721 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954650722 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954651724 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954652275 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954652726 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954653733 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954654736 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954655737 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954656738 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954657288 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954657659 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954657748 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954658749 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954659750 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954660751 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954661753 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954662245 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954662754 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954663755 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954664756 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954665757 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954666759 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954667251 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954667763 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954668765 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954669767 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954670768 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954671770 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954672241 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954672773 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954673776 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954674778 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954675780 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954676783 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954677313 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954677784 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954678785 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954679787 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954680788 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954681789 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954682238 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954682791 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954683793 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954684794 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954685796 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954686797 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954687247 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954687634 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954687798 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954688800 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954689802 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954690804 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954691805 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954692302 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954692807 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954693810 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954694813 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954695814 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954696820 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954697256 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954697824 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954698826 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954699833 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954700835 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954701837 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954702330 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954702838 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954703840 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954704841 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954705843 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954706844 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954707271 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954707847 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954708848 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954709850 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954710851 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954711853 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954712306 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954712855 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954713856 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954714858 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954715859 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954716860 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954717315 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954717629 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954717862 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954718864 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954719865 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954720867 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954721868 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954722239 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954722870 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954723871 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954724873 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954725876 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954726878 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954727325 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954727880 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954728889 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954729893 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954730895 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954731896 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954732286 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954732898 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954733917 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954734937 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954735948 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954737047 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954737319 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954738064 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954739133 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954740285 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954741342 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954742299 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954742375 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954743413 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954744426 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954745434 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954746448 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954747259 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954747455 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954747659 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954748457 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954749460 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954750482 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954751499 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954752262 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954752517 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954753521 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954754531 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954755537 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954756539 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954757321 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954757546 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954758553 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954759555 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954760571 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954761575 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954762282 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954762578 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954763584 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954764587 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954765599 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954766602 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954767276 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954767608 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954768610 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954769613 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954770616 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954771618 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954772253 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954772620 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954773621 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954774624 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954775626 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954776629 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954777282 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954777607 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954777632 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954778635 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954779637 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954780641 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954781643 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954782272 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954782645 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954783655 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954784657 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954785658 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954786660 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954787427 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954787759 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954788807 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954789836 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954790840 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954791842 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954792309 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954792844 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954793847 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954794851 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954795854 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954796856 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954797323 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954797901 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954798906 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954799909 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954800912 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954801921 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954802260 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954802923 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954803926 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954804932 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954805937 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954806950 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954807312 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954807656 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954807953 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954808957 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954809988 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954810995 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954812058 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954812280 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954813071 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954814073 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954815079 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954816081 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954817083 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954817276 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954818085 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954819087 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954820088 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954821090 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954822111 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954822296 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954823135 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954824138 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954825139 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954826141 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954827144 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954827270 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954828153 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954829163 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954830166 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954831228 [INFO] bridge hello ok
+1755954831244 [INFO] bridge subscribe(init) ack ok=true
+1755954831249 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755954839467 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755954839469 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954840470 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954841471 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954842473 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954843475 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954844477 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954845479 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954846481 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954847483 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954848485 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954849486 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954850488 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954851490 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954852318 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954852492 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954853493 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954854495 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954855498 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954856502 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954857238 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954857503 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954858505 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954859507 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954860509 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954861511 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954862320 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954862513 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954863514 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954864516 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954865517 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954866518 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954867317 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954867519 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954867681 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954868521 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954869577 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954870578 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954871581 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954872249 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954872582 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954873611 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954874614 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954875616 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954876617 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954877322 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954877619 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954878621 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954879622 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954880624 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954881625 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954882285 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954882629 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954883641 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954884644 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954885676 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954886830 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954887436 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954887927 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954888948 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954889950 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954890953 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954891967 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954892284 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954892970 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954893974 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954894980 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954895991 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954897001 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954897303 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954897680 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954898002 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954899004 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954900006 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954901007 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954902008 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954902355 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954903010 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954904012 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954905013 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954906017 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954907019 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954907295 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954908021 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954909022 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954910024 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954911025 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954912027 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954912294 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954913028 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954914029 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954915041 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954916074 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954917076 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954917253 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954918077 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954919078 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954920079 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954921081 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954922083 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954922245 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755954923085 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954924086 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954925088 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755954940010 [INFO] bridge hello ok
+1755954940025 [INFO] bridge subscribe(init) ack ok=true
+1755954945728 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755955115003 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755955115004 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755955116007 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755956504553 [INFO] bridge hello ok
+1755956504580 [INFO] bridge subscribe(init) ack ok=true
+1755956517724 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755957115198 [INFO] bridge hello ok
+1755957115212 [INFO] bridge subscribe(init) ack ok=true
+1755957120057 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958244381 [INFO] bridge hello ok
+1755958244406 [INFO] bridge subscribe(init) ack ok=true
+1755958267648 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958385823 [INFO] bridge hello ok
+1755958385839 [INFO] bridge subscribe(init) ack ok=true
+1755958391371 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958391897 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958391899 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958392900 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958393902 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958394904 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958395906 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958396910 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958397912 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958398915 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958399928 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958400931 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958401934 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958402399 [ERROR] rpc_call start failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958402941 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958403945 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958404958 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958405110 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958405960 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958406965 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958407977 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958408985 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958409990 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958410142 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958410994 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958411997 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958412999 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958414018 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958415041 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958415166 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958416046 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958417050 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958418057 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958419059 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958420287 [INFO] bridge hello ok
+1755958420315 [INFO] bridge subscribe(init) ack ok=true
+1755958420343 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958420548 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958420549 [ERROR] rpc_call query_history failed: connection closed while reading header
+1755958421555 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958422673 [INFO] bridge hello ok
+1755958422714 [INFO] bridge subscribe(init) ack ok=true
+1755958422724 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958424070 [ERROR] rpc_call snapshot failed: connection closed while reading header
+1755958424074 [ERROR] bridge hello failed: 管道正在被关闭。 (os error 232)
+1755958424075 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958425077 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958426100 [INFO] bridge hello ok
+1755958426120 [INFO] bridge subscribe(init) ack ok=true
+1755958426126 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958426178 [ERROR] rpc_call query_history failed: connection closed while reading header
+1755958426183 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958426185 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958427187 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958428248 [INFO] bridge hello ok
+1755958428285 [INFO] bridge subscribe(init) ack ok=true
+1755958428292 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958429994 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958431040 [INFO] bridge hello ok
+1755958431065 [INFO] bridge subscribe(init) ack ok=true
+1755958431068 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958432095 [ERROR] rpc_call query_history failed: connection closed while reading header
+1755958432095 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958432097 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958433099 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958434108 [WARN] bridge disconnected: 所有的管道范例都在使用中。 (os error 231)
+1755958435134 [INFO] bridge hello ok
+1755958435150 [INFO] bridge subscribe(init) ack ok=true
+1755958435155 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958439160 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958440161 [WARN] bridge disconnected: 所有的管道范例都在使用中。 (os error 231)
+1755958441163 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958442176 [INFO] bridge hello ok
+1755958442186 [INFO] bridge subscribe(init) ack ok=true
+1755958442189 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958444363 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958444364 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958445425 [INFO] bridge hello ok
+1755958445441 [INFO] bridge subscribe(init) ack ok=true
+1755958445446 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958445474 [ERROR] rpc_call query_history failed: connection closed while reading header
+1755958445478 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958445479 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958446482 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958447483 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958448485 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958449561 [INFO] bridge hello ok
+1755958449637 [INFO] bridge subscribe(init) ack ok=true
+1755958449651 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958454402 [ERROR] rpc_call snapshot failed: connection closed while reading header
+1755958454404 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958454406 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958455408 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958455977 [ERROR] rpc_call query_history failed: connection closed while reading header
+1755958456412 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958457425 [INFO] bridge hello ok
+1755958457442 [INFO] bridge subscribe(init) ack ok=true
+1755958457453 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958459916 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755958459918 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958460920 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958461923 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958462926 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958463927 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958464929 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958465975 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958467089 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958468099 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958469109 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958470132 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958470133 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958471136 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958472142 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958473161 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958474301 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958475177 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958475310 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958476314 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958477317 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958478319 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958479320 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958480194 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958480322 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958481645 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958482659 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958483660 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958484662 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958485144 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958485663 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958486665 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958487668 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958488670 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958489672 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958490118 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958490632 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755958490673 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958491675 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958492679 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958493682 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755958510363 [INFO] bridge hello ok
+1755958510403 [INFO] bridge subscribe(init) ack ok=true
+1755958519810 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755958999001 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755958999819 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755959001704 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755959059015 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755959060197 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755960827939 [INFO] bridge hello ok
+1755960827957 [INFO] bridge subscribe(init) ack ok=true
+1755960847240 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755961785935 [INFO] bridge hello ok
+1755961785954 [INFO] bridge subscribe(init) ack ok=true
+1755961796840 [ERROR] rpc_call burst_subscribe failed: decode json-rpc response (header="Content-Length: 165\r\n\r\n", body_preview="{"jsonrpc":"2.0","method":"state","params":[{"ts":1755961796809,"phase":"burst","reason":null,"extra":{"interval_ms":200,"ttl_ms":5000,"expires_at":1755961801809}}]}")
+1755961800644 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755961888965 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755961888967 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961889970 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961890985 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961891987 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961892989 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961894114 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961895120 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961896123 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961897136 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961898389 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961899392 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755961900393 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755963385124 [INFO] bridge hello ok
+1755963385145 [INFO] bridge subscribe(init) ack ok=true
+1755963393917 [ERROR] rpc_call burst_subscribe failed: decode json-rpc response (header="Content-Length: 165\r\n\r\n", body_preview="{"jsonrpc":"2.0","method":"state","params":[{"ts":1755963393912,"phase":"burst","reason":null,"extra":{"interval_ms":200,"ttl_ms":5000,"expires_at":1755963398911}}]}")
+1755963394976 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755963678847 [INFO] bridge hello ok
+1755963678865 [INFO] bridge subscribe(init) ack ok=true
+1755963687883 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755964937276 [INFO] bridge hello ok
+1755964937307 [INFO] bridge subscribe(init) ack ok=true
+1755964948577 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755964974580 [ERROR] rpc_call snapshot failed: rpc error: {"code":-32003,"data":{"code":-2146233088,"inner":{"code":-2147024809,"inner":null,"message":".NET number values such as positive and negative infinity cannot be written as valid JSON. To make it work when using 'JsonSerializer', consider specifying 'JsonNumberHandling.AllowNamedFloatingPointLiterals' (see https://docs.microsoft.com/dotnet/api/system.text.json.serialization.jsonnumberhandling).","stack":"   at System.Text.Json.ThrowHelper.ThrowArgumentException_ValueNotSupported()\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.ArrayConverter`2.OnWriteResume(Utf8JsonWriter writer, TElement[] array, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonCollectionConverter`2.OnTryWrite(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonPropertyInfo`1.GetMemberAndWriteJson(Object obj, WriteStack& state, Utf8JsonWriter writer)\r\n   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryWrite(Utf8JsonWriter writer, T value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWriteAsObject(Utf8JsonWriter writer, Object value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Converters.DictionaryOfTKeyTValueConverter`3.OnWriteResume(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonDictionaryConverter`3.OnTryWrite(Utf8JsonWriter writer, TDictionary dictionary, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.TryWrite(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.JsonConverter`1.WriteCore(Utf8JsonWriter writer, T& value, JsonSerializerOptions options, WriteStack& state)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Serialize(Utf8JsonWriter writer, T& rootValue, Object rootValueBoxed)\r\n   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.SerializeAsObject(Utf8JsonWriter writer, Object rootValue)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteUserData|17_5(Object value, Type declaredType, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.<Serialize>g__WriteResult|17_3(JsonRpcResult result, <>c__DisplayClass17_0&, <>c__DisplayClass17_1&)\r\n   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)","type":"System.ArgumentException"},"message":"序列化期间出错。","stack":"   at StreamJsonRpc.SystemTextJsonFormatter.Serialize(IBufferWriter`1 bufferWriter, JsonRpcMessage message)\r\n   at StreamJsonRpc.HeaderDelimitedMessageHandler.Write(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.MessageHandlerBase.WriteAsync(JsonRpcMessage content, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.SendAsync(JsonRpcMessage message, CancellationToken cancellationToken)\r\n   at StreamJsonRpc.JsonRpc.HandleRpcAsync(JsonRpcMessage rpc)","type":"System.Text.Json.JsonException"},"message":"序列化期间出错。"}
+1755964975904 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755965413457 [INFO] bridge hello ok
+1755965413472 [INFO] bridge subscribe(init) ack ok=true
+1755965419590 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755965474364 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755965474366 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965475368 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965476372 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965477388 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965478393 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965479401 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965480403 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965481406 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965482454 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965483457 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965484459 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965485460 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965486461 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965487464 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965488209 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755965488590 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965488769 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755965489619 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965490622 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965491624 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965492625 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965493186 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755965493627 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965765780 [INFO] bridge hello ok
+1755965765807 [INFO] bridge subscribe(init) ack ok=true
+1755965781854 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755965815031 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755965815032 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755965852900 [INFO] bridge hello ok
+1755965852935 [INFO] bridge subscribe(init) ack ok=true
+1755965863215 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755966640189 [INFO] bridge hello ok
+1755966640225 [INFO] bridge subscribe(init) ack ok=true
+1755966649054 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755968566608 [INFO] bridge hello ok
+1755968566631 [INFO] bridge subscribe(init) ack ok=true
+1755968573660 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755969072474 [INFO] bridge hello ok
+1755969072499 [INFO] bridge subscribe(init) ack ok=true
+1755969079256 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755969309425 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755970740185 [INFO] bridge hello ok
+1755970740222 [INFO] bridge subscribe(init) ack ok=true
+1755970749654 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755971208368 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755971208369 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755971209371 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755971210373 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755971251442 [INFO] bridge hello ok
+1755971251468 [INFO] bridge subscribe(init) ack ok=true
+1755971271579 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755971594520 [INFO] bridge hello ok
+1755971594555 [INFO] bridge subscribe(init) ack ok=true
+1755971605207 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755971809594 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755971822163 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755972166428 [INFO] bridge hello ok
+1755972166463 [INFO] bridge subscribe(init) ack ok=true
+1755972178786 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755972491661 [INFO] bridge hello ok
+1755972491685 [INFO] bridge subscribe(init) ack ok=true
+1755972500050 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755972868966 [INFO] bridge hello ok
+1755972868988 [INFO] bridge subscribe(init) ack ok=true
+1755972877334 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755972933523 [ERROR] rpc_call set_config failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755972937251 [ERROR] rpc_call set_config failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755972937478 [ERROR] rpc_call set_config failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1755973255170 [INFO] bridge hello ok
+1755973255198 [INFO] bridge subscribe(init) ack ok=true
+1755973266273 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755973534376 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755973822030 [INFO] bridge hello ok
+1755973822052 [INFO] bridge subscribe(init) ack ok=true
+1755973838375 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755974379021 [INFO] bridge hello ok
+1755974379056 [INFO] bridge subscribe(init) ack ok=true
+1755974392264 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755974632211 [INFO] bridge hello ok
+1755974632234 [INFO] bridge subscribe(init) ack ok=true
+1755974648435 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755974881514 [INFO] bridge hello ok
+1755974881538 [INFO] bridge subscribe(init) ack ok=true
+1755974892874 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755975657772 [INFO] bridge hello ok
+1755975657819 [INFO] bridge subscribe(init) ack ok=true
+1755975672246 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755975799076 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755975902706 [INFO] bridge hello ok
+1755975902729 [INFO] bridge subscribe(init) ack ok=true
+1755975917428 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755976945223 [INFO] bridge hello ok
+1755976945254 [INFO] bridge subscribe(init) ack ok=true
+1755976956479 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755976959427 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755978321857 [INFO] bridge hello ok
+1755978321875 [INFO] bridge subscribe(init) ack ok=true
+1755978336351 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755978352668 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755978352670 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755978353672 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755978354709 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755978355714 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755978356817 [INFO] bridge hello ok
+1755978356836 [INFO] bridge subscribe(init) ack ok=true
+1755978356838 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755978358880 [ERROR] rpc_call query_history failed: connection closed while reading header
+1755978358880 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755978359883 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755978360885 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)

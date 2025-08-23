@@ -155,7 +155,7 @@ namespace SystemMonitor.Service.Services.Samplers
             var now = Environment.TickCount64;
             lock (_lock)
             {
-                if (now - _lastTicks < 200)
+                if (now - _lastTicks < 400)
                 {
                     return _last;
                 }

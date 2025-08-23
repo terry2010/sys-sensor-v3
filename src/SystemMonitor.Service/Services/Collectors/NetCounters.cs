@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 
 namespace SystemMonitor.Service.Services.Collectors
 {
@@ -48,6 +49,10 @@ namespace SystemMonitor.Service.Services.Collectors
         private long _lastTicks;
         private object? _lastPayload;
         private bool _initTried;
+
+        // Fallback: 使用 NetworkInterface 的累计统计做差分
+        private long _niLastAt;
+        private readonly Dictionary<string, (long rxB, long txB, long rxPk, long txPk, long rxErr, long txErr, long rxDrop, long txDrop)> _niLast = new(StringComparer.OrdinalIgnoreCase);
 
         private static bool IsValidInterface(string name)
         {
@@ -142,7 +147,7 @@ namespace SystemMonitor.Service.Services.Collectors
             long sumErrRx = 0, sumErrTx = 0; int cntErrRx = 0, cntErrTx = 0;
             long sumDropRx = 0, sumDropTx = 0; int cntDropRx = 0, cntDropTx = 0;
             var perIf = new List<object>();
-            if (_ifs != null)
+            if (_ifs != null && _ifs.Count > 0)
             {
                 foreach (var item in _ifs)
                 {
@@ -181,6 +186,79 @@ namespace SystemMonitor.Service.Services.Collectors
                         utilization_percent = (double?)null,
                     });
                 }
+            }
+            else
+            {
+                // 回退路径：使用 IPv4 统计的累计值计算每秒速率
+                double secs = (_niLastAt == 0) ? 1.0 : Math.Max(0.2, (now - _niLastAt) / 1000.0); // 与节流一致，至少 200ms
+                try
+                {
+                    foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+                    {
+                        if (!IsValidInterface(ni.Name)) continue;
+                        try
+                        {
+                            var st = ni.GetIPv4Statistics();
+                            long rxB = st.BytesReceived;
+                            long txB = st.BytesSent;
+                            long rxPk = st.UnicastPacketsReceived + st.NonUnicastPacketsReceived;
+                            long txPk = st.UnicastPacketsSent + st.NonUnicastPacketsSent;
+                            long rxErr = st.IncomingPacketsWithErrors;
+                            long txErr = st.OutgoingPacketsWithErrors;
+                            long rxDrop = st.IncomingPacketsDiscarded;
+                            long txDrop = st.OutgoingPacketsDiscarded;
+
+                            var key = ni.Id ?? ni.Name;
+                            _niLast.TryGetValue(key, out var last);
+                            long dRxB = Math.Max(0, rxB - last.rxB);
+                            long dTxB = Math.Max(0, txB - last.txB);
+                            long dRxPk = Math.Max(0, rxPk - last.rxPk);
+                            long dTxPk = Math.Max(0, txPk - last.txPk);
+                            long dRxErr = Math.Max(0, rxErr - last.rxErr);
+                            long dTxErr = Math.Max(0, txErr - last.txErr);
+                            long dRxDrop = Math.Max(0, rxDrop - last.rxDrop);
+                            long dTxDrop = Math.Max(0, txDrop - last.txDrop);
+
+                            long rx = (long)Math.Round(dRxB / secs);
+                            long tx = (long)Math.Round(dTxB / secs);
+                            long? pkRx = (long)Math.Round(dRxPk / secs);
+                            long? pkTx = (long)Math.Round(dTxPk / secs);
+                            long? errRx = (long)Math.Round(dRxErr / secs);
+                            long? errTx = (long)Math.Round(dTxErr / secs);
+                            long? dropRx = (long)Math.Round(dRxDrop / secs);
+                            long? dropTx = (long)Math.Round(dTxDrop / secs);
+
+                            totalRx += rx; totalTx += tx;
+                            if (pkRx.HasValue) { sumPkRx += pkRx.Value; cntPkRx++; }
+                            if (pkTx.HasValue) { sumPkTx += pkTx.Value; cntPkTx++; }
+                            if (errRx.HasValue) { sumErrRx += errRx.Value; cntErrRx++; }
+                            if (errTx.HasValue) { sumErrTx += errTx.Value; cntErrTx++; }
+                            if (dropRx.HasValue) { sumDropRx += dropRx.Value; cntDropRx++; }
+                            if (dropTx.HasValue) { sumDropTx += dropTx.Value; cntDropTx++; }
+
+                            perIf.Add(new
+                            {
+                                if_id = key,
+                                name = ni.Name,
+                                rx_bytes_per_sec = rx,
+                                tx_bytes_per_sec = tx,
+                                rx_packets_per_sec = pkRx,
+                                tx_packets_per_sec = pkTx,
+                                rx_errors_per_sec = errRx,
+                                tx_errors_per_sec = errTx,
+                                rx_drops_per_sec = dropRx,
+                                tx_drops_per_sec = dropTx,
+                                utilization_percent = (double?)null,
+                            });
+
+                            // 更新 last
+                            _niLast[key] = (rxB, txB, rxPk, txPk, rxErr, txErr, rxDrop, txDrop);
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+                _niLastAt = now;
             }
 
             var payload = new

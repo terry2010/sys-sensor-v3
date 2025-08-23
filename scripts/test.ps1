@@ -14,6 +14,18 @@ Log "cwd=$cwd"
 $results = Join-Path -Path $root -ChildPath $ResultsDir
 if (-not (Test-Path $results)) { New-Item -ItemType Directory -Force -Path $results | Out-Null }
 
+# 清理可能占用二进制的残留服务进程，避免测试构建阶段复制 apphost.exe 失败
+Log "cleanup residual SystemMonitor.Service processes"
+try {
+  $procs = Get-Process -Name 'SystemMonitor.Service' -ErrorAction SilentlyContinue
+  if ($procs) {
+    foreach ($p in $procs) {
+      try { Stop-Process -Id $p.Id -Force -ErrorAction Stop } catch { }
+    }
+    Start-Sleep -Milliseconds 400
+  }
+} catch { }
+
 Log "dotnet test -c $Configuration"
 $cmd = @(
   "test", "-c", $Configuration,
