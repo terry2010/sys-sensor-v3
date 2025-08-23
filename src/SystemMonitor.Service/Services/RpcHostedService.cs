@@ -29,6 +29,49 @@ namespace SystemMonitor.Service.Services
         private readonly JsonSerializerOptions _jsonOptions;
         private readonly HistoryStore _store;
         
+        // 采集器统计结构：记录耗时滑窗与计数
+        private sealed class CollectorStat
+        {
+            private readonly Queue<long> _durMs = new();
+            private const int MaxSamples = 240; // 约数分钟窗口（视推送频率而定）
+            public long SuccessCount;
+            public long TimeoutCount;
+            public long ErrorCount;
+            public long LastMs;
+
+            public void AddDuration(long ms)
+            {
+                LastMs = ms; SuccessCount++;
+                _durMs.Enqueue(Math.Max(0, ms));
+                while (_durMs.Count > MaxSamples) _durMs.Dequeue();
+            }
+            public void AddTimeout() { TimeoutCount++; }
+            public void AddError() { ErrorCount++; }
+            public object Snapshot()
+            {
+                var arr = _durMs.ToArray();
+                Array.Sort(arr);
+                double P(int p)
+                {
+                    if (arr.Length == 0) return double.NaN;
+                    var rank = (p / 100.0) * (arr.Length - 1);
+                    int lo = (int)Math.Floor(rank), hi = (int)Math.Ceiling(rank);
+                    if (lo == hi) return arr[lo];
+                    var w = rank - lo; return arr[lo] * (1 - w) + arr[hi] * w;
+                }
+                return new
+                {
+                    last_ms = LastMs,
+                    p50_ms = double.IsNaN(P(50)) ? (double?)null : Math.Round(P(50), 1),
+                    p95_ms = double.IsNaN(P(95)) ? (double?)null : Math.Round(P(95), 1),
+                    p99_ms = double.IsNaN(P(99)) ? (double?)null : Math.Round(P(99), 1),
+                    success = SuccessCount,
+                    timeout = TimeoutCount,
+                    error = ErrorCount
+                };
+            }
+        }
+        
 
         public RpcHostedService(ILogger<RpcHostedService> logger, HistoryStore store)
         {
@@ -176,6 +219,8 @@ namespace SystemMonitor.Service.Services
                 int simCount = 0; bool simTriggered = false;
                 // 会话内模块级缓存：用于超时回退
                 var lastModules = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+                // 会话内采集器统计：用于首页观测
+                var stats = new Dictionary<string, CollectorStat>(StringComparer.OrdinalIgnoreCase);
                 while (!cts.Token.IsCancellationRequested)
                 {
                     try
@@ -227,8 +272,16 @@ namespace SystemMonitor.Service.Services
                                 {
                                     _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (sync)", c.Name, swOne.ElapsedMilliseconds);
                                 }
+                                // 记录统计
+                                var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                st.AddDuration(swOne.ElapsedMilliseconds);
                             }
-                            catch { /* ignore collector error */ }
+                            catch
+                            {
+                                var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                st.AddError();
+                                /* ignore collector error */
+                            }
                         }
 
                         // 异步并发采集（非豁免集）
@@ -262,6 +315,9 @@ namespace SystemMonitor.Service.Services
                                             {
                                                 _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (async)", c.Name, swOne.ElapsedMilliseconds);
                                             }
+                                            // 记录统计
+                                            var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                            st.AddDuration(swOne.ElapsedMilliseconds);
                                         }
                                         else
                                         {
@@ -273,9 +329,16 @@ namespace SystemMonitor.Service.Services
                                                     lock (payload) { payload[c.Name] = cached; }
                                                 }
                                             }
+                                            var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                            st.AddTimeout();
                                         }
                                     }
-                                    catch { /* ignore collector error */ }
+                                    catch
+                                    {
+                                        var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                        st.AddError();
+                                        /* ignore collector error */
+                                    }
                                     finally
                                     {
                                         semaphore.Release();
@@ -349,6 +412,18 @@ namespace SystemMonitor.Service.Services
                             }
                         }
                         catch { }
+                        // 附加：采集器统计诊断（供前端首页展示）
+                        try
+                        {
+                            var diag = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+                            foreach (var kv in stats)
+                            {
+                                diag[kv.Key] = kv.Value.Snapshot();
+                            }
+                            payload["collectors_diag"] = diag;
+                        }
+                        catch { /* ignore diag build error */ }
+
                         await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
                         // 推送成功后，刷新会话缓存
                         try

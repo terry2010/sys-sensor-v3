@@ -17,6 +17,28 @@
     </header>
 
     <section class="cards">
+      <div class="card" v-if="diagItems.length">
+        <h3>采集耗时概览</h3>
+        <div class="sub">数据来自 metrics.collectors_diag（滑窗 p50/p95/p99）</div>
+        <div class="diag-list">
+          <div class="diag-row head">
+            <span>collector</span>
+            <span>last(ms)</span>
+            <span>p95(ms)</span>
+            <span>p99(ms)</span>
+            <span>timeout</span>
+            <span>error</span>
+          </div>
+          <div class="diag-row" v-for="it in diagItems" :key="it.name">
+            <span class="name">{{ it.name }}</span>
+            <span>{{ fmtMs(it.last_ms) }}</span>
+            <span>{{ fmtMs(it.p95_ms) }}</span>
+            <span>{{ fmtMs(it.p99_ms) }}</span>
+            <span :class="{ warn: it.timeout > 0 }">{{ it.timeout }}</span>
+            <span :class="{ warn: it.error > 0 }">{{ it.error }}</span>
+          </div>
+        </div>
+      </div>
       <CpuPanel />
       <MemoryPanel />
       <NetworkPanel />
@@ -252,6 +274,22 @@ const sensorsJson = computed<string>(() => {
   try { return JSON.stringify(sensorsFiltered.value, null, 2); } catch { return '[]'; }
 });
 
+// 采集器耗时诊断（来自 metrics.latest.collectors_diag）
+const diagItems = computed<any[]>(() => {
+  const diag = (metrics.latest as any)?.collectors_diag;
+  if (!diag || typeof diag !== 'object') return [];
+  const arr: any[] = [];
+  for (const k of Object.keys(diag)) {
+    const v = (diag as any)[k] || {};
+    arr.push({ name: k, last_ms: v.last_ms ?? null, p95_ms: v.p95_ms ?? null, p99_ms: v.p99_ms ?? null, timeout: v.timeout ?? 0, error: v.error ?? 0 });
+  }
+  // 固定顺序：先 disk，再 cpu/memory/network，其它按字母
+  const order: Record<string, number> = { disk: 0, cpu: 1, memory: 2, network: 3 } as any;
+  arr.sort((a, b) => (order[a.name] ?? 100) - (order[b.name] ?? 100) || a.name.localeCompare(b.name));
+  return arr;
+});
+const fmtMs = (v: any) => (typeof v === 'number' && isFinite(v) ? Math.round(v) : '-');
+
 // 探测逻辑已合并进上面的 onMounted 初始化
 </script>
 
@@ -289,4 +327,9 @@ header {
 .btn:hover { background: #f0f0f0; }
 .json-box { margin: 8px 0; }
 .json-box pre { max-height: 300px; overflow: auto; background: #0b1020; color: #cde2ff; padding: 8px; border-radius: 6px; }
+/* 采集耗时概览 */
+.diag-list { display: grid; gap: 6px; margin-top: 8px; }
+.diag-row { display: grid; grid-template-columns: 1fr 80px 80px 80px 70px 70px; gap: 8px; font-size: 12px; align-items: center; }
+.diag-row.head { color: #666; font-weight: 600; }
+.diag-row .name { font-weight: 600; color: #333; }
 </style>
