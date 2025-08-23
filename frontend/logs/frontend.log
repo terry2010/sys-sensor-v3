@@ -1233,3 +1233,39 @@
 1755978358880 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
 1755978359883 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
 1755978360885 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755987211336 [INFO] bridge hello ok
+1755987211362 [INFO] bridge subscribe(init) ack ok=true
+1755987221325 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755987707484 [INFO] bridge hello ok
+1755987707501 [INFO] bridge subscribe(init) ack ok=true
+1755987714216 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755988633256 [INFO] bridge hello ok
+1755988633279 [INFO] bridge subscribe(init) ack ok=true
+1755988643681 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755989087680 [INFO] bridge hello ok
+1755989087755 [INFO] bridge subscribe(init) ack ok=true
+1755989095700 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1755989863400 [INFO] bridge hello ok
+1755989863414 [INFO] bridge subscribe(init) ack ok=true
+1755989867050 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1755990147053 [INFO] bridge hello ok
+1755990147080 [INFO] bridge subscribe(init) ack ok=true
+1755990154212 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755990694199 [INFO] bridge hello ok
+1755990694219 [INFO] bridge subscribe(init) ack ok=true
+1755990699294 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755990847862 [INFO] bridge hello ok
+1755990847918 [INFO] bridge subscribe(init) ack ok=true
+1755990854679 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755990943071 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1755990943072 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755990944073 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1755990961433 [INFO] bridge hello ok
+1755990961476 [INFO] bridge subscribe(init) ack ok=true
+1755990970770 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755991303417 [INFO] bridge hello ok
+1755991303435 [INFO] bridge subscribe(init) ack ok=true
+1755991313249 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1755991695018 [INFO] bridge hello ok
+1755991695036 [INFO] bridge subscribe(init) ack ok=true
+1755991699801 [INFO] bridge subscribe(toggle enable=true) ack ok=true

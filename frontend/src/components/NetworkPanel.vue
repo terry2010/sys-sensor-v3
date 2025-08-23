@@ -2,6 +2,16 @@
   <div class="card">
     <h3>Network</h3>
     <div class="sub">实时网络速率（总览与每接口）</div>
+    <!-- Wi‑Fi 与连通性简要信息 -->
+    <div class="kv" v-if="wifi">
+      <span class="k">Wi‑Fi</span>
+      <span class="v">{{ wifi.ssid || '-' }} ({{ wifi.bssid || '-' }}) · Ch {{ wifi.channel ?? '-' }} · PHY {{ wifi.phy_mode || '-' }} · Tx {{ wifi.tx_phy_rate_mbps ?? '-' }} Mbps</span>
+    </div>
+    <div class="kv" v-if="conn">
+      <span class="k">Connectivity</span>
+      <span class="v">IPv4 {{ conn.public_ipv4 || '-' }}, IPv6 {{ conn.public_ipv6 || '-' }}</span>
+    </div>
+
     <div v-if="totals">
       <div class="kv"><span class="k">rx_bytes_per_sec</span><span class="v">{{ fmtBps(totals.rx_bytes_per_sec) }}</span></div>
       <div class="kv"><span class="k">tx_bytes_per_sec</span><span class="v">{{ fmtBps(totals.tx_bytes_per_sec) }}</span></div>
@@ -89,6 +99,16 @@
         </div>
       </div>
     </details>
+
+    <details class="json-box" v-if="wifi">
+      <summary>wifi_info</summary>
+      <pre><code>{{ wifiJson }}</code></pre>
+    </details>
+
+    <details class="json-box" v-if="conn">
+      <summary>connectivity</summary>
+      <pre><code>{{ connJson }}</code></pre>
+    </details>
   </div>
 </template>
 
@@ -103,6 +123,10 @@ const list = computed<any[]>(() => Array.isArray(net.value?.per_interface_io) ? 
 const netJson = computed<string>(() => { try { return JSON.stringify(net.value || {}, null, 2); } catch { return '{}'; } });
 const infoList = computed<any[]>(() => Array.isArray(net.value?.per_interface_info) ? net.value.per_interface_info : []);
 const ethList = computed<any[]>(() => Array.isArray(net.value?.per_ethernet_info) ? net.value.per_ethernet_info : []);
+const wifi = computed<any>(() => net.value?.wifi_info || null);
+const conn = computed<any>(() => net.value?.connectivity || null);
+const wifiJson = computed<string>(() => { try { return JSON.stringify(wifi.value || {}, null, 2); } catch { return '{}'; } });
+const connJson = computed<string>(() => { try { return JSON.stringify(conn.value || {}, null, 2); } catch { return '{}'; } });
 
 const fmtBps = (v: any) => {
   if (v === null || v === undefined) return '-';
@@ -141,3 +165,4 @@ const fmtPercent = (v: any) => {
 .table.info .thead, .table.info .row { grid-template-columns: 190px 1fr 110px 120px 160px 80px 110px; }
 .table.eth .thead, .table.eth .row { grid-template-columns: 190px 1fr 120px 90px 140px; }
 </style>
+

@@ -14,11 +14,30 @@ namespace SystemMonitor.Service.Services.Collectors
             try { return o.GetType().GetProperty(name)?.GetValue(o); } catch { return null; }
         }
 
+        private static Dictionary<string, object?> CopyProps(object src)
+        {
+            var dict = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var props = src.GetType().GetProperties();
+                foreach (var p in props)
+                {
+                    try { dict[p.Name] = p.GetValue(src); } catch { }
+                }
+            }
+            catch { }
+            return dict;
+        }
+
         public object? Collect()
         {
             object? nc = null; object? nq = null;
             try { nc = NetCounters.Instance.Read(); } catch { nc = null; }
             try { nq = NetworkQuery.Instance.Read(); } catch { nq = null; }
+            // 附加：Wi‑Fi 与连通性
+            object? wq = null; object? conn = null;
+            try { wq = WifiQuery.Instance.Read(); } catch { wq = null; }
+            try { conn = ConnectivityService.Instance.Read(); } catch { conn = null; }
 
             // 提取 counters
             var ioTotals = nc != null ? GetProp(nc, "io_totals") : null;
@@ -27,6 +46,31 @@ namespace SystemMonitor.Service.Services.Collectors
             // 提取查询信息
             var infoObj = nq != null ? GetProp(nq, "per_interface_info") as System.Collections.IEnumerable : null;
             var ethObj = nq != null ? GetProp(nq, "per_ethernet_info") as System.Collections.IEnumerable : null;
+            var wifiInfo = wq != null ? GetProp(wq, "wifi_info") : null;
+            var connectivity = conn != null ? GetProp(conn, "connectivity") : null;
+
+            // 构建 name -> if_id 的映射（用于对齐 per_interface_io 的 if_id）
+            var ifIdByName = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                if (infoObj != null)
+                {
+                    foreach (var it in infoObj)
+                    {
+                        try
+                        {
+                            var name = GetProp(it, "name") as string;
+                            var ifId = GetProp(it, "if_id") as string;
+                            if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(ifId))
+                            {
+                                ifIdByName[name!] = ifId!;
+                            }
+                        }
+                        catch { }
+                    }
+                }
+            }
+            catch { }
 
             // 构建 name -> link_speed_mbps 的映射（取最大可用）
             var speedMap = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
@@ -76,10 +120,18 @@ namespace SystemMonitor.Service.Services.Collectors
                             }
                         }
 
+                        // 若能从 per_interface_info 映射到真实 if_id，则覆盖占位值
+                        object? ifIdOriginal = GetProp(row, "if_id");
+                        object? ifIdFinal = ifIdOriginal;
+                        if (!string.IsNullOrEmpty(name) && ifIdByName.TryGetValue(name, out var mappedId))
+                        {
+                            ifIdFinal = mappedId;
+                        }
+
                         // 复制原有字段并覆盖 utilization_percent
                         perIoList.Add(new
                         {
-                            if_id = GetProp(row, "if_id"),
+                            if_id = ifIdFinal,
                             name = name,
                             rx_bytes_per_sec = rx,
                             tx_bytes_per_sec = tx,
@@ -95,6 +147,29 @@ namespace SystemMonitor.Service.Services.Collectors
                     catch { /* ignore row */ }
                 }
             }
+
+            // 修正 wifi_info.if_id（若有 name 匹配）
+            object? wifiFixed = wifiInfo;
+            try
+            {
+                if (wifiInfo != null)
+                {
+                    var wname = GetProp(wifiInfo, "name") as string;
+                    var curIfId = GetProp(wifiInfo, "if_id");
+                    string? mapped = null;
+                    if (!string.IsNullOrWhiteSpace(wname) && ifIdByName.TryGetValue(wname!, out var mid)) mapped = mid;
+
+                    if (!string.IsNullOrWhiteSpace(mapped))
+                    {
+                        // 复制原有 wifi_info 的所有字段，只覆盖 if_id（并保留 name 原值）
+                        var wdict = CopyProps(wifiInfo);
+                        wdict["if_id"] = mapped;
+                        if (!string.IsNullOrWhiteSpace(wname)) wdict["name"] = wname;
+                        wifiFixed = wdict;
+                    }
+                }
+            }
+            catch { }
 
             // 构造最终返回，尽量保留可用数据
             return new
@@ -113,7 +188,10 @@ namespace SystemMonitor.Service.Services.Collectors
                 per_interface_io = perIoList.ToArray(),
                 per_interface_info = infoObj ?? Array.Empty<object>(),
                 per_ethernet_info = ethObj ?? Array.Empty<object>(),
+                wifi_info = wifiFixed,
+                connectivity = connectivity,
             };
         }
     }
 }
+
