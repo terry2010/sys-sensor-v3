@@ -5,6 +5,12 @@
     <div v-if="totals">
       <div class="kv"><span class="k">rx_bytes_per_sec</span><span class="v">{{ fmtBps(totals.rx_bytes_per_sec) }}</span></div>
       <div class="kv"><span class="k">tx_bytes_per_sec</span><span class="v">{{ fmtBps(totals.tx_bytes_per_sec) }}</span></div>
+      <div class="kv"><span class="k">rx_packets_per_sec</span><span class="v">{{ fmtNum(totals.rx_packets_per_sec) }}</span></div>
+      <div class="kv"><span class="k">tx_packets_per_sec</span><span class="v">{{ fmtNum(totals.tx_packets_per_sec) }}</span></div>
+      <div class="kv"><span class="k">rx_errors_per_sec</span><span class="v">{{ fmtNum(totals.rx_errors_per_sec) }}</span></div>
+      <div class="kv"><span class="k">tx_errors_per_sec</span><span class="v">{{ fmtNum(totals.tx_errors_per_sec) }}</span></div>
+      <div class="kv"><span class="k">rx_drops_per_sec</span><span class="v">{{ fmtNum(totals.rx_drops_per_sec) }}</span></div>
+      <div class="kv"><span class="k">tx_drops_per_sec</span><span class="v">{{ fmtNum(totals.tx_drops_per_sec) }}</span></div>
     </div>
 
     <details class="json-box">
@@ -13,14 +19,28 @@
         <div class="thead">
           <span class="c if">if_id</span>
           <span class="c name">name</span>
-          <span class="c rx">rx_bytes_per_sec</span>
-          <span class="c tx">tx_bytes_per_sec</span>
+          <span class="c rx">rx_bytes/s</span>
+          <span class="c tx">tx_bytes/s</span>
+          <span class="c rpk">rx_pkts/s</span>
+          <span class="c tpk">tx_pkts/s</span>
+          <span class="c rer">rx_err/s</span>
+          <span class="c ter">tx_err/s</span>
+          <span class="c rdp">rx_drop/s</span>
+          <span class="c tdp">tx_drop/s</span>
+          <span class="c util">util%</span>
         </div>
         <div class="row" v-for="(it, idx) in list" :key="idx">
           <span class="c if">{{ it.if_id }}</span>
           <span class="c name">{{ it.name }}</span>
           <span class="c rx">{{ fmtBps(it.rx_bytes_per_sec) }}</span>
           <span class="c tx">{{ fmtBps(it.tx_bytes_per_sec) }}</span>
+          <span class="c rpk">{{ fmtNum(it.rx_packets_per_sec) }}</span>
+          <span class="c tpk">{{ fmtNum(it.tx_packets_per_sec) }}</span>
+          <span class="c rer">{{ fmtNum(it.rx_errors_per_sec) }}</span>
+          <span class="c ter">{{ fmtNum(it.tx_errors_per_sec) }}</span>
+          <span class="c rdp">{{ fmtNum(it.rx_drops_per_sec) }}</span>
+          <span class="c tdp">{{ fmtNum(it.tx_drops_per_sec) }}</span>
+          <span class="c util">{{ fmtPercent(it.utilization_percent) }}</span>
         </div>
       </div>
       <pre><code>{{ netJson }}</code></pre>
@@ -46,6 +66,18 @@ const fmtBps = (v: any) => {
   if (v >= 1024) return (v / 1024).toFixed(1) + ' KB/s';
   return v.toFixed(0) + ' B/s';
 };
+
+const fmtNum = (v: any) => {
+  if (v === null || v === undefined) return '-';
+  if (typeof v !== 'number' || !isFinite(v)) return '-';
+  return Math.round(v).toString();
+};
+
+const fmtPercent = (v: any) => {
+  if (v === null || v === undefined) return '-';
+  if (typeof v !== 'number' || !isFinite(v)) return '-';
+  return v.toFixed(1) + '%';
+};
 </script>
 
 <style scoped>
@@ -54,7 +86,7 @@ const fmtBps = (v: any) => {
 .k { color: #555; }
 .v { color: #222; font-weight: 600; }
 .table { margin-top: 8px; border-top: 1px dashed #eee; }
-.thead, .row { display: grid; grid-template-columns: 190px 1fr 150px 150px; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12px; }
+.thead, .row { display: grid; grid-template-columns: 190px 1fr 120px 120px 90px 90px 80px 80px 90px 90px 70px; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12px; }
 .thead { color: #666; font-weight: 600; }
 .c { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .json-box pre { max-height: 240px; overflow: auto; background: #0b1020; color: #cde2ff; padding: 8px; border-radius: 6px; margin-top: 8px; }
