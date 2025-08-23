@@ -11959,3 +11959,423 @@
 2025-08-24 07:32:24.781 [StorageQuery] PhysicalDisks count=2
 2025-08-24 07:32:24.782   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
 2025-08-24 07:32:24.784   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:30.817 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:30.818 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:30.819   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:30.820   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:33.618 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:33.619 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:33.620   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:33.620   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:35.266 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:35.267 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:35.268   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:35.269   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:41.659 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:41.660 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:41.661   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:41.662   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:45.356 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:45.357 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:45.358   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:45.359   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:47.153 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:47.154 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:47.155   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:47.156   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:49.878 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:49.880 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:49.881   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:49.881   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:50.101 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:50.102 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:50.102   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:50.103   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:54.880 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:54.881 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:54.882   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:54.882   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:32:59.809 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:32:59.810 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:32:59.811   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:32:59.812   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:00.214 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:00.215 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:00.216   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:00.217   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:04.885 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:04.886 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:04.887   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:04.888   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:10.063 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:10.064 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:10.065   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:10.066   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:12.955 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:12.956 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:12.956   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:12.957   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:14.324 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:14.325 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:14.326   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:14.327   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:19.631 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:19.631 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:19.632   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:19.633   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:19.966 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:19.967 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:19.968   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:19.969   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:24.571 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:24.572 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:24.572   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:24.573   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:26.264 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:26.265 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:26.266   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:26.266   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:32.696 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:32.697 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:32.698   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:32.699   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:34.864 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:34.865 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:34.866   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:34.867   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:39.373 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:39.374 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:39.375   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:39.376   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:40.129 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:40.130 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:40.131   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:40.132   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:45.720 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:45.721 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:45.722   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:45.723   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:49.605 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:49.606 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:49.607   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:49.608   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:49.990 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:49.991 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:49.991   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:49.992   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:52.304 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:52.305 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:52.306   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:52.307   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:54.654 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:54.655 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:54.656   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:54.657   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:33:59.969 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:33:59.970 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:33:59.971   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:33:59.972   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:04.856 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:04.857 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:04.857   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:04.858   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:05.142 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:05.142 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:05.143   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:05.144   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:09.760 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:09.761 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:09.762   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:09.763   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:15.080 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:15.081 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:15.082   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:15.083   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:18.851 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:18.852 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:18.853   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:18.854   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:20.663 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:20.664 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:20.664   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:20.665   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:20.876 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:20.877 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:20.878   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:20.879   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:25.296 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:25.297 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:25.297   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:25.298   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:29.842 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:29.844 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:29.845   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:29.846   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:32.244 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:32.245 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:32.245   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:32.246   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:34.993 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:34.994 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:34.995   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:34.995   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:39.834 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:39.835 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:39.836   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:39.837   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:44.530 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:44.531 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:44.532   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:44.533   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:45.261 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:45.262 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:45.263   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:45.263   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:49.452 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:49.453 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:49.454   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:49.462   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:50.319 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:50.321 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:50.324   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:50.325   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:54.790 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:54.791 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:54.792   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:54.793   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:58.160 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:58.161 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:58.162   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:58.163   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:34:59.759 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:34:59.760 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:34:59.761   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:34:59.762   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:05.342 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:05.343 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:05.343   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:05.344   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:10.604 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:10.606 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:10.607   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:10.608   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:11.538 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:11.539 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:11.540   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:11.541   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:14.707 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:14.707 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:14.708   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:14.709   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:20.240 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:20.241 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:20.242   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:20.243   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:20.543 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:20.544 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:20.545   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:20.546   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:24.799 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:24.800 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:24.801   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:24.802   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:25.127 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:25.128 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:25.129   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:25.131   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:29.624 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:29.625 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:29.626   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:29.627   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:34.539 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:34.540 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:34.541   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:34.542   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:37.510 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:37.511 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:37.512   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:37.512   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:39.569 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:39.570 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:39.571   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:39.571   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:44.600 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:44.601 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:44.602   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:44.602   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:49.279 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:49.280 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:49.281   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:49.282   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:49.876 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:49.877 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:49.878   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:49.879   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:50.225 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:50.226 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:50.227   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:50.228   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:54.603 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:54.605 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:54.606   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:54.615   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:35:59.549 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:35:59.550 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:35:59.551   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:35:59.552   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:03.006 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:03.007 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:03.008   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:03.009   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:04.479 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:04.480 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:04.480   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:04.488   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:09.752 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:09.753 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:09.754   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:09.755   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:14.520 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:14.521 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:14.521   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:14.522   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:16.132 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:16.133 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:16.134   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:16.136   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:19.739 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:19.741 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:19.742   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:19.743   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:20.255 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:20.256 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:20.257   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:20.257   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:24.654 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:24.658 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:24.668   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:24.670   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:28.915 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:28.916 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:28.917   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:28.918   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:29.488 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:29.489 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:29.490   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:29.491   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:34.578 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:34.578 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:34.579   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:34.580   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:39.415 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:39.416 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:39.417   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:39.417   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:41.622 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:41.623 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:41.624   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:41.625   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:44.969 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:44.970 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:44.971   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:44.972   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:50.139 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:50.140 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:50.141   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:50.141   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:50.319 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:50.320 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:50.321   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:50.322   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:54.750 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:54.751 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:54.751   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:54.752   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:54.920 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:54.921 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:54.923   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:54.924   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:36:59.650 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:36:59.651 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:36:59.652   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:36:59.653   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:05.434 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:05.435 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:05.436   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:05.437   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:07.741 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:07.742 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:07.743   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:07.744   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:10.344 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:10.345 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:10.346   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:10.346   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:14.588 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:14.589 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:14.590   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:14.590   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:19.875 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:19.876 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:19.877   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:19.878   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:20.185 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:20.186 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:20.187   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:20.188   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:20.603 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:20.604 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:20.605   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:20.606   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:25.036 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:25.037 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:25.038   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:25.039   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:29.733 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:29.734 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:29.734   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:29.735   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:33.656 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:33.657 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:33.658   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:33.658   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:34.679 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:34.680 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:34.681   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:34.682   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:41.462 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:41.463 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:41.463   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:41.464   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:45.311 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:45.312 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:45.313   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:45.314   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:47.181 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:47.182 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:47.183   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:47.184   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:50.028 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:50.029 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:50.030   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:50.031   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:50.495 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:50.497 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:50.503   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:50.504   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:37:56.063 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:37:56.064 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:37:56.066   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:37:56.066   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:38:01.100 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:38:01.101 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:38:01.102   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:38:01.102   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:38:01.105 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:38:01.106 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:38:01.107   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:38:01.107   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
+2025-08-24 07:38:05.422 [StorageQuery] Fallback via PowerShell CIM, got 2 items
+2025-08-24 07:38:05.423 [StorageQuery] PhysicalDisks count=2
+2025-08-24 07:38:05.424   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
+2025-08-24 07:38:05.425   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=

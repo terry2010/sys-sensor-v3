@@ -268,3 +268,79 @@
 
 ## 7. 版本与兼容
 - `protocol_version` 初始为 1；破坏式变更需升版本并保持灰度兼容期
+
+## 8. 网络与 Wi‑Fi 指标（补充说明）
+
+### 8.1 `metrics.result.network.wifi_info`
+
+- 来源：优先 Windows WLAN API，其次 `netsh wlan show interfaces` 作为回退与补齐。
+- 序列化：字段统一 `snake_case`；当无值时为 `null`；列表字段至少返回空数组。
+
+字段列表（非穷尽）：
+
+- 基础
+  - `name`: string（接口描述，例如 `Intel(R) Wireless-AC 9560 160MHz`）
+  - `if_id`: string（接口 GUID）
+  - `ssid`: string
+  - `bssid`: string（`xx:xx:xx:xx:xx:xx`；全 0 视为无效值）
+  - `phy_mode`: string（例如 `802.11ac/ax`）
+  - `security`: string（例如 `WPA2/WPA3/Open`）
+  - `signal_quality`: number（0..100）
+  - `rssi_dbm`: number（dBm）
+  - `tx_phy_rate_mbps`: number
+  - `band_mhz`: number（2400/5000/6000）
+  - `channel`: number
+  - `channel_width_mhz`: number（20/40/80/160）
+  - `country_code`: string（ISO 2 字符）
+
+- 调试与原始数据
+  - `netsh_raw`: string（`netsh` 原始输出，UTF‑8）
+  - `netsh_parsed`: object（从 `netsh` 解析的关键字段）
+    - `name`, `ssid`, `bssid`, `radio`, `authentication`, `channel`, `receive_rate_mbps`, `transmit_rate_mbps`, `signal_quality`
+  - `netsh_error`: string|null（`netsh` 调用或解码错误信息）
+  - `wlan_ie`: string|null（WLAN BSS 信息元素原始十六进制串）
+  - `wlan_bss`: Array<object>（扫描到的 BSS 简表，最多 8 条；即使无结果也返回 `[]`）
+    - `bssid`, `ssid`, `rssi_dbm`, `freq_mhz`, `channel`, `ie_len`
+
+合并策略：
+
+- 以 WLAN API 值为主；若字段为空/无效（如 `bssid` 为 `00:...`、`signal_quality` 为 0、`channel` 为 0），使用 `netsh_parsed` 对应值补齐。
+
+示例：
+
+```json
+{
+  "wifi_info": {
+    "name": "Intel(R) Wireless-AC 9560 160MHz",
+    "if_id": "880e2690-205a-423e-896c-b89b7fae9097",
+    "ssid": "ASUS_5G",
+    "bssid": "2c:30:33:f6:77:ce",
+    "phy_mode": "802.11ac",
+    "security": "WPA2",
+    "signal_quality": 66,
+    "rssi_dbm": -55,
+    "tx_phy_rate_mbps": 520,
+    "band_mhz": 5000,
+    "channel": 36,
+    "channel_width_mhz": 80,
+    "country_code": "CN",
+    "netsh_raw": "...netsh utf-8 text...",
+    "netsh_parsed": {
+      "name": "WLAN",
+      "ssid": "ASUS_5G",
+      "bssid": "2c:30:33:f6:77:ce",
+      "radio": "802.11ac",
+      "authentication": "WPA2-Personal",
+      "channel": 36,
+      "receive_rate_mbps": 351,
+      "transmit_rate_mbps": 468,
+      "signal_quality": 66
+    },
+    "netsh_error": null,
+    "wlan_ie": "7A0C...",
+    "wlan_bss": [
+      { "bssid": "2c:30:33:f6:77:ce", "ssid": "ASUS_5G", "rssi_dbm": -55, "freq_mhz": 5180, "channel": 36, "ie_len": 214 }
+    ]
+  }
+}
+```
