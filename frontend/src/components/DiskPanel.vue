@@ -55,6 +55,83 @@
         </table>
       </details>
       <details>
+        <summary>SATA SMART (Common Attributes)</summary>
+        <div v-if="sataHealthRows.length===0" class="subhint">未检测到 SATA/ATA 设备或无可展示的通用属性。</div>
+        <table class="tbl" v-else>
+          <thead>
+            <tr>
+              <th>Disk</th>
+              <th>Temp(C)</th>
+              <th>POH</th>
+              <th>Realloc</th>
+              <th>Pending</th>
+              <th>CRC</th>
+              <th>Overall</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="h in sataHealthRows" :key="'sata-'+h.disk_id">
+              <td>{{ h.disk_id }}</td>
+              <td :class="clsTemp(h.temperature_c)">{{ fmtNum(h.temperature_c) }}</td>
+              <td>{{ fmtNum(h.power_on_hours) }}</td>
+              <td :class="nz(h.reallocated_sector_count)">{{ fmtNum(h.reallocated_sector_count) }}</td>
+              <td :class="nz(h.pending_sector_count)">{{ fmtNum(h.pending_sector_count) }}</td>
+              <td :class="nz(h.udma_crc_error_count)">{{ fmtNum(h.udma_crc_error_count) }}</td>
+              <td>{{ h.overall_health ?? '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details>
+        <summary>Latency Quality</summary>
+        <div class="subhint">当前仅展示平均延迟，p50/p95/p99 预留占位（后端提供后自动填充）。</div>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Disk</th>
+              <th>Read Avg</th>
+              <th>Write Avg</th>
+              <th>p50</th>
+              <th>p95</th>
+              <th>p99</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="d in perPhysicalSorted" :key="'lat-'+d.disk_id">
+              <td>{{ d.disk_id }}</td>
+              <td>{{ fmtMs(d.avg_read_latency_ms) }}</td>
+              <td>{{ fmtMs(d.avg_write_latency_ms) }}</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details>
+        <summary>Reliability & Events</summary>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Disk</th>
+              <th>Unsafe Shutdowns</th>
+              <th>Thermal Throttle</th>
+              <th>NVMe Media Errors</th>
+              <th>UDMA CRC Errors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="h in (disk.smart_health ?? [])" :key="'rel-'+h.disk_id">
+              <td>{{ h.disk_id }}</td>
+              <td :class="nz(h.unsafe_shutdowns)">{{ fmtNum(h.unsafe_shutdowns) }}</td>
+              <td :class="nz(h.thermal_throttle_events)">{{ fmtNum(h.thermal_throttle_events) }}</td>
+              <td :class="nz(h.nvme_media_errors)">{{ fmtNum(h.nvme_media_errors) }}</td>
+              <td :class="nz(h.udma_crc_error_count)">{{ fmtNum(h.udma_crc_error_count) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details>
         <summary>NVMe Details</summary>
         <div v-if="nvmeHealthRows.length===0" class="subhint">未获取到 NVMe 详情，可能因：驱动不支持、USB 桥接、或无管理员权限。</div>
         <table class="tbl">
@@ -276,6 +353,24 @@ const nvmeHealthRows = computed(() => {
   return arr.filter(hasNvme);
 });
 
+// disk_id -> interface_type 映射
+const ifaceByDiskId = computed(() => {
+  const map = new Map<string, string>();
+  const info = (disk.value?.per_physical_disk ?? []) as any[];
+  for (const it of info) map.set(String(it.disk_id), String(it.interface_type||''));
+  return map;
+});
+// SATA 行：根据接口或是否具备 SATA 常见字段来选择
+const sataHealthRows = computed(() => {
+  const arr = (disk.value?.smart_health ?? []) as any[];
+  return arr.filter(h => {
+    const iface = (ifaceByDiskId.value.get(String(h.disk_id))||'').toLowerCase();
+    const looksSata = iface.includes('sata') || iface.includes('ata');
+    const hasSataFields = (h.reallocated_sector_count!=null) || (h.pending_sector_count!=null) || (h.udma_crc_error_count!=null);
+    return looksSata || hasSataFields;
+  });
+});
+
 const fmtNum = (v: any) => (v==null||!isFinite(v)) ? '-' : String(Math.round(v*10)/10);
 const fmtMs = (v: any) => (v==null||!isFinite(v)) ? '-' : `${(v as number).toFixed(2)} ms`;
 const fmtPct = (v: any) => (v==null||!isFinite(v)) ? '-' : `${(v as number).toFixed(1)}%`;
@@ -288,6 +383,14 @@ const fmtBytes = (v: any) => {
   let val = n; let i= -1;
   do { val /= 1024; i++; } while (val >= 1024 && i < units.length-1);
   return `${val.toFixed(2)} ${units[i]}`;
+};
+
+// 非零高亮
+const nz = (v: any) => {
+  const n = Number(v);
+  if (!isFinite(n) || n<=0) return '';
+  if (n > 0) return 'warn';
+  return '';
 };
 const fmtHexByte = (v: any) => (v==null || !isFinite(v)) ? '-' : '0x' + Number(v).toString(16).toUpperCase().padStart(2, '0');
 // Health Data Units: LHM 多数以 GB/GiB 数值给出；若数值像“字节级”超大，则用字节格式，否则按 GB 显示
