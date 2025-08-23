@@ -117,6 +117,42 @@ public class ContractTests
         Assert.DoesNotContain("Enable", json);
     }
 
+    [Fact]
+    public void Disk_Snapshot_Response_TopProcesses_Serializes_To_SnakeCase()
+    {
+        var resp = new
+        {
+            ReadBytesPerSec = 1_000L,
+            WriteBytesPerSec = 2_000L,
+            QueueLength = 0.5,
+            TotalsSource = "perf_counter",
+            Totals = new { ReadBytesPerSec = 1_000L, WriteBytesPerSec = 2_000L },
+            TopProcessesByDisk = new[]
+            {
+                new { Pid = 1234, Name = "procA", ReadBytesPerSec = 111L, WriteBytesPerSec = 222L },
+                new { Pid = 5678, Name = "procB", ReadBytesPerSec = 333L, WriteBytesPerSec = 444L }
+            }
+        };
+        var json = JsonSerializer.Serialize(resp, Snake);
+        // 顶层字段
+        Assert.Contains("read_bytes_per_sec", json);
+        Assert.Contains("write_bytes_per_sec", json);
+        Assert.Contains("queue_length", json);
+        Assert.Contains("totals_source", json);
+        Assert.Contains("totals", json);
+        // 新增字段
+        Assert.Contains("top_processes_by_disk", json);
+        // 子项字段为 snake_case
+        Assert.Contains("\"pid\"", json);
+        Assert.Contains("\"name\"", json);
+        Assert.Contains("read_bytes_per_sec", json);
+        Assert.Contains("write_bytes_per_sec", json);
+        // 不应出现 PascalCase 版本
+        Assert.DoesNotContain("TopProcessesByDisk", json);
+        Assert.DoesNotContain("ReadBytesPerSec\":", json);
+        Assert.DoesNotContain("WriteBytesPerSec\":", json);
+    }
+
     [Fact(Skip = "非 M1：后续里程碑接口")]
     public void SetLogLevel_Request_Serializes_To_SnakeCase()
     {

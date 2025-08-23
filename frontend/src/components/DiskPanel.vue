@@ -38,6 +38,26 @@
         </div>
       </div>
       <details open>
+        <summary>Top Processes by Disk I/O</summary>
+        <div class="subhint">按进程读/写吞吐排序展示（每秒字节）。</div>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>PID</th><th>Name</th><th>Read/s</th><th>Write/s</th><th>Total/s</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="p in topProcsSorted" :key="p.pid">
+              <td>{{ p.pid }}</td>
+              <td>{{ p.name }}</td>
+              <td :class="nz(p.read_bytes_per_sec)">{{ fmtBps(p.read_bytes_per_sec) }}</td>
+              <td :class="nz(p.write_bytes_per_sec)">{{ fmtBps(p.write_bytes_per_sec) }}</td>
+              <td :class="nz(p.read_bytes_per_sec + p.write_bytes_per_sec)">{{ fmtBps((p.read_bytes_per_sec||0)+(p.write_bytes_per_sec||0)) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details open>
         <summary>Per Physical Disk I/O</summary>
         <table class="tbl">
           <thead>
@@ -378,6 +398,10 @@ const perVolumeSorted = computed(() => {
 const perVolumeInfoSorted = computed(() => {
   const arr = (disk.value?.per_volume ?? []) as any[];
   return [...arr].sort((a, b) => String(a.mount_point).localeCompare(String(b.mount_point)));
+});
+const topProcsSorted = computed(() => {
+  const arr = (disk.value?.top_processes_by_disk ?? []) as any[];
+  return [...arr].sort((a, b) => ((b.read_bytes_per_sec||0)+(b.write_bytes_per_sec||0)) - ((a.read_bytes_per_sec||0)+(a.write_bytes_per_sec||0)));
 });
 
 // 仅显示具有 NVMe 相关数据的行（任一 NVMe 字段非空）

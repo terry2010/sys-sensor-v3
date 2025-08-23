@@ -77,6 +77,24 @@ public class SchemaTests
         return result.IsValid;
     }
 
+    private static JsonSchema TopProcessesByDiskSchema => new JsonSchemaBuilder()
+        .Type(SchemaValueType.Object)
+        .Properties(
+            ("top_processes_by_disk", new JsonSchemaBuilder().Type(SchemaValueType.Array)
+                .Items(new JsonSchemaBuilder().Type(SchemaValueType.Object)
+                    .Properties(
+                        ("pid", new JsonSchemaBuilder().Type(SchemaValueType.Integer).Minimum(0)),
+                        ("name", new JsonSchemaBuilder().Type(SchemaValueType.String)),
+                        ("read_bytes_per_sec", new JsonSchemaBuilder().Type(SchemaValueType.Integer).Minimum(0)),
+                        ("write_bytes_per_sec", new JsonSchemaBuilder().Type(SchemaValueType.Integer).Minimum(0))
+                    )
+                    .Required("pid", "name", "read_bytes_per_sec", "write_bytes_per_sec")
+                )
+            )
+        )
+        .Required("top_processes_by_disk")
+        .Build();
+
     [Fact]
     public void Hello_Schema_Valid_Minimal()
     {
@@ -138,5 +156,50 @@ public class SchemaTests
     {
         var req = new { StartTs = 1, EndTs = 2, Granularity = "5s" };
         Assert.False(IsValid(QueryHistorySchema, req));
+    }
+
+    [Fact]
+    public void Disk_TopProcesses_Schema_Valid()
+    {
+        var resp = new
+        {
+            TopProcessesByDisk = new[]
+            {
+                new { Pid = 100, Name = "a", ReadBytesPerSec = 10L, WriteBytesPerSec = 20L },
+                new { Pid = 200, Name = "b", ReadBytesPerSec = 0L, WriteBytesPerSec = 0L }
+            }
+        };
+        Assert.True(IsValid(TopProcessesByDiskSchema, resp));
+    }
+
+    [Fact]
+    public void Disk_TopProcesses_Schema_Invalid_NegativePid()
+    {
+        var resp = new
+        {
+            TopProcessesByDisk = new[]
+            {
+                new { Pid = -1, Name = "x", ReadBytesPerSec = 1L, WriteBytesPerSec = 1L }
+            }
+        };
+        Assert.False(IsValid(TopProcessesByDiskSchema, resp));
+    }
+
+    [Fact]
+    public void Disk_TopProcesses_Schema_Invalid_MissingName()
+    {
+        var resp = new
+        {
+            TopProcessesByDisk = new object[]
+            {
+                new System.Collections.Generic.Dictionary<string, object>
+                {
+                    ["Pid"] = 1,
+                    ["ReadBytesPerSec"] = 1L,
+                    ["WriteBytesPerSec"] = 2L
+                }
+            }
+        };
+        Assert.False(IsValid(TopProcessesByDiskSchema, resp));
     }
 }

@@ -550,10 +550,130 @@ namespace SystemMonitor.Service.Services.Collectors
                                 nvme_namespace_inuse_bytes = nvmeNsInUseBytes,
                                 nvme_eui64 = nvmeEui64,
                                 nvme_nguid = nvmeNguid
-                            });
+                        });
+
+// ...
+
+                        // NVMe Identify/Namespace 基本信息（不影响健康读取失败与否）
+                        try
+                        {
+                            var idx = TryExtractIndex(id);
+                            if (idx.HasValue && (((!string.IsNullOrWhiteSpace(iface)) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0) || string.IsNullOrWhiteSpace(iface)))
+                            {
+                                // 命名空间数量（Controller.NN）
+                                nvmeNamespaceCount = Collectors.StorageIoctlHelper.TryReadNvmeIdentifyControllerNN(idx.Value);
+                                // 选择最佳命名空间并读取基本信息
+                                uint bestNsid = Collectors.StorageIoctlHelper.TrySelectBestNvmeNamespaceId(idx.Value);
+                                var nsBasic = Collectors.StorageIoctlHelper.TryReadNvmeIdentifyNamespaceBasic(idx.Value, bestNsid);
+                                if (nsBasic.HasValue)
+                                {
+                                    var (nsze, nuse, lbaBytes, eui, nguid) = nsBasic.Value;
+                                    nvmeNszeLba = nsze;
+                                    nvmeNuseLba = nuse;
+                                    nvmeNsLbaSizeBytes = lbaBytes;
+                                    nvmeEui64 = eui;
+                                    nvmeNguid = nguid;
+                                    nvmeNsCapacityBytes = (ulong)lbaBytes * nsze;
+                                    nvmeNsInUseBytes = (ulong)lbaBytes * nuse;
+                                }
+                                if (smartDebug)
+                                {
+                                    try { Serilog.Log.Information("[SMART] NVMe NS info idx={Idx} NN={NN} bestNSID={NSID} LBA={LBA} nsze={NSZE} nuse={NUSE} eui64={EUI} nguid={NGUID}", idx, nvmeNamespaceCount, bestNsid, nvmeNsLbaSizeBytes, nvmeNszeLba, nvmeNuseLba, nvmeEui64, nvmeNguid); } catch { }
+                                }
+                            }
                         }
-                        if (outList.Count > 0) smartHealth = outList.ToArray();
+                        catch { }
+
+                        if (sensors != null)
+                        {
+                            // 温度
+                            temperature ??= FindVal(sensors, "Temperature");
+
+                            // SATA 常见 SMART
+                            pwrOnHours ??= FindVal(sensors, "Power On Hours", "Power-On Hours", "POH");
+                            realloc ??= FindVal(sensors, "Reallocated Sectors", "Reallocated Sector", "Realloc");
+                            pending ??= FindVal(sensors, "Current Pending Sector", "Pending Sectors", "C5", "Pending");
+                            udmaCrc ??= FindVal(sensors, "CRC Error", "UDMA CRC Error", "Interface CRC Error", "CRC Error Count");
+
+                            // NVMe 常见指标（不同固件/控制器命名略有差异，尽量覆盖）
+                            // 剩余寿命/已使用百分比：若存在 Remaining Life(%)，则 used = 100 - remaining
+                            var remainingLife = FindVal(sensors, "Remaining Life", "Life Remaining", "Life Left", "Remaining Life(%)");
+                            var wearLevel = FindVal(sensors, "Wear", "Percentage Used", "Wear Level", "Media Wearout Indicator", "Wearout");
+                            if (!nvmePctUsed.HasValue)
+                            {
+                                if (wearLevel.HasValue) nvmePctUsed = wearLevel; // 已直接是使用百分比
+                                else if (remainingLife.HasValue) nvmePctUsed = 100 - remainingLife;
+                            }
+
+                            // 总读写量（一般单位是 GB 或者 GiB，由 LHM 规范化为数值，直接透传数值）
+                            dataRead ??= FindVal(sensors, "Total Host Reads", "Data Read", "Bytes Read", "Host Reads", "Data Units Read", "Read Total");
+                            dataWritten ??= FindVal(sensors, "Total Host Writes", "Data Written", "Bytes Written", "Host Writes", "Data Units Written", "Write Total");
+
+                            // 控制器忙碌时间/非正常关机/热节流事件
+                            ctrlBusyMin ??= FindVal(sensors, "Controller Busy Time", "Busy Time");
+                            unsafeShutdowns ??= FindVal(sensors, "Unsafe Shutdown", "Unsafe Shutdowns");
+                            throttleEvents ??= FindVal(sensors, "Thermal Throttling", "Thermal Throttle", "Throttle Events");
+
+                            // 健康概览（若存在 Health 百分比等）
+                            var healthPct = FindVal(sensors, "Health");
+                            if (!string.IsNullOrEmpty(overall) == false && healthPct.HasValue)
+                            {
+                                overall = healthPct.Value >= 90 ? "good" : (healthPct.Value >= 50 ? "warning" : "critical");
+                            }
+                        }
+
+                        outList.Add(new
+                        {
+                            disk_id = id,
+                            overall_health = overall,
+                            temperature_c = temperature,
+                            power_on_hours = pwrOnHours,
+                            reallocated_sector_count = realloc,
+                            pending_sector_count = pending,
+                            udma_crc_error_count = udmaCrc,
+                            nvme_percentage_used = nvmePctUsed,
+                            nvme_data_units_read = dataRead,
+                            nvme_data_units_written = dataWritten,
+                            nvme_controller_busy_time_min = ctrlBusyMin,
+                            unsafe_shutdowns = unsafeShutdowns,
+                            // 新增 NVMe 字段输出（有值才返回数值，否则为 null）
+                            nvme_power_cycles = nvmePowerCycles,
+                            nvme_power_on_hours = nvmePoh,
+                            nvme_media_errors = nvmeMediaErrors,
+                            nvme_available_spare = nvmeAvailSpare,
+                            nvme_spare_threshold = nvmeSpareThreshold,
+                            nvme_critical_warning = nvmeCriticalWarning,
+                            nvme_temp_sensor1_c = nvmeTs1,
+                            nvme_temp_sensor2_c = nvmeTs2,
+                            nvme_temp_sensor3_c = nvmeTs3,
+                            nvme_temp_sensor4_c = nvmeTs4,
+                            thermal_throttle_events = throttleEvents,
+                            // 新增：NVMe 错误日志汇总输出
+                            nvme_error_log = nvmeErrorLogObj,
+                            // NVMe Identify/Namespace 附加输出
+                            nvme_namespace_count = nvmeNamespaceCount,
+                            nvme_namespace_lba_size_bytes = nvmeNsLbaSizeBytes,
+                            nvme_namespace_size_lba = nvmeNszeLba,
+                            nvme_namespace_inuse_lba = nvmeNuseLba,
+                            nvme_namespace_capacity_bytes = nvmeNsCapacityBytes,
+                            nvme_namespace_inuse_bytes = nvmeNsInUseBytes,
+                            nvme_eui64 = nvmeEui64,
+                            nvme_nguid = nvmeNguid
+                        });
                     }
+                    if (outList.Count > 0) smartHealth = outList.ToArray();
+                }
+                }
+                catch { }
+
+                // Top processes by disk I/O (read/write bytes per second)
+                object[] topProcDisk = System.Array.Empty<object>();
+                try
+                {
+                    int topN = 10;
+                    var env = System.Environment.GetEnvironmentVariable("SYS_SENSOR_TOPPROC_DISK_N");
+                    if (!string.IsNullOrWhiteSpace(env) && int.TryParse(env, out var n) && n > 0 && n <= 50) topN = n;
+                    topProcDisk = SystemMonitor.Service.Services.ProcessDiskIoSampler.Instance.ReadTopByBytes(topN);
                 }
                 catch { }
 
@@ -569,6 +689,7 @@ namespace SystemMonitor.Service.Services.Collectors
                     totals,
                     per_physical_disk_io = perInst,
                     per_volume_io = (object?)(perVolEnriched ?? perVol),
+                    top_processes_by_disk = topProcDisk,
                     // 容量与静态信息
                     capacity_totals = new { total_bytes = capTotals.total, used_bytes = capTotals.used, free_bytes = capTotals.free },
                     vm_swapfiles_bytes = vmSwapBytes,
@@ -597,6 +718,7 @@ namespace SystemMonitor.Service.Services.Collectors
                     },
                     per_physical_disk_io = System.Array.Empty<object>(),
                     per_volume_io = System.Array.Empty<object>(),
+                    top_processes_by_disk = System.Array.Empty<object>(),
                     capacity_totals = new { total_bytes = (long?)null, used_bytes = (long?)null, free_bytes = (long?)null },
                     per_volume = System.Array.Empty<object>(),
                     per_physical_disk = System.Array.Empty<object>()

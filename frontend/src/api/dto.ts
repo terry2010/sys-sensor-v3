@@ -90,6 +90,13 @@ export type NvmeErrorLog = {
   recent_entries: NvmeErrorLogEntry[];
 };
 
+export type TopProcessDisk = {
+  pid: number;
+  name: string;
+  read_bytes_per_sec: number;
+  write_bytes_per_sec: number;
+};
+
 export type SnapshotResult = {
   ts: number;
   cpu?: { usage_percent: number };
@@ -102,6 +109,7 @@ export type SnapshotResult = {
     totals?: DiskIOTotals;
     per_physical_disk_io?: DiskPerPhysical[];
     per_volume_io?: DiskPerVolumeIO[];
+    top_processes_by_disk?: TopProcessDisk[];
     capacity_totals?: DiskCapacityTotals;
     vm_swapfiles_bytes?: number | null;
     per_volume?: DiskVolumeInfo[];
