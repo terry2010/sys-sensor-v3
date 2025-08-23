@@ -2,7 +2,37 @@ import { defineStore } from 'pinia';
 import { service } from '../api/service';
 import type { SnapshotResult } from '../api/dto';
 
-export type MetricPoint = { ts: number; cpu?: { usage_percent: number }; memory?: { total_mb: number; used_mb: number }; disk?: SnapshotResult['disk'] };
+export type MetricPoint = {
+  ts: number;
+  cpu?: { usage_percent: number };
+  memory?: { total_mb: number; used_mb: number };
+  disk?: SnapshotResult['disk'];
+  network?: {
+    io_totals: {
+      rx_bytes_per_sec: number;
+      tx_bytes_per_sec: number;
+      rx_packets_per_sec: number | null;
+      tx_packets_per_sec: number | null;
+      rx_errors_per_sec: number | null;
+      tx_errors_per_sec: number | null;
+      rx_drops_per_sec: number | null;
+      tx_drops_per_sec: number | null;
+    };
+    per_interface_io: Array<{
+      if_id: string;
+      name: string;
+      rx_bytes_per_sec: number;
+      tx_bytes_per_sec: number;
+      rx_packets_per_sec: number | null;
+      tx_packets_per_sec: number | null;
+      rx_errors_per_sec: number | null;
+      tx_errors_per_sec: number | null;
+      rx_drops_per_sec: number | null;
+      tx_drops_per_sec: number | null;
+      utilization_percent: number | null;
+    }>;
+  };
+};
 
 let started = false;
 

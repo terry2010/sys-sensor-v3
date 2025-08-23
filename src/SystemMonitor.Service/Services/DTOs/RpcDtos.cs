@@ -27,6 +27,9 @@ namespace SystemMonitor.Service.Services
     {
         public int? base_interval_ms { get; set; }
         public Dictionary<string, int>? module_intervals { get; set; }
+        public int? max_concurrency { get; set; }
+        public string[]? enabled_modules { get; set; }
+        public string[]? sync_exempt_modules { get; set; }
         public bool? persist { get; set; }
     }
 

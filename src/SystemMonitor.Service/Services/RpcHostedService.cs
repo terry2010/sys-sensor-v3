@@ -158,6 +158,8 @@ namespace SystemMonitor.Service.Services
                 var consecutiveErrors = 0;
                 // 故障注入计数（仅当前会话内生效）
                 int simCount = 0; bool simTriggered = false;
+                // 会话内模块级缓存：用于超时回退
+                var lastModules = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
                 while (!cts.Token.IsCancellationRequested)
                 {
                     try
@@ -184,17 +186,91 @@ namespace SystemMonitor.Service.Services
                             ["ts"] = now,
                             ["seq"] = rpcServer.NextSeq(),
                         };
-                        // 通过采集器抽象生成各模块字段
-                        foreach (var c in MetricsRegistry.Collectors)
+                        // 通过采集器抽象生成各模块字段（带耗时监控 + 有界并发）
+                        var swAll = Stopwatch.StartNew();
+                        var syncExempt = rpcServer.GetSyncExemptModules();
+                        var maxConc = rpcServer.GetMaxConcurrency();
+                        var collectors = MetricsRegistry.Collectors.Where(c => enabled.Contains(c.Name)).ToList();
+                        var syncList = collectors.Where(c => syncExempt.Contains(c.Name)).ToList();
+                        var asyncList = collectors.Where(c => !syncExempt.Contains(c.Name)).ToList();
+
+                        // 同步直采（豁免集）
+                        foreach (var c in syncList)
                         {
-                            if (!enabled.Contains(c.Name)) continue;
                             try
                             {
+                                var swOne = Stopwatch.StartNew();
                                 var val = c.Collect();
-                                if (val != null) payload[c.Name] = val;
+                                swOne.Stop();
+                                if (val != null)
+                                {
+                                    payload[c.Name] = val;
+                                    lock (lastModules) { lastModules[c.Name] = val; }
+                                }
+                                if (swOne.ElapsedMilliseconds > 200)
+                                {
+                                    _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (sync)", c.Name, swOne.ElapsedMilliseconds);
+                                }
                             }
                             catch { /* ignore collector error */ }
                         }
+
+                        // 异步并发采集（非豁免集）
+                        if (asyncList.Count > 0)
+                        {
+                            var semaphore = new System.Threading.SemaphoreSlim(Math.Max(1, maxConc));
+                            var tasks = new List<Task>();
+                            const int defaultTimeoutMs = 300;
+
+                            foreach (var c in asyncList)
+                            {
+                                tasks.Add(Task.Run(async () =>
+                                {
+                                    await semaphore.WaitAsync(cts.Token).ConfigureAwait(false);
+                                    try
+                                    {
+                                        var swOne = Stopwatch.StartNew();
+                                        var work = Task.Run(() => c.Collect());
+                                        var timeoutMs = string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase) ? 800 : defaultTimeoutMs;
+                                        var done = await Task.WhenAny(work, Task.Delay(timeoutMs, cts.Token)).ConfigureAwait(false);
+                                        if (done == work)
+                                        {
+                                            var val = await work.ConfigureAwait(false);
+                                            swOne.Stop();
+                                            if (val != null)
+                                            {
+                                                lock (payload) { payload[c.Name] = val; }
+                                                lock (lastModules) { lastModules[c.Name] = val; }
+                                            }
+                                            if (swOne.ElapsedMilliseconds > 200)
+                                            {
+                                                _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (async)", c.Name, swOne.ElapsedMilliseconds);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            _logger.LogWarning("collector timeout: {Name} exceeded {Timeout}ms, use cached value if any", c.Name, timeoutMs);
+                                            lock (lastModules)
+                                            {
+                                                if (lastModules.TryGetValue(c.Name, out var cached) && cached != null)
+                                                {
+                                                    lock (payload) { payload[c.Name] = cached; }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch { /* ignore collector error */ }
+                                    finally
+                                    {
+                                        semaphore.Release();
+                                    }
+                                }, cts.Token));
+                            }
+
+                            try { await Task.WhenAll(tasks).ConfigureAwait(false); } catch { /* ignore */ }
+                        }
+
+                        swAll.Stop();
                         // 维持历史/持久化所需的 CPU/Memory 数值（避免从匿名对象中反射）
                         if (enabled.Contains("cpu"))
                         {
@@ -225,7 +301,54 @@ namespace SystemMonitor.Service.Services
                                 throw new Exception("simulated metrics push error");
                             }
                         }
+                        // 采集总耗时与当前间隔对比
+                        try
+                        {
+                            var totalMs = (long)swAll.Elapsed.TotalMilliseconds;
+                            var intervalMs = rpcServer.GetCurrentIntervalMs(now);
+                            if (totalMs > intervalMs)
+                            {
+                                _logger.LogWarning("metrics collect slow: total {Total}ms exceeds interval {Interval}ms", totalMs, intervalMs);
+                            }
+                        }
+                        catch { }
+                        // 若启用了 disk 但未采集到，尝试使用缓存，否则填充占位
+                        try
+                        {
+                            if (enabled.Contains("disk") && !payload.ContainsKey("disk"))
+                            {
+                                bool filled = false;
+                                lock (lastModules)
+                                {
+                                    if (lastModules.TryGetValue("disk", out var cached) && cached != null)
+                                    {
+                                        payload["disk"] = cached;
+                                        filled = true;
+                                    }
+                                }
+                                if (!filled)
+                                {
+                                    payload["disk"] = new { status = "warming_up" };
+                                }
+                            }
+                        }
+                        catch { }
                         await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
+                        // 推送成功后，刷新会话缓存
+                        try
+                        {
+                            lock (lastModules)
+                            {
+                                foreach (var kv in payload)
+                                {
+                                    if (kv.Key is string key && !string.Equals(key, "ts", StringComparison.OrdinalIgnoreCase) && !string.Equals(key, "seq", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        lastModules[key] = kv.Value;
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
                         var pushed = rpcServer.IncrementMetricsCount();
                         if (logEvery > 0 && pushed % logEvery == 0)
                         {

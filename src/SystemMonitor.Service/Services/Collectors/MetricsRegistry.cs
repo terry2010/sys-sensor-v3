@@ -13,8 +13,9 @@ namespace SystemMonitor.Service.Services.Collectors
         {
             Register(new CpuCollector());
             Register(new MemoryCollector());
-            Register(new DiskCollector());
+            // 调整顺序：网络优先于磁盘，避免磁盘重 I/O 阻塞影响网络首帧
             Register(new NetworkCollector());
+            Register(new DiskCollector());
             Register(new GpuCollector());
             Register(new SensorCollector());
         }

@@ -64,14 +64,14 @@ namespace SystemMonitor.Service.Services
                 lock (_subLock) { _s_metricsEnabled = true; }
                 _logger.LogInformation("hello ok (bridge): app={App} proto={Proto} caps=[{Caps}] session_id={SessionId} conn={ConnId}", p.app_version, p.protocol_version, p.capabilities == null ? string.Empty : string.Join(',', p.capabilities), sessionId, _connId);
                 
-                // 桥接连接建立后自动启动采集（默认采集 CPU/内存/磁盘）
+                // 桥接连接建立后自动启动采集（默认采集 CPU/内存/磁盘/网络）
                 _ = Task.Run(async () =>
                 {
                     try
                     {
                         // 延迟500毫秒，确保桥接连接完全建立
                         await Task.Delay(500);
-                        await start(new StartParams { modules = new[] { "cpu", "mem", "disk" } });
+                        await start(new StartParams { modules = new[] { "cpu", "mem", "disk", "network" } });
                         _logger.LogInformation("自动启动采集模块成功");
                     }
                     catch (Exception ex)

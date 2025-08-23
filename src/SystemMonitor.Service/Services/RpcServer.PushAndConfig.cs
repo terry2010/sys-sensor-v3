@@ -26,8 +26,17 @@ namespace SystemMonitor.Service.Services
                 _burstExpiresAt = now + p.ttl_ms;
             }
             _logger.LogInformation("burst_subscribe: interval={Interval}ms ttl={Ttl}ms -> expires_at={Expires}", p.interval_ms, p.ttl_ms, _burstExpiresAt);
-            // 发出状态事件：burst
-            EmitState("burst", null, new { interval_ms = p.interval_ms, ttl_ms = p.ttl_ms, expires_at = _burstExpiresAt });
+            // 延迟发出状态事件：避免与当前 RPC 响应交叉，导致前端响应解码报错
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(120).ConfigureAwait(false);
+                    await WaitForUnsuppressedAsync(400).ConfigureAwait(false);
+                    EmitState("burst", null, new { interval_ms = p.interval_ms, ttl_ms = p.ttl_ms, expires_at = _burstExpiresAt });
+                }
+                catch { /* ignore */ }
+            });
             // 保障：在 TTL 内启动一个轻量定时器（仅桥接连接），按请求间隔发送最小 metrics，防止主循环受偶发抖动影响计数
             if (IsBridgeConnection)
             _ = Task.Run(async () =>
@@ -136,8 +145,11 @@ namespace SystemMonitor.Service.Services
             {
                 throw new InvalidOperationException("invalid_params: missing body");
             }
-            _logger.LogInformation("set_config 收到: base_interval_ms={Base}, module_intervals=[{Mods}]",
+            _logger.LogInformation("set_config 收到: base_interval_ms={Base}, max_concurrency={Conc}, enabled_modules=[{Enabled}], sync_exempt_modules=[{SyncExempt}], module_intervals=[{Mods}]",
                 p.base_interval_ms,
+                p.max_concurrency,
+                p.enabled_modules == null ? "null" : string.Join(", ", p.enabled_modules ?? Array.Empty<string>()),
+                p.sync_exempt_modules == null ? "null" : string.Join(", ", p.sync_exempt_modules ?? Array.Empty<string>()),
                 p.module_intervals == null ? "" : string.Join(", ", p.module_intervals.Select(kv => $"{kv.Key}={kv.Value}")));
 
             int? newBase = null;
@@ -183,11 +195,64 @@ namespace SystemMonitor.Service.Services
                 _logger.LogInformation("set_config: module_intervals -> {Intervals}", string.Join(", ", sanitized.Select(kv => $"{kv.Key}={kv.Value}ms")));
             }
 
+            // 新增：max_concurrency
+            if (p.max_concurrency.HasValue)
+            {
+                var c = Math.Clamp(p.max_concurrency.Value, 1, 8);
+                lock (_lock)
+                {
+                    _maxConcurrency = c;
+                }
+                _logger.LogInformation("set_config: max_concurrency -> {C}", c);
+            }
+
+            // 新增：enabled_modules（null 表示不修改；空数组表示全部）
+            if (p.enabled_modules != null)
+            {
+                var req = p.enabled_modules;
+                HashSet<string>? newSet = null;
+                if (req.Length == 0)
+                {
+                    newSet = null; // 表示全部
+                }
+                else
+                {
+                    var all = new HashSet<string>(Collectors.MetricsRegistry.Collectors.Select(c => c.Name), StringComparer.OrdinalIgnoreCase);
+                    var filtered = req.Where(m => !string.IsNullOrWhiteSpace(m) && all.Contains(m)).Select(m => m.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                    newSet = filtered.Count == 0 ? null : filtered;
+                }
+                lock (_lock)
+                {
+                    _enabledModules = newSet;
+                }
+                _logger.LogInformation("set_config: enabled_modules -> {Mods}", newSet == null ? "ALL" : string.Join(", ", newSet));
+            }
+
+            // 新增：sync_exempt_modules
+            if (p.sync_exempt_modules != null)
+            {
+                var all = new HashSet<string>(Collectors.MetricsRegistry.Collectors.Select(c => c.Name), StringComparer.OrdinalIgnoreCase);
+                var filtered = p.sync_exempt_modules.Where(m => !string.IsNullOrWhiteSpace(m) && all.Contains(m))
+                    .Select(m => m.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                if (filtered.Count == 0)
+                {
+                    filtered = new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
+                }
+                lock (_lock)
+                {
+                    _syncExemptModules = filtered;
+                }
+                _logger.LogInformation("set_config: sync_exempt_modules -> {Mods}", string.Join(", ", filtered));
+            }
+
             var result = new
             {
                 ok = true,
                 base_interval_ms = _baseIntervalMs,
-                effective_intervals = new Dictionary<string, int>(_moduleIntervals, StringComparer.OrdinalIgnoreCase)
+                effective_intervals = new Dictionary<string, int>(_moduleIntervals, StringComparer.OrdinalIgnoreCase),
+                max_concurrency = _maxConcurrency,
+                enabled_modules = GetEnabledModules().ToArray(),
+                sync_exempt_modules = _syncExemptModules.ToArray()
             };
             // 在返回后短延时发送一次 metrics（仅桥接连接），避免客户端在新的观测窗口内收不到任何事件
             if (IsBridgeConnection)

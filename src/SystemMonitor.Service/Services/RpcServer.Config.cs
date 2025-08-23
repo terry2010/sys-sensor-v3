@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemMonitor.Service.Services.Collectors;
 
 namespace SystemMonitor.Service.Services
 {
@@ -11,6 +12,10 @@ namespace SystemMonitor.Service.Services
         private int? _burstIntervalMs;
         private long _burstExpiresAt;
         private readonly Dictionary<string, int> _moduleIntervals = new(StringComparer.OrdinalIgnoreCase);
+        // 新增：全局并发度（有界并发）与模块启用/同步豁免列表
+        private int _maxConcurrency = 2; // 默认 2
+        private HashSet<string>? _enabledModules; // null 表示默认=全部
+        private HashSet<string> _syncExemptModules = new(StringComparer.OrdinalIgnoreCase) { "cpu", "memory" };
 
         public int GetCurrentIntervalMs(long now)
         {
@@ -34,11 +39,32 @@ namespace SystemMonitor.Service.Services
         {
             lock (_lock)
             {
-                if (_moduleIntervals.Count == 0)
+                if (_enabledModules != null && _enabledModules.Count > 0)
                 {
-                    return new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
+                    return new HashSet<string>(_enabledModules, StringComparer.OrdinalIgnoreCase);
                 }
-                return new HashSet<string>(_moduleIntervals.Keys, StringComparer.OrdinalIgnoreCase);
+                if (_moduleIntervals.Count > 0)
+                {
+                    return new HashSet<string>(_moduleIntervals.Keys, StringComparer.OrdinalIgnoreCase);
+                }
+                // 默认：全部注册的采集器
+                return new HashSet<string>(MetricsRegistry.Collectors.Select(c => c.Name), StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
+        public int GetMaxConcurrency()
+        {
+            lock (_lock)
+            {
+                return _maxConcurrency;
+            }
+        }
+
+        public ISet<string> GetSyncExemptModules()
+        {
+            lock (_lock)
+            {
+                return new HashSet<string>(_syncExemptModules, StringComparer.OrdinalIgnoreCase);
             }
         }
     }

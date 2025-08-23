@@ -19,6 +19,7 @@
     <section class="cards">
       <CpuPanel />
       <MemoryPanel />
+      <NetworkPanel />
       <DiskPanel />
       <div class="card" v-if="Array.isArray(sensors) && sensors.length">
         <h3>Hardware Sensors (LibreHardwareMonitor)</h3>
@@ -73,6 +74,7 @@ import { onMounted, onUnmounted, ref, computed } from 'vue';
 import SnapshotPanel from './components/SnapshotPanel.vue';
 import CpuPanel from './components/CpuPanel.vue';
 import MemoryPanel from './components/MemoryPanel.vue';
+import NetworkPanel from './components/NetworkPanel.vue';
 import DiskPanel from './components/DiskPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import ControlPanel from './components/ControlPanel.vue';
@@ -105,6 +107,8 @@ onMounted(async () => {
     try { void service.subscribeMetrics(true); } catch {}
     // 再非阻塞启动事件桥（不要等待，避免后端异常导致 UI 等待）
     void ensureEventBridge();
+    // 在事件桥初始化后短时间内提升刷新频率（突发 200ms，持续 5s）
+    try { void service.burstSubscribe?.({ interval_ms: 200, ttl_ms: 5000 } as any); } catch {}
     // 调试监听：观察桥接是否有事件/错误到达
     try {
       const { listen } = await import('@tauri-apps/api/event');
@@ -169,16 +173,16 @@ onMounted(async () => {
   void session.init();
   // 初始化桥接状态 store（监听事件）
   try { bridgeStore.init(); } catch {}
-  // 自动启动默认采集模块，确保有数据可推送
-  setTimeout(async () => {
+  // 自动启动默认采集模块，确保有数据可推送（移除 2s 延迟，立即启动）
+  (async () => {
     try {
       console.log('[App] 尝试自动启动采集模块...');
-      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk'] });
+      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network'] });
       console.log('[App] 自动启动采集模块成功:', result);
     } catch (e) {
       console.error('[App] 自动启动采集模块失败:', e);
     }
-  }, 2000); // 延迟 2 秒，确保桥接已建立
+  })();
 });
 
 // 健康状态（每秒刷新）
