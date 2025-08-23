@@ -236,9 +236,11 @@ namespace SystemMonitor.Service.Services.Collectors
                                 if (!string.IsNullOrEmpty(m)) { matchedHw = m; sensors = storageGroups[m]; }
                             }
 
-                            // 若仍未匹配，且判定为 NVMe，尝试通过 Identify 获取 SN/MN 再匹配
+                            // 若仍未匹配，且判定为 NVMe，或者 interface_type 为空不确定，也尝试通过 Identify 获取 SN/MN 再匹配
                             int? idxForNvme = TryExtractIndex(id);
-                            if (sensors == null && !string.IsNullOrWhiteSpace(iface) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0 && idxForNvme.HasValue)
+                            if (sensors == null && idxForNvme.HasValue &&
+                                (((!string.IsNullOrWhiteSpace(iface)) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                                  || string.IsNullOrWhiteSpace(iface)))
                             {
                                 try
                                 {
@@ -289,6 +291,12 @@ namespace SystemMonitor.Service.Services.Collectors
                             double? nvmeSpareThreshold = null;
                             byte? nvmeCriticalWarning = null;
                             double? nvmeTs1 = null, nvmeTs2 = null, nvmeTs3 = null, nvmeTs4 = null;
+                            // NVMe Identify/Namespace 附加信息
+                            string? nvmeEui64 = null, nvmeNguid = null;
+                            int? nvmeNsLbaSizeBytes = null;
+                            ulong? nvmeNszeLba = null, nvmeNuseLba = null;
+                            ulong? nvmeNsCapacityBytes = null, nvmeNsInUseBytes = null;
+                            uint? nvmeNamespaceCount = null;
                             string? overall = null;
 
                             // Phase B：原生 IOCTL 优先（可通过环境变量禁用）
@@ -335,6 +343,73 @@ namespace SystemMonitor.Service.Services.Collectors
                                     else if (smartDebug)
                                     {
                                         try { Serilog.Log.Information("[SMART] native fail disk id={Id} iface={Iface} idx={Idx}", id, iface, idx); } catch { }
+                                    }
+
+                                    // 放宽 NVMe 判定：若原生失败且 interface_type 为空，则尝试 NVMe SMART 作为备选
+                                    if (native == null && string.IsNullOrWhiteSpace(iface))
+                                    {
+                                        var nvmeAlt = StorageIoctlHelper.TryReadNvmeSmartSummary(idx.Value);
+                                        if (nvmeAlt != null)
+                                        {
+                                            overall = overall ?? nvmeAlt.overall_health;
+                                            temperature ??= nvmeAlt.temperature_c;
+                                            pwrOnHours ??= nvmeAlt.power_on_hours;
+                                            // SATA 专有计数不从 NVMe 覆盖
+                                            nvmePctUsed ??= nvmeAlt.nvme_percentage_used;
+                                            dataRead ??= nvmeAlt.nvme_data_units_read;
+                                            dataWritten ??= nvmeAlt.nvme_data_units_written;
+                                            ctrlBusyMin ??= nvmeAlt.nvme_controller_busy_time_min;
+                                            unsafeShutdowns ??= nvmeAlt.unsafe_shutdowns;
+                                            throttleEvents ??= nvmeAlt.thermal_throttle_events;
+                                            nvmePowerCycles ??= nvmeAlt.nvme_power_cycles;
+                                            nvmePoh ??= nvmeAlt.nvme_power_on_hours;
+                                            nvmeMediaErrors ??= nvmeAlt.nvme_media_errors;
+                                            nvmeAvailSpare ??= nvmeAlt.nvme_available_spare;
+                                            nvmeSpareThreshold ??= nvmeAlt.nvme_spare_threshold;
+                                            nvmeCriticalWarning ??= nvmeAlt.nvme_critical_warning;
+                                            nvmeTs1 ??= nvmeAlt.nvme_temp_sensor1_c;
+                                            nvmeTs2 ??= nvmeAlt.nvme_temp_sensor2_c;
+                                            nvmeTs3 ??= nvmeAlt.nvme_temp_sensor3_c;
+                                            nvmeTs4 ??= nvmeAlt.nvme_temp_sensor4_c;
+                                            if (smartDebug)
+                                            {
+                                                try { Serilog.Log.Information("[SMART] nvme fallback ok (iface empty) disk id={Id} idx={Idx}", id, idx); } catch { }
+                                            }
+                                        }
+                                        else if (smartDebug)
+                                        {
+                                            try { Serilog.Log.Information("[SMART] nvme fallback fail (iface empty) disk id={Id} idx={Idx}", id, idx); } catch { }
+                                        }
+                                    }
+                                }
+                            }
+                            catch { }
+
+                            // NVMe Identify/Namespace 基本信息（不影响健康读取失败与否）
+                            try
+                            {
+                                var idx = TryExtractIndex(id);
+                                if (idx.HasValue && (((!string.IsNullOrWhiteSpace(iface)) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0) || string.IsNullOrWhiteSpace(iface)))
+                                {
+                                    // 命名空间数量（Controller.NN）
+                                    nvmeNamespaceCount = Collectors.StorageIoctlHelper.TryReadNvmeIdentifyControllerNN(idx.Value);
+                                    // 选择最佳命名空间并读取基本信息
+                                    uint bestNsid = Collectors.StorageIoctlHelper.TrySelectBestNvmeNamespaceId(idx.Value);
+                                    var nsBasic = Collectors.StorageIoctlHelper.TryReadNvmeIdentifyNamespaceBasic(idx.Value, bestNsid);
+                                    if (nsBasic.HasValue)
+                                    {
+                                        var (nsze, nuse, lbaBytes, eui, nguid) = nsBasic.Value;
+                                        nvmeNszeLba = nsze;
+                                        nvmeNuseLba = nuse;
+                                        nvmeNsLbaSizeBytes = lbaBytes;
+                                        nvmeEui64 = eui;
+                                        nvmeNguid = nguid;
+                                        nvmeNsCapacityBytes = (ulong)lbaBytes * nsze;
+                                        nvmeNsInUseBytes = (ulong)lbaBytes * nuse;
+                                    }
+                                    if (smartDebug)
+                                    {
+                                        try { Serilog.Log.Information("[SMART] NVMe NS info idx={Idx} NN={NN} bestNSID={NSID} LBA={LBA} nsze={NSZE} nuse={NUSE} eui64={EUI} nguid={NGUID}", idx, nvmeNamespaceCount, bestNsid, nvmeNsLbaSizeBytes, nvmeNszeLba, nvmeNuseLba, nvmeEui64, nvmeNguid); } catch { }
                                     }
                                 }
                             }
@@ -403,7 +478,16 @@ namespace SystemMonitor.Service.Services.Collectors
                                 nvme_temp_sensor2_c = nvmeTs2,
                                 nvme_temp_sensor3_c = nvmeTs3,
                                 nvme_temp_sensor4_c = nvmeTs4,
-                                thermal_throttle_events = throttleEvents
+                                thermal_throttle_events = throttleEvents,
+                                // NVMe Identify/Namespace 附加输出
+                                nvme_namespace_count = nvmeNamespaceCount,
+                                nvme_namespace_lba_size_bytes = nvmeNsLbaSizeBytes,
+                                nvme_namespace_size_lba = nvmeNszeLba,
+                                nvme_namespace_inuse_lba = nvmeNuseLba,
+                                nvme_namespace_capacity_bytes = nvmeNsCapacityBytes,
+                                nvme_namespace_inuse_bytes = nvmeNsInUseBytes,
+                                nvme_eui64 = nvmeEui64,
+                                nvme_nguid = nvmeNguid
                             });
                         }
                         if (outList.Count > 0) smartHealth = outList.ToArray();

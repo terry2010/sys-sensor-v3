@@ -45,6 +45,26 @@ export type SmartHealth = {
   nvme_controller_busy_time_min?: number | null;
   unsafe_shutdowns?: number | null;
   thermal_throttle_events?: number | null;
+  // New NVMe health fields
+  nvme_available_spare?: number | null;
+  nvme_spare_threshold?: number | null;
+  nvme_media_errors?: number | null;
+  nvme_power_cycles?: number | null;
+  nvme_power_on_hours?: number | null;
+  nvme_critical_warning?: number | null; // byte
+  nvme_temp_sensor1_c?: number | null;
+  nvme_temp_sensor2_c?: number | null;
+  nvme_temp_sensor3_c?: number | null;
+  nvme_temp_sensor4_c?: number | null;
+  // NVMe Identify/Namespace fields
+  nvme_namespace_count?: number | null;
+  nvme_namespace_lba_size_bytes?: number | null;
+  nvme_namespace_size_lba?: number | null;
+  nvme_namespace_inuse_lba?: number | null;
+  nvme_namespace_capacity_bytes?: number | null;
+  nvme_namespace_inuse_bytes?: number | null;
+  nvme_eui64?: string | null;
+  nvme_nguid?: string | null;
 };
 
 export type SnapshotResult = {
