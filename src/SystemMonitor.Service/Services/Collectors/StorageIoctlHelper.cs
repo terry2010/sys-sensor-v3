@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace SystemMonitor.Service.Services.Collectors
 {
@@ -36,6 +37,70 @@ namespace SystemMonitor.Service.Services.Collectors
                     return null;
                 }
 
+                // SATA：通过 IDENTIFY DEVICE (0xEC) 读取 word 76（Serial ATA capabilities）判断支持的最高代际，作为链路速率近似
+                if (string.Equals(iface, "sata", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        using var h = OpenPhysicalDrive(physicalDriveIndex);
+                        int inSize = Marshal.SizeOf<SENDCMDINPARAMS>() - 1;
+                        int outSize = Marshal.SizeOf<SENDCMDOUTPARAMS>() + 512;
+                        var inBuf = Marshal.AllocHGlobal(inSize);
+                        var outBuf = Marshal.AllocHGlobal(outSize);
+                        try
+                        {
+                            var inParams = new SENDCMDINPARAMS();
+                            inParams.cBufferSize = 512;
+                            inParams.irDriveRegs.bFeaturesReg = 0;
+                            inParams.irDriveRegs.bSectorCountReg = 1;
+                            inParams.irDriveRegs.bSectorNumberReg = 1;
+                            inParams.irDriveRegs.bCylLowReg = 0;
+                            inParams.irDriveRegs.bCylHighReg = 0;
+                            inParams.irDriveRegs.bDriveHeadReg = 0xA0;
+                            inParams.irDriveRegs.bCommandReg = 0xEC; // IDENTIFY DEVICE
+                            Marshal.StructureToPtr(inParams, inBuf, false);
+
+                            if (!DeviceIoControl(h, SMART_RCV_DRIVE_DATA, inBuf, (uint)inSize, outBuf, (uint)outSize, out _, IntPtr.Zero))
+                            {
+                                return null;
+                            }
+
+                            var dataPtr = (IntPtr)(outBuf.ToInt64() + Marshal.SizeOf<SENDCMDOUTPARAMS>());
+                            byte[] idData = new byte[512];
+                            Marshal.Copy(dataPtr, idData, 0, 512);
+
+                            // word 76（LE）位 8/9/10 分别表示支持 SATA Gen1/Gen2/Gen3
+                            int w76Offset = 76 * 2;
+                            ushort w76 = (ushort)(idData[w76Offset] | (idData[w76Offset + 1] << 8));
+                            bool gen3 = (w76 & (1 << 10)) != 0;
+                            bool gen2 = (w76 & (1 << 9)) != 0;
+                            bool gen1 = (w76 & (1 << 8)) != 0;
+
+                            if (gen3) return "6 Gbps";       // SATA 3.0
+                            if (gen2) return "3 Gbps";       // SATA 2.0
+                            if (gen1) return "1.5 Gbps";     // SATA 1.5Gbps
+                            return null;
+                        }
+                        finally
+                        {
+                            Marshal.FreeHGlobal(inBuf);
+                            Marshal.FreeHGlobal(outBuf);
+                        }
+                    }
+                    catch { return null; }
+                }
+
+                // NVMe：通过 SetupAPI 读取 PCIe 当前链路速率与宽度
+                if (string.Equals(iface, "nvme", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!string.IsNullOrWhiteSpace(pnp))
+                    {
+                        var link = TryGetPcieLinkFromPnp(pnp!);
+                        if (!string.IsNullOrWhiteSpace(link)) return link;
+                    }
+                    return null;
+                }
+
                 // 其余总线：阶段A返回 null，占位（后续阶段B实现）
                 return null;
             }
@@ -44,6 +109,134 @@ namespace SystemMonitor.Service.Services.Collectors
                 return null;
             }
         }
+
+        // 读取 PCIe 当前链路速率与宽度（使用 SetupAPI 设备属性）
+        private static string? TryGetPcieLinkFromPnp(string pnpDeviceId)
+        {
+            IntPtr devInfo = IntPtr.Zero;
+            try
+            {
+                devInfo = SetupDiCreateDeviceInfoList(IntPtr.Zero, IntPtr.Zero);
+                if (devInfo == IntPtr.Zero || devInfo == new IntPtr(-1)) return null;
+
+                var data = new SP_DEVINFO_DATA();
+                data.cbSize = (uint)Marshal.SizeOf<SP_DEVINFO_DATA>();
+                if (!SetupDiOpenDeviceInfo(devInfo, pnpDeviceId, IntPtr.Zero, 0, ref data))
+                    return null;
+
+                // 读取 CurrentLinkSpeed（uint32，按代际 1..5 对应 Gen1..Gen5）
+                uint type = 0;
+                uint req = 0;
+                uint speedVal = 0;
+                int bufSize = sizeof(uint);
+                IntPtr buf = Marshal.AllocHGlobal(bufSize);
+                try
+                {
+                    var keySpeed = DEVPKEY_PciDevice_CurrentLinkSpeed; // 本地副本，允许以 ref 传入
+                    if (SetupDiGetDevicePropertyW(devInfo, ref data, ref keySpeed, out type, buf, (uint)bufSize, out req, 0))
+                    {
+                        speedVal = (uint)Marshal.ReadInt32(buf);
+                    }
+                    else
+                    {
+                        // 未取到则按未知
+                        speedVal = 0;
+                    }
+                }
+                finally { Marshal.FreeHGlobal(buf); }
+
+                // 读取 CurrentLinkWidth（uint32，x1/x2/x4...）
+                uint widthVal = 0;
+                buf = Marshal.AllocHGlobal(sizeof(uint));
+                try
+                {
+                    var keyWidth = DEVPKEY_PciDevice_CurrentLinkWidth; // 本地副本
+                    if (SetupDiGetDevicePropertyW(devInfo, ref data, ref keyWidth, out type, buf, (uint)sizeof(uint), out req, 0))
+                    {
+                        widthVal = (uint)Marshal.ReadInt32(buf);
+                    }
+                }
+                finally { Marshal.FreeHGlobal(buf); }
+
+                string gen = speedVal switch
+                {
+                    1 => "Gen1",
+                    2 => "Gen2",
+                    3 => "Gen3",
+                    4 => "Gen4",
+                    5 => "Gen5",
+                    6 => "Gen6",
+                    _ => string.Empty
+                };
+                if (!string.IsNullOrEmpty(gen) && widthVal > 0)
+                {
+                    return $"PCIe {gen} x{widthVal}";
+                }
+                if (!string.IsNullOrEmpty(gen)) return $"PCIe {gen}";
+                if (widthVal > 0) return $"PCIe x{widthVal}";
+                return null;
+            }
+            catch { return null; }
+            finally
+            {
+                if (devInfo != IntPtr.Zero && devInfo != new IntPtr(-1))
+                {
+                    try { SetupDiDestroyDeviceInfoList(devInfo); } catch { }
+                }
+            }
+        }
+
+        // ======= SetupAPI P/Invoke 定义（用于读取 PCIe 链路属性）=======
+        [StructLayout(LayoutKind.Sequential)]
+        private struct DEVPROPKEY
+        {
+            public Guid fmtid;
+            public uint pid;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct SP_DEVINFO_DATA
+        {
+            public uint cbSize;
+            public Guid ClassGuid;
+            public uint DevInst;
+            public IntPtr Reserved;
+        }
+
+        [DllImport("setupapi.dll", SetLastError = true)]
+        private static extern IntPtr SetupDiCreateDeviceInfoList(IntPtr ClassGuid, IntPtr hwndParent);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern bool SetupDiOpenDeviceInfo(IntPtr DeviceInfoSet, string DeviceInstanceId, IntPtr hwndParent, uint OpenFlags, ref SP_DEVINFO_DATA DeviceInfoData);
+
+        [DllImport("setupapi.dll", SetLastError = true)]
+        private static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern bool SetupDiGetDevicePropertyW(
+            IntPtr DeviceInfoSet,
+            ref SP_DEVINFO_DATA DeviceInfoData,
+            ref DEVPROPKEY PropertyKey,
+            out uint PropertyType,
+            IntPtr PropertyBuffer,
+            uint PropertyBufferSize,
+            out uint RequiredSize,
+            uint Flags);
+
+        // DEVPROP_TYPE 定义中我们仅用到 UINT32（0x00000007）。此处不强校验类型，宽松处理。
+
+        // DEVPKEY_PciDevice_* GUID: {A8B865DD-2E3D-4094-AD97-E593A70C75D6}
+        private static readonly DEVPROPKEY DEVPKEY_PciDevice_CurrentLinkSpeed = new DEVPROPKEY
+        {
+            fmtid = new Guid("A8B865DD-2E3D-4094-AD97-E593A70C75D6"),
+            pid = 2
+        };
+
+        private static readonly DEVPROPKEY DEVPKEY_PciDevice_CurrentLinkWidth = new DEVPROPKEY
+        {
+            fmtid = new Guid("A8B865DD-2E3D-4094-AD97-E593A70C75D6"),
+            pid = 4
+        };
 
         // 选择最合适的 NVMe 命名空间：
         // 1) 若 NN<=1，返回 1
@@ -319,6 +512,147 @@ namespace SystemMonitor.Service.Services.Collectors
                 }
             }
             catch { return null; }
+        }
+
+        // NVMe 错误日志（Log Page 0x01）读取与汇总
+        public sealed class NvmeErrorLogEntry
+        {
+            public ulong error_count { get; set; }
+            public ushort sqid { get; set; }
+            public ushort cmdid { get; set; }
+            public ushort status { get; set; }
+            public uint nsid { get; set; }
+            public ulong lba { get; set; }
+        }
+
+        public sealed class NvmeErrorLogSummary
+        {
+            public int parsed_bytes { get; set; }
+            public int entry_size { get; set; } = 64;
+            public int total_nonzero_entries { get; set; }
+            public List<NvmeErrorLogEntry> recent_entries { get; set; } = new();
+        }
+
+        // 读取 NVMe 错误信息日志（0x01），优先经 IOCTL_STORAGE_QUERY_PROPERTY；失败时走回退直通。
+        // 约定：读取 4096 字节（最多 64 条，每条 64 字节），仅解析 error_count!=0 的条目，返回最近若干条。
+        public static NvmeErrorLogSummary? TryReadNvmeErrorLogSummary(int physicalDriveIndex, int maxRecent = 8)
+        {
+            try
+            {
+                using var h = OpenPhysicalDrive(physicalDriveIndex);
+                var query = new STORAGE_PROPERTY_QUERY
+                {
+                    PropertyId = STORAGE_PROPERTY_ID.StorageDeviceProtocolSpecificProperty,
+                    QueryType = STORAGE_QUERY_TYPE.PropertyStandardQuery
+                };
+                var proto = new STORAGE_PROTOCOL_SPECIFIC_DATA
+                {
+                    ProtocolType = STORAGE_PROTOCOL_TYPE.ProtocolTypeNvme,
+                    DataType = (uint)STORAGE_PROTOCOL_NVME_DATA_TYPE.NVMeDataTypeLogPage,
+                    ProtocolDataRequestValue = 0x01, // Error Information Log
+                    ProtocolDataRequestSubValue = 0,
+                    ProtocolDataOffset = (uint)Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>(),
+                    ProtocolDataLength = 4096
+                };
+
+                int inSize = Marshal.SizeOf<STORAGE_PROPERTY_QUERY>() + Marshal.SizeOf<STORAGE_PROTOCOL_SPECIFIC_DATA>();
+                int outSize = Marshal.SizeOf<STORAGE_PROTOCOL_DATA_DESCRIPTOR>() + (int)proto.ProtocolDataLength;
+                var inBuf = Marshal.AllocHGlobal(inSize);
+                var outBuf = Marshal.AllocHGlobal(outSize);
+                try
+                {
+                    Marshal.StructureToPtr(query, inBuf, false);
+                    Marshal.StructureToPtr(proto, (IntPtr)(inBuf.ToInt64() + Marshal.SizeOf<STORAGE_PROPERTY_QUERY>()), false);
+
+                    if (!DeviceIoControl(h, IOCTL_STORAGE_QUERY_PROPERTY, inBuf, (uint)inSize, outBuf, (uint)outSize, out _, IntPtr.Zero))
+                    {
+                        int err = Marshal.GetLastWin32Error();
+                        if (string.Equals(Environment.GetEnvironmentVariable("SYS_SENSOR_SMART_DEBUG"), "1", StringComparison.OrdinalIgnoreCase))
+                        { try { Serilog.Log.Information("[SMART] NVMe ErrorLog DeviceIoControl fail idx={Idx} err={Err}", physicalDriveIndex, err); } catch { } }
+                        if (err == 87 || err == 50 || err == 1)
+                        {
+                            // 回退：Get Log Page (Error Info, LID=0x01), NUMD=1023 (4096B)，RAE=1；NSID 依次尝试 FFFFFFFF/0/1
+                            uint cdw10 = (1023u << 16) | 0x01u; // NUMD | LID
+                            uint cdw12 = (1u << 15);
+                            var path = @$"\\.\PHYSICALDRIVE{physicalDriveIndex}";
+                            var hProto = CreateFileW(path, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, IntPtr.Zero, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, IntPtr.Zero);
+                            if (hProto.IsInvalid) hProto = h;
+                            foreach (var tryNsid in new uint[] { 0xFFFFFFFFu, 0u, 1u })
+                            {
+                                if (SendNvmeAdminCommand(hProto, NVME_ADMIN_OPC_GET_LOG_PAGE, tryNsid, cdw10, 0, cdw12, 0, 0, 0, 4096, 0, out _, out var data))
+                                {
+                                    if (data != null && data.Length >= 64)
+                                    {
+                                        return ParseNvmeErrorLogBuffer(data, maxRecent);
+                                    }
+                                }
+                            }
+                            return null;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+
+                    var desc = Marshal.PtrToStructure<STORAGE_PROTOCOL_DATA_DESCRIPTOR>(outBuf);
+                    var sp = desc.ProtocolSpecific;
+                    if (sp.ProtocolDataLength < 64 || sp.ProtocolDataOffset == 0)
+                    {
+                        if (string.Equals(Environment.GetEnvironmentVariable("SYS_SENSOR_SMART_DEBUG"), "1", StringComparison.OrdinalIgnoreCase))
+                        { try { Serilog.Log.Information("[SMART] NVMe ErrorLog invalid desc idx={Idx} len={Len} off={Off}", physicalDriveIndex, sp.ProtocolDataLength, sp.ProtocolDataOffset); } catch { } }
+                        return null;
+                    }
+                    var dataPtr = (IntPtr)(outBuf.ToInt64() + (int)sp.ProtocolDataOffset);
+                    byte[] buf = new byte[sp.ProtocolDataLength];
+                    Marshal.Copy(dataPtr, buf, 0, (int)sp.ProtocolDataLength);
+                    return ParseNvmeErrorLogBuffer(buf, maxRecent);
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(inBuf);
+                    Marshal.FreeHGlobal(outBuf);
+                }
+            }
+            catch { return null; }
+        }
+
+        private static NvmeErrorLogSummary ParseNvmeErrorLogBuffer(byte[] buf, int maxRecent)
+        {
+            var summary = new NvmeErrorLogSummary { parsed_bytes = buf.Length };
+            int entrySize = summary.entry_size;
+            int total = 0;
+            var recent = new List<NvmeErrorLogEntry>();
+            for (int off = 0; off + entrySize <= buf.Length; off += entrySize)
+            {
+                try
+                {
+                    ulong errCnt = BitConverter.ToUInt64(buf, off + 0);
+                    if (errCnt == 0) continue;
+                    total++;
+                    if (recent.Count < Math.Max(1, maxRecent))
+                    {
+                        ushort sqid = BitConverter.ToUInt16(buf, off + 8);
+                        ushort cid = BitConverter.ToUInt16(buf, off + 10);
+                        ushort status = BitConverter.ToUInt16(buf, off + 12);
+                        ulong lba = BitConverter.ToUInt64(buf, off + 16);
+                        uint nsid = BitConverter.ToUInt32(buf, off + 24);
+                        recent.Add(new NvmeErrorLogEntry
+                        {
+                            error_count = errCnt,
+                            sqid = sqid,
+                            cmdid = cid,
+                            status = status,
+                            nsid = nsid,
+                            lba = lba
+                        });
+                    }
+                }
+                catch { /* ignore partial/format issues */ }
+            }
+            summary.total_nonzero_entries = total;
+            summary.recent_entries = recent;
+            return summary;
         }
 
         // 读取 NVMe Identify（Controller）字符串（序列号/型号/固件），失败返回 null
@@ -1416,6 +1750,13 @@ namespace SystemMonitor.Service.Services.Collectors
         private static ushort ReadUInt16(IntPtr basePtr, int offset)
         {
             return (ushort)(Marshal.ReadByte(basePtr, offset) | (Marshal.ReadByte(basePtr, offset + 1) << 8));
+        }
+        private static uint ReadUInt32(IntPtr basePtr, int offset)
+        {
+            return (uint)(Marshal.ReadByte(basePtr, offset)
+                        | (Marshal.ReadByte(basePtr, offset + 1) << 8)
+                        | (Marshal.ReadByte(basePtr, offset + 2) << 16)
+                        | (Marshal.ReadByte(basePtr, offset + 3) << 24));
         }
         private static ulong ReadUInt64(IntPtr basePtr, int offset)
         {
