@@ -18,6 +18,12 @@
             <div><label>Queue</label><span>{{ fmtNum(disk.totals?.queue_length ?? disk.queue_length) }}</span></div>
             <div><label>Avg Read Lat</label><span>{{ fmtMs(disk.totals?.avg_read_latency_ms) }}</span></div>
             <div><label>Avg Write Lat</label><span>{{ fmtMs(disk.totals?.avg_write_latency_ms) }}</span></div>
+            <div><label>Read p50</label><span>{{ fmtMs(disk.totals?.read_p50_ms) }}</span></div>
+            <div><label>Write p50</label><span>{{ fmtMs(disk.totals?.write_p50_ms) }}</span></div>
+            <div><label>Read p95</label><span>{{ fmtMs(disk.totals?.read_p95_ms) }}</span></div>
+            <div><label>Write p95</label><span>{{ fmtMs(disk.totals?.write_p95_ms) }}</span></div>
+            <div><label>Read p99</label><span>{{ fmtMs(disk.totals?.read_p99_ms) }}</span></div>
+            <div><label>Write p99</label><span>{{ fmtMs(disk.totals?.write_p99_ms) }}</span></div>
             <div><label>Source</label><span>{{ disk.totals_source ?? 'unknown' }}</span></div>
           </div>
         </div>
@@ -83,27 +89,33 @@
         </table>
       </details>
       <details>
-        <summary>Latency Quality</summary>
-        <div class="subhint">当前仅展示平均延迟，p50/p95/p99 预留占位（后端提供后自动填充）。</div>
+        <summary>Latency Quality (Per Volume)</summary>
+        <div class="subhint">展示每卷的平均延迟与分位数（p50/p95/p99）。</div>
         <table class="tbl">
           <thead>
             <tr>
-              <th>Disk</th>
+              <th>Volume</th>
               <th>Read Avg</th>
               <th>Write Avg</th>
-              <th>p50</th>
-              <th>p95</th>
-              <th>p99</th>
+              <th>R p50</th>
+              <th>R p95</th>
+              <th>R p99</th>
+              <th>W p50</th>
+              <th>W p95</th>
+              <th>W p99</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="d in perPhysicalSorted" :key="'lat-'+d.disk_id">
-              <td>{{ d.disk_id }}</td>
-              <td>{{ fmtMs(d.avg_read_latency_ms) }}</td>
-              <td>{{ fmtMs(d.avg_write_latency_ms) }}</td>
-              <td>-</td>
-              <td>-</td>
-              <td>-</td>
+            <tr v-for="v in perVolumeSorted" :key="'lat-'+v.volume_id">
+              <td>{{ v.volume_id }}</td>
+              <td>{{ fmtMs(v.avg_read_latency_ms) }}</td>
+              <td>{{ fmtMs(v.avg_write_latency_ms) }}</td>
+              <td>{{ fmtMs(v.read_p50_ms) }}</td>
+              <td>{{ fmtMs(v.read_p95_ms) }}</td>
+              <td>{{ fmtMs(v.read_p99_ms) }}</td>
+              <td>{{ fmtMs(v.write_p50_ms) }}</td>
+              <td>{{ fmtMs(v.write_p95_ms) }}</td>
+              <td>{{ fmtMs(v.write_p99_ms) }}</td>
             </tr>
           </tbody>
         </table>

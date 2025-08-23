@@ -44,6 +44,12 @@ namespace SystemMonitor.Service.Services.Collectors
                 // 读取 totals 原始值
                 var totalsRead = GetLong(totalsRaw, "read_bytes_per_sec");
                 var totalsWrite = GetLong(totalsRaw, "write_bytes_per_sec");
+                // 更新 totals 的延迟分位数聚合（以 IOPS 为权重）
+                var totReadIops = GetDoubleN(totalsRaw, "read_iops");
+                var totWriteIops = GetDoubleN(totalsRaw, "write_iops");
+                var totReadLat = GetDoubleN(totalsRaw, "avg_read_latency_ms");
+                var totWriteLat = GetDoubleN(totalsRaw, "avg_write_latency_ms");
+                LatencyAggregator.Instance.Update("_totals", totReadLat, totWriteLat, totReadIops, totWriteIops);
 
                 // 优先使用更细粒度的聚合，以避免系统 totals 计数器在部分环境失真
                 long sumVolRead = 0, sumVolWrite = 0; bool hasVol = false;
@@ -84,6 +90,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 }
 
                 // 生成对外 totals（保持字段齐全）
+                var (tot_rp50, tot_rp95, tot_rp99, tot_wp50, tot_wp95, tot_wp99) = LatencyAggregator.Instance.GetPercentiles("_totals");
                 var totals = new
                 {
                     read_bytes_per_sec = finalRead,
@@ -93,22 +100,43 @@ namespace SystemMonitor.Service.Services.Collectors
                     busy_percent = GetDoubleN(totalsRaw, "busy_percent"),
                     queue_length = GetDoubleN(totalsRaw, "queue_length"),
                     avg_read_latency_ms = GetDoubleN(totalsRaw, "avg_read_latency_ms"),
-                    avg_write_latency_ms = GetDoubleN(totalsRaw, "avg_write_latency_ms")
+                    avg_write_latency_ms = GetDoubleN(totalsRaw, "avg_write_latency_ms"),
+                    // 新增：滑窗分位数
+                    read_p50_ms = tot_rp50,
+                    read_p95_ms = tot_rp95,
+                    read_p99_ms = tot_rp99,
+                    write_p50_ms = tot_wp50,
+                    write_p95_ms = tot_wp95,
+                    write_p99_ms = tot_wp99
                 };
 
-                // enrich per_volume_io with free_percent from volumes
+                // enrich per_volume_io with free_percent from volumes + 分位数聚合
                 System.Collections.Generic.List<object>? perVolEnriched = null;
-                if (perVol != null && vols != null)
+                if (perVol != null)
                 {
                     perVolEnriched = new System.Collections.Generic.List<object>();
                     foreach (var v in perVol)
                     {
                         var vid = GetStringN(v, "volume_id");
+                        // 更新该卷的滑窗聚合
+                        var rIops = GetDoubleN(v, "read_iops");
+                        var wIops = GetDoubleN(v, "write_iops");
+                        var rLat = GetDoubleN(v, "avg_read_latency_ms");
+                        var wLat = GetDoubleN(v, "avg_write_latency_ms");
+                        if (!string.IsNullOrWhiteSpace(vid))
+                        {
+                            LatencyAggregator.Instance.Update($"vol:{vid}", rLat, wLat, rIops, wIops);
+                        }
+                        var (rp50, rp95, rp99, wp50, wp95, wp99) = string.IsNullOrWhiteSpace(vid) ? (null, null, null, null, null, null) : LatencyAggregator.Instance.GetPercentiles($"vol:{vid}");
+                        // 容量 free%
                         double? freePct = null;
                         try
                         {
-                            var match = vols.FirstOrDefault(x => string.Equals(x.id, vid, System.StringComparison.OrdinalIgnoreCase));
-                            freePct = match?.free_percent;
+                            if (vols != null)
+                            {
+                                var match = vols.FirstOrDefault(x => string.Equals(x.id, vid, System.StringComparison.OrdinalIgnoreCase));
+                                freePct = match?.free_percent;
+                            }
                         }
                         catch { }
                         perVolEnriched.Add(new
@@ -116,12 +144,19 @@ namespace SystemMonitor.Service.Services.Collectors
                             volume_id = vid ?? string.Empty,
                             read_bytes_per_sec = GetLong(v, "read_bytes_per_sec"),
                             write_bytes_per_sec = GetLong(v, "write_bytes_per_sec"),
-                            read_iops = GetDoubleN(v, "read_iops"),
-                            write_iops = GetDoubleN(v, "write_iops"),
+                            read_iops = rIops,
+                            write_iops = wIops,
                             busy_percent = GetDoubleN(v, "busy_percent"),
                             queue_length = GetDoubleN(v, "queue_length"),
-                            avg_read_latency_ms = GetDoubleN(v, "avg_read_latency_ms"),
-                            avg_write_latency_ms = GetDoubleN(v, "avg_write_latency_ms"),
+                            avg_read_latency_ms = rLat,
+                            avg_write_latency_ms = wLat,
+                            // 新增：分位数
+                            read_p50_ms = rp50,
+                            read_p95_ms = rp95,
+                            read_p99_ms = rp99,
+                            write_p50_ms = wp50,
+                            write_p95_ms = wp95,
+                            write_p99_ms = wp99,
                             free_percent = freePct
                         });
                     }
