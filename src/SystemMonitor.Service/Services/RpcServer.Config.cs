@@ -56,11 +56,7 @@ namespace SystemMonitor.Service.Services
                 {
                     return new HashSet<string>(s_enabledModules, StringComparer.OrdinalIgnoreCase);
                 }
-                if (s_moduleIntervals.Count > 0)
-                {
-                    return new HashSet<string>(s_moduleIntervals.Keys, StringComparer.OrdinalIgnoreCase);
-                }
-                // 默认：全部注册的采集器
+                // 默认：全部注册的采集器（module_intervals 仅决定各模块间隔，不决定启用集合）
                 return new HashSet<string>(MetricsRegistry.Collectors.Select(c => c.Name), StringComparer.OrdinalIgnoreCase);
             }
         }
