@@ -135,14 +135,16 @@ namespace SystemMonitor.Service.Services
             {
                 if (string.IsNullOrWhiteSpace(m)) continue;
                 var name = m.Trim().ToLowerInvariant() == "mem" ? "memory" : m.Trim();
-                map[name] = Math.Max(100, _baseIntervalMs);
+                int baseMs;
+                lock (s_cfgLock) { baseMs = s_baseIntervalMs; }
+                map[name] = Math.Max(100, baseMs);
             }
-            lock (_lock)
+            lock (s_cfgLock)
             {
-                _moduleIntervals.Clear();
+                s_moduleIntervals.Clear();
                 foreach (var kv in map)
                 {
-                    _moduleIntervals[kv.Key] = kv.Value;
+                    s_moduleIntervals[kv.Key] = kv.Value;
                 }
             }
             _logger.LogInformation("start called, modules={modules}", string.Join(",", modules));
@@ -166,9 +168,9 @@ namespace SystemMonitor.Service.Services
         public Task<object> stop()
         {
             // 清空模块设置，推送循环将依据空集合回退到默认模块或停止
-            lock (_lock)
+            lock (s_cfgLock)
             {
-                _moduleIntervals.Clear();
+                s_moduleIntervals.Clear();
             }
             _logger.LogInformation("stop called, metrics collection stopped");
             // 发出状态事件：stop

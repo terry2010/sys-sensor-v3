@@ -31,6 +31,11 @@ namespace SystemMonitor.Service.Services
         public string[]? enabled_modules { get; set; }
         public string[]? sync_exempt_modules { get; set; }
         public bool? persist { get; set; }
+        // 新增：磁盘采集细粒度 TTL 与开关（可选）
+        public int? disk_smart_ttl_ms { get; set; }
+        public int? disk_nvme_errorlog_ttl_ms { get; set; }
+        public int? disk_nvme_ident_ttl_ms { get; set; }
+        public bool? disk_smart_native_enabled { get; set; }
     }
 
     public sealed class StartParams

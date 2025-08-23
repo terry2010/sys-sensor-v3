@@ -29,7 +29,9 @@ export const tauriRpc = {
   async hello(): Promise<HelloResult> { return rpcCall<HelloResult>('hello', { app_version: 'fe-mock', protocol_version: 1, token: 'dev', capabilities: [] }); },
   async snapshot(p?: SnapshotParams): Promise<SnapshotResult> { return rpcCall<SnapshotResult>('snapshot', p ?? {}); },
   async query_history(p: QueryHistoryParams): Promise<QueryHistoryResult> { return rpcCall<QueryHistoryResult>('query_history', p); },
-  async set_config(p: SetConfigParams) { return rpcCall<any>('set_config', p); },
+  // 提升超时：set_config/get_config 可能因命名管道监听轮转等待而超过 6s
+  async set_config(p: SetConfigParams) { return rpcCall<any>('set_config', p, 15000); },
+  async get_config() { return rpcCall<any>('get_config', undefined, 15000); },
   async start(p?: StartParams) { return rpcCall<any>('start', p ?? {}); },
   // stop 为后端无参方法，此处必须不传递 params，否则会被识别为 stop/1
   async stop() { return rpcCall<any>('stop'); },

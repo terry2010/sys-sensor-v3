@@ -1,5 +1,5 @@
 // Web Mock 实现：无 Tauri 环境下用于本地开发 UI
-import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult, SnapshotParams } from './dto';
+import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult, SnapshotParams, GetConfigResult } from './dto';
 
 class MockMetricsBus {
   private interval?: number;
@@ -27,6 +27,24 @@ class MockMetricsBus {
 const bus = new MockMetricsBus();
 bus.start(500);
 
+// 可变的 mock 配置，用于模拟 set_config/get_config
+type MockConfig = import('./dto').GetConfigResult;
+const mockConfig: MockConfig = {
+  ok: true,
+  base_interval_ms: 1000,
+  effective_intervals: { disk: 1000 },
+  max_concurrency: 3,
+  enabled_modules: ['cpu','memory','disk'],
+  sync_exempt_modules: [],
+  current_interval_ms: 1000,
+  burst_expires_at: 0,
+  disk_smart_ttl_ms: 30000,
+  disk_nvme_errorlog_ttl_ms: 60000,
+  disk_nvme_ident_ttl_ms: 600000,
+  disk_smart_native_override: null,
+  disk_smart_native_effective: true,
+};
+
 export const mockRpc = {
   async hello(): Promise<HelloResult> {
     return {
@@ -35,6 +53,37 @@ export const mockRpc = {
       capabilities: ['metrics_stream','history_query'],
       session_id: 'mock-session'
     };
+  },
+  async get_config(): Promise<GetConfigResult> {
+    // 返回当前可变配置
+    return { ...mockConfig, effective_intervals: { ...mockConfig.effective_intervals } };
+  },
+  async set_config(p: import('./dto').SetConfigParams) {
+    // 基础/模块级间隔
+    if (typeof p.base_interval_ms === 'number' && p.base_interval_ms > 0) {
+      mockConfig.base_interval_ms = Math.max(100, p.base_interval_ms|0);
+    }
+    if (p.module_intervals && typeof p.module_intervals['disk'] === 'number' && p.module_intervals['disk']! > 0) {
+      mockConfig.effective_intervals['disk'] = Math.max(100, p.module_intervals['disk']!|0);
+    }
+    // 并发/模块启用/同步豁免（简单镜像）
+    if (typeof p.max_concurrency === 'number') mockConfig.max_concurrency = Math.max(1, Math.min(8, p.max_concurrency|0));
+    if (Array.isArray(p.enabled_modules)) mockConfig.enabled_modules = p.enabled_modules.length ? [...p.enabled_modules] : ['cpu','memory','disk'];
+    if (Array.isArray(p.sync_exempt_modules)) mockConfig.sync_exempt_modules = [...p.sync_exempt_modules];
+    // 磁盘 TTL 与开关（按后端夹紧规则近似）
+    if (typeof p.disk_smart_ttl_ms === 'number') mockConfig.disk_smart_ttl_ms = Math.max(5000, Math.min(300000, p.disk_smart_ttl_ms|0));
+    if (typeof p.disk_nvme_errorlog_ttl_ms === 'number') mockConfig.disk_nvme_errorlog_ttl_ms = Math.max(10000, Math.min(600000, p.disk_nvme_errorlog_ttl_ms|0));
+    if (typeof p.disk_nvme_ident_ttl_ms === 'number') mockConfig.disk_nvme_ident_ttl_ms = Math.max(60000, Math.min(3600000, p.disk_nvme_ident_ttl_ms|0));
+    if (typeof p.disk_smart_native_enabled === 'boolean') {
+      mockConfig.disk_smart_native_override = p.disk_smart_native_enabled;
+      mockConfig.disk_smart_native_effective = p.disk_smart_native_enabled;
+    }
+    // 计算当前推送间隔（无突发下 = disk 模块间隔 或 base）
+    const effDisk = mockConfig.effective_intervals?.['disk'] ?? mockConfig.base_interval_ms;
+    mockConfig.current_interval_ms = effDisk || mockConfig.base_interval_ms;
+    // 模拟推送频率变化
+    try { bus.start(Math.max(100, mockConfig.current_interval_ms)); } catch {}
+    return { ok: true, ...mockConfig } as any;
   },
   async snapshot(p?: SnapshotParams): Promise<SnapshotResult> {
     const ts = Date.now();

@@ -1,11 +1,51 @@
 <template>
   <div class="card">
     <h3>Disk</h3>
+    <div class="subhint">上次更新时间：{{ lastUpdatedText }}</div>
     <div v-if="!disk">暂无数据</div>
-    <div v-else class="hint" v-if="smartHint">
+    <div class="hint" v-else-if="warmingUp">
+      磁盘指标正在预热（warming up）…请稍候。
+    </div>
+    <div class="hint" v-else-if="smartHint">
       {{ smartHint }}
     </div>
     <template v-else>
+      <details class="settings" open>
+        <summary>Settings</summary>
+        <div class="subhint">在不重启的情况下调整采样/订阅与磁盘相关 TTL。建议范围：SMART 5–300s、NVMe ErrorLog 10–600s、NVMe Identify 1–60min。</div>
+        <div class="kv" v-if="cfg">
+          <div><label class="section">当前生效配置</label><span><button @click="refreshConfig">刷新</button></span></div>
+          <div><label>采样 Base Interval</label><span>{{ cfg.base_interval_ms }} ms</span></div>
+          <div><label>采样 Disk Interval</label><span>{{ (cfg.effective_intervals && cfg.effective_intervals['disk']) ? cfg.effective_intervals['disk'] : cfg.base_interval_ms }} ms</span></div>
+          <div><label>当前推送间隔</label><span>{{ cfg.current_interval_ms }} ms</span></div>
+          <div><label>突发剩余</label><span>{{ fmtBurstRemain(cfg.burst_expires_at) }}</span></div>
+          <div><label>当前 SMART 原生</label><span>{{ cfg.disk_smart_native_effective ? '启用' : '禁用' }} <small v-if="cfg.disk_smart_native_override!==null">(override={{ String(cfg.disk_smart_native_override) }})</small></span></div>
+          <div><label>SMART TTL</label><span>{{ fmtMs(cfg.disk_smart_ttl_ms) }}</span></div>
+          <div><label>NVMe ErrLog TTL</label><span>{{ fmtMs(cfg.disk_nvme_errorlog_ttl_ms) }}</span></div>
+          <div><label>NVMe Identify TTL</label><span>{{ fmtMs(cfg.disk_nvme_ident_ttl_ms) }}</span></div>
+        </div>
+        <div class="kv">
+          <div><label class="section">采样间隔</label><span></span></div>
+          <div><label>Base Interval (ms)</label><span><input type="number" min="500" max="60000" step="500" v-model.number="baseIntervalMsInput" placeholder="不修改" /></span></div>
+          <div><label>Disk Interval (ms)</label><span><input type="number" min="500" max="60000" step="500" v-model.number="diskIntervalMsInput" placeholder="不修改" /></span></div>
+        </div>
+        <div class="kv">
+          <div><label class="section">磁盘 TTL 与开关</label><span></span></div>
+          <div><label>SMART 原生启用</label>
+            <span>
+              <select v-model="smartNativeEnabledStr">
+                <option :value="''">不修改</option>
+                <option :value="'true'">启用</option>
+                <option :value="'false'">禁用</option>
+              </select>
+            </span>
+          </div>
+          <div><label>SMART TTL (ms)</label><span><input type="number" min="5000" max="300000" step="1000" v-model.number="smartTtlMs" placeholder="不修改" /></span></div>
+          <div><label>NVMe ErrorLog TTL (ms)</label><span><input type="number" min="10000" max="600000" step="1000" v-model.number="nvmeErrlogTtlMs" placeholder="不修改" /></span></div>
+          <div><label>NVMe Identify TTL (ms)</label><span><input type="number" min="60000" max="3600000" step="30000" v-model.number="nvmeIdentTtlMs" placeholder="不修改" /></span></div>
+          <div><label></label><span><button @click="applyConfig" :disabled="!canApply">应用配置</button></span></div>
+        </div>
+      </details>
       <div class="grid2">
         <div>
           <h4>Totals (I/O)</h4>
@@ -366,11 +406,21 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useMetricsStore } from '../stores/metrics';
+import { service } from '../api/service';
 
 const metrics = useMetricsStore();
 const disk = computed(() => metrics.latest?.disk);
+const lastUpdatedText = computed(() => {
+  const t = metrics.lastAt || 0;
+  if (!t) return '-';
+  try { return new Date(t).toLocaleTimeString(); } catch { return String(t); }
+});
+const warmingUp = computed(() => {
+  const d: any = disk.value;
+  return d && d.status === 'warming_up';
+});
 
 // 顶部 SMART 提示：当 smart_health 为空或所有项几乎为空时给出原因提示
 const smartHint = computed(() => {
@@ -386,6 +436,62 @@ const smartHint = computed(() => {
   }
   return '';
 });
+
+// 设置入口：SMART 开关与 TTLs
+const smartNativeEnabledStr = ref<string>(''); // '', 'true', 'false'
+// 采样间隔设置
+const baseIntervalMsInput = ref<number | undefined>(undefined);
+const diskIntervalMsInput = ref<number | undefined>(undefined);
+const smartTtlMs = ref<number | undefined>(undefined);
+const nvmeErrlogTtlMs = ref<number | undefined>(undefined);
+const nvmeIdentTtlMs = ref<number | undefined>(undefined);
+const cfg = ref<import('../api/dto').GetConfigResult | null>(null);
+const refreshConfig = async () => {
+  try {
+    const r = await service.getConfig();
+    cfg.value = r;
+    // 仅在尚未填写时进行预填
+    if (baseIntervalMsInput.value === undefined) baseIntervalMsInput.value = r.base_interval_ms;
+    const diskEff = (r.effective_intervals && r.effective_intervals['disk']) ? r.effective_intervals['disk'] : r.base_interval_ms;
+    if (diskIntervalMsInput.value === undefined) diskIntervalMsInput.value = diskEff;
+    console.log('get_config refreshed', r);
+  } catch { /* ignore */ }
+};
+// 突发订阅剩余 TTL 格式化
+const fmtBurstRemain = (expiresAt: number) => {
+  const n = Number(expiresAt);
+  if (!isFinite(n) || n <= 0) return '-';
+  const remain = Math.max(0, n - Date.now());
+  if (remain >= 1000) return `${Math.round(remain/1000)} s`;
+  return `${Math.round(remain)} ms`;
+};
+const canApply = computed(() =>
+  smartNativeEnabledStr.value !== '' ||
+  !!smartTtlMs.value || !!nvmeErrlogTtlMs.value || !!nvmeIdentTtlMs.value ||
+  !!baseIntervalMsInput.value || !!diskIntervalMsInput.value
+);
+const applyConfig = async () => {
+  const p: any = {};
+  // 采样间隔
+  if (baseIntervalMsInput.value) p.base_interval_ms = Math.max(200, Math.min(600000, Math.floor(baseIntervalMsInput.value)));
+  if (diskIntervalMsInput.value) p.module_intervals = { disk: Math.max(200, Math.min(600000, Math.floor(diskIntervalMsInput.value))) };
+  if (smartNativeEnabledStr.value === 'true') p.disk_smart_native_enabled = true;
+  else if (smartNativeEnabledStr.value === 'false') p.disk_smart_native_enabled = false;
+  if (smartTtlMs.value) p.disk_smart_ttl_ms = Math.max(5000, Math.min(300000, Math.floor(smartTtlMs.value)));
+  if (nvmeErrlogTtlMs.value) p.disk_nvme_errorlog_ttl_ms = Math.max(10000, Math.min(600000, Math.floor(nvmeErrlogTtlMs.value)));
+  if (nvmeIdentTtlMs.value) p.disk_nvme_ident_ttl_ms = Math.max(60000, Math.min(3600000, Math.floor(nvmeIdentTtlMs.value)));
+  try {
+    console.log('set_config params', p);
+    const r = await service.setConfig(p);
+    console.log('set_config ok, result=', r);
+    await refreshConfig();
+    console.log('get_config after apply', cfg.value);
+  } catch (e) {
+    console.error('set_config failed', e);
+  }
+};
+
+onMounted(() => { refreshConfig(); });
 
 const perPhysicalSorted = computed(() => {
   const arr = (disk.value?.per_physical_disk_io ?? []) as any[];
@@ -536,4 +642,6 @@ const parseCritWarn = (v: any) => {
 .warn { color: #d46b08; }
 .crit { color: #a8071a; font-weight: 600; }
 .tag { display: inline-block; padding: 2px 6px; margin: 2px 4px 2px 0; border-radius: 3px; background: #f5f5f5; color: #555; border: 1px solid #eee; font-size: 11px; }
+details.settings { margin: 8px 0 12px; }
+details.settings .kv { max-width: 560px; }
 </style>

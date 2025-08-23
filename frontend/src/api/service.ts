@@ -1,4 +1,4 @@
-import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult, SnapshotParams } from './dto';
+import type { QueryHistoryParams, QueryHistoryResult, SnapshotResult, HelloResult, SnapshotParams, GetConfigResult } from './dto';
 import { rpc } from './rpc';
 
 export const service = {
@@ -12,6 +12,7 @@ export const service = {
   // stop 为无参方法，严禁传参（否则被识别为 stop/1）
   stop() { return (rpc as any).stop?.(); },
   burstSubscribe(p: import('./dto').BurstSubscribeParams) { return (rpc as any).burst_subscribe?.(p); },
+  getConfig(): Promise<GetConfigResult> { return (rpc as any).get_config?.(); },
   async subscribeMetrics(p: boolean | { enable: boolean } = true) {
     const enable = typeof p === 'boolean' ? p : !!p?.enable;
     const impl: any = rpc;

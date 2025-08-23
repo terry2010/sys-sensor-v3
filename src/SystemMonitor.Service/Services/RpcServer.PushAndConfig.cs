@@ -166,9 +166,9 @@ namespace SystemMonitor.Service.Services
 
             if (newBase.HasValue)
             {
-                lock (_lock)
+                lock (s_cfgLock)
                 {
-                    _baseIntervalMs = newBase.Value;
+                    s_baseIntervalMs = newBase.Value;
                 }
                 _logger.LogInformation("set_config: base_interval_ms -> {Base}ms", newBase.Value);
             }
@@ -184,12 +184,12 @@ namespace SystemMonitor.Service.Services
                     if (val <= 0) throw new InvalidOperationException($"invalid_params: module_intervals[{name}] must be positive");
                     sanitized[name] = Math.Max(100, val);
                 }
-                lock (_lock)
+                lock (s_cfgLock)
                 {
-                    _moduleIntervals.Clear();
+                    s_moduleIntervals.Clear();
                     foreach (var kv in sanitized)
                     {
-                        _moduleIntervals[kv.Key] = kv.Value;
+                        s_moduleIntervals[kv.Key] = kv.Value;
                     }
                 }
                 _logger.LogInformation("set_config: module_intervals -> {Intervals}", string.Join(", ", sanitized.Select(kv => $"{kv.Key}={kv.Value}ms")));
@@ -199,9 +199,9 @@ namespace SystemMonitor.Service.Services
             if (p.max_concurrency.HasValue)
             {
                 var c = Math.Clamp(p.max_concurrency.Value, 1, 8);
-                lock (_lock)
+                lock (s_cfgLock)
                 {
-                    _maxConcurrency = c;
+                    s_maxConcurrency = c;
                 }
                 _logger.LogInformation("set_config: max_concurrency -> {C}", c);
             }
@@ -221,9 +221,9 @@ namespace SystemMonitor.Service.Services
                     var filtered = req.Where(m => !string.IsNullOrWhiteSpace(m) && all.Contains(m)).Select(m => m.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
                     newSet = filtered.Count == 0 ? null : filtered;
                 }
-                lock (_lock)
+                lock (s_cfgLock)
                 {
-                    _enabledModules = newSet;
+                    s_enabledModules = newSet;
                 }
                 _logger.LogInformation("set_config: enabled_modules -> {Mods}", newSet == null ? "ALL" : string.Join(", ", newSet));
             }
@@ -238,21 +238,36 @@ namespace SystemMonitor.Service.Services
                 {
                     filtered = new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
                 }
-                lock (_lock)
+                lock (s_cfgLock)
                 {
-                    _syncExemptModules = filtered;
+                    s_syncExemptModules = filtered;
                 }
                 _logger.LogInformation("set_config: sync_exempt_modules -> {Mods}", string.Join(", ", filtered));
             }
 
+            // 新增：磁盘 SMART/NVMe 细粒度 TTL 与原生 SMART 开关（可选）
+            try
+            {
+                int? smartTtl = p.disk_smart_ttl_ms;
+                int? nvmeErrTtl = p.disk_nvme_errorlog_ttl_ms;
+                int? nvmeIdentTtl = p.disk_nvme_ident_ttl_ms;
+                bool? smartNativeEnabled = p.disk_smart_native_enabled;
+                if (smartTtl.HasValue || nvmeErrTtl.HasValue || nvmeIdentTtl.HasValue || smartNativeEnabled.HasValue)
+                {
+                    SystemMonitor.Service.Services.Collectors.DiskCollector.ApplyConfig(smartTtl, nvmeErrTtl, nvmeIdentTtl, smartNativeEnabled);
+                    _logger.LogInformation("set_config: disk ttl/native updated smart_ttl={Smart} nvme_err_ttl={Err} nvme_ident_ttl={Ident} native_enabled={Native}", smartTtl, nvmeErrTtl, nvmeIdentTtl, smartNativeEnabled);
+                }
+            }
+            catch { /* ignore disk config errors to avoid breaking overall set_config */ }
+
             var result = new
             {
                 ok = true,
-                base_interval_ms = _baseIntervalMs,
-                effective_intervals = new Dictionary<string, int>(_moduleIntervals, StringComparer.OrdinalIgnoreCase),
-                max_concurrency = _maxConcurrency,
+                base_interval_ms = s_baseIntervalMs,
+                effective_intervals = new Dictionary<string, int>(s_moduleIntervals, StringComparer.OrdinalIgnoreCase),
+                max_concurrency = s_maxConcurrency,
                 enabled_modules = GetEnabledModules().ToArray(),
-                sync_exempt_modules = _syncExemptModules.ToArray()
+                sync_exempt_modules = s_syncExemptModules.ToArray()
             };
             // 在返回后短延时发送一次 metrics（仅桥接连接），避免客户端在新的观测窗口内收不到任何事件
             if (IsBridgeConnection)
@@ -288,6 +303,52 @@ namespace SystemMonitor.Service.Services
                 }
                 catch { /* ignore */ }
             });
+            return Task.FromResult<object>(result);
+        }
+
+        /// <summary>
+        /// 读取当前配置（只读）。
+        /// </summary>
+        public Task<object> get_config()
+        {
+            // 避免响应期间插入通知
+            SuppressPush(120);
+            int baseMs; int maxConc; Dictionary<string, int> mod = new(StringComparer.OrdinalIgnoreCase);
+            string[] enabled; string[] syncExempt;
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            int curInterval;
+            long burstExpire;
+            lock (s_cfgLock)
+            {
+                baseMs = s_baseIntervalMs;
+                maxConc = s_maxConcurrency;
+                mod = new Dictionary<string, int>(s_moduleIntervals, StringComparer.OrdinalIgnoreCase);
+                enabled = GetEnabledModules().ToArray();
+                syncExempt = s_syncExemptModules.ToArray();
+            }
+            lock (_lock)
+            {
+                curInterval = GetCurrentIntervalMs(now);
+                burstExpire = _burstIntervalMs.HasValue && now < _burstExpiresAt ? _burstExpiresAt : 0;
+            }
+            var d = SystemMonitor.Service.Services.Collectors.DiskCollector.ReadRuntimeConfig();
+            var result = new
+            {
+                ok = true,
+                base_interval_ms = baseMs,
+                effective_intervals = mod,
+                max_concurrency = maxConc,
+                enabled_modules = enabled,
+                sync_exempt_modules = syncExempt,
+                current_interval_ms = curInterval,
+                burst_expires_at = burstExpire,
+                // disk runtime
+                disk_smart_ttl_ms = d.smartTtlMs,
+                disk_nvme_errorlog_ttl_ms = d.nvmeErrlogTtlMs,
+                disk_nvme_ident_ttl_ms = d.nvmeIdentTtlMs,
+                disk_smart_native_override = d.smartNativeOverride,
+                disk_smart_native_effective = d.smartNativeEffective,
+            };
             return Task.FromResult<object>(result);
         }
     }

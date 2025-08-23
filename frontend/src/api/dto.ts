@@ -151,6 +151,11 @@ export type SetConfigParams = {
   base_interval_ms?: number;
   module_intervals?: Record<string, number>;
   persist?: boolean;
+  // disk runtime config
+  disk_smart_ttl_ms?: number;
+  disk_nvme_errorlog_ttl_ms?: number;
+  disk_nvme_ident_ttl_ms?: number;
+  disk_smart_native_enabled?: boolean;
 };
 
 export type StartParams = { modules?: string[] } | undefined;
@@ -160,4 +165,23 @@ export type BurstSubscribeParams = {
   modules?: string[];
   interval_ms: number;
   ttl_ms: number;
+};
+
+// get_config 返回结构
+export type GetConfigResult = {
+  ok: boolean;
+  base_interval_ms: number;
+  effective_intervals: Record<string, number>;
+  max_concurrency: number;
+  enabled_modules: string[];
+  sync_exempt_modules: string[];
+  // 推送当前状态
+  current_interval_ms: number;
+  burst_expires_at: number; // 0 表示无突发
+  // disk runtime
+  disk_smart_ttl_ms: number;
+  disk_nvme_errorlog_ttl_ms: number;
+  disk_nvme_ident_ttl_ms: number;
+  disk_smart_native_override: boolean | null;
+  disk_smart_native_effective: boolean;
 };
