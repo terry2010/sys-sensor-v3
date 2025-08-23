@@ -61,6 +61,34 @@
         </table>
       </details>
       <details>
+        <summary>NVMe Error Log</summary>
+        <div class="subhint">展示 NVMe 错误信息日志（Log 0x01）的计数与最近条目（如 SQID/CMDID/Status/NSID/LBA）。</div>
+        <div v-if="nvmeErrRows.length===0" class="subhint">未获取到 NVMe 错误日志，可能因：驱动不支持或无管理员权限。</div>
+        <table class="tbl" v-else>
+          <thead>
+            <tr>
+              <th>Disk</th>
+              <th>Total Errors</th>
+              <th>Recent Entries</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="h in nvmeErrRows" :key="'nverr-'+h.disk_id">
+              <td>{{ h.disk_id }}</td>
+              <td :class="nz(h.nvme_error_log?.total_nonzero_entries)">{{ fmtNum(h.nvme_error_log?.total_nonzero_entries) }}</td>
+              <td>
+                <div v-if="(h.nvme_error_log?.recent_entries?.length||0)===0">-</div>
+                <ul v-else class="list-compact">
+                  <li v-for="(e, i) in (h.nvme_error_log?.recent_entries||[])" :key="i">
+                    #{{ i+1 }}: E={{ e.error_count }}, SQ={{ e.sqid }}, CID={{ e.cmdid }}, ST={{ fmtHex16(e.status) }}, NSID={{ e.nsid }}, LBA={{ e.lba }}
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <details>
         <summary>SATA SMART (Common Attributes)</summary>
         <div v-if="sataHealthRows.length===0" class="subhint">未检测到 SATA/ATA 设备或无可展示的通用属性。</div>
         <table class="tbl" v-else>
@@ -365,6 +393,12 @@ const nvmeHealthRows = computed(() => {
   return arr.filter(hasNvme);
 });
 
+// 仅显示带 NVMe 错误日志的行
+const nvmeErrRows = computed(() => {
+  const arr = (disk.value?.smart_health ?? []) as any[];
+  return arr.filter(h => !!h?.nvme_error_log);
+});
+
 // disk_id -> interface_type 映射
 const ifaceByDiskId = computed(() => {
   const map = new Map<string, string>();
@@ -405,6 +439,7 @@ const nz = (v: any) => {
   return '';
 };
 const fmtHexByte = (v: any) => (v==null || !isFinite(v)) ? '-' : '0x' + Number(v).toString(16).toUpperCase().padStart(2, '0');
+const fmtHex16 = (v: any) => (v==null || !isFinite(v)) ? '-' : '0x' + Number(v).toString(16).toUpperCase().padStart(4, '0');
 // Health Data Units: LHM 多数以 GB/GiB 数值给出；若数值像“字节级”超大，则用字节格式，否则按 GB 显示
 const fmtHealthDataUnits = (v: any) => {
   if (v==null || !isFinite(v)) return '-';

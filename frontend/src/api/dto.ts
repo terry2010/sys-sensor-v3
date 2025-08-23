@@ -14,6 +14,13 @@ export type DiskIOTotals = {
   queue_length: number | null;
   avg_read_latency_ms: number | null;
   avg_write_latency_ms: number | null;
+  // 新增：滑窗分位数
+  read_p50_ms?: number | null;
+  read_p95_ms?: number | null;
+  read_p99_ms?: number | null;
+  write_p50_ms?: number | null;
+  write_p95_ms?: number | null;
+  write_p99_ms?: number | null;
 };
 
 export type DiskPerPhysical = DiskIOTotals & { disk_id?: string } & Record<string, any>;
@@ -65,6 +72,22 @@ export type SmartHealth = {
   nvme_namespace_inuse_bytes?: number | null;
   nvme_eui64?: string | null;
   nvme_nguid?: string | null;
+  // NVMe 错误日志汇总
+  nvme_error_log?: NvmeErrorLog | null;
+};
+
+export type NvmeErrorLogEntry = {
+  error_count: number;
+  sqid: number;
+  cmdid: number;
+  status: number;
+  nsid: number;
+  lba: number;
+};
+
+export type NvmeErrorLog = {
+  total_nonzero_entries: number;
+  recent_entries: NvmeErrorLogEntry[];
 };
 
 export type SnapshotResult = {

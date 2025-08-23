@@ -333,6 +333,8 @@ namespace SystemMonitor.Service.Services.Collectors
                             ulong? nvmeNsCapacityBytes = null, nvmeNsInUseBytes = null;
                             uint? nvmeNamespaceCount = null;
                             string? overall = null;
+                            // NVMe 错误日志（Log 0x01）对象（按盘）
+                            object? nvmeErrorLogObj = null;
 
                             // Phase B：原生 IOCTL 优先（可通过环境变量禁用）
                             try
@@ -379,6 +381,29 @@ namespace SystemMonitor.Service.Services.Collectors
                                     {
                                         try { Serilog.Log.Information("[SMART] native fail disk id={Id} iface={Iface} idx={Idx}", id, iface, idx); } catch { }
                                     }
+
+                                    // 尝试读取 NVMe 错误日志（仅 NVMe 或接口未知时）
+                                    object? nvmeErrLogObjLocal = null;
+                                    try
+                                    {
+                                        if (((!string.IsNullOrWhiteSpace(iface)) && iface.IndexOf("nvme", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                                            || string.IsNullOrWhiteSpace(iface))
+                                        {
+                                            var err = StorageIoctlHelper.TryReadNvmeErrorLogSummary(idx.Value);
+                                            if (err != null)
+                                            {
+                                                nvmeErrLogObjLocal = new
+                                                {
+                                                    total_nonzero_entries = err.total_nonzero_entries,
+                                                    recent_entries = err.recent_entries
+                                                        .Select(e => new { e.error_count, e.sqid, e.cmdid, e.status, e.nsid, e.lba })
+                                                        .ToArray()
+                                                };
+                                            }
+                                        }
+                                    }
+                                    catch { }
+                                    nvmeErrorLogObj = nvmeErrLogObjLocal ?? nvmeErrorLogObj;
 
                                     // 放宽 NVMe 判定：若原生失败且 interface_type 为空，则尝试 NVMe SMART 作为备选
                                     if (native == null && string.IsNullOrWhiteSpace(iface))
@@ -514,6 +539,8 @@ namespace SystemMonitor.Service.Services.Collectors
                                 nvme_temp_sensor3_c = nvmeTs3,
                                 nvme_temp_sensor4_c = nvmeTs4,
                                 thermal_throttle_events = throttleEvents,
+                                // 新增：NVMe 错误日志汇总输出
+                                nvme_error_log = nvmeErrorLogObj,
                                 // NVMe Identify/Namespace 附加输出
                                 nvme_namespace_count = nvmeNamespaceCount,
                                 nvme_namespace_lba_size_bytes = nvmeNsLbaSizeBytes,
