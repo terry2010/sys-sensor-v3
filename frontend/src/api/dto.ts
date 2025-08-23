@@ -112,6 +112,10 @@ export type SnapshotResult = {
     top_processes_by_disk?: TopProcessDisk[];
     capacity_totals?: DiskCapacityTotals;
     vm_swapfiles_bytes?: number | null;
+    // 平台占位（APFS 相关：Windows 下恒为 null）
+    purgeable_space_bytes?: number | null;
+    apfs_local_snapshots_count?: number | null;
+    apfs_local_snapshots_bytes?: number | null;
     per_volume?: DiskVolumeInfo[];
     per_physical_disk?: DiskPhysicalInfo[];
     smart_health?: SmartHealth[];

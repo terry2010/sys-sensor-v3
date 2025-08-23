@@ -1,356 +1,356 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="e75078b0-a173-44a8-b929-d413cfe6f31f" name="terry@DESKTOP-J6M8022 2025-08-23 21:56:10" runUser="DESKTOP-J6M8022\terry" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2025-08-23T21:56:10.6905001+08:00" queuing="2025-08-23T21:56:10.6905006+08:00" start="2025-08-23T21:56:08.5639420+08:00" finish="2025-08-23T21:56:36.9774559+08:00" />
-  <TestSettings name="default" id="50bb2b85-5704-4392-8f5e-2f3b50316e18">
-    <Deployment runDeploymentRoot="terry_DESKTOP-J6M8022_2025-08-23_21_56_10" />
+<TestRun id="38b872f9-37a3-4f6b-8fc7-25b7b7c18189" name="terry@DESKTOP-J6M8022 2025-08-23 22:13:34" runUser="DESKTOP-J6M8022\terry" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-08-23T22:13:34.8460209+08:00" queuing="2025-08-23T22:13:34.8460212+08:00" start="2025-08-23T22:13:31.9680302+08:00" finish="2025-08-23T22:14:21.1081022+08:00" />
+  <TestSettings name="default" id="5e9e409d-9d5f-4250-8232-f424bb1cb015">
+    <Deployment runDeploymentRoot="terry_DESKTOP-J6M8022_2025-08-23_22_13_34" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="1655010d-b213-43ad-9508-61d5e89c18aa" testId="c7997c4b-1968-3efe-299c-4efc84561103" testName="SystemMonitor.Tests.BridgeAndBurstTests.Hello_With_Bridge_Capability_Should_Set_Bridge_And_Enable_Push" computerName="DESKTOP-J6M8022" duration="00:00:00.0092657" startTime="2025-08-23T21:56:11.1933840+08:00" endTime="2025-08-23T21:56:11.1933846+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1655010d-b213-43ad-9508-61d5e89c18aa" />
-    <UnitTestResult executionId="98691d23-42b1-45b4-98b5-29a317b20302" testId="316b5766-01a4-b945-df1a-1d07ac1dfded" testName="SystemMonitor.Tests.SchemaTests.BurstSubscribe_Schema_Valid" computerName="DESKTOP-J6M8022" duration="00:00:00.0009078" startTime="2025-08-23T21:56:11.1593882+08:00" endTime="2025-08-23T21:56:11.1593885+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98691d23-42b1-45b4-98b5-29a317b20302" />
-    <UnitTestResult executionId="358b46e6-3ec1-40ec-af4c-6139b55cafd9" testId="dacf0d9f-52f8-cc00-236f-2f32d31c4af3" testName="SystemMonitor.Tests.EndToEndTests.SetConfig_Invalid_BaseInterval_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.1485216" startTime="2025-08-23T21:56:23.1711906+08:00" endTime="2025-08-23T21:56:23.1711908+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="358b46e6-3ec1-40ec-af4c-6139b55cafd9" />
-    <UnitTestResult executionId="61be2c7d-baf2-473e-a9dd-19d352d4db7b" testId="5359d170-82fa-d8d2-2f92-97bc053dca0c" testName="SystemMonitor.Tests.EndToEndTests.QueryHistory_Works" computerName="DESKTOP-J6M8022" duration="00:00:00.9467110" startTime="2025-08-23T21:56:17.7708435+08:00" endTime="2025-08-23T21:56:17.7708437+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="61be2c7d-baf2-473e-a9dd-19d352d4db7b" />
-    <UnitTestResult executionId="315abb03-41b2-41de-9e51-b691f433408c" testId="a5cee8d5-e1e7-16a2-597a-8c6cbc2b8be8" testName="SystemMonitor.Tests.EndToEndTests.Hello_Protocol_NotSupported_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.1482369" startTime="2025-08-23T21:56:26.0104324+08:00" endTime="2025-08-23T21:56:26.0104326+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="315abb03-41b2-41de-9e51-b691f433408c" />
-    <UnitTestResult executionId="e17fc59e-5e5f-47d3-ab2c-7b7772aa83ba" testId="1625b824-bf75-ff81-2ccc-b11736dbaaf3" testName="SystemMonitor.Tests.EndToEndTests.Snapshot_CpuMem_Ranges" computerName="DESKTOP-J6M8022" duration="00:00:02.0104018" startTime="2025-08-23T21:56:36.9137420+08:00" endTime="2025-08-23T21:56:36.9137423+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e17fc59e-5e5f-47d3-ab2c-7b7772aa83ba" />
-    <UnitTestResult executionId="57a58cdf-ebb4-4c4e-8051-99f1cf9f299f" testId="116d7234-8081-621c-9c63-75bb4125b1af" testName="SystemMonitor.Tests.ContractTests.SetConfig_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0003884" startTime="2025-08-23T21:56:10.9989480+08:00" endTime="2025-08-23T21:56:10.9989481+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="57a58cdf-ebb4-4c4e-8051-99f1cf9f299f" />
-    <UnitTestResult executionId="859bcee8-5512-43c3-95e3-900c467fe66d" testId="600d902f-724e-255d-709d-fa76d1ec6f96" testName="SystemMonitor.Tests.ContractTests.Disk_Snapshot_Response_TopProcesses_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0048285" startTime="2025-08-23T21:56:11.0102391+08:00" endTime="2025-08-23T21:56:11.0102393+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="859bcee8-5512-43c3-95e3-900c467fe66d" />
-    <UnitTestResult executionId="cab3b0ae-394d-4f8f-bd3a-d6e8b2880c3c" testId="b62b63b9-c5d3-6cc0-d782-e31396d5ce04" testName="SystemMonitor.Tests.BridgeAndBurstTests.Burst_Subscribe_Should_Override_Interval_Temporarily" computerName="DESKTOP-J6M8022" duration="00:00:00.9090006" startTime="2025-08-23T21:56:12.1057407+08:00" endTime="2025-08-23T21:56:12.1057410+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cab3b0ae-394d-4f8f-bd3a-d6e8b2880c3c" />
-    <UnitTestResult executionId="44df7ffc-5a68-4107-9ea3-eb98722c018e" testId="6bc5c69f-1e35-1dda-027a-3965f2238887" testName="SystemMonitor.Tests.ContractTests.SetLogLevel_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0010000" startTime="2025-08-23T21:56:11.0015345+08:00" endTime="2025-08-23T21:56:11.0015347+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44df7ffc-5a68-4107-9ea3-eb98722c018e">
+    <UnitTestResult executionId="5fa4b621-5662-4d6d-a6d8-f6b83c01de03" testId="cdc1d8a4-ebdd-0129-c99e-b7f07ac1be20" testName="SystemMonitor.Tests.MemoryCountersTests.MemoryCounters_Read_NoThrow_And_CacheWithin200ms" computerName="DESKTOP-J6M8022" duration="00:00:02.9811356" startTime="2025-08-23T22:13:38.0037187+08:00" endTime="2025-08-23T22:13:38.0037194+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5fa4b621-5662-4d6d-a6d8-f6b83c01de03" />
+    <UnitTestResult executionId="0dcd911d-311c-4269-83c8-fa02866e1aba" testId="deff2b50-b04e-659a-fcb1-aacff92daa42" testName="SystemMonitor.Tests.ContractTests.Hello_Request_Should_Not_Contain_PascalCase_Keys" computerName="DESKTOP-J6M8022" duration="00:00:00.0003054" startTime="2025-08-23T22:13:34.9462745+08:00" endTime="2025-08-23T22:13:34.9462748+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0dcd911d-311c-4269-83c8-fa02866e1aba" />
+    <UnitTestResult executionId="c3357df3-edbb-451f-a432-d4eae7a74594" testId="2fee1618-453a-fb22-e956-2fd9d457aed7" testName="SystemMonitor.Tests.ContractTests.Stop_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0014538" startTime="2025-08-23T22:13:34.9515573+08:00" endTime="2025-08-23T22:13:34.9515590+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c3357df3-edbb-451f-a432-d4eae7a74594" />
+    <UnitTestResult executionId="c507760d-3a02-4eff-9960-7e0e4c8f7507" testId="897198c2-e013-2fdc-4de0-ccbd44dab1f1" testName="SystemMonitor.Tests.UnitTest1.Test1" computerName="DESKTOP-J6M8022" duration="00:00:00.0000627" startTime="2025-08-23T22:13:34.4069571+08:00" endTime="2025-08-23T22:13:34.4069572+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c507760d-3a02-4eff-9960-7e0e4c8f7507" />
+    <UnitTestResult executionId="b0f24ded-2535-4473-bfe1-0f4870981454" testId="f6814e48-0b49-81a9-5412-aa1c3ac48e00" testName="SystemMonitor.Tests.ContractTests.QueryHistory_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0058300" startTime="2025-08-23T22:13:34.9578406+08:00" endTime="2025-08-23T22:13:34.9578412+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b0f24ded-2535-4473-bfe1-0f4870981454" />
+    <UnitTestResult executionId="a18bd527-4922-4e23-969a-f57e194cad8a" testId="7a415512-eeeb-ad04-a0c8-c1821ba3a362" testName="SystemMonitor.Tests.HistoryQueryTests.StepMs_1s_Groups_Last_Value_Per_Bucket" computerName="DESKTOP-J6M8022" duration="00:00:00.0074867" startTime="2025-08-23T22:14:20.0825353+08:00" endTime="2025-08-23T22:14:20.0825356+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a18bd527-4922-4e23-969a-f57e194cad8a" />
+    <UnitTestResult executionId="2b2d8ca5-7ed3-4ad5-9f36-5dd0abe8c228" testId="d1ecf483-dfd0-e8fd-412c-75343e5fd3e3" testName="SystemMonitor.Tests.UnitTest1.SnakeCase_Serialization_ShouldUseSnakeCaseNames" computerName="DESKTOP-J6M8022" duration="00:00:00.1109799" startTime="2025-08-23T22:13:34.3972839+08:00" endTime="2025-08-23T22:13:34.3974026+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b2d8ca5-7ed3-4ad5-9f36-5dd0abe8c228" />
+    <UnitTestResult executionId="c8476d73-2f3a-4beb-a55a-49d0a1e3536c" testId="fc84e8aa-81c3-13b2-161d-42cbb3024667" testName="SystemMonitor.Tests.ContractTests.SubscribeMetrics_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0127829" startTime="2025-08-23T22:13:34.9223031+08:00" endTime="2025-08-23T22:13:34.9223040+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8476d73-2f3a-4beb-a55a-49d0a1e3536c" />
+    <UnitTestResult executionId="a3f6dfdf-e997-4e9e-bcae-dac535907e52" testId="7fcfcc39-66f5-e59a-53bb-ab760b3d7c57" testName="SystemMonitor.Tests.SchemaTests.SetConfig_Schema_Invalid_TooSmallInterval" computerName="DESKTOP-J6M8022" duration="00:00:00.0079837" startTime="2025-08-23T22:13:38.3764924+08:00" endTime="2025-08-23T22:13:38.3764930+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a3f6dfdf-e997-4e9e-bcae-dac535907e52" />
+    <UnitTestResult executionId="1b810f69-816b-4fcb-ad0a-973e7dd0ec4a" testId="b62b63b9-c5d3-6cc0-d782-e31396d5ce04" testName="SystemMonitor.Tests.BridgeAndBurstTests.Burst_Subscribe_Should_Override_Interval_Temporarily" computerName="DESKTOP-J6M8022" duration="00:00:00.9126092" startTime="2025-08-23T22:14:21.0057260+08:00" endTime="2025-08-23T22:14:21.0057263+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1b810f69-816b-4fcb-ad0a-973e7dd0ec4a" />
+    <UnitTestResult executionId="02a78f8d-a404-4637-ab17-a26454cd8343" testId="ae3acead-7ea4-7542-c915-3fc15e2059df" testName="SystemMonitor.Tests.MemoryCountersTests.GetMemoryDetail_NoThrow_And_BoundedFields" computerName="DESKTOP-J6M8022" duration="00:00:00.0347269" startTime="2025-08-23T22:13:38.0440714+08:00" endTime="2025-08-23T22:13:38.0440720+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="02a78f8d-a404-4637-ab17-a26454cd8343" />
+    <UnitTestResult executionId="373f60c3-e741-451c-9128-d3a134876834" testId="d46fc4ee-0150-cded-8fbb-ceb1d2e0e4ba" testName="SystemMonitor.Tests.EndToEndTests.SetConfig_And_BurstSubscribe_Works" computerName="DESKTOP-J6M8022" duration="00:00:00.3349533" startTime="2025-08-23T22:14:07.0030945+08:00" endTime="2025-08-23T22:14:07.0030949+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="373f60c3-e741-451c-9128-d3a134876834" />
+    <UnitTestResult executionId="3b5442b9-eb59-4b26-88c5-ca6a7e6ca14f" testId="a5cee8d5-e1e7-16a2-597a-8c6cbc2b8be8" testName="SystemMonitor.Tests.EndToEndTests.Hello_Protocol_NotSupported_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.1019171" startTime="2025-08-23T22:14:05.5108073+08:00" endTime="2025-08-23T22:14:05.5108076+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b5442b9-eb59-4b26-88c5-ca6a7e6ca14f" />
+    <UnitTestResult executionId="1db1f59a-2dd9-4e17-9dfe-7f92e6e0c4b0" testId="7aba6d95-cdac-4d3b-fc1e-d345b65a933b" testName="SystemMonitor.Tests.ContractTests.Hello_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0045252" startTime="2025-08-23T22:13:35.0108712+08:00" endTime="2025-08-23T22:13:35.0108717+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1db1f59a-2dd9-4e17-9dfe-7f92e6e0c4b0" />
+    <UnitTestResult executionId="9287146e-4952-4fca-b02a-57ba09e48947" testId="84bddd7b-5fca-ad7f-6631-caa1dc730eca" testName="SystemMonitor.Tests.ContractTests.BurstSubscribe_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0043625" startTime="2025-08-23T22:13:34.9447178+08:00" endTime="2025-08-23T22:13:34.9447185+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9287146e-4952-4fca-b02a-57ba09e48947" />
+    <UnitTestResult executionId="79ae7da2-3944-483c-883c-f5175c020f52" testId="6bc5c69f-1e35-1dda-027a-3965f2238887" testName="SystemMonitor.Tests.ContractTests.SetLogLevel_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0010000" startTime="2025-08-23T22:13:34.9495692+08:00" endTime="2025-08-23T22:13:34.9495696+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79ae7da2-3944-483c-883c-f5175c020f52">
       <Output>
         <ErrorInfo>
           <Message>非 M1：后续里程碑接口</Message>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="b4705cf5-bc94-4860-9b78-98e6bbd068a6" testId="0f77d0ed-59fb-971b-4d70-0677c148fa79" testName="SystemMonitor.Tests.EndToEndTests.QueryHistory_Edges_And_Bucketing" computerName="DESKTOP-J6M8022" duration="00:00:00.8712186" startTime="2025-08-23T21:56:14.7645790+08:00" endTime="2025-08-23T21:56:14.7645794+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4705cf5-bc94-4860-9b78-98e6bbd068a6" />
-    <UnitTestResult executionId="416ce999-a98e-4d24-835e-f04f34367af0" testId="69d6d1aa-b426-63fd-4c85-4eac53250980" testName="SystemMonitor.Tests.SchemaTests.QueryHistory_Schema_Valid" computerName="DESKTOP-J6M8022" duration="00:00:00.0043180" startTime="2025-08-23T21:56:11.1438468+08:00" endTime="2025-08-23T21:56:11.1438471+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="416ce999-a98e-4d24-835e-f04f34367af0" />
-    <UnitTestResult executionId="b3967baf-9959-415f-bde0-09f95cc70f32" testId="897198c2-e013-2fdc-4de0-ccbd44dab1f1" testName="SystemMonitor.Tests.UnitTest1.Test1" computerName="DESKTOP-J6M8022" duration="00:00:00.0000587" startTime="2025-08-23T21:56:09.6786553+08:00" endTime="2025-08-23T21:56:09.6786556+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3967baf-9959-415f-bde0-09f95cc70f32" />
-    <UnitTestResult executionId="80424da7-8baf-4180-b29d-e3344b519985" testId="7fcfcc39-66f5-e59a-53bb-ab760b3d7c57" testName="SystemMonitor.Tests.SchemaTests.SetConfig_Schema_Invalid_TooSmallInterval" computerName="DESKTOP-J6M8022" duration="00:00:00.0027321" startTime="2025-08-23T21:56:11.1310854+08:00" endTime="2025-08-23T21:56:11.1310860+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80424da7-8baf-4180-b29d-e3344b519985" />
-    <UnitTestResult executionId="161c244d-97b1-4353-a037-2093b3ecc95d" testId="63eafbb5-a30b-37a9-e05f-fe5729a00075" testName="SystemMonitor.Tests.ContractTests.UpdateCheck_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0010000" startTime="2025-08-23T21:56:11.0148056+08:00" endTime="2025-08-23T21:56:11.0148057+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="161c244d-97b1-4353-a037-2093b3ecc95d">
+    <UnitTestResult executionId="725f15df-03ca-4319-a4d1-0358db616a34" testId="e1fbd4f1-6ade-f24b-317f-6dbbbf27c5fc" testName="SystemMonitor.Tests.SchemaTests.Hello_Schema_Valid_Minimal" computerName="DESKTOP-J6M8022" duration="00:00:00.0018142" startTime="2025-08-23T22:13:38.4259816+08:00" endTime="2025-08-23T22:13:38.4259823+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="725f15df-03ca-4319-a4d1-0358db616a34" />
+    <UnitTestResult executionId="9e2306eb-c9f7-43fc-8a3b-1b2668752407" testId="759df637-d080-ef7c-66ad-cd6f487477c1" testName="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_MissingName" computerName="DESKTOP-J6M8022" duration="00:00:00.0309066" startTime="2025-08-23T22:13:38.5082726+08:00" endTime="2025-08-23T22:13:38.5082729+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e2306eb-c9f7-43fc-8a3b-1b2668752407" />
+    <UnitTestResult executionId="d0063603-7f8f-4053-a32d-267cffd0dca3" testId="5359d170-82fa-d8d2-2f92-97bc053dca0c" testName="SystemMonitor.Tests.EndToEndTests.QueryHistory_Works" computerName="DESKTOP-J6M8022" duration="00:00:02.0949196" startTime="2025-08-23T22:13:50.0212212+08:00" endTime="2025-08-23T22:13:50.0212217+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0063603-7f8f-4053-a32d-267cffd0dca3" />
+    <UnitTestResult executionId="e17fec98-d739-4469-86a4-c82ce73da891" testId="69d6d1aa-b426-63fd-4c85-4eac53250980" testName="SystemMonitor.Tests.SchemaTests.QueryHistory_Schema_Valid" computerName="DESKTOP-J6M8022" duration="00:00:00.0119971" startTime="2025-08-23T22:13:38.4115216+08:00" endTime="2025-08-23T22:13:38.4115221+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e17fec98-d739-4469-86a4-c82ce73da891" />
+    <UnitTestResult executionId="8941b4dd-4524-46b3-898d-0f8b3e219e10" testId="1625b824-bf75-ff81-2ccc-b11736dbaaf3" testName="SystemMonitor.Tests.EndToEndTests.Snapshot_CpuMem_Ranges" computerName="DESKTOP-J6M8022" duration="00:00:03.1726770" startTime="2025-08-23T22:14:19.9399223+08:00" endTime="2025-08-23T22:14:19.9399228+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8941b4dd-4524-46b3-898d-0f8b3e219e10" />
+    <UnitTestResult executionId="987ddd67-9354-4de6-9d35-027682ec1d50" testId="1bc68377-98f3-3224-550a-3a1f98831502" testName="SystemMonitor.Tests.EndToEndTests.Hello_WithoutToken_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.4652251" startTime="2025-08-23T22:13:40.5802809+08:00" endTime="2025-08-23T22:13:40.5802814+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="987ddd67-9354-4de6-9d35-027682ec1d50" />
+    <UnitTestResult executionId="e1fac8c7-1643-4a8d-8ccc-6a4b419b0bd7" testId="8efef518-8988-e3e1-bb3e-361f08b825e5" testName="SystemMonitor.Tests.SchemaTests.Snapshot_Schema_Valid_WithModules" computerName="DESKTOP-J6M8022" duration="00:00:00.0071665" startTime="2025-08-23T22:13:38.3842169+08:00" endTime="2025-08-23T22:13:38.3842178+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e1fac8c7-1643-4a8d-8ccc-6a4b419b0bd7" />
+    <UnitTestResult executionId="122de01e-a186-4d27-9ae4-bf301e588627" testId="dacf0d9f-52f8-cc00-236f-2f32d31c4af3" testName="SystemMonitor.Tests.EndToEndTests.SetConfig_Invalid_BaseInterval_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.2959407" startTime="2025-08-23T22:14:00.4437502+08:00" endTime="2025-08-23T22:14:00.4437505+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="122de01e-a186-4d27-9ae4-bf301e588627" />
+    <UnitTestResult executionId="5c6601b8-23cc-4bec-aee8-9987e68f7e9e" testId="ba4d86c4-e56e-4feb-035c-05a39221e7db" testName="SystemMonitor.Tests.EndToEndTests.Snapshot_Cpu_Expanded_Fields" computerName="DESKTOP-J6M8022" duration="00:00:05.4783776" startTime="2025-08-23T22:13:59.1846283+08:00" endTime="2025-08-23T22:13:59.1846286+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c6601b8-23cc-4bec-aee8-9987e68f7e9e" />
+    <UnitTestResult executionId="47605b7d-c834-40a6-9a21-1748a7a08684" testId="c2cbe4b9-6d25-c7b6-4d02-96a009247a6c" testName="SystemMonitor.Tests.MemoryCountersTests.MemoryCounters_ForceFallback_NoInitObjects_NoThrow" computerName="DESKTOP-J6M8022" duration="00:00:00.0014273" startTime="2025-08-23T22:13:38.0081252+08:00" endTime="2025-08-23T22:13:38.0081256+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47605b7d-c834-40a6-9a21-1748a7a08684" />
+    <UnitTestResult executionId="f9391a0c-3355-421a-a8dc-0ccd974fdf78" testId="e7afe76e-2983-511f-53e6-ec72c360fd06" testName="SystemMonitor.Tests.SchemaTests.SetConfig_Schema_Valid_WithIntervals" computerName="DESKTOP-J6M8022" duration="00:00:00.0053035" startTime="2025-08-23T22:13:38.3900554+08:00" endTime="2025-08-23T22:13:38.3900557+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9391a0c-3355-421a-a8dc-0ccd974fdf78" />
+    <UnitTestResult executionId="ec16de00-3c46-499f-b1c7-0380bad65858" testId="afa476e6-1342-0de1-8963-ea8bca4835e6" testName="SystemMonitor.Tests.EndToEndTests.QueryHistory_Aggregations_10s_1m" computerName="DESKTOP-J6M8022" duration="00:00:01.3103959" startTime="2025-08-23T22:13:52.1293912+08:00" endTime="2025-08-23T22:13:52.1293917+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec16de00-3c46-499f-b1c7-0380bad65858" />
+    <UnitTestResult executionId="5dd6cd9b-32f8-4fdd-92c1-d2ced7c120fe" testId="d17c6ea2-3ca4-386f-c6e7-4b216cf89dd5" testName="SystemMonitor.Tests.ContractTests.UpdateApply_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0010000" startTime="2025-08-23T22:13:35.0194695+08:00" endTime="2025-08-23T22:13:35.0194699+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5dd6cd9b-32f8-4fdd-92c1-d2ced7c120fe">
       <Output>
         <ErrorInfo>
           <Message>非 M1：后续里程碑接口</Message>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="6d7a9b21-eced-4fa1-b085-6e8e22c5ec00" testId="d1ecf483-dfd0-e8fd-412c-75343e5fd3e3" testName="SystemMonitor.Tests.UnitTest1.SnakeCase_Serialization_ShouldUseSnakeCaseNames" computerName="DESKTOP-J6M8022" duration="00:00:00.0901644" startTime="2025-08-23T21:56:09.6710879+08:00" endTime="2025-08-23T21:56:09.6711337+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d7a9b21-eced-4fa1-b085-6e8e22c5ec00" />
-    <UnitTestResult executionId="13c34555-0e98-40fe-8bf3-e1e178386e21" testId="d46fc4ee-0150-cded-8fbb-ceb1d2e0e4ba" testName="SystemMonitor.Tests.EndToEndTests.SetConfig_And_BurstSubscribe_Works" computerName="DESKTOP-J6M8022" duration="00:00:00.1634605" startTime="2025-08-23T21:56:26.9032646+08:00" endTime="2025-08-23T21:56:26.9032648+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="13c34555-0e98-40fe-8bf3-e1e178386e21" />
-    <UnitTestResult executionId="ba6d1bb5-2e97-4d03-b05d-491e94e4d183" testId="7a415512-eeeb-ad04-a0c8-c1821ba3a362" testName="SystemMonitor.Tests.HistoryQueryTests.StepMs_1s_Groups_Last_Value_Per_Bucket" computerName="DESKTOP-J6M8022" duration="00:00:00.0110849" startTime="2025-08-23T21:56:10.9798014+08:00" endTime="2025-08-23T21:56:10.9798018+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ba6d1bb5-2e97-4d03-b05d-491e94e4d183" />
-    <UnitTestResult executionId="b02a903f-23e3-4d32-86a8-4d97b935f514" testId="f4df6398-0c14-b3dd-5ee6-c8f487d7504a" testName="SystemMonitor.Tests.ContractTests.Snapshot_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0008358" startTime="2025-08-23T21:56:11.0112816+08:00" endTime="2025-08-23T21:56:11.0112818+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b02a903f-23e3-4d32-86a8-4d97b935f514" />
-    <UnitTestResult executionId="cb82b6a5-268a-49c4-82b7-759733aada89" testId="afa476e6-1342-0de1-8963-ea8bca4835e6" testName="SystemMonitor.Tests.EndToEndTests.QueryHistory_Aggregations_10s_1m" computerName="DESKTOP-J6M8022" duration="00:00:01.3090967" startTime="2025-08-23T21:56:19.6246216+08:00" endTime="2025-08-23T21:56:19.6246223+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cb82b6a5-268a-49c4-82b7-759733aada89" />
-    <UnitTestResult executionId="a8e906a2-7676-4555-8c06-dbf76e68a430" testId="575383ac-a422-d1e5-3903-2da7ffd1b577" testName="SystemMonitor.Tests.EndToEndTests.Metrics_Throttle_Burst_Recovery_Works" computerName="DESKTOP-J6M8022" duration="00:00:01.6164295" startTime="2025-08-23T21:56:25.3270269+08:00" endTime="2025-08-23T21:56:25.3270272+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8e906a2-7676-4555-8c06-dbf76e68a430" />
-    <UnitTestResult executionId="788f6ad3-a4f8-471c-ae3f-6862720a6bbd" testId="759df637-d080-ef7c-66ad-cd6f487477c1" testName="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_MissingName" computerName="DESKTOP-J6M8022" duration="00:00:00.0133446" startTime="2025-08-23T21:56:11.1836112+08:00" endTime="2025-08-23T21:56:11.1836114+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="788f6ad3-a4f8-471c-ae3f-6862720a6bbd" />
-    <UnitTestResult executionId="b0c0a3f2-4642-4949-a93d-b645f1d7d48f" testId="ef813fb4-1132-cb92-7e68-0c9ef045b6b7" testName="SystemMonitor.Tests.EndToEndTests.Metrics_CpuMem_Ranges" computerName="DESKTOP-J6M8022" duration="00:00:00.5722157" startTime="2025-08-23T21:56:16.0812441+08:00" endTime="2025-08-23T21:56:16.0812443+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b0c0a3f2-4642-4949-a93d-b645f1d7d48f" />
-    <UnitTestResult executionId="fed133af-2bed-45c9-a170-b77f959f62fd" testId="18b35648-a566-3499-95ec-e14d308dcba6" testName="SystemMonitor.Tests.EndToEndTests.Hello_Unsupported_Capability_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.1514272" startTime="2025-08-23T21:56:27.5867225+08:00" endTime="2025-08-23T21:56:27.5867227+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fed133af-2bed-45c9-a170-b77f959f62fd" />
-    <UnitTestResult executionId="875e7177-208e-4be5-b847-be1cd2ae43d3" testId="d17c6ea2-3ca4-386f-c6e7-4b216cf89dd5" testName="SystemMonitor.Tests.ContractTests.UpdateApply_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0010000" startTime="2025-08-23T21:56:11.0139408+08:00" endTime="2025-08-23T21:56:11.0139410+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="875e7177-208e-4be5-b847-be1cd2ae43d3">
+    <UnitTestResult executionId="52587ade-c166-4775-afdf-9520a86962fd" testId="825a0899-f60c-7747-10dc-edf9d745369b" testName="SystemMonitor.Tests.ContractTests.Start_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0003989" startTime="2025-08-23T22:13:35.0202592+08:00" endTime="2025-08-23T22:13:35.0202596+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="52587ade-c166-4775-afdf-9520a86962fd" />
+    <UnitTestResult executionId="d5f88184-3c11-463f-9e37-3e538f8fd0a7" testId="b63f371d-2541-ba09-aa15-8afdc6da8ab0" testName="SystemMonitor.Tests.EndToEndTests.State_Emitted_On_Start_Burst_Stop" computerName="DESKTOP-J6M8022" duration="00:00:00.2910797" startTime="2025-08-23T22:14:15.9896928+08:00" endTime="2025-08-23T22:14:15.9896932+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5f88184-3c11-463f-9e37-3e538f8fd0a7" />
+    <UnitTestResult executionId="f7cd46f5-7b10-4a11-9aeb-c6c1e0a9968c" testId="575383ac-a422-d1e5-3903-2da7ffd1b577" testName="SystemMonitor.Tests.EndToEndTests.Metrics_Throttle_Burst_Recovery_Works" computerName="DESKTOP-J6M8022" duration="00:00:02.9336935" startTime="2025-08-23T22:14:04.3809202+08:00" endTime="2025-08-23T22:14:04.3809205+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7cd46f5-7b10-4a11-9aeb-c6c1e0a9968c" />
+    <UnitTestResult executionId="fd4dcf29-2535-455d-aa35-89fc7ffd0af6" testId="0f77d0ed-59fb-971b-4d70-0677c148fa79" testName="SystemMonitor.Tests.EndToEndTests.QueryHistory_Edges_And_Bucketing" computerName="DESKTOP-J6M8022" duration="00:00:01.7997980" startTime="2025-08-23T22:13:44.0928805+08:00" endTime="2025-08-23T22:13:44.0928809+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd4dcf29-2535-455d-aa35-89fc7ffd0af6" />
+    <UnitTestResult executionId="ab9fbb9d-2351-42e0-a868-bc6bc6fdf8e4" testId="116d7234-8081-621c-9c63-75bb4125b1af" testName="SystemMonitor.Tests.ContractTests.SetConfig_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0007679" startTime="2025-08-23T22:13:34.9457488+08:00" endTime="2025-08-23T22:13:34.9457493+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab9fbb9d-2351-42e0-a868-bc6bc6fdf8e4" />
+    <UnitTestResult executionId="1dfdcf19-20f3-4973-962b-f0c1dff59d1c" testId="dc6251cd-01f9-1cce-a502-df54ce71eba2" testName="SystemMonitor.Tests.ContractTests.SetConfig_Request_Should_Not_Contain_PascalCase_Keys" computerName="DESKTOP-J6M8022" duration="00:00:00.0173938" startTime="2025-08-23T22:13:34.9399680+08:00" endTime="2025-08-23T22:13:34.9399687+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1dfdcf19-20f3-4973-962b-f0c1dff59d1c" />
+    <UnitTestResult executionId="f9026a88-8d4d-4000-a098-8c56bc34134c" testId="316b5766-01a4-b945-df1a-1d07ac1dfded" testName="SystemMonitor.Tests.SchemaTests.BurstSubscribe_Schema_Valid" computerName="DESKTOP-J6M8022" duration="00:00:00.0011192" startTime="2025-08-23T22:13:38.4274986+08:00" endTime="2025-08-23T22:13:38.4274989+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9026a88-8d4d-4000-a098-8c56bc34134c" />
+    <UnitTestResult executionId="fc7f3201-e6d9-4cab-8684-ba1586435109" testId="d524aa03-b550-0e62-e27b-5731e05d725f" testName="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_NegativePid" computerName="DESKTOP-J6M8022" duration="00:00:00.0224466" startTime="2025-08-23T22:13:38.3679723+08:00" endTime="2025-08-23T22:13:38.3679735+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc7f3201-e6d9-4cab-8684-ba1586435109" />
+    <UnitTestResult executionId="5ee43b75-0271-42ca-b0a1-9fe331ff8424" testId="b3c9c3db-2e88-73a3-bfa9-5343e3be2294" testName="SystemMonitor.Tests.PushSuppressionTests.SubscribeMetrics_Should_Enable_Push" computerName="DESKTOP-J6M8022" duration="00:00:00.0034085" startTime="2025-08-23T22:13:34.6455940+08:00" endTime="2025-08-23T22:13:34.6455944+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ee43b75-0271-42ca-b0a1-9fe331ff8424" />
+    <UnitTestResult executionId="1088d0d2-7802-4b41-8d9d-20d7892422bc" testId="2380be20-41f7-c6da-9826-a89e44675606" testName="SystemMonitor.Tests.MemoryCountersTests.GetMemoryInfoMb_NoThrow_And_ReasonableRanges" computerName="DESKTOP-J6M8022" duration="00:00:00.0015846" startTime="2025-08-23T22:13:38.0062857+08:00" endTime="2025-08-23T22:13:38.0062863+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1088d0d2-7802-4b41-8d9d-20d7892422bc" />
+    <UnitTestResult executionId="fd5b6fd4-b339-42e2-9067-7b93ed0caecd" testId="f4df6398-0c14-b3dd-5ee6-c8f487d7504a" testName="SystemMonitor.Tests.ContractTests.Snapshot_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0049148" startTime="2025-08-23T22:13:35.0056059+08:00" endTime="2025-08-23T22:13:35.0056065+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd5b6fd4-b339-42e2-9067-7b93ed0caecd" />
+    <UnitTestResult executionId="be420322-132a-4962-bdb2-a35f4be13a86" testId="18b35648-a566-3499-95ec-e14d308dcba6" testName="SystemMonitor.Tests.EndToEndTests.Hello_Unsupported_Capability_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.1864678" startTime="2025-08-23T22:14:07.9432207+08:00" endTime="2025-08-23T22:14:07.9432210+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be420322-132a-4962-bdb2-a35f4be13a86" />
+    <UnitTestResult executionId="6fbd84ef-4b69-4b02-9d4a-c2ee27412445" testId="066ac360-3a3d-3874-ff81-64082362c1d3" testName="SystemMonitor.Tests.HistoryQueryTests.Raw_Empty_Window_Fallsback_To_Current_Snapshot" computerName="DESKTOP-J6M8022" duration="00:00:00.1321461" startTime="2025-08-23T22:14:20.0748493+08:00" endTime="2025-08-23T22:14:20.0748496+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fbd84ef-4b69-4b02-9d4a-c2ee27412445" />
+    <UnitTestResult executionId="963628ea-da83-4ce0-8ac9-550dd459ba8b" testId="786286bb-adde-af71-f91d-9110424a9ef6" testName="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Valid" computerName="DESKTOP-J6M8022" duration="00:00:00.2979164" startTime="2025-08-23T22:13:38.3450426+08:00" endTime="2025-08-23T22:13:38.3450429+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="963628ea-da83-4ce0-8ac9-550dd459ba8b" />
+    <UnitTestResult executionId="de11725d-f2ab-41fe-baa7-1eb69a0ebe67" testId="ef813fb4-1132-cb92-7e68-0c9ef045b6b7" testName="SystemMonitor.Tests.EndToEndTests.Metrics_CpuMem_Ranges" computerName="DESKTOP-J6M8022" duration="00:00:00.7247632" startTime="2025-08-23T22:13:46.2162904+08:00" endTime="2025-08-23T22:13:46.2162909+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de11725d-f2ab-41fe-baa7-1eb69a0ebe67" />
+    <UnitTestResult executionId="1c77de20-6f74-467b-8482-fbbc7502b2e2" testId="a9bbc647-8803-5dec-658a-7c77db2afa36" testName="SystemMonitor.Tests.PushSuppressionTests.Start_SetConfig_Should_Update_Intervals_And_Modules" computerName="DESKTOP-J6M8022" duration="00:00:00.2289734" startTime="2025-08-23T22:13:34.6417297+08:00" endTime="2025-08-23T22:13:34.6417302+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c77de20-6f74-467b-8482-fbbc7502b2e2" />
+    <UnitTestResult executionId="5413cd20-35a6-42b3-aa7c-05b485d53c02" testId="c7e17ebe-07f3-5913-71e6-f1c4a943136f" testName="SystemMonitor.Tests.SchemaTests.BurstSubscribe_Schema_Invalid_EmptyModules" computerName="DESKTOP-J6M8022" duration="00:00:00.0490198" startTime="2025-08-23T22:13:38.4769283+08:00" endTime="2025-08-23T22:13:38.4769306+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5413cd20-35a6-42b3-aa7c-05b485d53c02" />
+    <UnitTestResult executionId="43fb062a-fe10-46ad-b527-5a35b85ad9bb" testId="cc32e9a5-f3b4-24bc-d94d-c130daf26cd8" testName="SystemMonitor.Tests.HistoryQueryTests.Agg_10s_InMemory_Fallback_Buckets_By_EndTime" computerName="DESKTOP-J6M8022" duration="00:00:00.0073824" startTime="2025-08-23T22:14:20.0900517+08:00" endTime="2025-08-23T22:14:20.0900520+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="43fb062a-fe10-46ad-b527-5a35b85ad9bb" />
+    <UnitTestResult executionId="90062fd4-3764-4366-87b2-0b270068b0fd" testId="648e89fa-b178-023e-6b9f-b12e893716da" testName="SystemMonitor.Tests.EndToEndTests.Hello_Then_Snapshot_Works" computerName="DESKTOP-J6M8022" duration="00:00:05.6960744" startTime="2025-08-23T22:14:14.4307686+08:00" endTime="2025-08-23T22:14:14.4307691+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="90062fd4-3764-4366-87b2-0b270068b0fd" />
+    <UnitTestResult executionId="6512c8a0-f203-4699-a6bf-494084701517" testId="600d902f-724e-255d-709d-fa76d1ec6f96" testName="SystemMonitor.Tests.ContractTests.Disk_Snapshot_Response_TopProcesses_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0364980" startTime="2025-08-23T22:13:35.0003459+08:00" endTime="2025-08-23T22:13:35.0003465+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6512c8a0-f203-4699-a6bf-494084701517" />
+    <UnitTestResult executionId="7da44549-35b3-4f02-ac84-f8a0c2ebab49" testId="d13cbe31-bcad-db2e-a448-21033afe455a" testName="SystemMonitor.Tests.SchemaTests.Hello_Schema_Invalid_NoToken" computerName="DESKTOP-J6M8022" duration="00:00:00.0086517" startTime="2025-08-23T22:13:38.3990737+08:00" endTime="2025-08-23T22:13:38.3990740+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7da44549-35b3-4f02-ac84-f8a0c2ebab49" />
+    <UnitTestResult executionId="368c11b2-a489-426d-9182-65f3cc79a190" testId="63eafbb5-a30b-37a9-e05f-fe5729a00075" testName="SystemMonitor.Tests.ContractTests.UpdateCheck_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0010000" startTime="2025-08-23T22:13:35.0210971+08:00" endTime="2025-08-23T22:13:35.0210973+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="368c11b2-a489-426d-9182-65f3cc79a190">
       <Output>
         <ErrorInfo>
           <Message>非 M1：后续里程碑接口</Message>
         </ErrorInfo>
       </Output>
     </UnitTestResult>
-    <UnitTestResult executionId="77c1b82a-81a3-45b4-ba83-60162df96ff7" testId="d524aa03-b550-0e62-e27b-5731e05d725f" testName="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_NegativePid" computerName="DESKTOP-J6M8022" duration="00:00:00.0127701" startTime="2025-08-23T21:56:11.1281735+08:00" endTime="2025-08-23T21:56:11.1281739+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77c1b82a-81a3-45b4-ba83-60162df96ff7" />
-    <UnitTestResult executionId="c9ab2b0d-6ec0-4ae0-9624-f3873e268728" testId="1bc68377-98f3-3224-550a-3a1f98831502" testName="SystemMonitor.Tests.EndToEndTests.Hello_WithoutToken_Fails" computerName="DESKTOP-J6M8022" duration="00:00:00.2051983" startTime="2025-08-23T21:56:13.1310191+08:00" endTime="2025-08-23T21:56:13.1310193+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c9ab2b0d-6ec0-4ae0-9624-f3873e268728" />
-    <UnitTestResult executionId="9ee271a9-c9ef-4b98-a582-e1d1f4812906" testId="786286bb-adde-af71-f91d-9110424a9ef6" testName="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Valid" computerName="DESKTOP-J6M8022" duration="00:00:00.0997963" startTime="2025-08-23T21:56:11.1150943+08:00" endTime="2025-08-23T21:56:11.1150947+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ee271a9-c9ef-4b98-a582-e1d1f4812906" />
-    <UnitTestResult executionId="ed83724d-02a9-4aec-8ee6-691481247698" testId="e1fbd4f1-6ade-f24b-317f-6dbbbf27c5fc" testName="SystemMonitor.Tests.SchemaTests.Hello_Schema_Valid_Minimal" computerName="DESKTOP-J6M8022" duration="00:00:00.0008726" startTime="2025-08-23T21:56:11.1579625+08:00" endTime="2025-08-23T21:56:11.1579644+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ed83724d-02a9-4aec-8ee6-691481247698" />
-    <UnitTestResult executionId="9d4aa348-721a-475a-b5e4-d92fc892d7c4" testId="fc84e8aa-81c3-13b2-161d-42cbb3024667" testName="SystemMonitor.Tests.ContractTests.SubscribeMetrics_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0013175" startTime="2025-08-23T21:56:10.9875255+08:00" endTime="2025-08-23T21:56:10.9875257+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d4aa348-721a-475a-b5e4-d92fc892d7c4" />
-    <UnitTestResult executionId="02966896-debf-4475-a3b0-e215f1ab523b" testId="ae3acead-7ea4-7542-c915-3fc15e2059df" testName="SystemMonitor.Tests.MemoryCountersTests.GetMemoryDetail_NoThrow_And_BoundedFields" computerName="DESKTOP-J6M8022" duration="00:00:00.0174778" startTime="2025-08-23T21:56:10.9154893+08:00" endTime="2025-08-23T21:56:10.9154897+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="02966896-debf-4475-a3b0-e215f1ab523b" />
-    <UnitTestResult executionId="d7f541e1-07b4-4b30-af4e-9a39d87974a0" testId="2fee1618-453a-fb22-e956-2fd9d457aed7" testName="SystemMonitor.Tests.ContractTests.Stop_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0007832" startTime="2025-08-23T21:56:11.0026414+08:00" endTime="2025-08-23T21:56:11.0026416+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d7f541e1-07b4-4b30-af4e-9a39d87974a0" />
-    <UnitTestResult executionId="f7a8193d-822a-4f56-bfce-06c6fe5ac040" testId="ba4d86c4-e56e-4feb-035c-05a39221e7db" testName="SystemMonitor.Tests.EndToEndTests.Snapshot_Cpu_Expanded_Fields" computerName="DESKTOP-J6M8022" duration="00:00:02.3198534" startTime="2025-08-23T21:56:22.4922162+08:00" endTime="2025-08-23T21:56:22.4922164+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7a8193d-822a-4f56-bfce-06c6fe5ac040" />
-    <UnitTestResult executionId="6e559265-98ba-4ff5-97d5-8aa44f0886d3" testId="825a0899-f60c-7747-10dc-edf9d745369b" testName="SystemMonitor.Tests.ContractTests.Start_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0002656" startTime="2025-08-23T21:56:11.0144474+08:00" endTime="2025-08-23T21:56:11.0144475+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e559265-98ba-4ff5-97d5-8aa44f0886d3" />
-    <UnitTestResult executionId="47aed1e9-aacf-4cb6-bb7f-edfcaa2e0f6b" testId="066ac360-3a3d-3874-ff81-64082362c1d3" testName="SystemMonitor.Tests.HistoryQueryTests.Raw_Empty_Window_Fallsback_To_Current_Snapshot" computerName="DESKTOP-J6M8022" duration="00:00:00.0523186" startTime="2025-08-23T21:56:10.9684736+08:00" endTime="2025-08-23T21:56:10.9684741+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47aed1e9-aacf-4cb6-bb7f-edfcaa2e0f6b" />
-    <UnitTestResult executionId="14737db0-66c7-4617-a6bf-cd6b77dbaa0b" testId="af91bfef-d9e3-90f4-bf1f-8322352913ff" testName="SystemMonitor.Tests.SchemaTests.QueryHistory_Schema_Invalid_Granularity" computerName="DESKTOP-J6M8022" duration="00:00:00.0023169" startTime="2025-08-23T21:56:11.1463508+08:00" endTime="2025-08-23T21:56:11.1463510+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14737db0-66c7-4617-a6bf-cd6b77dbaa0b" />
-    <UnitTestResult executionId="5d09f16f-6993-4a1c-a5b0-88e1e5b7ad93" testId="b63f371d-2541-ba09-aa15-8afdc6da8ab0" testName="SystemMonitor.Tests.EndToEndTests.State_Emitted_On_Start_Burst_Stop" computerName="DESKTOP-J6M8022" duration="00:00:00.2066386" startTime="2025-08-23T21:56:34.3606564+08:00" endTime="2025-08-23T21:56:34.3606566+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5d09f16f-6993-4a1c-a5b0-88e1e5b7ad93" />
-    <UnitTestResult executionId="a337fd50-d174-41b2-9b61-aef633f86f4a" testId="b633bbb8-7807-8b62-d736-2bf19ee15db3" testName="SystemMonitor.Tests.PushSuppressionTests.SuppressWindow_Should_Block_Push_Temporarily" computerName="DESKTOP-J6M8022" duration="00:00:00.2616083" startTime="2025-08-23T21:56:12.3794330+08:00" endTime="2025-08-23T21:56:12.3794332+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a337fd50-d174-41b2-9b61-aef633f86f4a" />
-    <UnitTestResult executionId="18d2d68b-ef53-4b86-85e2-e0fbb3c910c8" testId="b3c9c3db-2e88-73a3-bfa9-5343e3be2294" testName="SystemMonitor.Tests.PushSuppressionTests.SubscribeMetrics_Should_Enable_Push" computerName="DESKTOP-J6M8022" duration="00:00:00.0013604" startTime="2025-08-23T21:56:12.1175166+08:00" endTime="2025-08-23T21:56:12.1175167+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="18d2d68b-ef53-4b86-85e2-e0fbb3c910c8" />
-    <UnitTestResult executionId="0e7761a9-6414-4417-bfdf-c071a952065e" testId="cdc1d8a4-ebdd-0129-c99e-b7f07ac1be20" testName="SystemMonitor.Tests.MemoryCountersTests.MemoryCounters_Read_NoThrow_And_CacheWithin200ms" computerName="DESKTOP-J6M8022" duration="00:00:01.2112213" startTime="2025-08-23T21:56:10.8948577+08:00" endTime="2025-08-23T21:56:10.8948587+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e7761a9-6414-4417-bfdf-c071a952065e" />
-    <UnitTestResult executionId="a0f0934c-be98-440d-99e6-dc0e5df402fd" testId="cc32e9a5-f3b4-24bc-d94d-c130daf26cd8" testName="SystemMonitor.Tests.HistoryQueryTests.Agg_10s_InMemory_Fallback_Buckets_By_EndTime" computerName="DESKTOP-J6M8022" duration="00:00:00.0057073" startTime="2025-08-23T21:56:10.9857060+08:00" endTime="2025-08-23T21:56:10.9857063+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a0f0934c-be98-440d-99e6-dc0e5df402fd" />
-    <UnitTestResult executionId="b029ce8a-7ae8-4e68-984d-d0a91639e2b6" testId="dc6251cd-01f9-1cce-a502-df54ce71eba2" testName="SystemMonitor.Tests.ContractTests.SetConfig_Request_Should_Not_Contain_PascalCase_Keys" computerName="DESKTOP-J6M8022" duration="00:00:00.0055722" startTime="2025-08-23T21:56:10.9934327+08:00" endTime="2025-08-23T21:56:10.9934331+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b029ce8a-7ae8-4e68-984d-d0a91639e2b6" />
-    <UnitTestResult executionId="d4e12c05-08b7-4dc6-88bd-6f596331b246" testId="deff2b50-b04e-659a-fcb1-aacff92daa42" testName="SystemMonitor.Tests.ContractTests.Hello_Request_Should_Not_Contain_PascalCase_Keys" computerName="DESKTOP-J6M8022" duration="00:00:00.0007272" startTime="2025-08-23T21:56:10.9998846+08:00" endTime="2025-08-23T21:56:10.9998847+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4e12c05-08b7-4dc6-88bd-6f596331b246" />
-    <UnitTestResult executionId="6e8dbdc0-9d88-4131-926f-6c5ac41836c6" testId="8efef518-8988-e3e1-bb3e-361f08b825e5" testName="SystemMonitor.Tests.SchemaTests.Snapshot_Schema_Valid_WithModules" computerName="DESKTOP-J6M8022" duration="00:00:00.0016388" startTime="2025-08-23T21:56:11.1329016+08:00" endTime="2025-08-23T21:56:11.1329019+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e8dbdc0-9d88-4131-926f-6c5ac41836c6" />
-    <UnitTestResult executionId="a8891186-3628-4474-ab3a-807af2e04890" testId="7aba6d95-cdac-4d3b-fc1e-d345b65a933b" testName="SystemMonitor.Tests.ContractTests.Hello_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0014440" startTime="2025-08-23T21:56:11.0129407+08:00" endTime="2025-08-23T21:56:11.0129409+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8891186-3628-4474-ab3a-807af2e04890" />
-    <UnitTestResult executionId="87ac4d92-bc42-41ad-a3a7-04e3c9596241" testId="a9bbc647-8803-5dec-658a-7c77db2afa36" testName="SystemMonitor.Tests.PushSuppressionTests.Start_SetConfig_Should_Update_Intervals_And_Modules" computerName="DESKTOP-J6M8022" duration="00:00:00.0053413" startTime="2025-08-23T21:56:12.1146605+08:00" endTime="2025-08-23T21:56:12.1146608+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="87ac4d92-bc42-41ad-a3a7-04e3c9596241" />
-    <UnitTestResult executionId="fd43654c-2beb-4737-8131-8c3c7ec33d84" testId="d13cbe31-bcad-db2e-a448-21033afe455a" testName="SystemMonitor.Tests.SchemaTests.Hello_Schema_Invalid_NoToken" computerName="DESKTOP-J6M8022" duration="00:00:00.0035937" startTime="2025-08-23T21:56:11.1386969+08:00" endTime="2025-08-23T21:56:11.1386971+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd43654c-2beb-4737-8131-8c3c7ec33d84" />
-    <UnitTestResult executionId="a4b4f256-b083-4f77-88f1-a9100c9f5d14" testId="648e89fa-b178-023e-6b9f-b12e893716da" testName="SystemMonitor.Tests.EndToEndTests.Hello_Then_Snapshot_Works" computerName="DESKTOP-J6M8022" duration="00:00:05.4940815" startTime="2025-08-23T21:56:33.6195386+08:00" endTime="2025-08-23T21:56:33.6195389+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4b4f256-b083-4f77-88f1-a9100c9f5d14" />
-    <UnitTestResult executionId="dc1c02f2-4a45-4d30-a449-5edfa24c91f1" testId="e7afe76e-2983-511f-53e6-ec72c360fd06" testName="SystemMonitor.Tests.SchemaTests.SetConfig_Schema_Valid_WithIntervals" computerName="DESKTOP-J6M8022" duration="00:00:00.0018612" startTime="2025-08-23T21:56:11.1349379+08:00" endTime="2025-08-23T21:56:11.1349381+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc1c02f2-4a45-4d30-a449-5edfa24c91f1" />
-    <UnitTestResult executionId="3c764c7c-f834-4a1e-8294-b6ee23ae1e30" testId="2380be20-41f7-c6da-9826-a89e44675606" testName="SystemMonitor.Tests.MemoryCountersTests.GetMemoryInfoMb_NoThrow_And_ReasonableRanges" computerName="DESKTOP-J6M8022" duration="00:00:00.0010372" startTime="2025-08-23T21:56:10.8963054+08:00" endTime="2025-08-23T21:56:10.8963058+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c764c7c-f834-4a1e-8294-b6ee23ae1e30" />
-    <UnitTestResult executionId="68e76e31-771e-4138-a580-6dc8761c4870" testId="c7e17ebe-07f3-5913-71e6-f1c4a943136f" testName="SystemMonitor.Tests.SchemaTests.BurstSubscribe_Schema_Invalid_EmptyModules" computerName="DESKTOP-J6M8022" duration="00:00:00.0104534" startTime="2025-08-23T21:56:11.1700562+08:00" endTime="2025-08-23T21:56:11.1700564+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68e76e31-771e-4138-a580-6dc8761c4870" />
-    <UnitTestResult executionId="bb1a778a-43c1-40fa-8ea3-5a1fffd2b0c2" testId="f6814e48-0b49-81a9-5412-aa1c3ac48e00" testName="SystemMonitor.Tests.ContractTests.QueryHistory_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0023364" startTime="2025-08-23T21:56:11.0051526+08:00" endTime="2025-08-23T21:56:11.0051532+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb1a778a-43c1-40fa-8ea3-5a1fffd2b0c2" />
-    <UnitTestResult executionId="75d93a9f-21c3-4bcb-8867-d29fb9cd7da6" testId="84bddd7b-5fca-ad7f-6631-caa1dc730eca" testName="SystemMonitor.Tests.ContractTests.BurstSubscribe_Request_Serializes_To_SnakeCase" computerName="DESKTOP-J6M8022" duration="00:00:00.0024159" startTime="2025-08-23T21:56:10.9983756+08:00" endTime="2025-08-23T21:56:10.9983758+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75d93a9f-21c3-4bcb-8867-d29fb9cd7da6" />
-    <UnitTestResult executionId="c0fab487-5d4e-49fd-a9e0-7b1dd5fd9c44" testId="c2cbe4b9-6d25-c7b6-4d02-96a009247a6c" testName="SystemMonitor.Tests.MemoryCountersTests.MemoryCounters_ForceFallback_NoInitObjects_NoThrow" computerName="DESKTOP-J6M8022" duration="00:00:00.0011758" startTime="2025-08-23T21:56:10.8977430+08:00" endTime="2025-08-23T21:56:10.8977433+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0fab487-5d4e-49fd-a9e0-7b1dd5fd9c44" />
+    <UnitTestResult executionId="5549d8c3-2490-477f-bfaa-dddd47c12d8d" testId="b633bbb8-7807-8b62-d736-2bf19ee15db3" testName="SystemMonitor.Tests.PushSuppressionTests.SuppressWindow_Should_Block_Push_Temporarily" computerName="DESKTOP-J6M8022" duration="00:00:00.2619648" startTime="2025-08-23T22:13:34.9079614+08:00" endTime="2025-08-23T22:13:34.9079619+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5549d8c3-2490-477f-bfaa-dddd47c12d8d" />
+    <UnitTestResult executionId="a1e2dcee-5d04-45a4-b41a-5df50e3ece48" testId="c7997c4b-1968-3efe-299c-4efc84561103" testName="SystemMonitor.Tests.BridgeAndBurstTests.Hello_With_Bridge_Capability_Should_Set_Bridge_And_Enable_Push" computerName="DESKTOP-J6M8022" duration="00:00:00.0022143" startTime="2025-08-23T22:14:20.0925541+08:00" endTime="2025-08-23T22:14:20.0925543+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1e2dcee-5d04-45a4-b41a-5df50e3ece48" />
+    <UnitTestResult executionId="e4a45cbd-9b92-47b5-a1a6-e788713504c4" testId="af91bfef-d9e3-90f4-bf1f-8322352913ff" testName="SystemMonitor.Tests.SchemaTests.QueryHistory_Schema_Invalid_Granularity" computerName="DESKTOP-J6M8022" duration="00:00:00.0102468" startTime="2025-08-23T22:13:38.4220986+08:00" endTime="2025-08-23T22:13:38.4220989+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e4a45cbd-9b92-47b5-a1a6-e788713504c4" />
   </Results>
   <TestDefinitions>
     <UnitTest name="SystemMonitor.Tests.PushSuppressionTests.SubscribeMetrics_Should_Enable_Push" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="b3c9c3db-2e88-73a3-bfa9-5343e3be2294">
-      <Execution id="18d2d68b-ef53-4b86-85e2-e0fbb3c910c8" />
+      <Execution id="5ee43b75-0271-42ca-b0a1-9fe331ff8424" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.PushSuppressionTests" name="SubscribeMetrics_Should_Enable_Push" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.PushSuppressionTests.SuppressWindow_Should_Block_Push_Temporarily" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="b633bbb8-7807-8b62-d736-2bf19ee15db3">
-      <Execution id="a337fd50-d174-41b2-9b61-aef633f86f4a" />
+      <Execution id="5549d8c3-2490-477f-bfaa-dddd47c12d8d" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.PushSuppressionTests" name="SuppressWindow_Should_Block_Push_Temporarily" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.SetConfig_Invalid_BaseInterval_Fails" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="dacf0d9f-52f8-cc00-236f-2f32d31c4af3">
-      <Execution id="358b46e6-3ec1-40ec-af4c-6139b55cafd9" />
+      <Execution id="122de01e-a186-4d27-9ae4-bf301e588627" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="SetConfig_Invalid_BaseInterval_Fails" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Metrics_CpuMem_Ranges" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="ef813fb4-1132-cb92-7e68-0c9ef045b6b7">
-      <Execution id="b0c0a3f2-4642-4949-a93d-b645f1d7d48f" />
+      <Execution id="de11725d-f2ab-41fe-baa7-1eb69a0ebe67" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Metrics_CpuMem_Ranges" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.MemoryCountersTests.MemoryCounters_Read_NoThrow_And_CacheWithin200ms" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="cdc1d8a4-ebdd-0129-c99e-b7f07ac1be20">
-      <Execution id="0e7761a9-6414-4417-bfdf-c071a952065e" />
+      <Execution id="5fa4b621-5662-4d6d-a6d8-f6b83c01de03" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.MemoryCountersTests" name="MemoryCounters_Read_NoThrow_And_CacheWithin200ms" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.BridgeAndBurstTests.Burst_Subscribe_Should_Override_Interval_Temporarily" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="b62b63b9-c5d3-6cc0-d782-e31396d5ce04">
-      <Execution id="cab3b0ae-394d-4f8f-bd3a-d6e8b2880c3c" />
+      <Execution id="1b810f69-816b-4fcb-ad0a-973e7dd0ec4a" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.BridgeAndBurstTests" name="Burst_Subscribe_Should_Override_Interval_Temporarily" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Hello_Then_Snapshot_Works" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="648e89fa-b178-023e-6b9f-b12e893716da">
-      <Execution id="a4b4f256-b083-4f77-88f1-a9100c9f5d14" />
+      <Execution id="90062fd4-3764-4366-87b2-0b270068b0fd" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Hello_Then_Snapshot_Works" />
     </UnitTest>
-    <UnitTest name="SystemMonitor.Tests.UnitTest1.SnakeCase_Serialization_ShouldUseSnakeCaseNames" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d1ecf483-dfd0-e8fd-412c-75343e5fd3e3">
-      <Execution id="6d7a9b21-eced-4fa1-b085-6e8e22c5ec00" />
-      <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.UnitTest1" name="SnakeCase_Serialization_ShouldUseSnakeCaseNames" />
-    </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.SetConfig_Schema_Valid_WithIntervals" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="e7afe76e-2983-511f-53e6-ec72c360fd06">
-      <Execution id="dc1c02f2-4a45-4d30-a449-5edfa24c91f1" />
+      <Execution id="f9391a0c-3355-421a-a8dc-0ccd974fdf78" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="SetConfig_Schema_Valid_WithIntervals" />
     </UnitTest>
+    <UnitTest name="SystemMonitor.Tests.UnitTest1.SnakeCase_Serialization_ShouldUseSnakeCaseNames" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d1ecf483-dfd0-e8fd-412c-75343e5fd3e3">
+      <Execution id="2b2d8ca5-7ed3-4ad5-9f36-5dd0abe8c228" />
+      <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.UnitTest1" name="SnakeCase_Serialization_ShouldUseSnakeCaseNames" />
+    </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Snapshot_CpuMem_Ranges" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="1625b824-bf75-ff81-2ccc-b11736dbaaf3">
-      <Execution id="e17fc59e-5e5f-47d3-ab2c-7b7772aa83ba" />
+      <Execution id="8941b4dd-4524-46b3-898d-0f8b3e219e10" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Snapshot_CpuMem_Ranges" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.Start_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="825a0899-f60c-7747-10dc-edf9d745369b">
-      <Execution id="6e559265-98ba-4ff5-97d5-8aa44f0886d3" />
+      <Execution id="52587ade-c166-4775-afdf-9520a86962fd" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="Start_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.Hello_Request_Should_Not_Contain_PascalCase_Keys" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="deff2b50-b04e-659a-fcb1-aacff92daa42">
-      <Execution id="d4e12c05-08b7-4dc6-88bd-6f596331b246" />
+      <Execution id="0dcd911d-311c-4269-83c8-fa02866e1aba" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="Hello_Request_Should_Not_Contain_PascalCase_Keys" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.QueryHistory_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="f6814e48-0b49-81a9-5412-aa1c3ac48e00">
-      <Execution id="bb1a778a-43c1-40fa-8ea3-5a1fffd2b0c2" />
+      <Execution id="b0f24ded-2535-4473-bfe1-0f4870981454" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="QueryHistory_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.MemoryCountersTests.GetMemoryInfoMb_NoThrow_And_ReasonableRanges" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="2380be20-41f7-c6da-9826-a89e44675606">
-      <Execution id="3c764c7c-f834-4a1e-8294-b6ee23ae1e30" />
+      <Execution id="1088d0d2-7802-4b41-8d9d-20d7892422bc" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.MemoryCountersTests" name="GetMemoryInfoMb_NoThrow_And_ReasonableRanges" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.SetConfig_And_BurstSubscribe_Works" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d46fc4ee-0150-cded-8fbb-ceb1d2e0e4ba">
-      <Execution id="13c34555-0e98-40fe-8bf3-e1e178386e21" />
+      <Execution id="373f60c3-e741-451c-9128-d3a134876834" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="SetConfig_And_BurstSubscribe_Works" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.Disk_Snapshot_Response_TopProcesses_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="600d902f-724e-255d-709d-fa76d1ec6f96">
-      <Execution id="859bcee8-5512-43c3-95e3-900c467fe66d" />
+      <Execution id="6512c8a0-f203-4699-a6bf-494084701517" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="Disk_Snapshot_Response_TopProcesses_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.QueryHistory_Works" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="5359d170-82fa-d8d2-2f92-97bc053dca0c">
-      <Execution id="61be2c7d-baf2-473e-a9dd-19d352d4db7b" />
+      <Execution id="d0063603-7f8f-4053-a32d-267cffd0dca3" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="QueryHistory_Works" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_MissingName" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="759df637-d080-ef7c-66ad-cd6f487477c1">
-      <Execution id="788f6ad3-a4f8-471c-ae3f-6862720a6bbd" />
+      <Execution id="9e2306eb-c9f7-43fc-8a3b-1b2668752407" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Disk_TopProcesses_Schema_Invalid_MissingName" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.SetLogLevel_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="6bc5c69f-1e35-1dda-027a-3965f2238887">
-      <Execution id="44df7ffc-5a68-4107-9ea3-eb98722c018e" />
+      <Execution id="79ae7da2-3944-483c-883c-f5175c020f52" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="SetLogLevel_Request_Serializes_To_SnakeCase" />
     </UnitTest>
-    <UnitTest name="SystemMonitor.Tests.EndToEndTests.QueryHistory_Edges_And_Bucketing" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="0f77d0ed-59fb-971b-4d70-0677c148fa79">
-      <Execution id="b4705cf5-bc94-4860-9b78-98e6bbd068a6" />
-      <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="QueryHistory_Edges_And_Bucketing" />
-    </UnitTest>
     <UnitTest name="SystemMonitor.Tests.BridgeAndBurstTests.Hello_With_Bridge_Capability_Should_Set_Bridge_And_Enable_Push" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="c7997c4b-1968-3efe-299c-4efc84561103">
-      <Execution id="1655010d-b213-43ad-9508-61d5e89c18aa" />
+      <Execution id="a1e2dcee-5d04-45a4-b41a-5df50e3ece48" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.BridgeAndBurstTests" name="Hello_With_Bridge_Capability_Should_Set_Bridge_And_Enable_Push" />
     </UnitTest>
+    <UnitTest name="SystemMonitor.Tests.EndToEndTests.QueryHistory_Edges_And_Bucketing" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="0f77d0ed-59fb-971b-4d70-0677c148fa79">
+      <Execution id="fd4dcf29-2535-455d-aa35-89fc7ffd0af6" />
+      <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="QueryHistory_Edges_And_Bucketing" />
+    </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.SetConfig_Schema_Invalid_TooSmallInterval" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="7fcfcc39-66f5-e59a-53bb-ab760b3d7c57">
-      <Execution id="80424da7-8baf-4180-b29d-e3344b519985" />
+      <Execution id="a3f6dfdf-e997-4e9e-bcae-dac535907e52" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="SetConfig_Schema_Invalid_TooSmallInterval" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.HistoryQueryTests.Agg_10s_InMemory_Fallback_Buckets_By_EndTime" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="cc32e9a5-f3b4-24bc-d94d-c130daf26cd8">
-      <Execution id="a0f0934c-be98-440d-99e6-dc0e5df402fd" />
+      <Execution id="43fb062a-fe10-46ad-b527-5a35b85ad9bb" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.HistoryQueryTests" name="Agg_10s_InMemory_Fallback_Buckets_By_EndTime" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Valid" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="786286bb-adde-af71-f91d-9110424a9ef6">
-      <Execution id="9ee271a9-c9ef-4b98-a582-e1d1f4812906" />
+      <Execution id="963628ea-da83-4ce0-8ac9-550dd459ba8b" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Disk_TopProcesses_Schema_Valid" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.BurstSubscribe_Schema_Valid" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="316b5766-01a4-b945-df1a-1d07ac1dfded">
-      <Execution id="98691d23-42b1-45b4-98b5-29a317b20302" />
+      <Execution id="f9026a88-8d4d-4000-a098-8c56bc34134c" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="BurstSubscribe_Schema_Valid" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Hello_Unsupported_Capability_Fails" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="18b35648-a566-3499-95ec-e14d308dcba6">
-      <Execution id="fed133af-2bed-45c9-a170-b77f959f62fd" />
+      <Execution id="be420322-132a-4962-bdb2-a35f4be13a86" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Hello_Unsupported_Capability_Fails" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Hello_Protocol_NotSupported_Fails" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="a5cee8d5-e1e7-16a2-597a-8c6cbc2b8be8">
-      <Execution id="315abb03-41b2-41de-9e51-b691f433408c" />
+      <Execution id="3b5442b9-eb59-4b26-88c5-ca6a7e6ca14f" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Hello_Protocol_NotSupported_Fails" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.BurstSubscribe_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="84bddd7b-5fca-ad7f-6631-caa1dc730eca">
-      <Execution id="75d93a9f-21c3-4bcb-8867-d29fb9cd7da6" />
+      <Execution id="9287146e-4952-4fca-b02a-57ba09e48947" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="BurstSubscribe_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.HistoryQueryTests.StepMs_1s_Groups_Last_Value_Per_Bucket" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="7a415512-eeeb-ad04-a0c8-c1821ba3a362">
-      <Execution id="ba6d1bb5-2e97-4d03-b05d-491e94e4d183" />
+      <Execution id="a18bd527-4922-4e23-969a-f57e194cad8a" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.HistoryQueryTests" name="StepMs_1s_Groups_Last_Value_Per_Bucket" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.UpdateApply_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d17c6ea2-3ca4-386f-c6e7-4b216cf89dd5">
-      <Execution id="875e7177-208e-4be5-b847-be1cd2ae43d3" />
+      <Execution id="5dd6cd9b-32f8-4fdd-92c1-d2ced7c120fe" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="UpdateApply_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.State_Emitted_On_Start_Burst_Stop" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="b63f371d-2541-ba09-aa15-8afdc6da8ab0">
-      <Execution id="5d09f16f-6993-4a1c-a5b0-88e1e5b7ad93" />
+      <Execution id="d5f88184-3c11-463f-9e37-3e538f8fd0a7" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="State_Emitted_On_Start_Burst_Stop" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.UnitTest1.Test1" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="897198c2-e013-2fdc-4de0-ccbd44dab1f1">
-      <Execution id="b3967baf-9959-415f-bde0-09f95cc70f32" />
+      <Execution id="c507760d-3a02-4eff-9960-7e0e4c8f7507" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.UnitTest1" name="Test1" />
     </UnitTest>
-    <UnitTest name="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_NegativePid" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d524aa03-b550-0e62-e27b-5731e05d725f">
-      <Execution id="77c1b82a-81a3-45b4-ba83-60162df96ff7" />
-      <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Disk_TopProcesses_Schema_Invalid_NegativePid" />
-    </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.Snapshot_Schema_Valid_WithModules" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="8efef518-8988-e3e1-bb3e-361f08b825e5">
-      <Execution id="6e8dbdc0-9d88-4131-926f-6c5ac41836c6" />
+      <Execution id="e1fac8c7-1643-4a8d-8ccc-6a4b419b0bd7" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Snapshot_Schema_Valid_WithModules" />
     </UnitTest>
+    <UnitTest name="SystemMonitor.Tests.SchemaTests.Disk_TopProcesses_Schema_Invalid_NegativePid" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d524aa03-b550-0e62-e27b-5731e05d725f">
+      <Execution id="fc7f3201-e6d9-4cab-8684-ba1586435109" />
+      <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Disk_TopProcesses_Schema_Invalid_NegativePid" />
+    </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.BurstSubscribe_Schema_Invalid_EmptyModules" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="c7e17ebe-07f3-5913-71e6-f1c4a943136f">
-      <Execution id="68e76e31-771e-4138-a580-6dc8761c4870" />
+      <Execution id="5413cd20-35a6-42b3-aa7c-05b485d53c02" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="BurstSubscribe_Schema_Invalid_EmptyModules" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.QueryHistory_Aggregations_10s_1m" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="afa476e6-1342-0de1-8963-ea8bca4835e6">
-      <Execution id="cb82b6a5-268a-49c4-82b7-759733aada89" />
+      <Execution id="ec16de00-3c46-499f-b1c7-0380bad65858" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="QueryHistory_Aggregations_10s_1m" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.SetConfig_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="116d7234-8081-621c-9c63-75bb4125b1af">
-      <Execution id="57a58cdf-ebb4-4c4e-8051-99f1cf9f299f" />
+      <Execution id="ab9fbb9d-2351-42e0-a868-bc6bc6fdf8e4" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="SetConfig_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.PushSuppressionTests.Start_SetConfig_Should_Update_Intervals_And_Modules" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="a9bbc647-8803-5dec-658a-7c77db2afa36">
-      <Execution id="87ac4d92-bc42-41ad-a3a7-04e3c9596241" />
+      <Execution id="1c77de20-6f74-467b-8482-fbbc7502b2e2" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.PushSuppressionTests" name="Start_SetConfig_Should_Update_Intervals_And_Modules" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.Stop_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="2fee1618-453a-fb22-e956-2fd9d457aed7">
-      <Execution id="d7f541e1-07b4-4b30-af4e-9a39d87974a0" />
+      <Execution id="c3357df3-edbb-451f-a432-d4eae7a74594" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="Stop_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.SubscribeMetrics_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="fc84e8aa-81c3-13b2-161d-42cbb3024667">
-      <Execution id="9d4aa348-721a-475a-b5e4-d92fc892d7c4" />
+      <Execution id="c8476d73-2f3a-4beb-a55a-49d0a1e3536c" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="SubscribeMetrics_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Snapshot_Cpu_Expanded_Fields" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="ba4d86c4-e56e-4feb-035c-05a39221e7db">
-      <Execution id="f7a8193d-822a-4f56-bfce-06c6fe5ac040" />
+      <Execution id="5c6601b8-23cc-4bec-aee8-9987e68f7e9e" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Snapshot_Cpu_Expanded_Fields" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.HistoryQueryTests.Raw_Empty_Window_Fallsback_To_Current_Snapshot" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="066ac360-3a3d-3874-ff81-64082362c1d3">
-      <Execution id="47aed1e9-aacf-4cb6-bb7f-edfcaa2e0f6b" />
+      <Execution id="6fbd84ef-4b69-4b02-9d4a-c2ee27412445" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.HistoryQueryTests" name="Raw_Empty_Window_Fallsback_To_Current_Snapshot" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.Hello_Schema_Valid_Minimal" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="e1fbd4f1-6ade-f24b-317f-6dbbbf27c5fc">
-      <Execution id="ed83724d-02a9-4aec-8ee6-691481247698" />
+      <Execution id="725f15df-03ca-4319-a4d1-0358db616a34" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Hello_Schema_Valid_Minimal" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.Hello_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="7aba6d95-cdac-4d3b-fc1e-d345b65a933b">
-      <Execution id="a8891186-3628-4474-ab3a-807af2e04890" />
+      <Execution id="1db1f59a-2dd9-4e17-9dfe-7f92e6e0c4b0" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="Hello_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Hello_WithoutToken_Fails" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="1bc68377-98f3-3224-550a-3a1f98831502">
-      <Execution id="c9ab2b0d-6ec0-4ae0-9624-f3873e268728" />
+      <Execution id="987ddd67-9354-4de6-9d35-027682ec1d50" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Hello_WithoutToken_Fails" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.SetConfig_Request_Should_Not_Contain_PascalCase_Keys" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="dc6251cd-01f9-1cce-a502-df54ce71eba2">
-      <Execution id="b029ce8a-7ae8-4e68-984d-d0a91639e2b6" />
+      <Execution id="1dfdcf19-20f3-4973-962b-f0c1dff59d1c" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="SetConfig_Request_Should_Not_Contain_PascalCase_Keys" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.QueryHistory_Schema_Valid" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="69d6d1aa-b426-63fd-4c85-4eac53250980">
-      <Execution id="416ce999-a98e-4d24-835e-f04f34367af0" />
+      <Execution id="e17fec98-d739-4469-86a4-c82ce73da891" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="QueryHistory_Schema_Valid" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.QueryHistory_Schema_Invalid_Granularity" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="af91bfef-d9e3-90f4-bf1f-8322352913ff">
-      <Execution id="14737db0-66c7-4617-a6bf-cd6b77dbaa0b" />
+      <Execution id="e4a45cbd-9b92-47b5-a1a6-e788713504c4" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="QueryHistory_Schema_Invalid_Granularity" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.Snapshot_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="f4df6398-0c14-b3dd-5ee6-c8f487d7504a">
-      <Execution id="b02a903f-23e3-4d32-86a8-4d97b935f514" />
+      <Execution id="fd5b6fd4-b339-42e2-9067-7b93ed0caecd" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="Snapshot_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.EndToEndTests.Metrics_Throttle_Burst_Recovery_Works" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="575383ac-a422-d1e5-3903-2da7ffd1b577">
-      <Execution id="a8e906a2-7676-4555-8c06-dbf76e68a430" />
+      <Execution id="f7cd46f5-7b10-4a11-9aeb-c6c1e0a9968c" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.EndToEndTests" name="Metrics_Throttle_Burst_Recovery_Works" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.SchemaTests.Hello_Schema_Invalid_NoToken" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="d13cbe31-bcad-db2e-a448-21033afe455a">
-      <Execution id="fd43654c-2beb-4737-8131-8c3c7ec33d84" />
+      <Execution id="7da44549-35b3-4f02-ac84-f8a0c2ebab49" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.SchemaTests" name="Hello_Schema_Invalid_NoToken" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.ContractTests.UpdateCheck_Request_Serializes_To_SnakeCase" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="63eafbb5-a30b-37a9-e05f-fe5729a00075">
-      <Execution id="161c244d-97b1-4353-a037-2093b3ecc95d" />
+      <Execution id="368c11b2-a489-426d-9182-65f3cc79a190" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.ContractTests" name="UpdateCheck_Request_Serializes_To_SnakeCase" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.MemoryCountersTests.MemoryCounters_ForceFallback_NoInitObjects_NoThrow" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="c2cbe4b9-6d25-c7b6-4d02-96a009247a6c">
-      <Execution id="c0fab487-5d4e-49fd-a9e0-7b1dd5fd9c44" />
+      <Execution id="47605b7d-c834-40a6-9a21-1748a7a08684" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.MemoryCountersTests" name="MemoryCounters_ForceFallback_NoInitObjects_NoThrow" />
     </UnitTest>
     <UnitTest name="SystemMonitor.Tests.MemoryCountersTests.GetMemoryDetail_NoThrow_And_BoundedFields" storage="c:\code\sys-sensor-v3\src\systemmonitor.tests\bin\release\net8.0\systemmonitor.tests.dll" id="ae3acead-7ea4-7542-c915-3fc15e2059df">
-      <Execution id="02966896-debf-4475-a3b0-e215f1ab523b" />
+      <Execution id="02a78f8d-a404-4637-ab17-a26454cd8343" />
       <TestMethod codeBase="C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Release\net8.0\SystemMonitor.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="SystemMonitor.Tests.MemoryCountersTests" name="GetMemoryDetail_NoThrow_And_BoundedFields" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="c7997c4b-1968-3efe-299c-4efc84561103" executionId="1655010d-b213-43ad-9508-61d5e89c18aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="316b5766-01a4-b945-df1a-1d07ac1dfded" executionId="98691d23-42b1-45b4-98b5-29a317b20302" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="dacf0d9f-52f8-cc00-236f-2f32d31c4af3" executionId="358b46e6-3ec1-40ec-af4c-6139b55cafd9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="5359d170-82fa-d8d2-2f92-97bc053dca0c" executionId="61be2c7d-baf2-473e-a9dd-19d352d4db7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="a5cee8d5-e1e7-16a2-597a-8c6cbc2b8be8" executionId="315abb03-41b2-41de-9e51-b691f433408c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="1625b824-bf75-ff81-2ccc-b11736dbaaf3" executionId="e17fc59e-5e5f-47d3-ab2c-7b7772aa83ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="116d7234-8081-621c-9c63-75bb4125b1af" executionId="57a58cdf-ebb4-4c4e-8051-99f1cf9f299f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="600d902f-724e-255d-709d-fa76d1ec6f96" executionId="859bcee8-5512-43c3-95e3-900c467fe66d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="b62b63b9-c5d3-6cc0-d782-e31396d5ce04" executionId="cab3b0ae-394d-4f8f-bd3a-d6e8b2880c3c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="6bc5c69f-1e35-1dda-027a-3965f2238887" executionId="44df7ffc-5a68-4107-9ea3-eb98722c018e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="0f77d0ed-59fb-971b-4d70-0677c148fa79" executionId="b4705cf5-bc94-4860-9b78-98e6bbd068a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="69d6d1aa-b426-63fd-4c85-4eac53250980" executionId="416ce999-a98e-4d24-835e-f04f34367af0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="897198c2-e013-2fdc-4de0-ccbd44dab1f1" executionId="b3967baf-9959-415f-bde0-09f95cc70f32" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7fcfcc39-66f5-e59a-53bb-ab760b3d7c57" executionId="80424da7-8baf-4180-b29d-e3344b519985" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="63eafbb5-a30b-37a9-e05f-fe5729a00075" executionId="161c244d-97b1-4353-a037-2093b3ecc95d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d1ecf483-dfd0-e8fd-412c-75343e5fd3e3" executionId="6d7a9b21-eced-4fa1-b085-6e8e22c5ec00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d46fc4ee-0150-cded-8fbb-ceb1d2e0e4ba" executionId="13c34555-0e98-40fe-8bf3-e1e178386e21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7a415512-eeeb-ad04-a0c8-c1821ba3a362" executionId="ba6d1bb5-2e97-4d03-b05d-491e94e4d183" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="f4df6398-0c14-b3dd-5ee6-c8f487d7504a" executionId="b02a903f-23e3-4d32-86a8-4d97b935f514" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="afa476e6-1342-0de1-8963-ea8bca4835e6" executionId="cb82b6a5-268a-49c4-82b7-759733aada89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="575383ac-a422-d1e5-3903-2da7ffd1b577" executionId="a8e906a2-7676-4555-8c06-dbf76e68a430" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="759df637-d080-ef7c-66ad-cd6f487477c1" executionId="788f6ad3-a4f8-471c-ae3f-6862720a6bbd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="ef813fb4-1132-cb92-7e68-0c9ef045b6b7" executionId="b0c0a3f2-4642-4949-a93d-b645f1d7d48f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="18b35648-a566-3499-95ec-e14d308dcba6" executionId="fed133af-2bed-45c9-a170-b77f959f62fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d17c6ea2-3ca4-386f-c6e7-4b216cf89dd5" executionId="875e7177-208e-4be5-b847-be1cd2ae43d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d524aa03-b550-0e62-e27b-5731e05d725f" executionId="77c1b82a-81a3-45b4-ba83-60162df96ff7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="1bc68377-98f3-3224-550a-3a1f98831502" executionId="c9ab2b0d-6ec0-4ae0-9624-f3873e268728" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="786286bb-adde-af71-f91d-9110424a9ef6" executionId="9ee271a9-c9ef-4b98-a582-e1d1f4812906" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="e1fbd4f1-6ade-f24b-317f-6dbbbf27c5fc" executionId="ed83724d-02a9-4aec-8ee6-691481247698" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="fc84e8aa-81c3-13b2-161d-42cbb3024667" executionId="9d4aa348-721a-475a-b5e4-d92fc892d7c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="ae3acead-7ea4-7542-c915-3fc15e2059df" executionId="02966896-debf-4475-a3b0-e215f1ab523b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="2fee1618-453a-fb22-e956-2fd9d457aed7" executionId="d7f541e1-07b4-4b30-af4e-9a39d87974a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="ba4d86c4-e56e-4feb-035c-05a39221e7db" executionId="f7a8193d-822a-4f56-bfce-06c6fe5ac040" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="825a0899-f60c-7747-10dc-edf9d745369b" executionId="6e559265-98ba-4ff5-97d5-8aa44f0886d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="066ac360-3a3d-3874-ff81-64082362c1d3" executionId="47aed1e9-aacf-4cb6-bb7f-edfcaa2e0f6b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="af91bfef-d9e3-90f4-bf1f-8322352913ff" executionId="14737db0-66c7-4617-a6bf-cd6b77dbaa0b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="b63f371d-2541-ba09-aa15-8afdc6da8ab0" executionId="5d09f16f-6993-4a1c-a5b0-88e1e5b7ad93" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="b633bbb8-7807-8b62-d736-2bf19ee15db3" executionId="a337fd50-d174-41b2-9b61-aef633f86f4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="b3c9c3db-2e88-73a3-bfa9-5343e3be2294" executionId="18d2d68b-ef53-4b86-85e2-e0fbb3c910c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="cdc1d8a4-ebdd-0129-c99e-b7f07ac1be20" executionId="0e7761a9-6414-4417-bfdf-c071a952065e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="cc32e9a5-f3b4-24bc-d94d-c130daf26cd8" executionId="a0f0934c-be98-440d-99e6-dc0e5df402fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="dc6251cd-01f9-1cce-a502-df54ce71eba2" executionId="b029ce8a-7ae8-4e68-984d-d0a91639e2b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="deff2b50-b04e-659a-fcb1-aacff92daa42" executionId="d4e12c05-08b7-4dc6-88bd-6f596331b246" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="8efef518-8988-e3e1-bb3e-361f08b825e5" executionId="6e8dbdc0-9d88-4131-926f-6c5ac41836c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="7aba6d95-cdac-4d3b-fc1e-d345b65a933b" executionId="a8891186-3628-4474-ab3a-807af2e04890" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="a9bbc647-8803-5dec-658a-7c77db2afa36" executionId="87ac4d92-bc42-41ad-a3a7-04e3c9596241" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="d13cbe31-bcad-db2e-a448-21033afe455a" executionId="fd43654c-2beb-4737-8131-8c3c7ec33d84" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="648e89fa-b178-023e-6b9f-b12e893716da" executionId="a4b4f256-b083-4f77-88f1-a9100c9f5d14" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="e7afe76e-2983-511f-53e6-ec72c360fd06" executionId="dc1c02f2-4a45-4d30-a449-5edfa24c91f1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="2380be20-41f7-c6da-9826-a89e44675606" executionId="3c764c7c-f834-4a1e-8294-b6ee23ae1e30" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="c7e17ebe-07f3-5913-71e6-f1c4a943136f" executionId="68e76e31-771e-4138-a580-6dc8761c4870" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="f6814e48-0b49-81a9-5412-aa1c3ac48e00" executionId="bb1a778a-43c1-40fa-8ea3-5a1fffd2b0c2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="84bddd7b-5fca-ad7f-6631-caa1dc730eca" executionId="75d93a9f-21c3-4bcb-8867-d29fb9cd7da6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
-    <TestEntry testId="c2cbe4b9-6d25-c7b6-4d02-96a009247a6c" executionId="c0fab487-5d4e-49fd-a9e0-7b1dd5fd9c44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cdc1d8a4-ebdd-0129-c99e-b7f07ac1be20" executionId="5fa4b621-5662-4d6d-a6d8-f6b83c01de03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="deff2b50-b04e-659a-fcb1-aacff92daa42" executionId="0dcd911d-311c-4269-83c8-fa02866e1aba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2fee1618-453a-fb22-e956-2fd9d457aed7" executionId="c3357df3-edbb-451f-a432-d4eae7a74594" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="897198c2-e013-2fdc-4de0-ccbd44dab1f1" executionId="c507760d-3a02-4eff-9960-7e0e4c8f7507" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f6814e48-0b49-81a9-5412-aa1c3ac48e00" executionId="b0f24ded-2535-4473-bfe1-0f4870981454" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a415512-eeeb-ad04-a0c8-c1821ba3a362" executionId="a18bd527-4922-4e23-969a-f57e194cad8a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1ecf483-dfd0-e8fd-412c-75343e5fd3e3" executionId="2b2d8ca5-7ed3-4ad5-9f36-5dd0abe8c228" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc84e8aa-81c3-13b2-161d-42cbb3024667" executionId="c8476d73-2f3a-4beb-a55a-49d0a1e3536c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7fcfcc39-66f5-e59a-53bb-ab760b3d7c57" executionId="a3f6dfdf-e997-4e9e-bcae-dac535907e52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b62b63b9-c5d3-6cc0-d782-e31396d5ce04" executionId="1b810f69-816b-4fcb-ad0a-973e7dd0ec4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ae3acead-7ea4-7542-c915-3fc15e2059df" executionId="02a78f8d-a404-4637-ab17-a26454cd8343" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d46fc4ee-0150-cded-8fbb-ceb1d2e0e4ba" executionId="373f60c3-e741-451c-9128-d3a134876834" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a5cee8d5-e1e7-16a2-597a-8c6cbc2b8be8" executionId="3b5442b9-eb59-4b26-88c5-ca6a7e6ca14f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7aba6d95-cdac-4d3b-fc1e-d345b65a933b" executionId="1db1f59a-2dd9-4e17-9dfe-7f92e6e0c4b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84bddd7b-5fca-ad7f-6631-caa1dc730eca" executionId="9287146e-4952-4fca-b02a-57ba09e48947" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6bc5c69f-1e35-1dda-027a-3965f2238887" executionId="79ae7da2-3944-483c-883c-f5175c020f52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1fbd4f1-6ade-f24b-317f-6dbbbf27c5fc" executionId="725f15df-03ca-4319-a4d1-0358db616a34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="759df637-d080-ef7c-66ad-cd6f487477c1" executionId="9e2306eb-c9f7-43fc-8a3b-1b2668752407" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5359d170-82fa-d8d2-2f92-97bc053dca0c" executionId="d0063603-7f8f-4053-a32d-267cffd0dca3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="69d6d1aa-b426-63fd-4c85-4eac53250980" executionId="e17fec98-d739-4469-86a4-c82ce73da891" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1625b824-bf75-ff81-2ccc-b11736dbaaf3" executionId="8941b4dd-4524-46b3-898d-0f8b3e219e10" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bc68377-98f3-3224-550a-3a1f98831502" executionId="987ddd67-9354-4de6-9d35-027682ec1d50" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8efef518-8988-e3e1-bb3e-361f08b825e5" executionId="e1fac8c7-1643-4a8d-8ccc-6a4b419b0bd7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dacf0d9f-52f8-cc00-236f-2f32d31c4af3" executionId="122de01e-a186-4d27-9ae4-bf301e588627" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba4d86c4-e56e-4feb-035c-05a39221e7db" executionId="5c6601b8-23cc-4bec-aee8-9987e68f7e9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2cbe4b9-6d25-c7b6-4d02-96a009247a6c" executionId="47605b7d-c834-40a6-9a21-1748a7a08684" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7afe76e-2983-511f-53e6-ec72c360fd06" executionId="f9391a0c-3355-421a-a8dc-0ccd974fdf78" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="afa476e6-1342-0de1-8963-ea8bca4835e6" executionId="ec16de00-3c46-499f-b1c7-0380bad65858" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d17c6ea2-3ca4-386f-c6e7-4b216cf89dd5" executionId="5dd6cd9b-32f8-4fdd-92c1-d2ced7c120fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="825a0899-f60c-7747-10dc-edf9d745369b" executionId="52587ade-c166-4775-afdf-9520a86962fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b63f371d-2541-ba09-aa15-8afdc6da8ab0" executionId="d5f88184-3c11-463f-9e37-3e538f8fd0a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="575383ac-a422-d1e5-3903-2da7ffd1b577" executionId="f7cd46f5-7b10-4a11-9aeb-c6c1e0a9968c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f77d0ed-59fb-971b-4d70-0677c148fa79" executionId="fd4dcf29-2535-455d-aa35-89fc7ffd0af6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="116d7234-8081-621c-9c63-75bb4125b1af" executionId="ab9fbb9d-2351-42e0-a868-bc6bc6fdf8e4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dc6251cd-01f9-1cce-a502-df54ce71eba2" executionId="1dfdcf19-20f3-4973-962b-f0c1dff59d1c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="316b5766-01a4-b945-df1a-1d07ac1dfded" executionId="f9026a88-8d4d-4000-a098-8c56bc34134c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d524aa03-b550-0e62-e27b-5731e05d725f" executionId="fc7f3201-e6d9-4cab-8684-ba1586435109" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3c9c3db-2e88-73a3-bfa9-5343e3be2294" executionId="5ee43b75-0271-42ca-b0a1-9fe331ff8424" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2380be20-41f7-c6da-9826-a89e44675606" executionId="1088d0d2-7802-4b41-8d9d-20d7892422bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f4df6398-0c14-b3dd-5ee6-c8f487d7504a" executionId="fd5b6fd4-b339-42e2-9067-7b93ed0caecd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18b35648-a566-3499-95ec-e14d308dcba6" executionId="be420322-132a-4962-bdb2-a35f4be13a86" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="066ac360-3a3d-3874-ff81-64082362c1d3" executionId="6fbd84ef-4b69-4b02-9d4a-c2ee27412445" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="786286bb-adde-af71-f91d-9110424a9ef6" executionId="963628ea-da83-4ce0-8ac9-550dd459ba8b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ef813fb4-1132-cb92-7e68-0c9ef045b6b7" executionId="de11725d-f2ab-41fe-baa7-1eb69a0ebe67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9bbc647-8803-5dec-658a-7c77db2afa36" executionId="1c77de20-6f74-467b-8482-fbbc7502b2e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7e17ebe-07f3-5913-71e6-f1c4a943136f" executionId="5413cd20-35a6-42b3-aa7c-05b485d53c02" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cc32e9a5-f3b4-24bc-d94d-c130daf26cd8" executionId="43fb062a-fe10-46ad-b527-5a35b85ad9bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="648e89fa-b178-023e-6b9f-b12e893716da" executionId="90062fd4-3764-4366-87b2-0b270068b0fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="600d902f-724e-255d-709d-fa76d1ec6f96" executionId="6512c8a0-f203-4699-a6bf-494084701517" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d13cbe31-bcad-db2e-a448-21033afe455a" executionId="7da44549-35b3-4f02-ac84-f8a0c2ebab49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="63eafbb5-a30b-37a9-e05f-fe5729a00075" executionId="368c11b2-a489-426d-9182-65f3cc79a190" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b633bbb8-7807-8b62-d736-2bf19ee15db3" executionId="5549d8c3-2490-477f-bfaa-dddd47c12d8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7997c4b-1968-3efe-299c-4efc84561103" executionId="a1e2dcee-5d04-45a4-b41a-5df50e3ece48" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af91bfef-d9e3-90f4-bf1f-8322352913ff" executionId="e4a45cbd-9b92-47b5-a1a6-e788713504c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="列表中未列出的结果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
@@ -359,20 +359,112 @@
   <ResultSummary outcome="Completed">
     <Counters total="54" executed="51" passed="51" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
-      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.19)&#xD;
-[xUnit.net 00:00:00.21]   Discovering: SystemMonitor.Tests&#xD;
-[xUnit.net 00:00:00.29]   Discovered:  SystemMonitor.Tests&#xD;
-[xUnit.net 00:00:00.30]   Starting:    SystemMonitor.Tests&#xD;
-[xUnit.net 00:00:01.81]       非 M1：后续里程碑接口&#xD;
+      <StdOut>[xUnit.net 00:00:00.01] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.19)&#xD;
+[xUnit.net 00:00:00.59]   Discovering: SystemMonitor.Tests&#xD;
+[xUnit.net 00:00:00.72]   Discovered:  SystemMonitor.Tests&#xD;
+[xUnit.net 00:00:00.72]   Starting:    SystemMonitor.Tests&#xD;
+[xUnit.net 00:00:01.53]       非 M1：后续里程碑接口&#xD;
 在测试运行中跳过测试“SystemMonitor.Tests.ContractTests.SetLogLevel_Request_Serializes_To_SnakeCase”。&#xD;
-[xUnit.net 00:00:01.82]       非 M1：后续里程碑接口&#xD;
-[xUnit.net 00:00:01.82]       非 M1：后续里程碑接口&#xD;
+[xUnit.net 00:00:01.60]       非 M1：后续里程碑接口&#xD;
+[xUnit.net 00:00:01.60]       非 M1：后续里程碑接口&#xD;
 在测试运行中跳过测试“SystemMonitor.Tests.ContractTests.UpdateApply_Request_Serializes_To_SnakeCase”。&#xD;
 在测试运行中跳过测试“SystemMonitor.Tests.ContractTests.UpdateCheck_Request_Serializes_To_SnakeCase”。&#xD;
 [svc][out] [BOOT] Program start&#xD;
 [svc][out] [BOOT] Invoking root command...&#xD;
 [svc][out] [BOOT] Host builder created&#xD;
 [svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.4s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.6s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.5s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.7s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.9s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.4s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.4s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.7s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.9s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.4s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.6s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
+[svc][out] [BOOT] Host built&#xD;
+[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.4s&#xD;
+[svc][out] [BOOT] Program start&#xD;
+[svc][out] [BOOT] Invoking root command...&#xD;
+[svc][out] [BOOT] Host builder created&#xD;
+[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
 [svc][out] [BOOT] Host built&#xD;
 [svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
 [svc][out] [BOOT] Program start&#xD;
@@ -386,46 +478,11 @@
 [svc][out] [BOOT] Invoking root command...&#xD;
 [svc][out] [BOOT] Host builder created&#xD;
 [svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
 [test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.2s&#xD;
 [svc][out] [BOOT] Host built&#xD;
 [svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
+[test][pipe-wait] last-win32=2 elapsed=0.4s&#xD;
 [svc][out] [BOOT] Program start&#xD;
 [svc][out] [BOOT] Invoking root command...&#xD;
 [svc][out] [BOOT] Host builder created&#xD;
@@ -433,42 +490,18 @@
 [svc][out] [BOOT] Host built&#xD;
 [svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
 [test][pipe-wait] last-win32=2 elapsed=0.0s&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[svc][out] [BOOT] Program start&#xD;
-[svc][out] [BOOT] Invoking root command...&#xD;
-[svc][out] [BOOT] Host builder created&#xD;
-[svc][out] [BOOT] Building host...&#xD;
-[svc][out] [BOOT] Host built&#xD;
-[svc][out] [SystemMonitor.Service] Running in CONSOLE mode. Use --service to run as Windows Service.&#xD;
-[xUnit.net 00:00:27.72]   Finished:    SystemMonitor.Tests&#xD;
+[xUnit.net 00:00:47.59]   Finished:    SystemMonitor.Tests&#xD;
 </StdOut>
     </Output>
     <RunInfos>
-      <RunInfo computerName="DESKTOP-J6M8022" outcome="Warning" timestamp="2025-08-23T21:56:11.0033927+08:00">
-        <Text>[xUnit.net 00:00:01.81]     SystemMonitor.Tests.ContractTests.SetLogLevel_Request_Serializes_To_SnakeCase [SKIP]</Text>
+      <RunInfo computerName="DESKTOP-J6M8022" outcome="Warning" timestamp="2025-08-23T22:13:34.9486552+08:00">
+        <Text>[xUnit.net 00:00:01.53]     SystemMonitor.Tests.ContractTests.SetLogLevel_Request_Serializes_To_SnakeCase [SKIP]</Text>
       </RunInfo>
-      <RunInfo computerName="DESKTOP-J6M8022" outcome="Warning" timestamp="2025-08-23T21:56:11.0170387+08:00">
-        <Text>[xUnit.net 00:00:01.82]     SystemMonitor.Tests.ContractTests.UpdateApply_Request_Serializes_To_SnakeCase [SKIP]</Text>
+      <RunInfo computerName="DESKTOP-J6M8022" outcome="Warning" timestamp="2025-08-23T22:13:35.0168902+08:00">
+        <Text>[xUnit.net 00:00:01.59]     SystemMonitor.Tests.ContractTests.UpdateApply_Request_Serializes_To_SnakeCase [SKIP]</Text>
       </RunInfo>
-      <RunInfo computerName="DESKTOP-J6M8022" outcome="Warning" timestamp="2025-08-23T21:56:11.0173420+08:00">
-        <Text>[xUnit.net 00:00:01.82]     SystemMonitor.Tests.ContractTests.UpdateCheck_Request_Serializes_To_SnakeCase [SKIP]</Text>
+      <RunInfo computerName="DESKTOP-J6M8022" outcome="Warning" timestamp="2025-08-23T22:13:35.0212594+08:00">
+        <Text>[xUnit.net 00:00:01.60]     SystemMonitor.Tests.ContractTests.UpdateCheck_Request_Serializes_To_SnakeCase [SKIP]</Text>
       </RunInfo>
     </RunInfos>
   </ResultSummary>

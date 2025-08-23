@@ -693,6 +693,10 @@ namespace SystemMonitor.Service.Services.Collectors
                     // 容量与静态信息
                     capacity_totals = new { total_bytes = capTotals.total, used_bytes = capTotals.used, free_bytes = capTotals.free },
                     vm_swapfiles_bytes = vmSwapBytes,
+                    // 平台占位（APFS 相关：Windows 下恒为 null）
+                    purgeable_space_bytes = (long?)null,
+                    apfs_local_snapshots_count = (int?)null,
+                    apfs_local_snapshots_bytes = (long?)null,
                     per_volume = vols,
                     per_physical_disk = physOut,
                     smart_health = (object[]?)smartHealth
@@ -720,6 +724,10 @@ namespace SystemMonitor.Service.Services.Collectors
                     per_volume_io = System.Array.Empty<object>(),
                     top_processes_by_disk = System.Array.Empty<object>(),
                     capacity_totals = new { total_bytes = (long?)null, used_bytes = (long?)null, free_bytes = (long?)null },
+                    // 平台占位（APFS 相关：Windows 下恒为 null）
+                    purgeable_space_bytes = (long?)null,
+                    apfs_local_snapshots_count = (int?)null,
+                    apfs_local_snapshots_bytes = (long?)null,
                     per_volume = System.Array.Empty<object>(),
                     per_physical_disk = System.Array.Empty<object>()
                 };
