@@ -274,3 +274,5 @@ C:\code\sys-sensor-v3\src\SystemMonitor.Tests\obj\Debug\net8.0\refint\SystemMoni
 C:\code\sys-sensor-v3\src\SystemMonitor.Tests\obj\Debug\net8.0\SystemMonitor.Tests.pdb
 C:\code\sys-sensor-v3\src\SystemMonitor.Tests\obj\Debug\net8.0\SystemMonitor.Tests.genruntimeconfig.cache
 C:\code\sys-sensor-v3\src\SystemMonitor.Tests\obj\Debug\net8.0\ref\SystemMonitor.Tests.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Debug\net8.0\winrt.runtime.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Tests\bin\Debug\net8.0\Microsoft.Windows.SDK.NET.dll

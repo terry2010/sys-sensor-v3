@@ -43,6 +43,7 @@
       <MemoryPanel />
       <NetworkPanel />
       <DiskPanel />
+      <GpuPanel />
       <PowerPanel />
       <PeripheralsPanel />
       <div class="card" v-if="sensorMod">
@@ -282,6 +283,7 @@ import DiskPanel from './components/DiskPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import PowerPanel from './components/PowerPanel.vue';
 import PeripheralsPanel from './components/PeripheralsPanel.vue';
+import GpuPanel from './components/GpuPanel.vue';
 import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
 import DebugEvents from './components/DebugEvents.vue';
@@ -382,7 +384,7 @@ onMounted(async () => {
   (async () => {
     try {
       console.log('[App] 尝试自动启动采集模块...');
-      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network', 'sensor', 'power', 'peripherals'] });
+      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network', 'gpu', 'sensor', 'power', 'peripherals'] });
       console.log('[App] 自动启动采集模块成功:', result);
     } catch (e) {
       console.error('[App] 自动启动采集模块失败:', e);

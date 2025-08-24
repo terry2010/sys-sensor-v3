@@ -6,6 +6,7 @@ export type MetricPoint = {
   ts: number;
   cpu?: { usage_percent: number };
   memory?: { total_mb: number; used_mb: number };
+  gpu?: any;
   disk?: SnapshotResult['disk'];
   network?: {
     io_totals: {
@@ -79,6 +80,7 @@ export const useMetricsStore = defineStore('metrics', {
         if (this.history.length > 300) this.history.shift();
         this.lastAt = Date.now();
         this.count += 1;
+        try { if ((p as any)?.gpu) console.debug('[metrics] gpu:', (p as any).gpu); } catch {}
         const w: any = typeof window !== 'undefined' ? window : {};
         if (!w.__METRICS_READY) w.__METRICS_READY = true;
       });

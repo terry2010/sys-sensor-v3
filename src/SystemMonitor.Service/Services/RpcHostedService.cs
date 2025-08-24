@@ -304,6 +304,7 @@ namespace SystemMonitor.Service.Services
                                         int timeoutMs = defaultTimeoutMs;
                                         if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
                                         else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 700;
+                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
                                         var done = await Task.WhenAny(work, Task.Delay(timeoutMs, cts.Token)).ConfigureAwait(false);
                                         if (done == work)
                                         {
