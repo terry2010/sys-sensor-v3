@@ -22,6 +22,8 @@ namespace SystemMonitor.Service.Services.Collectors
             // 新增：外设电量采集模块（与 power 并列输出）
             Register(new PeripheralBatteryCollector());
             Register(new SensorCollector());
+            // 新增：系统信息采集模块（缓存较长，频率较低）
+            Register(new SystemInfoCollector());
         }
 
         public static void Register(IMetricsCollector collector)

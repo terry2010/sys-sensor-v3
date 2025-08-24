@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/132</span>
+                <span class='fraction'>0/135</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/132</span>
+                <span class='fraction'>0/135</span>
             </div>
         
             
@@ -195,7 +195,13 @@
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -331,7 +337,7 @@
 <span class="cstat-no" title="statement not covered" >  &lt;div class="card"&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;h3&gt;Snapshot&lt;/h3&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;div class="row"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;button @click="refresh" :disabled="loading"&gt;刷新&lt;/button&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;button @click="refreshWithModules" :disabled="loading"&gt;刷新&lt;/button&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;div class="checks"&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;label&gt;&lt;input type="checkbox" v-model="m.cpu" /&gt; cpu&lt;/label&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;label&gt;&lt;input type="checkbox" v-model="m.memory" /&gt; memory&lt;/label&gt;</span>
@@ -339,6 +345,7 @@
 <span class="cstat-no" title="statement not covered" >        &lt;label&gt;&lt;input type="checkbox" v-model="m.network" /&gt; network&lt;/label&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;label&gt;&lt;input type="checkbox" v-model="m.gpu" /&gt; gpu&lt;/label&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;label&gt;&lt;input type="checkbox" v-model="m.sensor" /&gt; sensor&lt;/label&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;label&gt;&lt;input type="checkbox" v-model="m.power" /&gt; power&lt;/label&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;button @click="refreshWithModules" :disabled="loading"&gt;带参刷新&lt;/button&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;span v-if="loading"&gt;加载中…&lt;/span&gt;</span>
@@ -377,7 +384,7 @@
 <span class="cstat-no" title="statement not covered" >const lastEvent = ref('');</span>
 <span class="cstat-no" title="statement not covered" >const showRaw = ref(false);</span>
 <span class="cstat-no" title="statement not covered" >const rawJson = computed(() =&gt; snap.value ? JSON.stringify(snap.value, null, 2) : '');</span>
-<span class="cstat-no" title="statement not covered" >const m = ref({ cpu: true, memory: true, disk: false, network: false, gpu: false, sensor: false });</span>
+<span class="cstat-no" title="statement not covered" >const m = ref({ cpu: true, memory: true, disk: true, network: true, gpu: true, sensor: true, power: true });</span>
 <span class="cstat-no" title="statement not covered" >const filteredEntries = computed(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  const s: any = snap.value || {};</span>
 <span class="cstat-no" title="statement not covered" >  const out: Record&lt;string, any&gt; = {};</span>
@@ -419,6 +426,7 @@
 <span class="cstat-no" title="statement not covered" >  if (s.network) mods.push('network');</span>
 <span class="cstat-no" title="statement not covered" >  if (s.gpu) mods.push('gpu');</span>
 <span class="cstat-no" title="statement not covered" >  if (s.sensor) mods.push('sensor');</span>
+<span class="cstat-no" title="statement not covered" >  if (s.power) mods.push('power');</span>
 <span class="cstat-no" title="statement not covered" >  const p: SnapshotParams = { modules: mods.length ? mods : undefined };</span>
 <span class="cstat-no" title="statement not covered" >  withTimeout(service.snapshot(p))</span>
 <span class="cstat-no" title="statement not covered" >    .then(r =&gt; { if (my === reqSeq) snap.value = r; })</span>
@@ -440,7 +448,8 @@
 <span class="cstat-no" title="statement not covered" >    await on('metrics', () =&gt; { connected.value = true; lastEvent.value = 'metrics'; });</span>
 <span class="cstat-no" title="statement not covered" >  } catch { /* 非 Tauri 环境 */ }</span>
 <span class="cstat-no" title="statement not covered" >  // 首次拉取</span>
-<span class="cstat-no" title="statement not covered" >  refresh();</span>
+<span class="cstat-no" title="statement not covered" >  // 首次拉取使用所选模块，确保 disk/network/gpu/sensor 等有数据</span>
+<span class="cstat-no" title="statement not covered" >  refreshWithModules();</span>
 <span class="cstat-no" title="statement not covered" >  // 卸载时清理监听</span>
 <span class="cstat-no" title="statement not covered" >  onUnmounted(() =&gt; { for (const u of unsubs) try { u(); } catch {} });</span>
 <span class="cstat-no" title="statement not covered" >});</span>
@@ -466,7 +475,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-23T21:30:03.777Z
+                at 2025-08-24T21:02:49.903Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

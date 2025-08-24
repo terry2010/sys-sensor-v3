@@ -13,6 +13,7 @@
 - `stop()`
 - `query_history(params: { from_ts: number, to_ts: number, modules?: string[], step_ms?: number, agg?: "raw"|"10s"|"1m" })`
 - `subscribe_metrics(params: { enable: boolean })`
+- `verify_metrics()`
 
 ## 2. 事件（Service → UI）
 - `metrics`: `{ ts: number, seq: number, cpu?: {...}, memory?: {...}, ... }`（按启用模块动态裁剪；仅在“事件桥”连接且推流开关启用时发送）
@@ -75,6 +76,75 @@
   },"id":1
 }
 ```
+
+### 3.2 verify_metrics（全部指标核查）
+
+- 说明：并行执行所有注册采集器，返回每个模块的可序列化字段名列表、耗时与错误信息；不写入历史、不触发推送。
+- 典型用途：对照 `doc/metrics-verification.md` 与 `doc/istat-menus-metrics.md` 进行覆盖率核查。
+
+```json
+// verify_metrics
+{ "jsonrpc":"2.0", "method":"verify_metrics", "id": 9 }
+```
+```json
+// verify_metrics response（示例）
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "ok": true,
+    "ts": 1710001111222,
+    "modules": [
+      {
+        "module": "cpu",
+        "ok": true,
+        "elapsed_ms": 42,
+        "field_count": 18,
+        "fields": [
+          "usage_percent",
+          "user_percent",
+          "system_percent",
+          "idle_percent",
+          "uptime_sec",
+          "load_avg_1m"
+        ],
+        "error": null,
+        "notes": ["missing: nice_percent"]
+      },
+      {
+        "module": "memory",
+        "ok": true,
+        "elapsed_ms": 12,
+        "field_count": 6,
+        "fields": ["total_mb", "used_mb"],
+        "error": null,
+        "notes": null
+      },
+      {
+        "module": "gpu",
+        "ok": false,
+        "elapsed_ms": 1500,
+        "field_count": 0,
+        "fields": [],
+        "error": "timeout",
+        "notes": null
+      }
+    ]
+  },
+  "id": 9
+}
+```
+
+- 字段说明：
+  - `ok`: boolean（请求成功标志，恒 true）
+  - `ts`: number（UTC 毫秒时间戳）
+  - `modules[]`: 每个采集模块一项
+    - `module`: string（模块名，如 `cpu`/`memory`/`disk` 等；与 `MetricsRegistry` 对齐）
+    - `ok`: boolean（该模块本次采集是否成功，即有非空 `payload` 且无 `error`）
+    - `elapsed_ms`: number（该模块采集耗时）
+    - `field_count`: number（从 payload 根对象解析得到的一级字段数量）
+    - `fields`: string[]（按字母序排列的一级字段名列表）
+    - `error`: string|null（异常类型与消息，或 `timeout`）
+    - `notes`: string[]|null（非严格校验的提示，便于发现缺口；例如 `missing: nice_percent`）
 ```json
 // hello response
 {
