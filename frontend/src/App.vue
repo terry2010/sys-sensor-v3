@@ -49,6 +49,11 @@
         <div class="kv"><span>CPU Package Temp (°C)</span><span>{{ fmt1(sensorMod.cpu?.package_temp_c) }}</span></div>
         <div class="kv"><span>CPU Core Temps (°C)</span><span>{{ fmtArr1(sensorMod.cpu?.core_temps_c) }}</span></div>
         <div class="kv"><span>CPU Package Power (W)</span><span>{{ fmt1(sensorMod.cpu?.package_power_w) }}</span></div>
+        <div class="kv"><span>System Total Power (W)</span><span>{{ fmt1(sensorMod.system_total_power_w) }}</span></div>
+        <div class="kv"><span>GPU Package Power (W)</span><span>{{ fmt1(sensorMod.gpu?.package_power_w) }}</span></div>
+        <div class="kv"><span>SoC Package Power (W)</span><span>{{ fmt1(sensorMod.soc?.package_power_w) }}</span></div>
+        <div class="kv"><span>Mainboard Temp (°C)</span><span>{{ fmt1(sensorMod.board?.mainboard_temp_c) }}</span></div>
+        <div class="kv"><span>Chipset Temp (°C)</span><span>{{ fmt1(sensorMod.board?.chipset_temp_c) }}</span></div>
         <div class="kv"><span>Fan RPM</span><span>{{ fmtArrInt(sensorMod.fan_rpm) }}</span></div>
         <div class="kv"><span>Fan Count</span><span>{{ sensorMod.fan_count ?? 0 }}</span></div>
         <div class="kv"><span>Temperatures</span><span>{{ (sensorMod.temperatures?.length || 0) }}</span></div>

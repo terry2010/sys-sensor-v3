@@ -129,9 +129,62 @@ export type SnapshotResult = {
       time_to_full_min?: number | null;
       ac_line_online?: boolean | null;
       time_on_battery_sec?: number | null;
+      // 新增：电池温度（摄氏度）
+      temperature_c?: number | null;
+      // 扩展：高级电池指标
+      cycle_count?: number | null;
+      condition?: 'normal' | 'replace_soon' | 'replace_now' | 'unknown' | null;
+      full_charge_capacity_mah?: number | null;
+      design_capacity_mah?: number | null;
+      voltage_mv?: number | null;
+      current_ma?: number | null;
+      power_w?: number | null;
+      manufacturer?: string | null;
+      serial_number?: string | null;
+      manufacture_date?: string | null;
     };
-    adapter?: Record<string, any> | null;
-    ups?: Record<string, any> | null;
+    adapter?: {
+      present?: boolean | null;
+      rated_watts?: number | null;
+      negotiated_watts?: number | null;
+      voltage_mv?: number | null;
+      current_ma?: number | null;
+      is_pd_fast_charge?: boolean | null;
+      charge_mode?: 'charging' | 'maintenance' | 'full' | 'unknown' | null;
+      pd?: {
+        protocol?: string | null; // e.g. 'USB-PD'
+        negotiated_profile?: {
+          voltage_v?: number | null;
+          current_a?: number | null;
+          power_w?: number | null;
+        } | null;
+        caps?: any[]; // 预留：源能力 PDO 表
+      } | null;
+    } | null;
+    ups?: {
+      present?: boolean | null;
+      percentage?: number | null;
+      runtime_min?: number | null;
+      power_source?: 'ac' | 'battery' | 'unknown' | null;
+      input_voltage_v?: number | null;
+      input_frequency_hz?: number | null;
+      load_percent?: number | null;
+    } | null;
+    usb?: {
+      devices: Array<{
+        name?: string | null;
+        pnp_class?: string | null;
+        device_id?: string | null;
+        status?: string | null;
+        description?: string | null;
+      }>;
+      ucsi_controllers?: Array<{
+        name?: string | null;
+        device_id?: string | null;
+        status?: string | null;
+        description?: string | null;
+      }>;
+    } | null;
   };
 };
 

@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Linq;
 using static SystemMonitor.Service.Services.SystemInfo;
 using SystemMonitor.Service.Services.Collectors;
+using static SystemMonitor.Service.Services.Win32Interop;
 
 namespace SystemMonitor.Service.Services
 {
@@ -300,7 +301,9 @@ namespace SystemMonitor.Service.Services
                                     {
                                         var swOne = Stopwatch.StartNew();
                                         var work = Task.Run(() => c.Collect());
-                                        var timeoutMs = string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase) ? 800 : defaultTimeoutMs;
+                                        int timeoutMs = defaultTimeoutMs;
+                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
+                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 700;
                                         var done = await Task.WhenAny(work, Task.Delay(timeoutMs, cts.Token)).ConfigureAwait(false);
                                         if (done == work)
                                         {
@@ -408,6 +411,59 @@ namespace SystemMonitor.Service.Services
                                 if (!filled)
                                 {
                                     payload["disk"] = new { status = "warming_up" };
+                                }
+                            }
+                        }
+                        catch { }
+                        // 若启用了 power 但未采集到，尝试使用缓存；如无，则使用 GetSystemPowerStatus 构造轻量级占位，避免前端全为“—”
+                        try
+                        {
+                            if (enabled.Contains("power") && !payload.ContainsKey("power"))
+                            {
+                                bool filled = false;
+                                lock (lastModules)
+                                {
+                                    if (lastModules.TryGetValue("power", out var cached) && cached != null)
+                                    {
+                                        payload["power"] = cached;
+                                        filled = true;
+                                    }
+                                }
+                                if (!filled)
+                                {
+                                    bool? ac = null; double? pct = null; int? remainMin = null; int? toFullMin = null;
+                                    try
+                                    {
+                                        if (GetSystemPowerStatus(out var sps))
+                                        {
+                                            ac = sps.ACLineStatus == 0 ? false : sps.ACLineStatus == 1 ? true : (bool?)null;
+                                            pct = sps.BatteryLifePercent == 255 ? (double?)null : sps.BatteryLifePercent;
+                                            remainMin = sps.BatteryLifeTime >= 0 ? (int?)Math.Max(0, sps.BatteryLifeTime / 60) : null;
+                                            toFullMin = sps.BatteryFullLifeTime >= 0 ? (int?)Math.Max(0, sps.BatteryFullLifeTime / 60) : null;
+                                        }
+                                    }
+                                    catch { }
+                                    var battery = new
+                                    {
+                                        percentage = pct,
+                                        state = (string?)null,
+                                        time_remaining_min = remainMin,
+                                        time_to_full_min = toFullMin,
+                                        ac_line_online = ac,
+                                        time_on_battery_sec = (int?)null,
+                                        temperature_c = (double?)null,
+                                        cycle_count = (int?)null,
+                                        condition = (string?)null,
+                                        full_charge_capacity_mah = (double?)null,
+                                        design_capacity_mah = (double?)null,
+                                        voltage_mv = (double?)null,
+                                        current_ma = (double?)null,
+                                        power_w = (double?)null,
+                                        manufacturer = (string?)null,
+                                        serial_number = (string?)null,
+                                        manufacture_date = (string?)null,
+                                    };
+                                    payload["power"] = new { battery, adapter = (object?)null, ups = (object?)null, usb = (object?)null };
                                 }
                             }
                         }

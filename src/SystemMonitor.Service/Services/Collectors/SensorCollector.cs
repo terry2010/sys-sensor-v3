@@ -64,6 +64,8 @@ namespace SystemMonitor.Service.Services.Collectors
 
                 // temperatures: [{ key, c }]
                 var temps = new System.Collections.Generic.List<object>();
+                double? aggMainboardC = null;
+                double? aggChipsetC = null;
                 try
                 {
                     foreach (var s in all)
@@ -75,6 +77,31 @@ namespace SystemMonitor.Service.Services.Collectors
                         var key = string.Join("/", new[] { s.hw_type, s.hw_name, s.sensor_name }
                             ).Replace("\\", "/");
                         temps.Add(new { key, c = v.Value });
+
+                        var hwType = (s.hw_type ?? string.Empty).ToLowerInvariant();
+                        var name = (s.sensor_name ?? string.Empty).ToLowerInvariant();
+                        var hwName = (s.hw_name ?? string.Empty).ToLowerInvariant();
+
+                        // 主板温度启发：hw_type 为 motherboard，或名称包含 system/mainboard/motherboard/board/ambient
+                        bool isMainboard = hwType.Contains("motherboard")
+                            || name.Contains("system") || name.Contains("mainboard") || name.Contains("motherboard") || name.Contains("board") || name.Contains("ambient")
+                            || hwName.Contains("motherboard") || hwName.Contains("mainboard");
+                        if (isMainboard)
+                        {
+                            // 取最大或优先包含 system/mainboard 的读数
+                            if (!aggMainboardC.HasValue) aggMainboardC = v.Value;
+                            if (name.Contains("system") || name.Contains("mainboard") || name.Contains("motherboard")) aggMainboardC = v.Value;
+                            else aggMainboardC = Math.Max(aggMainboardC.Value, v.Value);
+                        }
+
+                        // 芯片组/PCH 温度启发：名称包含 pch/chipset/ich/pmic
+                        bool isChipset = name.Contains("pch") || name.Contains("chipset") || name.Contains("ich") || name.Contains("pmic")
+                            || hwName.Contains("pch") || hwName.Contains("chipset");
+                        if (isChipset)
+                        {
+                            if (!aggChipsetC.HasValue) aggChipsetC = v.Value;
+                            else aggChipsetC = Math.Max(aggChipsetC.Value, v.Value);
+                        }
                     }
                 }
                 catch { }
@@ -120,6 +147,10 @@ namespace SystemMonitor.Service.Services.Collectors
 
                 // powers_w: { key: number }
                 var powers = new System.Collections.Generic.Dictionary<string, double>();
+                // 额外聚合：系统总功率/GPU 包功率/SoC 包功率
+                double? aggSystemTotalW = null;
+                double? aggGpuPkgW = null;
+                double? aggSocPkgW = null;
                 try
                 {
                     foreach (var s in all)
@@ -130,6 +161,55 @@ namespace SystemMonitor.Service.Services.Collectors
                         var key = string.Join("/", new[] { s.hw_type, s.hw_name, s.sensor_name }
                             ).Replace("\\", "/");
                         if (!powers.ContainsKey(key)) powers[key] = v.Value;
+
+                        // Heuristics：GPU 包功率
+                        var hwType = (s.hw_type ?? string.Empty).ToLowerInvariant();
+                        var name = (s.sensor_name ?? string.Empty).ToLowerInvariant();
+                        if (hwType.Contains("gpu"))
+                        {
+                            // 优先关键字：package/core/chip，次优：board/total/power
+                            bool high = name.Contains("package") || name.Contains("core") || name.Contains("chip");
+                            bool mid = name.Contains("board") || name.Contains("total") || name == "power" || name.Contains("gpu power");
+                            if (high)
+                            {
+                                aggGpuPkgW = v.Value;
+                            }
+                            else if (!aggGpuPkgW.HasValue && mid)
+                            {
+                                aggGpuPkgW = v.Value;
+                            }
+                            else if (!aggGpuPkgW.HasValue)
+                            {
+                                // 兜底取最大值
+                                aggGpuPkgW = v.Value;
+                            }
+                            else if (v.Value > aggGpuPkgW.Value && !high)
+                            {
+                                // 在未命中 high 的情况下，选择更大值
+                                aggGpuPkgW = v.Value;
+                            }
+                        }
+
+                        // Heuristics：SoC 包功率（部分平台会将 SoC 作为独立硬件或传感器名）
+                        if (hwType.Contains("soc") || name.Contains("soc"))
+                        {
+                            bool high = name.Contains("package") || name.Contains("soc");
+                            if (high)
+                            {
+                                aggSocPkgW = v.Value;
+                            }
+                            else if (!aggSocPkgW.HasValue)
+                            {
+                                aggSocPkgW = v.Value;
+                            }
+                        }
+
+                        // Heuristics：系统总功率（Total/System/Overall/Package+Board 等）
+                        if (name.Contains("total") || name.Contains("overall") || name.Contains("system"))
+                        {
+                            // 取最大 total 类读数
+                            aggSystemTotalW = aggSystemTotalW.HasValue ? Math.Max(aggSystemTotalW.Value, v.Value) : v.Value;
+                        }
                     }
                 }
                 catch { }
@@ -254,6 +334,11 @@ namespace SystemMonitor.Service.Services.Collectors
                         core_temps_c = R1Arr(cores),
                         package_power_w = R1(pkgPower)
                     },
+                    // 新增：聚合功率
+                    system_total_power_w = R1(aggSystemTotalW),
+                    gpu = new { package_power_w = R1(aggGpuPkgW) },
+                    soc = new { package_power_w = R1(aggSocPkgW) },
+                    board = new { mainboard_temp_c = R1(aggMainboardC), chipset_temp_c = R1(aggChipsetC) },
                     fan_rpm = FixRpm(fans),
                     fan_count = fanDetails.Count,
                     temperatures = temps.Count > 0 ? temps.ToArray() : Array.Empty<object>(),

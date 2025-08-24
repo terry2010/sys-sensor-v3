@@ -4,6 +4,16 @@
 
 —
 
+## 进度总览（2025-08-24T20:17:23+08:00）
+
+- [x] 后端基础电源采集（GetSystemPowerStatus）
+- [x] 后端高级电池指标（WMI，含容错与400ms节流）
+- [x] 采集器注册与快照/推流包含 `power`
+- [x] 前端 DTO 扩展 `power.battery/adapter/ups`
+- [x] 前端 PowerPanel 展示关键与高级字段，支持原始 JSON
+- [ ] 适配器/UPS 实数值采集（当前按计划返回 null）
+- [ ] 单元与端到端测试完善
+
 ## 1. 指标范围与字段定义（与指标文档对齐）
 
 模块名：`power`
@@ -113,25 +123,27 @@
 
 ## 5. 前端改动（Tauri + Vue3）
 
-- DTO：`frontend/src/api/dto.ts` 扩展 `SnapshotResult` 增加 `power` 模块类型
-- Store：`frontend/src/stores/metrics.ts` 的 `MetricPoint` 增加 `power?: { battery: ... }`
+- DTO：`frontend/src/api/dto.ts` 扩展 `SnapshotResult` 增加 `power` 模块类型（已完成）
+- Store：`frontend/src/stores/metrics.ts` 的 `MetricPoint` 增加 `power?: { battery: ... }`（已支持基本透传，无需改动）
 - 组件：
   - `SnapshotPanel.vue` 能显示 `power` 原始 JSON（现有通用渲染已支持）
-  - 临时日志：在 `src-tauri/src/main.rs` 订阅 `metrics` 时打印 `power.battery.percentage/state`（联调后注释掉）
+  - 新增 `PowerPanel.vue` 展示电池关键与高级字段，并附 adapter/ups JSON（已完成）
+  - 临时日志：在 `src-tauri/src/main.rs` 订阅 `metrics` 时打印 `power.battery.percentage/state`（未启用，保持计划项）
 
 - 联调：使用 `scripts/dev.ps1` 启动，验证日志与 UI 显示
+  - 当前状态：已联调，`battery.state='ac'`、`ac_line_online=true`，其余高级字段在本机为 null（容错符合预期）
 
 —
 
 ## 6. 开发顺序与里程碑映射
 
-1) 冻结字段（本文档）
-2) 新增 `PowerCollector` + Win32Interop 扩展 + 注册
-3) 反复编译修正直至通过
-4) 新增/完善测试并通过
-5) 前端 DTO/Store/显示与主进程临时打印
-6) `scripts/dev.ps1` 启动联调，确认输出合理
-7) 注释临时打印，重读 `doc/istat-menus-metrics.md`，选择下一项
+1) [x] 冻结字段（本文档）
+2) [x] 新增 `PowerCollector` + Win32Interop 扩展 + 注册
+3) [x] 反复编译修正直至通过
+4) [ ] 新增/完善测试并通过
+5) [x] 前端 DTO/显示（PowerPanel）；[ ] 主进程临时打印
+6) [x] `scripts/dev.ps1` 启动联调，确认输出合理
+7) [ ] 注释临时打印，重读 `doc/istat-menus-metrics.md`，选择下一项
 
 —
 
