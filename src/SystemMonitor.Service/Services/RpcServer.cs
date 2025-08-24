@@ -33,6 +33,22 @@ namespace SystemMonitor.Service.Services
         private static readonly HashSet<string> _supportedCapabilities = new(new[] { "metrics_stream", "burst_mode", "history_query" }, StringComparer.OrdinalIgnoreCase);
         private readonly HistoryStore _store;
         private JsonRpc? _rpc;
+        // 会话级最近模块缓存：用于 snapshot/metrics 之间的回填复用
+        private readonly Dictionary<string, object?> _lastModules = new(StringComparer.OrdinalIgnoreCase);
+        private readonly object _moduleCacheLock = new();
+        private static bool IsWarmupPlaceholder(object? v)
+        {
+            try
+            {
+                if (v == null) return false;
+                var t = v.GetType();
+                var prop = t.GetProperty("status");
+                if (prop == null) return false;
+                var s = prop.GetValue(v) as string;
+                return string.Equals(s, "warming_up", StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        }
         
 
         public RpcServer(ILogger logger, long initialSeq, HistoryStore store, Guid connId)
@@ -50,6 +66,48 @@ namespace SystemMonitor.Service.Services
         public void SetJsonRpc(JsonRpc rpc)
         {
             _rpc = rpc;
+        }
+
+        // 读取会话缓存中的模块值（若存在）
+        public bool TryGetModuleFromCache(string name, out object? val)
+        {
+            lock (_moduleCacheLock)
+            {
+                return _lastModules.TryGetValue(name, out val);
+            }
+        }
+
+        // 写入/更新会话缓存中的某个模块值
+        public void SetModuleCache(string name, object? val)
+        {
+            lock (_moduleCacheLock)
+            {
+                if (val == null) return;
+                if (string.Equals(name, "collectors_diag", StringComparison.OrdinalIgnoreCase)) return;
+                if (string.Equals(name, "gpu_raw", StringComparison.OrdinalIgnoreCase)) return;
+                if (IsWarmupPlaceholder(val)) return;
+                _lastModules[name] = val;
+            }
+        }
+
+        // 批量将 payload 中的模块写入会话缓存（跳过 ts/seq 等非模块字段）
+        public void UpdateModuleCacheFromPayload(IReadOnlyDictionary<string, object?> payload)
+        {
+            lock (_moduleCacheLock)
+            {
+                foreach (var kv in payload)
+                {
+                    var key = kv.Key;
+                    if (string.Equals(key, "ts", StringComparison.OrdinalIgnoreCase) || string.Equals(key, "seq", StringComparison.OrdinalIgnoreCase))
+                        continue;
+                    if (string.Equals(key, "collectors_diag", StringComparison.OrdinalIgnoreCase)) continue;
+                    if (string.Equals(key, "gpu_raw", StringComparison.OrdinalIgnoreCase)) continue;
+                    var val = kv.Value;
+                    if (val == null) continue;
+                    if (IsWarmupPlaceholder(val)) continue;
+                    _lastModules[key] = val;
+                }
+            }
         }
 
         

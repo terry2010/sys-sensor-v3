@@ -167,7 +167,41 @@ namespace SystemMonitor.Service.Services.Collectors
                         catch { }
                     }
                 }
+                // WMI 回退：当性能计数器不可用或总使用率为 0 时，使用 WMI GPUEngine 聚合 usage
+                try
+                {
+                    bool needWmiFallback = adapters.Count == 0 || adapters.Values.All(a => a.Total <= 0.0);
+                    if (needWmiFallback)
+                    {
+                        using var s = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name, UtilizationPercentage FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
+                        foreach (ManagementObject mo in s.Get())
+                        {
+                            try
+                            {
+                                var name = mo["Name"] as string ?? string.Empty;
+                                var utilObj = mo["UtilizationPercentage"]; double util = 0;
+                                if (utilObj != null) double.TryParse(utilObj.ToString(), out util);
+                                if (util <= 0) continue;
 
+                                // 按 LUID 聚合，不把 pid_...engtype_* 当成适配器行
+                                var key = ParseAdapterKeyFromEngineInstance(name) ?? name;
+                                if (string.IsNullOrWhiteSpace(key)) continue;
+                                if (!adapters.TryGetValue(key, out var agg)) agg = new AdapterAgg(key);
+                                agg.Total += util;
+                                var lower = name.ToLowerInvariant();
+                                if (lower.Contains("engtype_3d")) agg.ByEng3D += util;
+                                else if (lower.Contains("engtype_compute")) agg.ByEngCompute += util;
+                                else if (lower.Contains("engtype_copy")) agg.ByEngCopy += util;
+                                else if (lower.Contains("engtype_videodecode")) agg.ByEngVDec += util;
+                                else if (lower.Contains("engtype_videoencode")) agg.ByEngVEnc += util;
+                                else agg.ByEngOther += util;
+                                adapters[key] = agg;
+                            }
+                            catch { }
+                        }
+                    }
+                }
+                catch { }
                 // 2) 读取 VRAM（Dedicated/Shared Usage/Limit）并尝试解析适配器显示名
                 var nameMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 if (_mem.Count > 0)
@@ -206,6 +240,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 double? packagePowerW = null;
                 double? fanRpm = null;
                 double? memControllerLoadPct = null;
+                bool seenIntelGpu = false;
                 var vendorAgg = new Dictionary<string, (double? temp, double? coreClk, double? memClk, double? powerW, double? fanRpm, double? memCtrlLoad)>(StringComparer.OrdinalIgnoreCase)
                 {
                     ["nvidia"] = (null, null, null, null, null, null),
@@ -221,6 +256,7 @@ namespace SystemMonitor.Service.Services.Collectors
                                    : string.Equals(s.hw_type, "GpuAmd", StringComparison.OrdinalIgnoreCase) ? "amd"
                                    : string.Equals(s.hw_type, "GpuIntel", StringComparison.OrdinalIgnoreCase) ? "intel" : null;
                         if (vendor == null) continue;
+                        if (vendor == "intel") seenIntelGpu = true;
 
                         // accumulate per vendor (take max for temp; take max for clocks; sum not needed)
                         var agg = vendorAgg[vendor];
@@ -279,6 +315,29 @@ namespace SystemMonitor.Service.Services.Collectors
                 }
                 catch { }
 
+                // 回退：若 GPU 温度仍为空，尝试从所有传感器中按名称关键字匹配（覆盖 Intel iGPU 温度挂在 CPU/主板下的情况）
+                try
+                {
+                    if (!gpuTemp.HasValue)
+                    {
+                        var all2 = SensorsProvider.Current.DumpAll();
+                        double? found = null;
+                        foreach (var s in all2)
+                        {
+                            if (!string.Equals(s.sensor_type, "Temperature", StringComparison.OrdinalIgnoreCase)) continue;
+                            var name = (s.sensor_name ?? string.Empty).ToLowerInvariant();
+                            // 常见关键词：gpu, graphics, igpu, gt（Intel 图形子系统常见前缀，如 GT0/GT1）
+                            if (name.Contains("gpu") || name.Contains("graphics") || name.Contains("igpu") || name.Contains(" gt"))
+                            {
+                                if (s.value.HasValue)
+                                    found = found.HasValue ? Math.Max(found.Value, s.value.Value) : s.value.Value;
+                            }
+                        }
+                        if (found.HasValue) gpuTemp = found;
+                    }
+                }
+                catch { }
+
                 // iGPU/WMI 回退：若仅有一个适配器且名称/总量为空，尝试用 Win32_VideoController 填充
                 try
                 {
@@ -334,6 +393,27 @@ namespace SystemMonitor.Service.Services.Collectors
                 // DXGI 显存预算（local/non-local） + 静态信息
                 var dxgi = DxgiHelper.GetAdapterBudgets();
                 var dxgiDesc = DxgiHelper.GetAdapterDesc1();
+
+                // 在构造列表前：若仍未得到 GPU 温度且系统存在 Intel GPU（VendorId=0x8086），则用 CPU Package 温度兜底
+                try
+                {
+                    if (!gpuTemp.HasValue)
+                    {
+                        bool hasIntel = false;
+                        try { hasIntel = dxgiDesc.Values.Any(d => d.VendorId == 0x8086); } catch { }
+                        if (!hasIntel) hasIntel = seenIntelGpu;
+                        if (hasIntel)
+                        {
+                            try
+                            {
+                                var t = SystemMonitor.Service.Services.LhmSensors.Instance.Read().pkgTemp;
+                                if (t.HasValue) gpuTemp = t;
+                            }
+                            catch { }
+                        }
+                    }
+                }
+                catch { }
 
                 // 4) 构造返回对象
                 var list = new List<object>();
@@ -413,14 +493,31 @@ namespace SystemMonitor.Service.Services.Collectors
                     idx++;
                 }
 
-                // 活跃适配器（启发式：usage 最大且 >5%；否则回退到第一个）
+                // 活跃适配器（启发式：优先选择“真实适配器”而非引擎/进程行）
                 int? activeIdx = null; string? activeName = null;
                 try
                 {
                     if (list.Count > 0)
                     {
                         var arr = list.Select((o, i) => new { obj = o, i }).ToArray();
-                        var max = arr
+                        // 标记真实适配器：名称含 luid_ 或 有任一显存字段或有厂商ID
+                        bool IsReal(object o)
+                        {
+                            try
+                            {
+                                var name = (string?)o_get(o, "name") ?? string.Empty;
+                                if (name.IndexOf("luid_", StringComparison.OrdinalIgnoreCase) >= 0) return true;
+                                if (o_get(o, "vendor_id") != null) return true;
+                                if (o_get(o, "vram_dedicated_used_mb") != null) return true;
+                                if (o_get(o, "vram_shared_used_mb") != null) return true;
+                                return false;
+                            }
+                            catch { return false; }
+                        }
+
+                        var real = arr.Where(x => IsReal(x.obj)).ToArray();
+                        var pickFrom = real.Length > 0 ? real : arr;
+                        var max = pickFrom
                             .Select(x => new { x.i, usage = (double?)o_get(x.obj, "usage_percent"), name = (string?)o_get(x.obj, "name") })
                             .OrderByDescending(x => x.usage ?? -1)
                             .FirstOrDefault();
@@ -432,8 +529,17 @@ namespace SystemMonitor.Service.Services.Collectors
                         else
                         {
                             // 回退：选择第一个适配器
-                            activeIdx = 0;
-                            activeName = (string?)o_get(list[0], "name");
+                            var first = pickFrom.FirstOrDefault();
+                            if (first != null)
+                            {
+                                activeIdx = first.i;
+                                activeName = (string?)o_get(first.obj, "name");
+                            }
+                            else
+                            {
+                                activeIdx = 0;
+                                activeName = (string?)o_get(list[0], "name");
+                            }
                         }
                     }
                 }
@@ -459,6 +565,69 @@ namespace SystemMonitor.Service.Services.Collectors
                             })
                             .ToArray();
                         if (items.Length > 0) topProcs = items;
+                    }
+                }
+                catch { }
+
+                // WMI 回退：Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine
+                // 某些会话/驱动下性能计数器实例不可见，但 WMI 格式化类可用
+                try
+                {
+                    if (topProcs == null)
+                    {
+                        var wmiAgg = new Dictionary<int, (double total, double vdec, double venc)>();
+                        using var s = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name, UtilizationPercentage FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
+                        foreach (ManagementObject mo in s.Get())
+                        {
+                            try
+                            {
+                                var name = mo["Name"] as string ?? string.Empty;
+                                var utilObj = mo["UtilizationPercentage"]; double util = 0;
+                                if (utilObj != null) double.TryParse(utilObj.ToString(), out util);
+                                if (util <= 0) continue;
+                                // 解析 pid：兼容 "pid 1234" 或 "pid_1234"
+                                int pid = -1;
+                                foreach (var part in name.Split(','))
+                                {
+                                    var t = part.Trim();
+                                    if (t.StartsWith("pid ", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        var num = t.Substring(4).Trim();
+                                        if (int.TryParse(num, out var p)) { pid = p; break; }
+                                    }
+                                    else if (t.StartsWith("pid_", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        var num = t.Substring(4).Trim();
+                                        if (int.TryParse(num, out var p)) { pid = p; break; }
+                                    }
+                                }
+                                if (pid <= 0) continue;
+                                var lower = name.ToLowerInvariant();
+                                var cur = wmiAgg.TryGetValue(pid, out var v) ? v : (0, 0, 0);
+                                cur.total += util;
+                                if (lower.Contains("engtype_videodecode")) cur.vdec += util;
+                                if (lower.Contains("engtype_videoencode")) cur.venc += util;
+                                wmiAgg[pid] = cur;
+                            }
+                            catch { }
+                        }
+                        if (wmiAgg.Count > 0)
+                        {
+                            var items = wmiAgg
+                                .Select(kv => new { pid = kv.Key, kv.Value.total, kv.Value.vdec, kv.Value.venc })
+                                .OrderByDescending(x => x.total)
+                                .Take(5)
+                                .Select(x => new
+                                {
+                                    pid = x.pid,
+                                    name = SafeProcName(x.pid),
+                                    usage_percent = Math.Clamp(x.total, 0.0, 100.0),
+                                    video_decode_util_percent = x.vdec > 0 ? x.vdec : (double?)null,
+                                    video_encode_util_percent = x.venc > 0 ? x.venc : (double?)null
+                                })
+                                .ToArray();
+                            if (items.Length > 0) topProcs = items;
+                        }
                     }
                 }
                 catch { }
@@ -644,10 +813,27 @@ namespace SystemMonitor.Service.Services.Collectors
             // 典型："engtype_3D_0, pid 1234, luid_0x000..._0x000"
             try
             {
+                // 先直接在整串里查找 "luid_"
+                int i = inst.IndexOf("luid_", StringComparison.OrdinalIgnoreCase);
+                if (i >= 0)
+                {
+                    // 结束位置：优先空格/逗号/括号，否则到结尾
+                    int end = inst.Length;
+                    int sp = inst.IndexOf(' ', i);
+                    if (sp >= 0) end = Math.Min(end, sp);
+                    int cm = inst.IndexOf(',', i);
+                    if (cm >= 0) end = Math.Min(end, cm);
+                    int rb = inst.IndexOf(')', i);
+                    if (rb >= 0) end = Math.Min(end, rb);
+                    var key = inst.Substring(i, end - i).Trim();
+                    return NormalizeLuidKey(key);
+                }
+
+                // 回退：按逗号/空格分割再找 token
                 var parts = inst.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 var luid = parts.FirstOrDefault(p => p.StartsWith("luid_", StringComparison.OrdinalIgnoreCase));
-                var key = string.IsNullOrWhiteSpace(luid) ? inst : luid;
-                return NormalizeLuidKey(key);
+                var key2 = string.IsNullOrWhiteSpace(luid) ? inst : luid;
+                return NormalizeLuidKey(key2);
             }
             catch { return inst; }
         }

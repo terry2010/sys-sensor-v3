@@ -218,10 +218,16 @@ namespace SystemMonitor.Service.Services
                 var consecutiveErrors = 0;
                 // 故障注入计数（仅当前会话内生效）
                 int simCount = 0; bool simTriggered = false;
-                // 会话内模块级缓存：用于超时回退
-                var lastModules = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+                // 移除本地 lastModules，统一使用 rpcServer 的会话缓存（在 RpcServer 中实现）
                 // 会话内采集器统计：用于首页观测
                 var stats = new Dictionary<string, CollectorStat>(StringComparer.OrdinalIgnoreCase);
+                // 自适应超时：跟踪连续超时次数
+                var consecTimeouts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                // 救火采集抑制：记录最近一次救火时间，避免频繁触发
+                var lastRescueAt = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+                // 避免救火与原始采集对同一模块并发：记录救火进行中模块
+                var rescueInFlight = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                int pushTick = 0;
                 while (!cts.Token.IsCancellationRequested)
                 {
                     try
@@ -267,7 +273,7 @@ namespace SystemMonitor.Service.Services
                                 if (val != null)
                                 {
                                     payload[c.Name] = val;
-                                    lock (lastModules) { lastModules[c.Name] = val; }
+                                    rpcServer.SetModuleCache(c.Name, val);
                                 }
                                 if (swOne.ElapsedMilliseconds > 200)
                                 {
@@ -302,9 +308,25 @@ namespace SystemMonitor.Service.Services
                                         var swOne = Stopwatch.StartNew();
                                         var work = Task.Run(() => c.Collect());
                                         int timeoutMs = defaultTimeoutMs;
-                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
-                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 700;
-                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
+                                        // 基础阈值：根据观测 p95 提升，减少常态超时
+                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 900;
+                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 1500;
+                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 2000;
+                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = 1200;
+                                        // 自适应：若该模块连续超时达到阈值，则临时提升超时以抓到首次数据
+                                        int ct;
+                                        lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct); }
+                                        if (ct >= 2)
+                                        {
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 2000);
+                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1500);
+                                        }
+                                        // 亦可在会话刚开始的前几次推送稍微放宽
+                                        if (pushTick < 3)
+                                        {
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1800);
+                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
+                                        }
                                         var done = await Task.WhenAny(work, Task.Delay(timeoutMs, cts.Token)).ConfigureAwait(false);
                                         if (done == work)
                                         {
@@ -313,8 +335,10 @@ namespace SystemMonitor.Service.Services
                                             if (val != null)
                                             {
                                                 lock (payload) { payload[c.Name] = val; }
-                                                lock (lastModules) { lastModules[c.Name] = val; }
+                                                rpcServer.SetModuleCache(c.Name, val);
                                             }
+                                            // 成功则重置连续超时计数
+                                            lock (consecTimeouts) { consecTimeouts[c.Name] = 0; }
                                             if (swOne.ElapsedMilliseconds > 200)
                                             {
                                                 _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (async)", c.Name, swOne.ElapsedMilliseconds);
@@ -326,12 +350,77 @@ namespace SystemMonitor.Service.Services
                                         else
                                         {
                                             _logger.LogWarning("collector timeout: {Name} exceeded {Timeout}ms, use cached value if any", c.Name, timeoutMs);
-                                            lock (lastModules)
+                                            if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
                                             {
-                                                if (lastModules.TryGetValue(c.Name, out var cached) && cached != null)
+                                                lock (payload) { payload[c.Name] = cached; }
+                                            }
+                                            // 若连续超时较多，触发一次救火采集（更大超时），尝试播种缓存
+                                            int ct2; long nowTs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                                            lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct2); }
+                                            bool shouldRescue = ct2 >= 3;
+                                            if (shouldRescue)
+                                            {
+                                                bool allowed = false;
+                                                lock (lastRescueAt)
                                                 {
-                                                    lock (payload) { payload[c.Name] = cached; }
+                                                    lastRescueAt.TryGetValue(c.Name, out var lastTs);
+                                                    if (lastTs == 0 || nowTs - lastTs >= 5000) // 同一模块5秒内最多一次
+                                                    {
+                                                        lastRescueAt[c.Name] = nowTs;
+                                                        allowed = true;
+                                                    }
                                                 }
+                                                if (allowed)
+                                                {
+                                                    bool doRescue = false;
+                                                    lock (rescueInFlight)
+                                                    {
+                                                        if (!rescueInFlight.Contains(c.Name))
+                                                        {
+                                                            rescueInFlight.Add(c.Name);
+                                                            doRescue = true;
+                                                        }
+                                                    }
+                                                    if (doRescue)
+                                                    {
+                                                        int rescueTimeout = timeoutMs;
+                                                        if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 2600);
+                                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 2000);
+                                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1400);
+                                                        try
+                                                        {
+                                                            _logger.LogWarning("collector rescue: {Name} try with extended timeout {Timeout}ms", c.Name, rescueTimeout);
+                                                            var rescueTask = Task.Run(() => c.Collect());
+                                                            var rescueDone = await Task.WhenAny(rescueTask, Task.Delay(rescueTimeout, cts.Token)).ConfigureAwait(false);
+                                                            if (rescueDone == rescueTask)
+                                                            {
+                                                                var val2 = await rescueTask.ConfigureAwait(false);
+                                                                if (val2 != null)
+                                                                {
+                                                                    lock (payload) { payload[c.Name] = val2; }
+                                                                    rpcServer.SetModuleCache(c.Name, val2);
+                                                                    lock (consecTimeouts) { consecTimeouts[c.Name] = 0; }
+                                                                    _logger.LogInformation("collector rescue success: {Name}", c.Name);
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                _logger.LogWarning("collector rescue timeout: {Name} exceeded {Timeout}ms", c.Name, rescueTimeout);
+                                                            }
+                                                        }
+                                                        catch { /* ignore rescue errors */ }
+                                                        finally
+                                                        {
+                                                            lock (rescueInFlight) { rescueInFlight.Remove(c.Name); }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            // 递增连续超时计数
+                                            lock (consecTimeouts)
+                                            {
+                                                consecTimeouts.TryGetValue(c.Name, out var n);
+                                                consecTimeouts[c.Name] = n + 1;
                                             }
                                             var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
                                             st.AddTimeout();
@@ -395,19 +484,40 @@ namespace SystemMonitor.Service.Services
                             }
                         }
                         catch { }
+                        // 若启用了 gpu 且已采集到，将其克隆到 gpu_raw 方便前端首页直接展示 JSON
+                        try
+                        {
+                            if (enabled.Contains("gpu") && payload.ContainsKey("gpu"))
+                            {
+                                payload["gpu_raw"] = payload["gpu"]; // 引用同一对象，避免额外序列化成本
+                            }
+                        }
+                        catch { }
+
+                        // 若启用了 gpu 但未采集到，尝试使用缓存（避免快照/首页缺 gpu）
+                        try
+                        {
+                            if (enabled.Contains("gpu") && !payload.ContainsKey("gpu"))
+                            {
+                                if (rpcServer.TryGetModuleFromCache("gpu", out var cached) && cached != null)
+                                {
+                                    payload["gpu"] = cached;
+                                    payload["gpu_raw"] = cached;
+                                }
+                            }
+                        }
+                        catch { }
+
                         // 若启用了 disk 但未采集到，尝试使用缓存，否则填充占位
                         try
                         {
                             if (enabled.Contains("disk") && !payload.ContainsKey("disk"))
                             {
                                 bool filled = false;
-                                lock (lastModules)
+                                if (rpcServer.TryGetModuleFromCache("disk", out var cached) && cached != null)
                                 {
-                                    if (lastModules.TryGetValue("disk", out var cached) && cached != null)
-                                    {
-                                        payload["disk"] = cached;
-                                        filled = true;
-                                    }
+                                    payload["disk"] = cached;
+                                    filled = true;
                                 }
                                 if (!filled)
                                 {
@@ -422,13 +532,10 @@ namespace SystemMonitor.Service.Services
                             if (enabled.Contains("power") && !payload.ContainsKey("power"))
                             {
                                 bool filled = false;
-                                lock (lastModules)
+                                if (rpcServer.TryGetModuleFromCache("power", out var cached) && cached != null)
                                 {
-                                    if (lastModules.TryGetValue("power", out var cached) && cached != null)
-                                    {
-                                        payload["power"] = cached;
-                                        filled = true;
-                                    }
+                                    payload["power"] = cached;
+                                    filled = true;
                                 }
                                 if (!filled)
                                 {
@@ -485,19 +592,11 @@ namespace SystemMonitor.Service.Services
                         // 推送成功后，刷新会话缓存
                         try
                         {
-                            lock (lastModules)
-                            {
-                                foreach (var kv in payload)
-                                {
-                                    if (kv.Key is string key && !string.Equals(key, "ts", StringComparison.OrdinalIgnoreCase) && !string.Equals(key, "seq", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        lastModules[key] = kv.Value;
-                                    }
-                                }
-                            }
+                            rpcServer.UpdateModuleCacheFromPayload(payload.ToDictionary(k => k.Key, v => v.Value));
                         }
                         catch { }
                         var pushed = rpcServer.IncrementMetricsCount();
+                        pushTick++;
                         if (logEvery > 0 && pushed % logEvery == 0)
                         {
                             _logger.LogInformation("metrics 推送累计: {Count}", pushed);

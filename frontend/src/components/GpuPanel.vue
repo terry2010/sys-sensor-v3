@@ -4,6 +4,15 @@
     <div class="sub">Windows 性能计数器 + LHM（若可用）</div>
     <div class="kv"><span>Active</span><span>{{ activeName || '—' }}</span></div>
     <div class="kv"><span>Temperature (°C)</span><span>{{ fmt1(temperatureC) }}</span></div>
+    <div class="kv"><span>GPU Usage</span><span>{{ fmt1(overallGpuUsage) }}</span></div>
+    <div class="kv"><span>Memory Usage</span><span>
+      <template v-if="overallMemTotalMB > 0">
+        {{ fmtMB(overallMemUsedMB) }} / {{ fmtMB(overallMemTotalMB) }} ({{ fmt1(overallMemPercent) }})
+      </template>
+      <template v-else>
+        {{ fmtMB(overallMemUsedMB) }}
+      </template>
+    </span></div>
     <table class="tbl" v-if="adapters.length">
       <thead>
         <tr>
@@ -99,6 +108,11 @@
       <div class="kv"><span>Adapter Compatibility</span><span>{{ activeStatic?.adapter_compatibility ?? '—' }}</span></div>
     </div>
     <div v-else>—</div>
+
+    <details style="margin-top:12px">
+      <summary style="cursor:pointer">gpu_raw JSON（调试）</summary>
+      <pre style="max-height:240px; overflow:auto; background:#fafafa; padding:8px; border:1px solid #eee; border-radius:4px">{{ prettyJson(gpuRaw) }}</pre>
+    </details>
   </div>
 </template>
 
@@ -127,6 +141,7 @@ const activeAdapter = computed<any | null>(() => {
   return i >= 0 && i < arr.length ? arr[i] : null;
 });
 const activeStatic = computed<any | null>(() => gpu.value?.active_adapter_static || null);
+const gpuRaw = computed<any | null>(() => (metrics.latest as any)?.gpu_raw ?? null);
 
 const fmt1 = (v: any) => (typeof v === 'number' && isFinite(v)) ? v.toFixed(1) : (v == null ? '—' : String(v));
 const fmtMB = (v: any) => (typeof v === 'number' && isFinite(v)) ? `${Math.max(0, Math.round(v))} MB` : (v == null ? '—' : String(v));
@@ -136,6 +151,9 @@ const sumMB = (a: any, b: any) => {
   return x + y;
 };
 const fmtHex = (v: any) => (typeof v === 'number' && isFinite(v)) ? `0x${v.toString(16).toUpperCase()}` : (v == null ? '—' : String(v));
+const prettyJson = (v: any) => {
+  try { return v == null ? '—' : JSON.stringify(v, null, 2); } catch { return String(v); }
+};
 
 // temperature: 优先活跃适配器的 core 温度，否则取所有适配器最大值
 const temperatureC = computed<number | null>(() => {
@@ -152,6 +170,41 @@ const temperatureC = computed<number | null>(() => {
     if (typeof v === 'number') max = max == null ? v : Math.max(max, v);
   }
   return max;
+});
+
+// 总体 GPU 占用率：优先活跃适配器 usage_percent；否则取全局最大值
+const overallGpuUsage = computed<number | null>(() => {
+  const arr = adapters.value;
+  if (!arr.length) return null;
+  const act = activeAdapter.value;
+  const v = act?.usage_percent;
+  if (typeof v === 'number' && isFinite(v)) return v;
+  let max: number | null = null;
+  for (const a of arr) {
+    const u = a?.usage_percent;
+    if (typeof u === 'number' && isFinite(u)) max = max == null ? u : Math.max(max, u);
+  }
+  return max;
+});
+
+// 总体显存占用：活跃适配器 dedicated+shared 的已用/总量
+const overallMemUsedMB = computed<number>(() => {
+  const a = activeAdapter.value;
+  const used = sumMB(a?.vram_dedicated_used_mb, a?.vram_shared_used_mb);
+  return used;
+});
+const overallMemTotalMB = computed<number>(() => {
+  const a = activeAdapter.value;
+  const tot = sumMB(a?.vram_dedicated_total_mb, a?.vram_shared_total_mb);
+  return tot;
+});
+const overallMemPercent = computed<number | null>(() => {
+  const tot = overallMemTotalMB.value;
+  const used = overallMemUsedMB.value;
+  if (typeof tot === 'number' && tot > 0 && typeof used === 'number') {
+    return Math.max(0, Math.min(100, (used / tot) * 100));
+  }
+  return null;
 });
 </script>
 

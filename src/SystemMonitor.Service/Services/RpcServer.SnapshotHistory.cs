@@ -53,17 +53,20 @@ namespace SystemMonitor.Service.Services
             var ts = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             // 规范化模块名（mem -> memory），未指定则默认 cpu/memory
             HashSet<string> want;
+            bool explicitModules;
             if (p?.modules != null && p.modules.Length > 0)
             {
                 want = new HashSet<string>(p.modules.Select(m => (m ?? string.Empty).Trim().ToLowerInvariant() == "mem" ? "memory" : (m ?? string.Empty).Trim()), StringComparer.OrdinalIgnoreCase);
+                explicitModules = true;
             }
             else
             {
                 want = new HashSet<string>(new[] { "cpu", "memory" }, StringComparer.OrdinalIgnoreCase);
+                explicitModules = false;
             }
             var payload = new Dictionary<string, object?> { ["ts"] = ts };
-            // 高频场景：直接走极简路径，避免任何重型采集器与系统调用
-            var highFreq = want.Contains("disk") || want.Count > 2;
+            // 高频场景：仅当未显式传入 modules 时启用快速路径，避免首页 snapshot 丢失数据
+            var highFreq = !explicitModules && (want.Contains("disk") || want.Count > 2);
             if (highFreq)
             {
                 // 仅在请求包含 disk 时返回占位，其他模块在高频下省略以提升吞吐
@@ -99,8 +102,8 @@ namespace SystemMonitor.Service.Services
                 taskByName[c.Name] = t;
             }
             // 第一阶段：全局预算
-            // 采用较充裕预算
-            var budgetMs = 150;
+            // 显式请求模块时提高预算，尽量返回数据
+            var budgetMs = explicitModules ? 700 : 150;
             var all = Task.WhenAll(tasks);
             var done = await Task.WhenAny(all, Task.Delay(budgetMs)).ConfigureAwait(false);
             foreach (var t in tasks)
@@ -116,8 +119,8 @@ namespace SystemMonitor.Service.Services
                 }
             }
             // 第二阶段：关键模块兜底等待（cpu/memory）
-            var critical = new[] { "cpu", "memory" };
-            var extraWaitMs = 250;
+            var critical = explicitModules ? want.ToArray() : new[] { "cpu", "memory" };
+            var extraWaitMs = explicitModules ? 600 : 250;
             var deadline = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + extraWaitMs;
             foreach (var key in critical)
             {
@@ -188,6 +191,91 @@ namespace SystemMonitor.Service.Services
             }
             catch { /* ignore quick memory fallback error */ }
             _logger.LogInformation("snapshot called, modules={Modules}", p?.modules == null ? "*" : string.Join(',', p.modules));
+            // 对于显式请求但仍未返回的非关键模块，填充轻量级占位，避免前端完全缺字段
+            if (explicitModules)
+            {
+                // 先尝试用会话缓存回填，再退回 warming_up
+                try
+                {
+                    if (want.Contains("disk") && !payload.ContainsKey("disk"))
+                    {
+                        if (!TryGetModuleFromCache("disk", out var cached) || cached == null) payload["disk"] = new { status = "warming_up" }; else payload["disk"] = cached;
+                    }
+                }
+                catch { }
+                try
+                {
+                    if (want.Contains("network") && !payload.ContainsKey("network"))
+                    {
+                        if (!TryGetModuleFromCache("network", out var cached) || cached == null) payload["network"] = new { status = "warming_up" }; else payload["network"] = cached;
+                    }
+                }
+                catch { }
+                try
+                {
+                    if (want.Contains("gpu") && !payload.ContainsKey("gpu"))
+                    {
+                        if (!TryGetModuleFromCache("gpu", out var cached) || cached == null) payload["gpu"] = new { status = "warming_up" }; else payload["gpu"] = cached;
+                    }
+                }
+                catch { }
+                try
+                {
+                    if (want.Contains("sensor") && !payload.ContainsKey("sensor"))
+                    {
+                        if (!TryGetModuleFromCache("sensor", out var cached) || cached == null) payload["sensor"] = new { status = "warming_up" }; else payload["sensor"] = cached;
+                    }
+                }
+                catch { }
+                try
+                {
+                    if (want.Contains("power") && !payload.ContainsKey("power"))
+                    {
+                        if (TryGetModuleFromCache("power", out var cached) && cached != null)
+                        {
+                            payload["power"] = cached;
+                        }
+                        else
+                        {
+                            // 轻量回退：直接读取系统电源状态，提供可用的最小电池/AC 信息
+                            bool? ac = null; double? pct = null; int? remainMin = null; int? toFullMin = null;
+                            try
+                            {
+                                if (Win32Interop.GetSystemPowerStatus(out var sps))
+                                {
+                                    ac = sps.ACLineStatus == 0 ? false : sps.ACLineStatus == 1 ? true : (bool?)null;
+                                    pct = sps.BatteryLifePercent == 255 ? (double?)null : sps.BatteryLifePercent;
+                                    remainMin = sps.BatteryLifeTime >= 0 ? (int?)Math.Max(0, sps.BatteryLifeTime / 60) : null;
+                                    toFullMin = sps.BatteryFullLifeTime >= 0 ? (int?)Math.Max(0, sps.BatteryFullLifeTime / 60) : null;
+                                }
+                            }
+                            catch { }
+                            var battery = new
+                            {
+                                percentage = pct,
+                                state = (string?)null,
+                                time_remaining_min = remainMin,
+                                time_to_full_min = toFullMin,
+                                ac_line_online = ac,
+                                time_on_battery_sec = (int?)null,
+                                temperature_c = (double?)null,
+                                cycle_count = (int?)null,
+                                condition = (string?)null,
+                                full_charge_capacity_mah = (double?)null,
+                                design_capacity_mah = (double?)null,
+                                voltage_mv = (double?)null,
+                                current_ma = (double?)null,
+                                power_w = (double?)null,
+                                manufacturer = (string?)null,
+                                serial_number = (string?)null,
+                                manufacture_date = (string?)null,
+                            };
+                            payload["power"] = new { battery, adapter = (object?)null, ups = (object?)null, usb = (object?)null };
+                        }
+                    }
+                }
+                catch { }
+            }
             return payload;
         }
 

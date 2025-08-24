@@ -1861,3 +1861,316 @@
 1756061791308 [INFO] bridge hello ok
 1756061791330 [INFO] bridge subscribe(init) ack ok=true
 1756061800151 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756062330878 [INFO] bridge hello ok
+1756062330902 [INFO] bridge subscribe(init) ack ok=true
+1756062341518 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1756062516633 [INFO] bridge hello ok
+1756062516655 [INFO] bridge subscribe(init) ack ok=true
+1756062536764 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756062537084 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756062682104 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756062682106 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756062683109 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756062684123 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756062850492 [INFO] bridge hello ok
+1756062850521 [INFO] bridge subscribe(init) ack ok=true
+1756062862293 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756063256794 [INFO] bridge hello ok
+1756063256838 [INFO] bridge subscribe(init) ack ok=true
+1756063282758 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1756063566335 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756063566338 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756063567341 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756063755534 [INFO] bridge hello ok
+1756063755621 [INFO] bridge subscribe(init) ack ok=true
+1756063779616 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756064034830 [INFO] bridge hello ok
+1756064034873 [INFO] bridge subscribe(init) ack ok=true
+1756064050579 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756064792568 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756064793570 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756064821011 [INFO] bridge hello ok
+1756064821054 [INFO] bridge subscribe(init) ack ok=true
+1756064833050 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756065074954 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756065074961 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065075963 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065076967 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065102559 [INFO] bridge hello ok
+1756065102576 [INFO] bridge subscribe(init) ack ok=true
+1756065112220 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756065346787 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756065391367 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065392370 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065424773 [INFO] bridge hello ok
+1756065424798 [INFO] bridge subscribe(init) ack ok=true
+1756065445553 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756065724702 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756065724703 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065725705 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756065754639 [INFO] bridge hello ok
+1756065754691 [INFO] bridge subscribe(init) ack ok=true
+1756065769666 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756066227252 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756066227254 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756066228255 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756066286385 [INFO] bridge hello ok
+1756066286411 [INFO] bridge subscribe(init) ack ok=true
+1756066306084 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756066375092 [INFO] bridge hello ok
+1756066375121 [INFO] bridge subscribe(init) ack ok=true
+1756066558400 [INFO] bridge hello ok
+1756066558482 [INFO] bridge subscribe(init) ack ok=true
+1756066581343 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756066937043 [ERROR] rpc_call query_history failed: 管道已结束。 (os error 109)
+1756066937068 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756066938134 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756066939149 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756066996785 [INFO] bridge hello ok
+1756066996843 [INFO] bridge subscribe(init) ack ok=true
+1756067020953 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756067250092 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067255205 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067260115 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067260468 [WARN] bridge disconnected: 所有的管道范例都在使用中。 (os error 231)
+1756067260474 [ERROR] rpc_call query_history failed: 管道已结束。 (os error 109)
+1756067261470 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067262486 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067263501 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067264504 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067265104 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067265516 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067265750 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067266522 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067267566 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067268582 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067269643 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067270138 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067270675 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067271684 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067272694 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067273727 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067274744 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067275102 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067275748 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067276761 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067277778 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067278814 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067279826 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067280106 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067280859 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067281903 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067282920 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067283960 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067284972 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067285097 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067285986 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067287018 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067288046 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067289067 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067290071 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067290181 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067291152 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067292159 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067293164 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067294203 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067295073 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067295208 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067295787 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067296241 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067297250 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067298256 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067299273 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067300081 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067300281 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067301310 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067302336 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067303342 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067304471 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067305101 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067305479 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067306495 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067307504 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067308533 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067309548 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067310136 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067310553 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067311563 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067312568 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067313602 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067314606 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067315127 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067315772 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067316774 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067317795 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067318798 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067319804 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067320098 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067320815 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067321819 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067322824 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067323855 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067324871 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067325122 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067325904 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067326042 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067326912 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067327918 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067328934 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067329995 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067330123 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067331024 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067332033 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067333065 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067334092 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067335105 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067335144 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067336169 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067337211 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067338279 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067339311 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067340150 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067340341 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067341348 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067342405 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067343417 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067344429 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067345121 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067345438 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067346475 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067347565 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067348571 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067349575 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067350240 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067350590 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067351619 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067352668 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067353746 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067354763 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067355128 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067355783 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067355817 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067356805 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067357811 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067358814 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067359860 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067360189 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067360881 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067361902 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067362925 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067363938 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067364951 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067365087 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067366042 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067367066 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067368072 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067369107 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067370282 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067370321 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067371466 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067372599 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067373603 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067374634 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067375094 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067375675 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067376680 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067377729 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067378860 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067379887 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067380111 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067380901 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067381920 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067382971 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067384046 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067385051 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067385136 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067385764 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067386099 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067387172 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067388198 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067389336 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067390074 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067390352 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067391360 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067392375 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067393395 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067394417 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067395204 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067395468 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067396492 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067397515 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067398531 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067399544 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067400109 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067400560 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067401566 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067402582 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067403586 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067404657 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067405088 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067405668 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067406682 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067407717 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067408769 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067409898 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067410157 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067410906 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067411924 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067412961 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067413996 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067415027 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067415165 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067415873 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067416113 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067417127 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067418141 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067419145 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067420145 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067420201 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067421324 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067422335 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067423347 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067424545 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067425184 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067425564 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067426585 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067427663 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067428671 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067429688 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067430135 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067430720 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067431759 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067432817 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067434044 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067435152 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067435193 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067436155 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067437161 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067438190 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067439195 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067440195 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067440282 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067441358 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067442363 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067443378 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067444384 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067445130 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067445397 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067445814 [ERROR] rpc_call snapshot failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067446405 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067447420 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067448433 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067449435 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067450103 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067450440 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067451451 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067453059 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067454068 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067455111 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067455153 [ERROR] rpc_call query_history failed: open named pipe \\.\pipe\sys_sensor_v3.rpc
+1756067456122 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067457130 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067458180 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756067510706 [INFO] bridge hello ok
+1756067510785 [INFO] bridge subscribe(init) ack ok=true
+1756067526902 [INFO] bridge subscribe(toggle enable=true) ack ok=false

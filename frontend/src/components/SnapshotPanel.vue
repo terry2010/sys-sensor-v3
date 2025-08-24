@@ -2,7 +2,7 @@
   <div class="card">
     <h3>Snapshot</h3>
     <div class="row">
-      <button @click="refresh" :disabled="loading">刷新</button>
+      <button @click="refreshWithModules" :disabled="loading">刷新</button>
       <div class="checks">
         <label><input type="checkbox" v-model="m.cpu" /> cpu</label>
         <label><input type="checkbox" v-model="m.memory" /> memory</label>
@@ -49,7 +49,7 @@ const connected = ref(false);
 const lastEvent = ref('');
 const showRaw = ref(false);
 const rawJson = computed(() => snap.value ? JSON.stringify(snap.value, null, 2) : '');
-const m = ref({ cpu: true, memory: true, disk: false, network: false, gpu: false, sensor: false, power: true });
+const m = ref({ cpu: true, memory: true, disk: true, network: true, gpu: true, sensor: true, power: true });
 const filteredEntries = computed(() => {
   const s: any = snap.value || {};
   const out: Record<string, any> = {};
@@ -113,7 +113,8 @@ onMounted(async () => {
     await on('metrics', () => { connected.value = true; lastEvent.value = 'metrics'; });
   } catch { /* 非 Tauri 环境 */ }
   // 首次拉取
-  refresh();
+  // 首次拉取使用所选模块，确保 disk/network/gpu/sensor 等有数据
+  refreshWithModules();
   // 卸载时清理监听
   onUnmounted(() => { for (const u of unsubs) try { u(); } catch {} });
 });
