@@ -5,6 +5,34 @@ export type HelloResult = {
   session_id: string;
 };
 
+// peripherals DTO
+export type PeripheralBattery = {
+  // 核心字段（可能为 null，视后端读取情况）
+  battery_percent?: number | null;
+  battery_mv?: number | null;
+  charging?: boolean | null;
+  // 连接/来源信息
+  connection?: 'ble' | 'bt' | 'usb' | 'hid' | 'rf' | string | null;
+  source?: 'ble_gatt' | 'hid_service' | string | null;
+  // 标识与元数据（可选）
+  name?: string | null;
+  manufacturer?: string | null;
+  model?: string | null;
+  serial_number?: string | null;
+  // BLE/GATT 相关扩展（可选）
+  interface_path?: string | null;
+  address?: string | null; // e.g. BLE MAC 或设备地址
+  service_uuid?: string | null;
+  characteristic_uuid?: string | null;
+  rssi?: number | null;
+  tx_power_dbm?: number | null;
+  // 时间戳/缓存
+  last_seen_ts?: number | null;
+  ttl_ms?: number | null;
+  // 其它扩展
+  [k: string]: any;
+};
+
 export type DiskIOTotals = {
   read_bytes_per_sec: number;
   write_bytes_per_sec: number;
@@ -186,6 +214,10 @@ export type SnapshotResult = {
       }>;
     } | null;
   };
+  // 新增：外设模块（peripherals）
+  peripherals?: {
+    batteries: PeripheralBattery[];
+  };
 };
 
 export type SnapshotParams = {
@@ -206,6 +238,7 @@ export type QueryHistoryItem = {
   memory?: { total: number; used: number } | null;
   disk?: SnapshotResult['disk'] | null;
   power?: SnapshotResult['power'] | null;
+  peripherals?: SnapshotResult['peripherals'] | null;
 };
 
 export type QueryHistoryResult = {

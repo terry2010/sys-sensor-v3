@@ -58,6 +58,7 @@ export type MetricPoint = {
     }>;
   };
   power?: SnapshotResult['power'];
+  peripherals?: SnapshotResult['peripherals'];
 };
 
 let started = false;

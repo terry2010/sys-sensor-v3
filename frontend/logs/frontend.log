@@ -1573,3 +1573,40 @@
 1756045844369 [INFO] bridge hello ok
 1756045844417 [INFO] bridge subscribe(init) ack ok=true
 1756045862092 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047299393 [INFO] bridge hello ok
+1756047299422 [INFO] bridge subscribe(init) ack ok=true
+1756047309022 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047515923 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047516278 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047548582 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047589682 [INFO] bridge hello ok
+1756047589686 [INFO] bridge subscribe(init) ack ok=true
+1756047599532 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047681607 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756047726244 [INFO] bridge hello ok
+1756047726283 [INFO] bridge subscribe(init) ack ok=true
+1756047736528 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1756050871233 [INFO] bridge hello ok
+1756050871261 [INFO] bridge subscribe(init) ack ok=true
+1756050881770 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756051260705 [INFO] bridge hello ok
+1756051260726 [INFO] bridge subscribe(init) ack ok=true
+1756051267481 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756051479074 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756051479075 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051480077 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051481078 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051496500 [INFO] bridge hello ok
+1756051496522 [INFO] bridge subscribe(init) ack ok=true
+1756051503885 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756051600684 [ERROR] bridge hello failed: 管道已结束。 (os error 109)
+1756051600685 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051601687 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051602690 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051603693 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051604733 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756051605735 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756052392102 [INFO] bridge hello ok
+1756052392125 [INFO] bridge subscribe(init) ack ok=true
+1756052398946 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756052400236 [INFO] bridge subscribe(toggle enable=true) ack ok=true

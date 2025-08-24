@@ -44,6 +44,7 @@
       <NetworkPanel />
       <DiskPanel />
       <PowerPanel />
+      <PeripheralsPanel />
       <div class="card" v-if="sensorMod">
         <h3>Sensors Summary</h3>
         <div class="kv"><span>CPU Package Temp (°C)</span><span>{{ fmt1(sensorMod.cpu?.package_temp_c) }}</span></div>
@@ -280,6 +281,7 @@ import NetworkPanel from './components/NetworkPanel.vue';
 import DiskPanel from './components/DiskPanel.vue';
 import HistoryChart from './components/HistoryChart.vue';
 import PowerPanel from './components/PowerPanel.vue';
+import PeripheralsPanel from './components/PeripheralsPanel.vue';
 import ControlPanel from './components/ControlPanel.vue';
 import HistoryQuery from './components/HistoryQuery.vue';
 import DebugEvents from './components/DebugEvents.vue';
@@ -380,7 +382,7 @@ onMounted(async () => {
   (async () => {
     try {
       console.log('[App] 尝试自动启动采集模块...');
-      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network', 'sensor', 'power'] });
+      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network', 'sensor', 'power', 'peripherals'] });
       console.log('[App] 自动启动采集模块成功:', result);
     } catch (e) {
       console.error('[App] 自动启动采集模块失败:', e);
