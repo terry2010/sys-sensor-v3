@@ -43,6 +43,180 @@
       <MemoryPanel />
       <NetworkPanel />
       <DiskPanel />
+      <div class="card" v-if="sensorMod">
+        <h3>Sensors Summary</h3>
+        <div class="kv"><span>CPU Package Temp (°C)</span><span>{{ fmt1(sensorMod.cpu?.package_temp_c) }}</span></div>
+        <div class="kv"><span>CPU Core Temps (°C)</span><span>{{ fmtArr1(sensorMod.cpu?.core_temps_c) }}</span></div>
+        <div class="kv"><span>CPU Package Power (W)</span><span>{{ fmt1(sensorMod.cpu?.package_power_w) }}</span></div>
+        <div class="kv"><span>Fan RPM</span><span>{{ fmtArrInt(sensorMod.fan_rpm) }}</span></div>
+        <div class="kv"><span>Fan Count</span><span>{{ sensorMod.fan_count ?? 0 }}</span></div>
+        <div class="kv"><span>Temperatures</span><span>{{ (sensorMod.temperatures?.length || 0) }}</span></div>
+        <div class="kv"><span>Fan Details</span><span>{{ (sensorMod.fan_details?.length || 0) }}</span></div>
+        <div class="kv"><span>Fan Controls</span><span>{{ (sensorMod.fan_control_details?.length || 0) }}</span></div>
+        <div class="kv"><span>Powers (keys)</span><span>{{ sensorMod.powers_w ? Object.keys(sensorMod.powers_w).length : 0 }}</span></div>
+        <div class="kv"><span>Voltages (keys)</span><span>{{ sensorMod.voltages_v ? Object.keys(sensorMod.voltages_v).length : 0 }}</span></div>
+        <div class="kv"><span>Loads (keys)</span><span>{{ sensorMod.loads_percent ? Object.keys(sensorMod.loads_percent).length : 0 }}</span></div>
+        <div class="kv"><span>Clocks (keys)</span><span>{{ sensorMod.clocks_mhz ? Object.keys(sensorMod.clocks_mhz).length : 0 }}</span></div>
+        <div class="kv"><span>Currents (keys)</span><span>{{ sensorMod.currents_a ? Object.keys(sensorMod.currents_a).length : 0 }}</span></div>
+        <div class="kv"><span>Controls (keys)</span><span>{{ sensorMod.controls_percent ? Object.keys(sensorMod.controls_percent).length : 0 }}</span></div>
+        <div class="kv"><span>Flows (keys)</span><span>{{ sensorMod.flows_lpm ? Object.keys(sensorMod.flows_lpm).length : 0 }}</span></div>
+        <div class="kv"><span>Levels (keys)</span><span>{{ sensorMod.levels_percent ? Object.keys(sensorMod.levels_percent).length : 0 }}</span></div>
+        <div class="kv"><span>Factors (keys)</span><span>{{ sensorMod.factors ? Object.keys(sensorMod.factors).length : 0 }}</span></div>
+      </div>
+      <div class="card" v-if="sensorMod">
+        <h3>Sensors Tables</h3>
+        <div class="sub">按类别展开全部 Key/Value</div>
+        <div class="tbl-wrap">
+          <h4>Temperatures</h4>
+          <table class="tbl" v-if="Array.isArray(sensorMod.temperatures) && sensorMod.temperatures.length">
+            <thead><tr><th>Key</th><th>°C</th></tr></thead>
+            <tbody>
+              <tr v-for="(it,i) in sensorMod.temperatures" :key="'temp-'+i">
+                <td>{{ it.key }}</td>
+                <td class="num">{{ fmt1(it.c) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Fan Details</h4>
+          <table class="tbl" v-if="Array.isArray(sensorMod.fan_details) && sensorMod.fan_details.length">
+            <thead><tr><th>Key</th><th>RPM</th></tr></thead>
+            <tbody>
+              <tr v-for="(it,i) in sensorMod.fan_details" :key="'fan-'+i">
+                <td>{{ it.key }}</td>
+                <td class="num">{{ Math.max(0, Math.round(it.rpm || 0)) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Fan Control Details</h4>
+          <table class="tbl" v-if="Array.isArray(sensorMod.fan_control_details) && sensorMod.fan_control_details.length">
+            <thead><tr><th>Key</th><th>%</th></tr></thead>
+            <tbody>
+              <tr v-for="(it,i) in sensorMod.fan_control_details" :key="'fanctl-'+i">
+                <td>{{ it.key }}</td>
+                <td class="num">{{ fmt1(it.percent) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Powers (W)</h4>
+          <table class="tbl" v-if="entries(sensorMod.powers_w).length">
+            <thead><tr><th>Key</th><th>W</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.powers_w)" :key="'pow-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Voltages (V)</h4>
+          <table class="tbl" v-if="entries(sensorMod.voltages_v).length">
+            <thead><tr><th>Key</th><th>V</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.voltages_v)" :key="'volt-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Loads (%)</h4>
+          <table class="tbl" v-if="entries(sensorMod.loads_percent).length">
+            <thead><tr><th>Key</th><th>%</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.loads_percent)" :key="'load-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Clocks (MHz)</h4>
+          <table class="tbl" v-if="entries(sensorMod.clocks_mhz).length">
+            <thead><tr><th>Key</th><th>MHz</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.clocks_mhz)" :key="'clk-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Currents (A)</h4>
+          <table class="tbl" v-if="entries(sensorMod.currents_a).length">
+            <thead><tr><th>Key</th><th>A</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.currents_a)" :key="'cur-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Controls (%)</h4>
+          <table class="tbl" v-if="entries(sensorMod.controls_percent).length">
+            <thead><tr><th>Key</th><th>%</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.controls_percent)" :key="'ctl-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Flows (L/min)</h4>
+          <table class="tbl" v-if="entries(sensorMod.flows_lpm).length">
+            <thead><tr><th>Key</th><th>L/min</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.flows_lpm)" :key="'flow-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Levels (%)</h4>
+          <table class="tbl" v-if="entries(sensorMod.levels_percent).length">
+            <thead><tr><th>Key</th><th>%</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.levels_percent)" :key="'lvl-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+
+          <h4>Factors</h4>
+          <table class="tbl" v-if="entries(sensorMod.factors).length">
+            <thead><tr><th>Key</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr v-for="([k,v],i) in entries(sensorMod.factors)" :key="'fac-'+i">
+                <td>{{ k }}</td>
+                <td class="num">{{ fmt1(v) }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-else>—</div>
+        </div>
+
+        <details class="json-box" :open="showSensorJson">
+          <summary @click.prevent="showSensorJson = !showSensorJson">Sensor JSON</summary>
+          <pre><code>{{ sensorModJson }}</code></pre>
+        </details>
+      </div>
       <div class="card" v-if="Array.isArray(sensors) && sensors.length">
         <h3>Hardware Sensors (LibreHardwareMonitor)</h3>
         <div class="sub">total: {{ sensors.length }}</div>
@@ -199,7 +373,7 @@ onMounted(async () => {
   (async () => {
     try {
       console.log('[App] 尝试自动启动采集模块...');
-      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network'] });
+      const result = await service.start?.({ modules: ['cpu', 'mem', 'disk', 'network', 'sensor'] });
       console.log('[App] 自动启动采集模块成功:', result);
     } catch (e) {
       console.error('[App] 自动启动采集模块失败:', e);
@@ -245,13 +419,30 @@ const rpcSource = computed(() => {
 });
 const rpcSourceClass = computed(() => rpcSource.value === 'tauri' ? 'ok' : 'warn');
 
-// LHM 传感器列表（来自 metrics.latest.cpu.lhm_sensors）
+// 传感器全量列表（当设置 SYS_SENSOR_DUMP_ALL=1 时由后端附带），路径：metrics.latest.sensor.dump_all.sensors
 const sensors = computed<any[]>(() => {
-  const cpu: any = metrics.latest?.cpu;
-  const arr = cpu?.lhm_sensors;
+  const sensor: any = (metrics.latest as any)?.sensor;
+  const arr = sensor?.dump_all?.sensors;
   return Array.isArray(arr) ? arr : [];
 });
+// 便捷访问 sensor 模块主体
+const sensorMod = computed<any>(() => (metrics.latest as any)?.sensor ?? null);
+// 简易格式化
+const fmt1 = (v: any) => (typeof v === 'number' && isFinite(v)) ? v.toFixed(1) : (v == null ? '—' : String(v));
+const fmtArr1 = (arr: any) => Array.isArray(arr)
+  ? arr.filter((x: any) => typeof x === 'number' && isFinite(x)).map((x: number) => x.toFixed(1)).join(', ')
+  : (arr == null ? '—' : '');
+const fmtArrInt = (arr: any) => Array.isArray(arr)
+  ? arr.filter((x: any) => typeof x === 'number' && isFinite(x)).map((x: number) => Math.max(0, Math.round(x))).join(', ')
+  : (arr == null ? '—' : '');
 const sensorVal = (s: any) => (typeof s?.value === 'number' && isFinite(s.value)) ? s.value.toFixed(3) : String(s?.value ?? '-');
+// 实用：对象转 entries（空对象返回空数组）
+const entries = (o: any): [string, any][] => (o && typeof o === 'object') ? Object.entries(o) as any : [];
+// 传感器模块 JSON 展示
+const showSensorJson = ref<boolean>(false);
+const sensorModJson = computed<string>(() => {
+  try { return JSON.stringify(sensorMod.value, null, 2); } catch { return '{}'; }
+});
 
 // 过滤与下拉选项
 const filterHwType = ref<string>('');
@@ -327,9 +518,16 @@ header {
 .btn:hover { background: #f0f0f0; }
 .json-box { margin: 8px 0; }
 .json-box pre { max-height: 300px; overflow: auto; background: #0b1020; color: #cde2ff; padding: 8px; border-radius: 6px; }
+.tbl-wrap { margin-top: 8px; display: grid; gap: 10px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tbl th, .tbl td { border-bottom: 1px dashed #eee; padding: 6px 8px; text-align: left; }
+.tbl th { color: #666; font-weight: 600; }
+.tbl td.num { text-align: right; font-variant-numeric: tabular-nums; }
 /* 采集耗时概览 */
 .diag-list { display: grid; gap: 6px; margin-top: 8px; }
 .diag-row { display: grid; grid-template-columns: 1fr 80px 80px 80px 70px 70px; gap: 8px; font-size: 12px; align-items: center; }
 .diag-row.head { color: #666; font-weight: 600; }
 .diag-row .name { font-weight: 600; color: #333; }
+/* Sensors Summary */
+.kv { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12px; }
 </style>

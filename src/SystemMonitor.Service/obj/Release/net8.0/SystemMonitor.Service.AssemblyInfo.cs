@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SystemMonitor.Service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eaad2652c4cd86ee0c5e7f39246c7aca56b9fdc1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e915b89070b74ce5e3e719fc47fe4b9a04df473a")]
 [assembly: System.Reflection.AssemblyProductAttribute("SystemMonitor.Service")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SystemMonitor.Service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

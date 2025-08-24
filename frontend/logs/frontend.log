@@ -1269,3 +1269,33 @@
 1755991695018 [INFO] bridge hello ok
 1755991695036 [INFO] bridge subscribe(init) ack ok=true
 1755991699801 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756021814962 [INFO] bridge hello ok
+1756021814984 [INFO] bridge subscribe(init) ack ok=true
+1756021818451 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756022001040 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1756022035291 [INFO] bridge hello ok
+1756022035294 [INFO] bridge subscribe(init) ack ok=true
+1756022037616 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756022102456 [INFO] bridge hello ok
+1756022102476 [INFO] bridge subscribe(init) ack ok=true
+1756022121003 [INFO] bridge subscribe(toggle enable=true) ack ok=false
+1756023218709 [INFO] bridge hello ok
+1756023218728 [INFO] bridge subscribe(init) ack ok=true
+1756023227039 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756023452150 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756023508940 [INFO] bridge hello ok
+1756023508962 [INFO] bridge subscribe(init) ack ok=true
+1756023520015 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756023687922 [INFO] bridge hello ok
+1756023687947 [INFO] bridge subscribe(init) ack ok=true
+1756023701711 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756023985092 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756023986095 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756023987119 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756023988134 [WARN] bridge disconnected: 系统找不到指定的文件。 (os error 2)
+1756024005675 [INFO] bridge hello ok
+1756024005712 [INFO] bridge subscribe(init) ack ok=true
+1756024012829 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756024246286 [INFO] bridge hello ok
+1756024246412 [INFO] bridge subscribe(init) ack ok=true
+1756024259517 [INFO] bridge subscribe(toggle enable=true) ack ok=true

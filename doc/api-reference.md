@@ -168,6 +168,93 @@
 }
 ```
 
+### 3.1 metrics.result.sensor（传感器与风扇）
+
+- 来源：`SensorCollector`（`LibreHardwareMonitorLib` 封装）。字段统一 `snake_case`；数值单位：温度=℃、功率=W、风扇=RPM、电压=V。
+- 可用性：不同机型/驱动暴露差异较大；不可读时以 `null` 或空集合返回，不抛异常。
+
+字段列表：
+
+- `cpu`: object
+  - `package_temp_c`: number|null（CPU 包温，℃，保留 1 位小数）
+  - `core_temps_c`: number[]|null（各核心温度，℃，保留 1 位小数；不可读为 null）
+  - `package_power_w`: number|null（CPU 包功率，W，保留 1 位小数）
+- `fan_rpm`: number[]|null（各风扇当前转速列表，RPM；不可读为 null）
+- `fan_count`: number（探测到的风扇数量，来自传感器明细统计）
+- `temperatures`: Array<{ `key`: string, `c`: number }>
+  - 通用温度明细，`key` 由 `硬件类型/硬件名/传感器名` 拼接，数值单位 ℃（1 位小数）；无可读传感器时返回空数组 `[]`。
+- `fan_details`: Array<{ `key`: string, `rpm`: number }>
+  - 通用风扇明细，单位 RPM；无可读风扇时返回空数组 `[]`。
+- `fan_control_details`: Array<{ `key`: string, `percent`: number }>
+  - 风扇控制/占空比明细（来源于 `Control` 传感器并按名称包含 `Fan` 的项），单位 %；可为空数组。
+- `powers_w`: Record<string, number>
+  - 通用功率映射（单位 W）；键规则同上；无可读功率时为空对象 `{}`。
+- `voltages_v`: Record<string, number>
+  - 通用电压映射（单位 V）；键规则同上；无可读电压时为空对象 `{}`。
+- `loads_percent`: Record<string, number>（负载，单位 %）
+- `clocks_mhz`: Record<string, number>（时钟频率，MHz）
+- `currents_a`: Record<string, number>（电流，A）
+- `controls_percent`: Record<string, number>（控制/占空比，%）
+- `flows_lpm`: Record<string, number>（流量，L/min 等，依硬件）
+- `levels_percent`: Record<string, number>（液位，%）
+- `factors`: Record<string, number>（无单位比例型）
+- `dump_all`?: object（可选，调试）
+  - 当进程环境变量 `SYS_SENSOR_DUMP_ALL=1` 时出现：`{ sensors: Array<{ hw_type, hw_name, sensor_type, sensor_name, value }> }`
+
+示例（节选）：
+
+```json
+{
+  "sensor": {
+    "cpu": {
+      "package_temp_c": 62.3,
+      "core_temps_c": [58.5, 60.1, 61.9, 59.7],
+      "package_power_w": 27.4
+    },
+    "fan_rpm": [980, 1020],
+    "fan_count": 2,
+    "temperatures": [
+      { "key": "Cpu/Intel Core i7-9750H/CPU Package", "c": 62.3 },
+      { "key": "Gpu/NVIDIA GeForce GTX 1650/GPU Core", "c": 54.1 }
+    ],
+    "fan_details": [
+      { "key": "Motherboard/MSI XYZ/Fan #1", "rpm": 980 },
+      { "key": "Motherboard/MSI XYZ/Fan #2", "rpm": 1020 }
+    ],
+    "fan_control_details": [
+      { "key": "Motherboard/MSI XYZ/Fan #1 Control", "percent": 45.0 }
+    ],
+    "powers_w": {
+      "Cpu/Intel Core i7-9750H/CPU Package": 27.4
+    },
+    "voltages_v": {
+      "Motherboard/MSI XYZ/CPU VCore": 1.08
+    },
+    "loads_percent": {
+      "Cpu/Intel Core i7-9750H/CPU Total": 35.0
+    },
+    "clocks_mhz": {
+      "Cpu/Intel Core i7-9750H/CPU Core #1": 3900.0
+    },
+    "currents_a": {
+      "Psu/Corsair/12V": 3.1
+    },
+    "controls_percent": {
+      "Motherboard/MSI XYZ/Fan #1 Control": 45.0
+    },
+    "flows_lpm": {
+      "Controller/NZXT Kraken/Flow": 1.8
+    },
+    "levels_percent": {
+      "Controller/NZXT Kraken/Water Level": 80.0
+    },
+    "factors": {
+      "Gpu/NVIDIA/Throttle": 0.0
+    }
+  }
+}
+```
+
 ```json
 // query_history
 {
