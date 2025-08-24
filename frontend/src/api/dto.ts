@@ -256,6 +256,8 @@ export type SetConfigParams = {
   disk_nvme_errorlog_ttl_ms?: number;
   disk_nvme_ident_ttl_ms?: number;
   disk_smart_native_enabled?: boolean;
+  // peripherals config
+  peripherals_winrt_fallback_enabled?: boolean;
 };
 
 export type StartParams = { modules?: string[] } | undefined;
@@ -278,6 +280,8 @@ export type GetConfigResult = {
   // 推送当前状态
   current_interval_ms: number;
   burst_expires_at: number; // 0 表示无突发
+  // peripherals config
+  peripherals_winrt_fallback_enabled: boolean;
   // disk runtime
   disk_smart_ttl_ms: number;
   disk_nvme_errorlog_ttl_ms: number;

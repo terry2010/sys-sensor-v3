@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JlC2gOetULY=",
+  "dgSpecHash": "H7d2Zntg/y4=",
   "success": true,
   "projectFilePath": "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj",
   "expectedPackageFiles": [
@@ -44,6 +44,8 @@
     "C:\\Users\\terry\\.nuget\\packages\\microsoft.visualstudio.threading.only\\17.13.61\\microsoft.visualstudio.threading.only.17.13.61.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\microsoft.visualstudio.validation\\17.8.8\\microsoft.visualstudio.validation.17.8.8.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
+    "C:\\Users\\terry\\.nuget\\packages\\microsoft.windows.cswinrt\\0.1.0-prerelease.200629.3\\microsoft.windows.cswinrt.0.1.0-prerelease.200629.3.nupkg.sha512",
+    "C:\\Users\\terry\\.nuget\\packages\\microsoft.windows.sdk.net\\10.0.18362.6-preview\\microsoft.windows.sdk.net.10.0.18362.6-preview.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\mono.posix.netstandard\\1.0.0\\mono.posix.netstandard.1.0.0.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\nerdbank.streams\\2.12.90\\nerdbank.streams.2.12.90.nupkg.sha512",
     "C:\\Users\\terry\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",

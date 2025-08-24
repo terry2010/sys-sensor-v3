@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using SystemMonitor.Service.Services.Interop;
+using SystemMonitor.Service.Services;
 
 namespace SystemMonitor.Service.Services.Collectors
 {
@@ -19,7 +20,7 @@ namespace SystemMonitor.Service.Services.Collectors
         private static long _cacheTs;
         private static List<object>? _cacheItems;
         private static object? _cacheDebug;
-        private const int CacheMs = 10_000; // 10s：接口枚举缓存，后续细化为每设备缓存
+        private const int CacheMs = 3_000; // 3s：缩短缓存，加快断开后的收敛
 
         // 每设备级缓存与统计
         private sealed class DevCache
@@ -58,7 +59,67 @@ namespace SystemMonitor.Service.Services.Collectors
                         enumCount++;
                         if (sample.Count < 3 && !string.IsNullOrWhiteSpace(path)) sample.Add(path);
                     }, (err) => { errorCount++; });
-                    debug = new { enum_count = enumCount, error = errorCount, sample_paths = sample.ToArray() };
+                    // WinRT 回退：在配置开关启用时尝试查询经典蓝牙
+                    int winrtCount = 0;
+                    bool winrtSupported = false;
+                    var winrtNamesSample = new List<string>(3);
+                    try
+                    {
+                        if (RpcServer.GetPeripheralsWinrtFallbackEnabledStatic())
+                        {
+                            winrtSupported = WinRtDeviceInfo.IsSupported();
+                            var list = winrtSupported ? WinRtDeviceInfo.TryQueryBatteryPercents() : new List<(string? id, string? name, double? percent)>();
+                            winrtCount = list.Count;
+                            foreach (var (id, name, percent) in list)
+                            {
+                                if (winrtNamesSample.Count < 3 && !string.IsNullOrWhiteSpace(name)) winrtNamesSample.Add(name!);
+                                // 附加一条 classic 蓝牙设备的电量数据
+                                double? batt = percent.HasValue ? Math.Max(0, Math.Min(100, percent.Value)) : (double?)null;
+                                var nowTs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                                items.Add(new
+                                {
+                                    id = id,
+                                    name = name,
+                                    kind = (string?)null,
+                                    connection = "classic",
+                                    battery_percent = batt,
+                                    battery_state = (string?)null,
+                                    source = "winrt_deviceinfo",
+                                    last_update_ts = batt.HasValue ? (long?)nowTs : null,
+                                    // 扩展字段：尽量对齐现有 schema
+                                    interface_path = (string?)null,
+                                    device_instance_id = id,
+                                    ble_address = (string?)null,
+                                    address = (string?)null,
+                                    manufacturer = (string?)null,
+                                    product = (string?)null,
+                                    vendor_id = (int?)null,
+                                    product_id = (int?)null,
+                                    rssi = (int?)null,
+                                    services = (string[]?)null,
+                                    first_seen_ts = nowTs,
+                                    last_seen_ts = nowTs,
+                                    present = true,
+                                    has_battery_service = (bool?)null,
+                                    battery_source = "winrt_deviceinfo",
+                                    level_valid_reason = (string?)null,
+                                    sampling_ms = (long)0,
+                                    retry_count = 0,
+                                    // 调试字段（winrt 无 GATT 过程）
+                                    open_ok = (bool?)null,
+                                    gatt_service_found = (bool?)null,
+                                    gatt_char_found = (bool?)null,
+                                    gatt_err_stage = (int?)null,
+                                    gatt_hr_services = (int?)null,
+                                    gatt_hr_chars = (int?)null,
+                                    gatt_hr_value = (int?)null
+                                });
+                            }
+                        }
+                    }
+                    catch { /* ignore winrt errors */ }
+
+                    debug = new { enum_count = enumCount, error = errorCount, sample_paths = sample.ToArray(), winrt_supported = winrtSupported, winrt_count = winrtCount, winrt_names_sample = winrtNamesSample.ToArray() };
                     lock (_lock)
                     {
                         _cacheItems = items;
@@ -214,7 +275,7 @@ namespace SystemMonitor.Service.Services.Collectors
                             services = services,
                             first_seen_ts = dc.FirstSeenTs,
                             last_seen_ts = dc.LastSeenTs,
-                            present = true,
+                            present = openOk,
                             has_battery_service = hasBatteryService,
                             battery_source = batterySource,
                             level_valid_reason = levelReason,

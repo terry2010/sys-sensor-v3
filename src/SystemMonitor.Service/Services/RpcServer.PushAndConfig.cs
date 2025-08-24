@@ -20,6 +20,8 @@ namespace SystemMonitor.Service.Services
             {
                 throw new InvalidOperationException("invalid_params: interval_ms>0 && ttl_ms>0 required");
             }
+
+            // 注意：burst_subscribe 仅处理突发订阅，不处理配置项
             lock (_lock)
             {
                 _burstIntervalMs = p.interval_ms;
@@ -145,12 +147,13 @@ namespace SystemMonitor.Service.Services
             {
                 throw new InvalidOperationException("invalid_params: missing body");
             }
-            _logger.LogInformation("set_config 收到: base_interval_ms={Base}, max_concurrency={Conc}, enabled_modules=[{Enabled}], sync_exempt_modules=[{SyncExempt}], module_intervals=[{Mods}]",
+            _logger.LogInformation("set_config 收到: base_interval_ms={Base}, max_concurrency={Conc}, enabled_modules=[{Enabled}], sync_exempt_modules=[{SyncExempt}], module_intervals=[{Mods}], peripherals_winrt_fallback_enabled={WinRT}",
                 p.base_interval_ms,
                 p.max_concurrency,
                 p.enabled_modules == null ? "null" : string.Join(", ", p.enabled_modules ?? Array.Empty<string>()),
                 p.sync_exempt_modules == null ? "null" : string.Join(", ", p.sync_exempt_modules ?? Array.Empty<string>()),
-                p.module_intervals == null ? "" : string.Join(", ", p.module_intervals.Select(kv => $"{kv.Key}={kv.Value}")));
+                p.module_intervals == null ? "" : string.Join(", ", p.module_intervals.Select(kv => $"{kv.Key}={kv.Value}")),
+                p.peripherals_winrt_fallback_enabled);
 
             int? newBase = null;
             if (p.base_interval_ms.HasValue)
@@ -245,6 +248,17 @@ namespace SystemMonitor.Service.Services
                 _logger.LogInformation("set_config: sync_exempt_modules -> {Mods}", string.Join(", ", filtered));
             }
 
+            // 新增：外设电量 WinRT 回退开关
+            if (p.peripherals_winrt_fallback_enabled.HasValue)
+            {
+                var en = p.peripherals_winrt_fallback_enabled.Value;
+                lock (s_cfgLock)
+                {
+                    s_peripheralsWinrtFallbackEnabled = en;
+                }
+                _logger.LogInformation("set_config: peripherals_winrt_fallback_enabled -> {En}", en);
+            }
+
             // 新增：磁盘 SMART/NVMe 细粒度 TTL 与原生 SMART 开关（可选）
             try
             {
@@ -267,7 +281,8 @@ namespace SystemMonitor.Service.Services
                 effective_intervals = new Dictionary<string, int>(s_moduleIntervals, StringComparer.OrdinalIgnoreCase),
                 max_concurrency = s_maxConcurrency,
                 enabled_modules = GetEnabledModules().ToArray(),
-                sync_exempt_modules = s_syncExemptModules.ToArray()
+                sync_exempt_modules = s_syncExemptModules.ToArray(),
+                peripherals_winrt_fallback_enabled = GetPeripheralsWinrtFallbackEnabled()
             };
             // 在返回后短延时发送一次 metrics（仅桥接连接），避免客户端在新的观测窗口内收不到任何事件
             if (IsBridgeConnection)
@@ -342,6 +357,7 @@ namespace SystemMonitor.Service.Services
                 sync_exempt_modules = syncExempt,
                 current_interval_ms = curInterval,
                 burst_expires_at = burstExpire,
+                peripherals_winrt_fallback_enabled = GetPeripheralsWinrtFallbackEnabled(),
                 // disk runtime
                 disk_smart_ttl_ms = d.smartTtlMs,
                 disk_nvme_errorlog_ttl_ms = d.nvmeErrlogTtlMs,

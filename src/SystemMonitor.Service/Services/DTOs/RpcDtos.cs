@@ -36,6 +36,8 @@ namespace SystemMonitor.Service.Services
         public int? disk_nvme_errorlog_ttl_ms { get; set; }
         public int? disk_nvme_ident_ttl_ms { get; set; }
         public bool? disk_smart_native_enabled { get; set; }
+        // 新增：外设电量 WinRT 回退开关（可选）
+        public bool? peripherals_winrt_fallback_enabled { get; set; }
     }
 
     public sealed class StartParams

@@ -20,6 +20,8 @@ namespace SystemMonitor.Service.Services
         private static int s_maxConcurrency = 2; // 默认 2
         private static HashSet<string>? s_enabledModules; // null 表示默认=全部
         private static HashSet<string> s_syncExemptModules = new(StringComparer.OrdinalIgnoreCase) { "cpu", "memory" };
+        // 新增：外设电量 WinRT 回退开关（默认关闭）
+        private static bool s_peripheralsWinrtFallbackEnabled = false;
 
         public int GetCurrentIntervalMs(long now)
         {
@@ -74,6 +76,23 @@ namespace SystemMonitor.Service.Services
             lock (s_cfgLock)
             {
                 return new HashSet<string>(s_syncExemptModules, StringComparer.OrdinalIgnoreCase);
+            }
+        }
+
+        public bool GetPeripheralsWinrtFallbackEnabled()
+        {
+            lock (s_cfgLock)
+            {
+                return s_peripheralsWinrtFallbackEnabled;
+            }
+        }
+
+        // 静态读取：供采集器在无 RpcServer 实例上下文时访问
+        internal static bool GetPeripheralsWinrtFallbackEnabledStatic()
+        {
+            lock (s_cfgLock)
+            {
+                return s_peripheralsWinrtFallbackEnabled;
             }
         }
     }

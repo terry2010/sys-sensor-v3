@@ -8,6 +8,7 @@
     <div class="row">
       <label>base_interval_ms: <input type="number" v-model.number="baseInterval" min="100" step="100" /></label>
       <label>persist: <input type="checkbox" v-model="persist" /></label>
+      <label>peripherals_winrt_fallback_enabled: <input type="checkbox" v-model="winrtFallback" /></label>
       <button @click="onSetConfig" :disabled="setcfgLoading">setConfig()</button>
     </div>
     <div class="row">
@@ -44,6 +45,7 @@ import { isTauriHost } from '../api/rpc';
 const logs = ref<string[]>([]);
 const baseInterval = ref<number>(1000);
 const persist = ref<boolean>(false);
+const winrtFallback = ref<boolean>(false);
 const startModules = ref<string>('cpu,mem');
 const burstModules = ref<string>('cpu');
 const burstInterval = ref<number>(1000);
@@ -77,7 +79,7 @@ function onSnapshot() {
 const setcfgLoading = ref(false);
 function onSetConfig() {
   setcfgLoading.value = true; const lt = setTimeout(() => { setcfgLoading.value = false; }, 800);
-  withTimeout(Promise.resolve(api.setConfig?.({ base_interval_ms: baseInterval.value, persist: persist.value }) as any))
+  withTimeout(Promise.resolve(api.setConfig?.({ base_interval_ms: baseInterval.value, persist: persist.value, peripherals_winrt_fallback_enabled: winrtFallback.value }) as any))
     .then(r => log(r ?? 'ok'))
     .catch((e:any) => log(e?.message || e))
     .finally(() => { clearTimeout(lt); setcfgLoading.value = false; });

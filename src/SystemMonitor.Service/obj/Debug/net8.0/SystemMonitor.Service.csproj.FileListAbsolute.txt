@@ -181,3 +181,5 @@ C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\refint\SystemMo
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.pdb
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\SystemMonitor.Service.genruntimeconfig.cache
 C:\code\sys-sensor-v3\src\SystemMonitor.Service\obj\Debug\net8.0\ref\SystemMonitor.Service.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\winrt.runtime.dll
+C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\Microsoft.Windows.SDK.NET.dll

@@ -869,6 +869,35 @@
           }
         }
       },
+      "Microsoft.Windows.CsWinRT/0.1.0-prerelease.200629.3": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0/winrt.runtime.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/winrt.runtime.dll": {}
+        },
+        "build": {
+          "build/Microsoft.Windows.CsWinRT.props": {},
+          "build/Microsoft.Windows.CsWinRT.targets": {}
+        }
+      },
+      "Microsoft.Windows.SDK.NET/10.0.18362.6-preview": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Windows.CsWinRT": "0.1.0-prerelease.200629.3"
+        },
+        "compile": {
+          "lib/net5.0/Microsoft.Windows.SDK.NET.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.Windows.SDK.NET.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Mono.Posix.NETStandard/1.0.0": {
         "type": "package",
         "compile": {
@@ -3025,6 +3054,39 @@
         "version.txt"
       ]
     },
+    "Microsoft.Windows.CsWinRT/0.1.0-prerelease.200629.3": {
+      "sha512": "+w4zLxMF9+dpdrpQCp7iup8Y+GGq9iZ3M1SmBTLvXT49m2PKk2e7Wx8XjomKWowMNUBKds6zlEAapweqcBpA7w==",
+      "type": "package",
+      "path": "microsoft.windows.cswinrt/0.1.0-prerelease.200629.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/Microsoft.Windows.CsWinRT.props",
+        "build/Microsoft.Windows.CsWinRT.targets",
+        "cswinrt.exe",
+        "lib/net5.0/winrt.runtime.dll",
+        "lib/netstandard2.0/winrt.runtime.dll",
+        "microsoft.windows.cswinrt.0.1.0-prerelease.200629.3.nupkg.sha512",
+        "microsoft.windows.cswinrt.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Microsoft.Windows.SDK.NET/10.0.18362.6-preview": {
+      "sha512": "s4tEghfB6EomvcVVmK9TG2AhyWuqtFPp8jJ7ItgnCfjKZVNFwI8S/+IvV0v4bz8OdbhsfDzUvByQM4I/ABoXYg==",
+      "type": "package",
+      "path": "microsoft.windows.sdk.net/10.0.18362.6-preview",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/Microsoft.Windows.SDK.NET.dll",
+        "lib/net5.0/Microsoft.Windows.SDK.NET.xml",
+        "lib/netstandard2.0/Microsoft.Windows.SDK.NET.dll",
+        "lib/netstandard2.0/Microsoft.Windows.SDK.NET.xml",
+        "microsoft.windows.sdk.net.10.0.18362.6-preview.nupkg.sha512",
+        "microsoft.windows.sdk.net.nuspec"
+      ]
+    },
     "Mono.Posix.NETStandard/1.0.0": {
       "sha512": "vSN/L1uaVwKsiLa95bYu2SGkF0iY3xMblTfxc8alSziPuVfJpj3geVqHGAA75J7cZkMuKpFVikz82Lo6y6LLdA==",
       "type": "package",
@@ -4187,6 +4249,7 @@
       "Microsoft.Data.Sqlite >= 9.0.8",
       "Microsoft.Extensions.Hosting >= 8.0.1",
       "Microsoft.Extensions.Hosting.WindowsServices >= 8.0.1",
+      "Microsoft.Windows.SDK.NET >= 10.0.18362.6-preview",
       "Nerdbank.Streams >= 2.12.90",
       "Serilog >= 4.3.0",
       "Serilog.Enrichers.Environment >= 3.0.0",
@@ -4259,6 +4322,10 @@
           "Microsoft.Extensions.Hosting.WindowsServices": {
             "target": "Package",
             "version": "[8.0.1, )"
+          },
+          "Microsoft.Windows.SDK.NET": {
+            "target": "Package",
+            "version": "[10.0.18362.6-preview, )"
           },
           "Nerdbank.Streams": {
             "target": "Package",

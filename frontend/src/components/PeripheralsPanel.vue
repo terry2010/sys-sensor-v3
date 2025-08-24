@@ -4,7 +4,13 @@
 
     <section>
       <h4>BLE/Peripheral Batteries</h4>
-      <div v-if="Array.isArray(batteries) && batteries.length > 0">
+      <div style="margin: 6px 0 8px; display:flex; gap:12px; align-items:center;">
+        <label style="user-select:none; cursor:pointer;">
+          <input type="checkbox" v-model="showOnlineOnly" /> 只显示在线
+        </label>
+        <span style="color:#667; font-size:12px;">共 {{ batteries.length }}，显示 {{ batteriesFiltered.length }}</span>
+      </div>
+      <div v-if="Array.isArray(batteriesFiltered) && batteriesFiltered.length > 0">
         <div class="tbl-wrap">
         <table class="tbl">
           <thead>
@@ -32,7 +38,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(b, i) in batteries" :key="i">
+            <tr v-for="(b, i) in batteriesFiltered" :key="i">
               <td class="k">{{ b.name || b.model || b.interface_path || '—' }}</td>
               <td class="v">{{ fmtBool(b.present) }}</td>
               <td class="v">{{ fmtPct(b.battery_percent) }}</td>
@@ -68,12 +74,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useMetricsStore } from '../stores/metrics';
 
 const metrics = useMetricsStore();
 const peripherals = computed<any>(() => (metrics.latest as any)?.peripherals ?? null);
 const batteries = computed<any[]>(() => Array.isArray(peripherals.value?.batteries) ? peripherals.value.batteries : []);
+const showOnlineOnly = ref(true);
+const batteriesFiltered = computed<any[]>(() => showOnlineOnly.value ? batteries.value.filter(b => b?.present === true) : batteries.value);
 const peripheralsJson = computed<string>(() => { try { return JSON.stringify(peripherals.value, null, 2); } catch { return '{}'; } });
 
 const isNum = (v: any) => typeof v === 'number' && isFinite(v);
