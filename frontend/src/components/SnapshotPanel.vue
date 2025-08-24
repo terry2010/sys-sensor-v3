@@ -10,6 +10,7 @@
         <label><input type="checkbox" v-model="m.network" /> network</label>
         <label><input type="checkbox" v-model="m.gpu" /> gpu</label>
         <label><input type="checkbox" v-model="m.sensor" /> sensor</label>
+        <label><input type="checkbox" v-model="m.power" /> power</label>
       </div>
       <button @click="refreshWithModules" :disabled="loading">带参刷新</button>
       <span v-if="loading">加载中…</span>
@@ -48,7 +49,7 @@ const connected = ref(false);
 const lastEvent = ref('');
 const showRaw = ref(false);
 const rawJson = computed(() => snap.value ? JSON.stringify(snap.value, null, 2) : '');
-const m = ref({ cpu: true, memory: true, disk: false, network: false, gpu: false, sensor: false });
+const m = ref({ cpu: true, memory: true, disk: false, network: false, gpu: false, sensor: false, power: true });
 const filteredEntries = computed(() => {
   const s: any = snap.value || {};
   const out: Record<string, any> = {};
@@ -90,6 +91,7 @@ const refreshWithModules = () => {
   if (s.network) mods.push('network');
   if (s.gpu) mods.push('gpu');
   if (s.sensor) mods.push('sensor');
+  if (s.power) mods.push('power');
   const p: SnapshotParams = { modules: mods.length ? mods : undefined };
   withTimeout(service.snapshot(p))
     .then(r => { if (my === reqSeq) snap.value = r; })

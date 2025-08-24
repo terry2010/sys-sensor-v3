@@ -62,5 +62,27 @@ namespace SystemMonitor.Service.Services
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetProcessIoCounters(IntPtr hProcess, out IO_COUNTERS ioCounters);
+
+        // ==========================
+        // Power status (battery/ac)
+        // ==========================
+
+        /// <summary>
+        /// Win32 SYSTEM_POWER_STATUS 结构，用于获取 AC 状态、电池百分比与估算时间。
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct SYSTEM_POWER_STATUS
+        {
+            public byte ACLineStatus;          // 0=离线, 1=在线, 255=未知
+            public byte BatteryFlag;           // 位标志：1 高电量,2 低电量,4 危急,8 充电,128 无电池,255 未知
+            public byte BatteryLifePercent;    // 0..100, 255=未知
+            public byte SystemStatusFlag;      // 保留
+            public int BatteryLifeTime;        // 剩余秒数，-1=未知
+            public int BatteryFullLifeTime;    // 充满秒数，-1=未知
+        }
+
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetSystemPowerStatus(out SYSTEM_POWER_STATUS lpSystemPowerStatus);
     }
 }

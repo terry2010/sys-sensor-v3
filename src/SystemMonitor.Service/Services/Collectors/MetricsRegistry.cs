@@ -17,6 +17,8 @@ namespace SystemMonitor.Service.Services.Collectors
             Register(new NetworkCollector());
             Register(new DiskCollector());
             Register(new GpuCollector());
+            // 新增：电源/电池采集模块
+            Register(new PowerCollector());
             Register(new SensorCollector());
         }
 

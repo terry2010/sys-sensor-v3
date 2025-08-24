@@ -120,6 +120,19 @@ export type SnapshotResult = {
     per_physical_disk?: DiskPhysicalInfo[];
     smart_health?: SmartHealth[];
   };
+  // 新增：电源/电池模块（最小字段集）
+  power?: {
+    battery: {
+      percentage?: number | null;
+      state: string; // 'discharging' | 'charging' | 'full' | 'ac' | 'unknown'
+      time_remaining_min?: number | null;
+      time_to_full_min?: number | null;
+      ac_line_online?: boolean | null;
+      time_on_battery_sec?: number | null;
+    };
+    adapter?: Record<string, any> | null;
+    ups?: Record<string, any> | null;
+  };
 };
 
 export type SnapshotParams = {
@@ -139,6 +152,7 @@ export type QueryHistoryItem = {
   cpu?: { usage_percent: number } | null;
   memory?: { total: number; used: number } | null;
   disk?: SnapshotResult['disk'] | null;
+  power?: SnapshotResult['power'] | null;
 };
 
 export type QueryHistoryResult = {
