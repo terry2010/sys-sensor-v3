@@ -1302,3 +1302,8 @@
 1756036591010 [INFO] bridge hello ok
 1756036591039 [INFO] bridge subscribe(init) ack ok=true
 1756036595874 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756036766755 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756036854629 [INFO] bridge subscribe(toggle enable=true) ack ok=true
+1756037016913 [INFO] bridge hello ok
+1756037016936 [INFO] bridge subscribe(init) ack ok=true
+1756037023626 [INFO] bridge subscribe(toggle enable=true) ack ok=true

@@ -57,6 +57,7 @@ export type MetricPoint = {
       auto_negotiation?: boolean | null;
     }>;
   };
+  power?: SnapshotResult['power'];
 };
 
 let started = false;
