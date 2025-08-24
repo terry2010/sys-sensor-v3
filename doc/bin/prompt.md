@@ -97,7 +97,7 @@
 
 
 
- 完整查阅文档， 完整审阅代码，总结项目现状 
+完整查阅文档， 完整审阅代码，总结项目现状 
 
 总结完毕后， 再读一次 C:\code\sys-sensor-v3\doc\task.md 和  C:\code\sys-sensor-v3\doc\istat-menus-metrics.md ， 
 
@@ -110,8 +110,7 @@
  
 #你的开发任务：
 
-这次集中力量将GPU所有指标都实现了。 实现的时候还要顺带显示出尽量多的外设信息。之前你要先总结相关需要开发指标，总结完以后将详细开发计划保存到doc文件夹的新文件中， 你重新和  C:\code\sys-sensor-v3\doc\istat-menus-metrics.md  对比一下， 确定没有遗漏指标。然后进入开发 
-这次要发送到很多不同电脑上测试， 你在把所有指标开发完毕，自测通过之后， 确定首页UI显示了所有新增指标后， 再让我介入
+对比代码， 逐项确认   C:\code\sys-sensor-v3\doc\istat-menus-metrics.md  中的指标 是否在代码中实现 和在 前端首页展示， doc里新建一个文件， 总结一项增加一次内容，每次增加完内容之后你要 从   C:\code\sys-sensor-v3\doc\istat-menus-metrics.md 获取下一个检查的指标， 你的总结要确保完全正确， 在你完全总结完毕之后， 你要回过头再看一遍   C:\code\sys-sensor-v3\doc\istat-menus-metrics.md 和代码， 确保你的总结完全正确
 
 ##  工作流程（逐指标落实）
 
