@@ -1,8 +1,0 @@
-2025-08-23 21:56:32.216 [StorageQuery] Fallback via PowerShell CIM, got 2 items
-2025-08-23 21:56:32.216 [StorageQuery] Fallback via PowerShell CIM, got 2 items
-2025-08-23 21:56:32.223 [StorageQuery] PhysicalDisks count=2
-2025-08-23 21:56:32.223 [StorageQuery] PhysicalDisks count=2
-2025-08-23 21:56:32.225   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
-2025-08-23 21:56:32.225   id=0, model=Samsung SSD 990 EVO Plus 2TB, size=2000398934016, iface=nvme, media=ssd
-2025-08-23 21:56:32.226   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
-2025-08-23 21:56:32.226   id=1, model=SSK SFD213, size=31037849600, iface=usb, media=
