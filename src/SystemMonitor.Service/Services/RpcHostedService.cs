@@ -167,6 +167,15 @@ namespace SystemMonitor.Service.Services
         private async Task HandleClientAsync(NamedPipeServerStream serverStream, CancellationToken stoppingToken)
         {
             using var streamLease = serverStream;
+            
+            // 创建会话级别的CancellationTokenSource，确保所有任务都能被正确取消
+            using var sessionCts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+            var sessionToken = sessionCts.Token;
+            
+            var connId = Guid.NewGuid();
+            var sessionStartTime = DateTimeOffset.UtcNow;
+            var allSessionTasks = new List<Task>();
+            
             _logger.LogInformation("客户端已连接");
 
             var reader = serverStream.UsePipeReader();
@@ -177,19 +186,24 @@ namespace SystemMonitor.Service.Services
             formatter.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
             var handler = new HeaderDelimitedMessageHandler(writer, reader, formatter);
 
-            var connId = Guid.NewGuid();
             _logger.LogInformation("客户端会话建立: conn={ConnId}", connId);
             var rpcServer = new RpcServer(_logger, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), _store, connId);
             var rpc = new JsonRpc(handler, rpcServer);
             rpcServer.SetJsonRpc(rpc);
 
+            // 改进的断开连接处理
             rpc.Disconnected += (s, e) =>
             {
-                _logger.LogInformation("客户端断开：{Reason} conn={ConnId}", e?.Description, connId);
+                var elapsed = DateTimeOffset.UtcNow - sessionStartTime;
+                _logger.LogInformation("客户端断开：{Reason} conn={ConnId}, 连接时长: {Elapsed}ms", 
+                    e?.Description ?? "unknown", connId, (long)elapsed.TotalMilliseconds);
+                
+                // 立即取消所有会话任务
+                try { sessionCts.Cancel(); } catch { }
+                
                 try
                 {
                     var reason = string.IsNullOrWhiteSpace(e?.Description) ? "disconnected" : e!.Description!;
-                    // 统一上报断线事件
                     var payload = new { reason };
                     rpcServer.NotifyBridge("bridge_disconnected", payload);
                 }
@@ -198,51 +212,64 @@ namespace SystemMonitor.Service.Services
 
             rpc.StartListening();
 
-            using var cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
             // 后台慢路径预热：周期性刷新物理盘缓存，降低首次采集抖动
             var slowWarmupTask = Task.Run(async () =>
             {
-                while (!cts.Token.IsCancellationRequested)
+                try
                 {
-                    try
+                    while (!sessionToken.IsCancellationRequested)
                     {
-                        SystemMonitor.Service.Services.Collectors.DiskCollector.RefreshPhysicalCache();
+                        try
+                        {
+                            SystemMonitor.Service.Services.Collectors.DiskCollector.RefreshPhysicalCache();
+                        }
+                        catch { }
+                        await Task.Delay(12000, sessionToken).ConfigureAwait(false);
                     }
-                    catch { }
-                    try { await Task.Delay(12000, cts.Token).ConfigureAwait(false); } catch { }
                 }
-            }, cts.Token);
+                catch (OperationCanceledException) { }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "预热任务异常结束 conn={ConnId}", connId);
+                }
+            }, sessionToken);
+            allSessionTasks.Add(slowWarmupTask);
             var metricsTask = Task.Run(async () =>
             {
-                var logEvery = GetMetricsLogEvery();
-                var consecutiveErrors = 0;
-                // 故障注入计数（仅当前会话内生效）
-                int simCount = 0; bool simTriggered = false;
-                // 移除本地 lastModules，统一使用 rpcServer 的会话缓存（在 RpcServer 中实现）
-                // 会话内采集器统计：用于首页观测
-                var stats = new Dictionary<string, CollectorStat>(StringComparer.OrdinalIgnoreCase);
-                // 自适应超时：跟踪连续超时次数
-                var consecTimeouts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                // 救火采集抑制：记录最近一次救火时间，避免频繁触发
-                var lastRescueAt = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-                // 避免救火与原始采集对同一模块并发：记录救火进行中模块
-                var rescueInFlight = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                int pushTick = 0;
-                while (!cts.Token.IsCancellationRequested)
+                try
+                {
+                    var logEvery = GetMetricsLogEvery();
+                    var consecutiveErrors = 0;
+                    // 故障注入计数（仅当前会话内生效）
+                    int simCount = 0; bool simTriggered = false;
+                    // 移除本地 lastModules，统一使用 rpcServer 的会话缓存（在 RpcServer 中实现）
+                    // 会话内采集器统计：用于首页观测
+                    var stats = new Dictionary<string, CollectorStat>(StringComparer.OrdinalIgnoreCase);
+                    // 自适应超时：跟踪连续超时次数
+                    var consecTimeouts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                    // 救火采集抑制：记录最近一次救火时间，避免频繁触发
+                    var lastRescueAt = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+                    // 避免救火与原始采集对同一模块并发：记录救火进行中模块
+                    var rescueInFlight = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    int pushTick = 0;
+                    
+                    _logger.LogInformation("开始 metrics 推送循环 conn={ConnId}", connId);
+                    
+                    while (!sessionToken.IsCancellationRequested)
                 {
                     try
                     {
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                        // 推送条件：必须是“事件桥接”连接，且开启了 metrics 订阅
+                        // 推送条件：必须是"事件桥接"连接，且开启了 metrics 订阅
                         if (!rpcServer.IsBridgeConnection || !rpcServer.MetricsPushEnabled)
                         {
-                            await Task.Delay(300, cts.Token).ConfigureAwait(false);
+                            await Task.Delay(300, sessionToken).ConfigureAwait(false);
                             continue;
                         }
                         // 在短期抑制窗口内，避免与当前 RPC 响应交叉
                         if (rpcServer.IsPushSuppressed(now))
                         {
-                            await Task.Delay(50, cts.Token).ConfigureAwait(false);
+                            await Task.Delay(50, sessionToken).ConfigureAwait(false);
                             continue;
                         }
                         var enabled = rpcServer.GetEnabledModules();
@@ -297,12 +324,14 @@ namespace SystemMonitor.Service.Services
                             var semaphore = new System.Threading.SemaphoreSlim(Math.Max(1, maxConc));
                             var tasks = new List<Task>();
                             const int defaultTimeoutMs = 300;
+                            
+                            // 使用会话级别的CancellationToken确保任务能被正确取消
 
                             foreach (var c in asyncList)
                             {
                                 tasks.Add(Task.Run(async () =>
                                 {
-                                    await semaphore.WaitAsync(cts.Token).ConfigureAwait(false);
+                                    await semaphore.WaitAsync(sessionToken).ConfigureAwait(false);
                                     try
                                     {
                                         var swOne = Stopwatch.StartNew();
@@ -327,7 +356,7 @@ namespace SystemMonitor.Service.Services
                                             if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1800);
                                             if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
                                         }
-                                        var done = await Task.WhenAny(work, Task.Delay(timeoutMs, cts.Token)).ConfigureAwait(false);
+                                        var done = await Task.WhenAny(work, Task.Delay(timeoutMs, sessionToken)).ConfigureAwait(false);
                                         if (done == work)
                                         {
                                             var val = await work.ConfigureAwait(false);
@@ -391,7 +420,7 @@ namespace SystemMonitor.Service.Services
                                                         {
                                                             _logger.LogWarning("collector rescue: {Name} try with extended timeout {Timeout}ms", c.Name, rescueTimeout);
                                                             var rescueTask = Task.Run(() => c.Collect());
-                                                            var rescueDone = await Task.WhenAny(rescueTask, Task.Delay(rescueTimeout, cts.Token)).ConfigureAwait(false);
+                                                            var rescueDone = await Task.WhenAny(rescueTask, Task.Delay(rescueTimeout, sessionToken)).ConfigureAwait(false);
                                                             if (rescueDone == rescueTask)
                                                             {
                                                                 var val2 = await rescueTask.ConfigureAwait(false);
@@ -436,10 +465,33 @@ namespace SystemMonitor.Service.Services
                                     {
                                         semaphore.Release();
                                     }
-                                }, cts.Token));
+                                }, sessionToken));
                             }
 
-                            try { await Task.WhenAll(tasks).ConfigureAwait(false); } catch { /* ignore */ }
+                            try 
+                            { 
+                                // 等待所有异步采集任务完成，但有超时保护
+                                var allTasksCompletion = Task.WhenAll(tasks);
+                                var timeoutTask = Task.Delay(10000, sessionToken); // 10秒超时
+                                var completed = await Task.WhenAny(allTasksCompletion, timeoutTask).ConfigureAwait(false);
+                                
+                                if (completed == timeoutTask)
+                                {
+                                    _logger.LogWarning("异步采集任务整体超时，强制继续 conn={ConnId}", connId);
+                                }
+                            } 
+                            catch (OperationCanceledException) 
+                            {
+                                _logger.LogInformation("异步采集任务被取消 conn={ConnId}", connId);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogWarning(ex, "异步采集任务异常 conn={ConnId}", connId);
+                            }
+                            finally
+                            {
+                                semaphore.Dispose();
+                            }
                         }
 
                         swAll.Stop();
@@ -606,29 +658,99 @@ namespace SystemMonitor.Service.Services
                         var targetInterval = rpcServer.GetCurrentIntervalMs(now2);
                         var spentMs = (int)Math.Max(0, swAll.ElapsedMilliseconds);
                         var delay = Math.Max(0, targetInterval - spentMs);
-                        await Task.Delay(delay, cts.Token).ConfigureAwait(false);
+                        await Task.Delay(delay, sessionToken).ConfigureAwait(false);
                         consecutiveErrors = 0; // 只要成功一次就清零
                     }
                     catch (OperationCanceledException)
                     {
-                        // 推送循环被取消，一般是服务器停止或会话结束
-                        try { rpcServer.NotifyBridge("bridge_disconnected", new { reason = "operation_canceled" }); } catch { }
+                        _logger.LogInformation("metrics 推送循环被取消 conn={ConnId}", connId);
                         break;
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogDebug(ex, "metrics 推送异常（忽略并继续）");
-                        // 尝试上报 bridge_error，带原因
-                        try { rpcServer.NotifyBridge("bridge_error", new { reason = "metrics_push_exception", message = ex.Message }); } catch { }
                         consecutiveErrors++;
-                        await Task.Delay(1000, cts.Token).ConfigureAwait(false);
+                        _logger.LogWarning(ex, "metrics 推送异常 conn={ConnId}, 连续错误次数: {ConsecutiveErrors}", connId, consecutiveErrors);
+                        
+                        if (consecutiveErrors > 10)
+                        {
+                            _logger.LogError("metrics 推送连续错误过多，延长等待时间 conn={ConnId}", connId);
+                            try { await Task.Delay(1000, sessionToken).ConfigureAwait(false); } catch { break; }
+                        }
                     }
                 }
-            }, cts.Token);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "metrics 任务外层异常 conn={ConnId}", connId);
+                }
+                finally
+                {
+                    _logger.LogInformation("metrics 推送循环结束 conn={ConnId}", connId);
+                }
+            }, sessionToken);
+            allSessionTasks.Add(metricsTask);
 
-            await rpc.Completion.ConfigureAwait(false);
-            cts.Cancel();
-            try { await metricsTask.ConfigureAwait(false); } catch { }
+            try
+            {
+                // 等待RPC完成
+                await rpc.Completion.ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "RPC会话异常结束 conn={ConnId}", connId);
+            }
+            finally
+            {
+                // 会话结束时强制清理所有后台任务
+                var cleanupStartTime = DateTimeOffset.UtcNow;
+                _logger.LogInformation("开始清理会话任务 conn={ConnId}, 任务数量: {TaskCount}", connId, allSessionTasks.Count);
+                
+                // 第一步：取消所有任务
+                try 
+                { 
+                    sessionCts.Cancel(); 
+                    _logger.LogDebug("已发送取消信号 conn={ConnId}", connId);
+                } 
+                catch { }
+                
+                // 第二步：等待任务优雅结束（5秒超时）
+                try
+                {
+                    var gracefulCompletion = Task.WhenAll(allSessionTasks);
+                    await gracefulCompletion.WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+                    var cleanupElapsed = DateTimeOffset.UtcNow - cleanupStartTime;
+                    _logger.LogInformation("会话任务优雅清理完成 conn={ConnId}, 耗时: {Elapsed}ms", connId, (long)cleanupElapsed.TotalMilliseconds);
+                }
+                catch (TimeoutException)
+                {
+                    var cleanupElapsed = DateTimeOffset.UtcNow - cleanupStartTime;
+                    _logger.LogWarning("会话任务清理超时 conn={ConnId}, 超时时间: {Elapsed}ms, 将强制结束", connId, (long)cleanupElapsed.TotalMilliseconds);
+                    
+                    // 第三步：强制垃圾回收，帮助清理未完成的任务
+                    try
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
+                    }
+                    catch { }
+                }
+                catch (Exception ex)
+                {
+                    var cleanupElapsed = DateTimeOffset.UtcNow - cleanupStartTime;
+                    _logger.LogError(ex, "会话任务清理异常 conn={ConnId}, 耗时: {Elapsed}ms", connId, (long)cleanupElapsed.TotalMilliseconds);
+                }
+                
+                // 最终清理
+                try
+                {
+                    rpc?.Dispose();
+                }
+                catch { }
+                
+                var totalElapsed = DateTimeOffset.UtcNow - sessionStartTime;
+                _logger.LogInformation("客户端会话完全结束 conn={ConnId}, 总时长: {Elapsed}ms", connId, (long)totalElapsed.TotalMilliseconds);
+            }
         }
 
         private static int GetMetricsLogEvery()

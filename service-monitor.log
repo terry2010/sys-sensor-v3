@@ -1,0 +1,92 @@
+﻿[2025-08-26 15:40:54.445] SystemMonitor.Service process not found (check #12440)
+[2025-08-26 15:40:59.461] SystemMonitor.Service process not found (check #12441)
+[2025-08-26 15:41:04.488] SystemMonitor.Service process not found (check #12442)
+[2025-08-26 15:41:09.512] SystemMonitor.Service process not found (check #12443)
+[2025-08-26 15:41:14.546] SystemMonitor.Service process not found (check #12444)
+[2025-08-26 15:41:19.580] SystemMonitor.Service process not found (check #12445)
+[2025-08-26 15:41:24.594] SystemMonitor.Service process not found (check #12446)
+[2025-08-26 15:41:29.630] SystemMonitor.Service process not found (check #12447)
+[2025-08-26 15:41:34.646] SystemMonitor.Service process not found (check #12448)
+[2025-08-26 15:41:39.672] SystemMonitor.Service process not found (check #12449)
+[2025-08-26 15:41:44.685] SystemMonitor.Service process not found (check #12450)
+[2025-08-26 15:41:49.707] SystemMonitor.Service process not found (check #12451)
+[2025-08-26 15:41:54.730] SystemMonitor.Service process not found (check #12452)
+[2025-08-26 15:41:59.747] SystemMonitor.Service process not found (check #12453)
+[2025-08-26 15:42:04.777] SystemMonitor.Service process not found (check #12454)
+[2025-08-26 15:42:09.810] SystemMonitor.Service process not found (check #12455)
+[2025-08-26 15:42:14.827] SystemMonitor.Service process not found (check #12456)
+[2025-08-26 15:42:19.848] SystemMonitor.Service process not found (check #12457)
+[2025-08-26 15:42:24.876] SystemMonitor.Service process not found (check #12458)
+[2025-08-26 15:42:29.896] SystemMonitor.Service process not found (check #12459)
+[2025-08-26 15:42:34.922] SystemMonitor.Service process not found (check #12460)
+[2025-08-26 15:42:39.933] SystemMonitor.Service process not found (check #12461)
+[2025-08-26 15:42:44.962] SystemMonitor.Service process not found (check #12462)
+[2025-08-26 15:42:49.988] SystemMonitor.Service process not found (check #12463)
+[2025-08-26 15:42:55.015] SystemMonitor.Service process not found (check #12464)
+[2025-08-26 15:43:00.040] SystemMonitor.Service process not found (check #12465)
+[2025-08-26 15:43:05.062] SystemMonitor.Service process not found (check #12466)
+[2025-08-26 15:43:10.071] SystemMonitor.Service process not found (check #12467)
+[2025-08-26 15:43:15.086] SystemMonitor.Service process not found (check #12468)
+[2025-08-26 15:43:20.105] SystemMonitor.Service process not found (check #12469)
+[2025-08-26 15:43:25.128] SystemMonitor.Service process not found (check #12470)
+[2025-08-26 15:43:30.146] SystemMonitor.Service process not found (check #12471)
+[2025-08-26 15:43:35.161] SystemMonitor.Service process not found (check #12472)
+[2025-08-26 15:43:40.188] SystemMonitor.Service process not found (check #12473)
+[2025-08-26 15:43:45.202] SystemMonitor.Service process not found (check #12474)
+[2025-08-26 15:43:50.219] SystemMonitor.Service process not found (check #12475)
+[2025-08-26 15:43:55.237] SystemMonitor.Service process not found (check #12476)
+[2025-08-26 15:44:00.255] SystemMonitor.Service process not found (check #12477)
+[2025-08-26 15:44:05.273] SystemMonitor.Service process not found (check #12478)
+[2025-08-26 15:44:10.301] SystemMonitor.Service process not found (check #12479)
+[2025-08-26 15:44:15.331] SystemMonitor.Service process not found (check #12480)
+[2025-08-26 15:44:20.352] SystemMonitor.Service process not found (check #12481)
+[2025-08-26 15:44:25.374] SystemMonitor.Service process not found (check #12482)
+[2025-08-26 15:44:30.389] SystemMonitor.Service process not found (check #12483)
+[2025-08-26 15:44:35.405] SystemMonitor.Service process not found (check #12484)
+[2025-08-26 15:44:40.424] SystemMonitor.Service process not found (check #12485)
+[2025-08-26 15:44:45.453] Monitoring new process: PID=55236, Start Time=08/26/2025 15:44:45, Memory=14.85MB
+[2025-08-26 15:45:05.536] [CRITICAL] Process disappeared! Last PID=55236
+[2025-08-26 15:45:05.539] Process run duration: 00:00:20.2703032
+[2025-08-26 15:45:05.541] Searching for crash cause...
+[2025-08-26 15:45:10.683] SystemMonitor.Service process not found (check #12491)
+[2025-08-26 15:45:15.697] SystemMonitor.Service process not found (check #12492)
+[2025-08-26 15:45:20.716] SystemMonitor.Service process not found (check #12493)
+[2025-08-26 15:45:25.736] SystemMonitor.Service process not found (check #12494)
+[2025-08-26 15:45:30.762] SystemMonitor.Service process not found (check #12495)
+[2025-08-26 15:45:35.783] SystemMonitor.Service process not found (check #12496)
+[2025-08-26 15:45:40.816] SystemMonitor.Service process not found (check #12497)
+[2025-08-26 15:45:45.843] Monitoring new process: PID=44808, Start Time=08/26/2025 15:45:45, Memory=13.3MB
+[2025-08-26 15:46:16.392] Process health check: PID=44808, Run Time=00:00:30.6001349, Memory=65.73MB, Handles=399, Threads=16
+[2025-08-26 15:47:17.165] Process health check: PID=44808, Run Time=00:01:31.3757974, Memory=143.69MB, Handles=1037, Threads=35
+[2025-08-26 15:47:17.169] [WARNING] High handle count: 1037
+[2025-08-26 15:48:17.441] Process health check: PID=44808, Run Time=00:02:31.6520163, Memory=153.61MB, Handles=1018, Threads=32
+[2025-08-26 15:48:17.451] [WARNING] High handle count: 1018
+[2025-08-26 15:49:17.684] Process health check: PID=44808, Run Time=00:03:31.8941787, Memory=155.63MB, Handles=851, Threads=21
+[2025-08-26 15:50:17.951] Process health check: PID=44808, Run Time=00:04:32.1619734, Memory=154.57MB, Handles=841, Threads=19
+[2025-08-26 15:51:18.452] Process health check: PID=44808, Run Time=00:05:32.6617914, Memory=154.62MB, Handles=837, Threads=20
+[2025-08-26 15:52:19.503] Process health check: PID=44808, Run Time=00:06:33.7116966, Memory=154.64MB, Handles=838, Threads=21
+[2025-08-26 15:53:22.376] Process health check: PID=44808, Run Time=00:07:36.5862352, Memory=154.61MB, Handles=837, Threads=19
+[2025-08-26 15:54:22.885] Process health check: PID=44808, Run Time=00:08:37.0945942, Memory=154.59MB, Handles=834, Threads=18
+[2025-08-26 15:55:23.452] Process health check: PID=44808, Run Time=00:09:37.6619470, Memory=154.59MB, Handles=836, Threads=18
+[2025-08-26 15:56:24.198] Process health check: PID=44808, Run Time=00:10:38.4084074, Memory=154.65MB, Handles=838, Threads=21
+[2025-08-26 15:57:25.340] Process health check: PID=44808, Run Time=00:11:39.5491902, Memory=154.5MB, Handles=824, Threads=18
+[2025-08-26 15:58:25.953] Process health check: PID=44808, Run Time=00:12:40.1612398, Memory=154.5MB, Handles=824, Threads=18
+[2025-08-26 15:59:26.655] Process health check: PID=44808, Run Time=00:13:40.8647761, Memory=154.54MB, Handles=834, Threads=19
+[2025-08-26 16:00:27.595] Process health check: PID=44808, Run Time=00:14:41.8043800, Memory=154.5MB, Handles=836, Threads=17
+[2025-08-26 16:01:28.142] Process health check: PID=44808, Run Time=00:15:42.3531609, Memory=154.52MB, Handles=836, Threads=18
+[2025-08-26 16:02:28.447] Process health check: PID=44808, Run Time=00:16:42.6565852, Memory=154.54MB, Handles=841, Threads=19
+[2025-08-26 16:03:28.849] Process health check: PID=44808, Run Time=00:17:43.0584459, Memory=154.6MB, Handles=839, Threads=18
+[2025-08-26 16:04:29.282] Process health check: PID=44808, Run Time=00:18:43.4913290, Memory=154.61MB, Handles=841, Threads=18
+[2025-08-26 16:05:29.699] Process health check: PID=44808, Run Time=00:19:43.9082082, Memory=154.73MB, Handles=855, Threads=20
+[2025-08-26 16:06:30.068] Process health check: PID=44808, Run Time=00:20:44.2781815, Memory=154.73MB, Handles=865, Threads=22
+[2025-08-26 16:07:30.391] Process health check: PID=44808, Run Time=00:21:44.6006814, Memory=154.65MB, Handles=855, Threads=18
+[2025-08-26 16:07:55.537] [CRITICAL] Process disappeared! Last PID=44808
+[2025-08-26 16:07:55.541] Process run duration: 00:22:09.7501770
+[2025-08-26 16:07:55.545] Searching for crash cause...
+[2025-08-26 16:08:00.737] SystemMonitor.Service process not found (check #12762)
+[2025-08-26 16:08:05.759] Monitoring new process: PID=1104, Start Time=08/26/2025 16:08:03, Memory=64.38MB
+[2025-08-26 16:08:30.928] Process health check: PID=1104, Run Time=00:00:27.3274170, Memory=133MB, Handles=998, Threads=39
+[2025-08-26 16:09:31.324] Process health check: PID=1104, Run Time=00:01:27.7237186, Memory=147.52MB, Handles=1049, Threads=36
+[2025-08-26 16:09:31.327] [WARNING] High handle count: 1049
+[2025-08-26 16:10:31.588] Process health check: PID=1104, Run Time=00:02:27.9888933, Memory=153.92MB, Handles=980, Threads=34
+[2025-08-26 16:11:31.871] Process health check: PID=1104, Run Time=00:03:28.2710411, Memory=153.42MB, Handles=997, Threads=37

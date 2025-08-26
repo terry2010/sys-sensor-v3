@@ -1,0 +1,398 @@
+2025-08-26 15:45:49.153 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Worker [worker] Worker 服务启动，进程ID: 53260，线程ID: 1
+2025-08-26 15:45:49.208 +08:00 [DBG] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:49.2085463+08:00"
+2025-08-26 15:45:49.217 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Services.RpcHostedService [startup] RPC HostedService 启动
+2025-08-26 15:45:49.218 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Services.RpcHostedService [startup] 初始化 HistoryStore 开始
+2025-08-26 15:45:49.466 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Services.HistoryStore HistoryStore initialized at C:\code\sys-sensor-v3\src\SystemMonitor.Service\bin\Debug\net8.0\data\metrics.db
+2025-08-26 15:45:49.469 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Services.RpcHostedService [startup] 初始化 HistoryStore 结束，用时 251ms
+2025-08-26 15:45:49.472 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:45:49.481 +08:00 [INF] DESKTOP-J6M8022 53260/1 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:45:50.219 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:50.2196756+08:00"
+2025-08-26 15:45:51.329 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:51.3293022+08:00"
+2025-08-26 15:45:52.335 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:52.3350159+08:00"
+2025-08-26 15:45:53.336 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:53.3361096+08:00"
+2025-08-26 15:45:54.344 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:54.3445018+08:00"
+2025-08-26 15:45:55.350 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:55.3507017+08:00"
+2025-08-26 15:45:56.355 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:56.3550667+08:00"
+2025-08-26 15:45:57.372 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:57.3724148+08:00"
+2025-08-26 15:45:58.440 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:58.4402942+08:00"
+2025-08-26 15:45:59.449 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:45:59.4494924+08:00"
+2025-08-26 15:46:00.467 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:00.4677568+08:00"
+2025-08-26 15:46:01.506 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:01.5061901+08:00"
+2025-08-26 15:46:02.570 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:02.5702619+08:00"
+2025-08-26 15:46:03.576 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:03.5767815+08:00"
+2025-08-26 15:46:04.592 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:04.5918297+08:00"
+2025-08-26 15:46:05.613 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:05.6135010+08:00"
+2025-08-26 15:46:06.626 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:06.6265861+08:00"
+2025-08-26 15:46:07.645 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:07.6456932+08:00"
+2025-08-26 15:46:08.661 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:08.6612449+08:00"
+2025-08-26 15:46:09.668 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:09.6685763+08:00"
+2025-08-26 15:46:10.685 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:10.6849989+08:00"
+2025-08-26 15:46:11.686 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:11.6866861+08:00"
+2025-08-26 15:46:12.699 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:12.6998041+08:00"
+2025-08-26 15:46:13.702 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:13.7022646+08:00"
+2025-08-26 15:46:14.782 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:14.7827052+08:00"
+2025-08-26 15:46:15.797 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:15.7977871+08:00"
+2025-08-26 15:46:16.829 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:16.8295576+08:00"
+2025-08-26 15:46:17.837 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:17.8370306+08:00"
+2025-08-26 15:46:18.840 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:18.8405537+08:00"
+2025-08-26 15:46:19.844 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:19.8443484+08:00"
+2025-08-26 15:46:20.858 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:20.8585084+08:00"
+2025-08-26 15:46:21.863 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:21.8633157+08:00"
+2025-08-26 15:46:22.873 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:22.8731729+08:00"
+2025-08-26 15:46:23.876 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:23.8763010+08:00"
+2025-08-26 15:46:24.887 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:24.8875796+08:00"
+2025-08-26 15:46:25.892 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:25.8924939+08:00"
+2025-08-26 15:46:26.892 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:26.8926854+08:00"
+2025-08-26 15:46:27.895 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:27.8955162+08:00"
+2025-08-26 15:46:28.908 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:28.9084405+08:00"
+2025-08-26 15:46:29.928 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:29.9269819+08:00"
+2025-08-26 15:46:30.944 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:30.9439077+08:00"
+2025-08-26 15:46:31.984 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:31.9845979+08:00"
+2025-08-26 15:46:32.997 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:32.9975511+08:00"
+2025-08-26 15:46:33.500 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:46:33.528 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:46:33.555 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="3aff1995-236c-4ca2-b77a-158a9361c9e9"
+2025-08-26 15:46:33.732 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:46:33.733 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:46:33.750 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9"
+2025-08-26 15:46:33.927 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService burst_subscribe: interval=200ms ttl=5000ms -> expires_at=1756194398927
+2025-08-26 15:46:33.992 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9", 连接时长: 461ms
+2025-08-26 15:46:34.001 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9"
+2025-08-26 15:46:34.001 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9"
+2025-08-26 15:46:34.023 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:34.0230105+08:00"
+2025-08-26 15:46:34.031 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9", 任务数量: 2
+2025-08-26 15:46:34.032 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9"
+2025-08-26 15:46:34.086 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService state emitted: phase=burst reason=null
+2025-08-26 15:46:35.029 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:35.0291241+08:00"
+2025-08-26 15:46:35.106 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9", 耗时: 1074ms
+2025-08-26 15:46:35.107 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="3aff1995-236c-4ca2-b77a-158a9361c9e9", 总时长: 1578ms
+2025-08-26 15:46:36.044 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:36.0440938+08:00"
+2025-08-26 15:46:37.055 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:37.0554140+08:00"
+2025-08-26 15:46:38.062 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:38.0624615+08:00"
+2025-08-26 15:46:39.069 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:39.0691120+08:00"
+2025-08-26 15:46:40.083 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:40.0836843+08:00"
+2025-08-26 15:46:41.088 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:41.0881361+08:00"
+2025-08-26 15:46:42.091 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:42.0916254+08:00"
+2025-08-26 15:46:43.094 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:43.0947806+08:00"
+2025-08-26 15:46:43.143 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:46:43.144 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:46:43.144 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e"
+2025-08-26 15:46:43.145 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:46:43.145 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e"
+2025-08-26 15:46:43.145 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:46:43.195 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e", 连接时长: 51ms
+2025-08-26 15:46:43.196 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e"
+2025-08-26 15:46:43.196 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e"
+2025-08-26 15:46:43.196 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e", 任务数量: 2
+2025-08-26 15:46:43.196 +08:00 [DBG] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e"
+2025-08-26 15:46:43.702 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e", 耗时: 506ms
+2025-08-26 15:46:43.703 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="8b9d7ecf-6ef0-4770-8daa-f53a6082e61e", 总时长: 558ms
+2025-08-26 15:46:44.098 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:44.0980942+08:00"
+2025-08-26 15:46:45.100 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:45.1007349+08:00"
+2025-08-26 15:46:46.105 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:46.1051783+08:00"
+2025-08-26 15:46:47.120 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:47.1201502+08:00"
+2025-08-26 15:46:48.124 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:48.1243117+08:00"
+2025-08-26 15:46:49.137 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:49.1373585+08:00"
+2025-08-26 15:46:50.142 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:50.1420785+08:00"
+2025-08-26 15:46:51.142 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:51.1424394+08:00"
+2025-08-26 15:46:52.152 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:52.1523049+08:00"
+2025-08-26 15:46:53.147 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:46:53.147 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:46:53.147 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="a1577cd0-9984-4390-bad3-c7641dcb7708"
+2025-08-26 15:46:53.147 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:46:53.147 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="a1577cd0-9984-4390-bad3-c7641dcb7708"
+2025-08-26 15:46:53.147 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:46:53.153 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="a1577cd0-9984-4390-bad3-c7641dcb7708", 连接时长: 6ms
+2025-08-26 15:46:53.153 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="a1577cd0-9984-4390-bad3-c7641dcb7708"
+2025-08-26 15:46:53.153 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="a1577cd0-9984-4390-bad3-c7641dcb7708"
+2025-08-26 15:46:53.154 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="a1577cd0-9984-4390-bad3-c7641dcb7708", 任务数量: 2
+2025-08-26 15:46:53.154 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="a1577cd0-9984-4390-bad3-c7641dcb7708"
+2025-08-26 15:46:53.154 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:53.1542241+08:00"
+2025-08-26 15:46:53.778 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="a1577cd0-9984-4390-bad3-c7641dcb7708", 耗时: 624ms
+2025-08-26 15:46:53.778 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="a1577cd0-9984-4390-bad3-c7641dcb7708", 总时长: 631ms
+2025-08-26 15:46:54.163 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:54.1635859+08:00"
+2025-08-26 15:46:55.169 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:55.1691162+08:00"
+2025-08-26 15:46:56.174 +08:00 [DBG] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:56.1740226+08:00"
+2025-08-26 15:46:57.188 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:57.1887609+08:00"
+2025-08-26 15:46:58.190 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:58.1908346+08:00"
+2025-08-26 15:46:59.194 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:46:59.1941929+08:00"
+2025-08-26 15:47:00.199 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:00.1995095+08:00"
+2025-08-26 15:47:01.200 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:01.2006455+08:00"
+2025-08-26 15:47:02.207 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:02.2073559+08:00"
+2025-08-26 15:47:03.152 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:03.152 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:03.152 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75"
+2025-08-26 15:47:03.153 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:03.153 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:03.153 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75"
+2025-08-26 15:47:03.159 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75", 连接时长: 6ms
+2025-08-26 15:47:03.159 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75"
+2025-08-26 15:47:03.159 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75"
+2025-08-26 15:47:03.159 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75", 任务数量: 2
+2025-08-26 15:47:03.159 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75"
+2025-08-26 15:47:03.212 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:03.2122373+08:00"
+2025-08-26 15:47:03.994 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75", 耗时: 834ms
+2025-08-26 15:47:03.994 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="713390ce-8d2b-4169-b1eb-10ba9f44dc75", 总时长: 841ms
+2025-08-26 15:47:04.218 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:04.2180395+08:00"
+2025-08-26 15:47:05.219 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:05.2193882+08:00"
+2025-08-26 15:47:06.223 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:06.2230487+08:00"
+2025-08-26 15:47:07.238 +08:00 [DBG] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:07.2382763+08:00"
+2025-08-26 15:47:08.156 +08:00 [INF] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:08.156 +08:00 [INF] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:08.156 +08:00 [INF] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="4900604a-3b3d-4623-8868-0169c17f5969"
+2025-08-26 15:47:08.156 +08:00 [INF] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:08.156 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="4900604a-3b3d-4623-8868-0169c17f5969"
+2025-08-26 15:47:08.156 +08:00 [INF] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:08.160 +08:00 [INF] DESKTOP-J6M8022 53260/15 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="4900604a-3b3d-4623-8868-0169c17f5969", 连接时长: 4ms
+2025-08-26 15:47:08.161 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="4900604a-3b3d-4623-8868-0169c17f5969"
+2025-08-26 15:47:08.161 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="4900604a-3b3d-4623-8868-0169c17f5969"
+2025-08-26 15:47:08.161 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="4900604a-3b3d-4623-8868-0169c17f5969", 任务数量: 2
+2025-08-26 15:47:08.161 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="4900604a-3b3d-4623-8868-0169c17f5969"
+2025-08-26 15:47:08.243 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:08.2432107+08:00"
+2025-08-26 15:47:08.705 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="4900604a-3b3d-4623-8868-0169c17f5969", 耗时: 544ms
+2025-08-26 15:47:08.705 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="4900604a-3b3d-4623-8868-0169c17f5969", 总时长: 549ms
+2025-08-26 15:47:09.243 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:09.2434813+08:00"
+2025-08-26 15:47:10.249 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:10.2493395+08:00"
+2025-08-26 15:47:11.252 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:11.2527023+08:00"
+2025-08-26 15:47:12.257 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:12.2571428+08:00"
+2025-08-26 15:47:13.267 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:13.2671160+08:00"
+2025-08-26 15:47:14.298 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:14.2986339+08:00"
+2025-08-26 15:47:15.305 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:15.3056842+08:00"
+2025-08-26 15:47:16.319 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:16.3191717+08:00"
+2025-08-26 15:47:17.319 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:17.3195779+08:00"
+2025-08-26 15:47:18.159 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:18.159 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:18.159 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167"
+2025-08-26 15:47:18.159 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:18.159 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:18.160 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167"
+2025-08-26 15:47:18.169 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167", 连接时长: 10ms
+2025-08-26 15:47:18.169 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167"
+2025-08-26 15:47:18.170 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167"
+2025-08-26 15:47:18.170 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167", 任务数量: 2
+2025-08-26 15:47:18.170 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167"
+2025-08-26 15:47:18.334 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:18.3348478+08:00"
+2025-08-26 15:47:19.258 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167", 耗时: 1087ms
+2025-08-26 15:47:19.258 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="f5f2dadb-277e-41f7-b555-d9f6bdd90167", 总时长: 1099ms
+2025-08-26 15:47:19.341 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:19.3409945+08:00"
+2025-08-26 15:47:20.343 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:20.3430881+08:00"
+2025-08-26 15:47:21.356 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:21.3564266+08:00"
+2025-08-26 15:47:22.361 +08:00 [DBG] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:22.3615105+08:00"
+2025-08-26 15:47:23.362 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:23.3628909+08:00"
+2025-08-26 15:47:24.367 +08:00 [DBG] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:24.3678948+08:00"
+2025-08-26 15:47:25.381 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:25.3815773+08:00"
+2025-08-26 15:47:26.386 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:26.3863728+08:00"
+2025-08-26 15:47:27.395 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:27.3959573+08:00"
+2025-08-26 15:47:28.142 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:28.142 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:28.142 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="7bec926b-acca-45ce-8df7-951407fb4c65"
+2025-08-26 15:47:28.143 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:28.143 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="7bec926b-acca-45ce-8df7-951407fb4c65"
+2025-08-26 15:47:28.143 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:28.155 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="7bec926b-acca-45ce-8df7-951407fb4c65", 连接时长: 12ms
+2025-08-26 15:47:28.155 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="7bec926b-acca-45ce-8df7-951407fb4c65"
+2025-08-26 15:47:28.155 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="7bec926b-acca-45ce-8df7-951407fb4c65"
+2025-08-26 15:47:28.156 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="7bec926b-acca-45ce-8df7-951407fb4c65", 任务数量: 2
+2025-08-26 15:47:28.156 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="7bec926b-acca-45ce-8df7-951407fb4c65"
+2025-08-26 15:47:28.405 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:28.4055092+08:00"
+2025-08-26 15:47:28.792 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="7bec926b-acca-45ce-8df7-951407fb4c65", 耗时: 636ms
+2025-08-26 15:47:28.792 +08:00 [INF] DESKTOP-J6M8022 53260/10 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="7bec926b-acca-45ce-8df7-951407fb4c65", 总时长: 650ms
+2025-08-26 15:47:29.413 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:29.4133154+08:00"
+2025-08-26 15:47:30.427 +08:00 [DBG] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:30.4270691+08:00"
+2025-08-26 15:47:31.435 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:31.4357834+08:00"
+2025-08-26 15:47:32.449 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:32.4498656+08:00"
+2025-08-26 15:47:33.449 +08:00 [DBG] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:33.4497690+08:00"
+2025-08-26 15:47:33.915 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:33.915 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:33.915 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29"
+2025-08-26 15:47:33.916 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:33.916 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29"
+2025-08-26 15:47:33.916 +08:00 [INF] DESKTOP-J6M8022 53260/11 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:34.388 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService snapshot called, modules=*
+2025-08-26 15:47:34.429 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29", 连接时长: 513ms
+2025-08-26 15:47:34.429 +08:00 [INF] DESKTOP-J6M8022 53260/16 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29"
+2025-08-26 15:47:34.429 +08:00 [INF] DESKTOP-J6M8022 53260/16 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29"
+2025-08-26 15:47:34.429 +08:00 [INF] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29", 任务数量: 2
+2025-08-26 15:47:34.429 +08:00 [DBG] DESKTOP-J6M8022 53260/12 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29"
+2025-08-26 15:47:34.458 +08:00 [DBG] DESKTOP-J6M8022 53260/16 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:34.4581222+08:00"
+2025-08-26 15:47:34.560 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29", 耗时: 130ms
+2025-08-26 15:47:34.560 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="f7dc942d-9a8d-412b-8982-a8dcb4013f29", 总时长: 644ms
+2025-08-26 15:47:35.465 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:35.4659487+08:00"
+2025-08-26 15:47:36.467 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:36.4676319+08:00"
+2025-08-26 15:47:37.480 +08:00 [DBG] DESKTOP-J6M8022 53260/26 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:37.4807234+08:00"
+2025-08-26 15:47:38.497 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:38.4972554+08:00"
+2025-08-26 15:47:39.499 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:39.4999378+08:00"
+2025-08-26 15:47:40.501 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:40.5012672+08:00"
+2025-08-26 15:47:41.517 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:41.5173323+08:00"
+2025-08-26 15:47:42.531 +08:00 [DBG] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:42.5315453+08:00"
+2025-08-26 15:47:43.150 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:43.150 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:43.150 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="509f6939-d9db-4355-8922-ed074384b850"
+2025-08-26 15:47:43.151 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:43.151 +08:00 [INF] DESKTOP-J6M8022 53260/8 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="509f6939-d9db-4355-8922-ed074384b850"
+2025-08-26 15:47:43.151 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:43.156 +08:00 [INF] DESKTOP-J6M8022 53260/26 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="509f6939-d9db-4355-8922-ed074384b850", 连接时长: 5ms
+2025-08-26 15:47:43.156 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="509f6939-d9db-4355-8922-ed074384b850"
+2025-08-26 15:47:43.156 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="509f6939-d9db-4355-8922-ed074384b850"
+2025-08-26 15:47:43.156 +08:00 [INF] DESKTOP-J6M8022 53260/26 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="509f6939-d9db-4355-8922-ed074384b850", 任务数量: 2
+2025-08-26 15:47:43.156 +08:00 [DBG] DESKTOP-J6M8022 53260/26 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="509f6939-d9db-4355-8922-ed074384b850"
+2025-08-26 15:47:43.534 +08:00 [DBG] DESKTOP-J6M8022 53260/26 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:43.5344528+08:00"
+2025-08-26 15:47:44.033 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="509f6939-d9db-4355-8922-ed074384b850", 耗时: 876ms
+2025-08-26 15:47:44.033 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="509f6939-d9db-4355-8922-ed074384b850", 总时长: 882ms
+2025-08-26 15:47:44.537 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:44.5372537+08:00"
+2025-08-26 15:47:45.542 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:45.5422049+08:00"
+2025-08-26 15:47:46.557 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:46.5571069+08:00"
+2025-08-26 15:47:47.569 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:47.5692115+08:00"
+2025-08-26 15:47:48.584 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:48.5845954+08:00"
+2025-08-26 15:47:49.587 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:49.5877238+08:00"
+2025-08-26 15:47:50.589 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:50.5892896+08:00"
+2025-08-26 15:47:51.602 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:51.6019786+08:00"
+2025-08-26 15:47:52.614 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:52.6145017+08:00"
+2025-08-26 15:47:53.142 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:47:53.142 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:47:53.142 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc"
+2025-08-26 15:47:53.142 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:47:53.142 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc"
+2025-08-26 15:47:53.143 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:47:53.151 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc", 连接时长: 9ms
+2025-08-26 15:47:53.152 +08:00 [INF] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc"
+2025-08-26 15:47:53.152 +08:00 [INF] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc"
+2025-08-26 15:47:53.152 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc", 任务数量: 2
+2025-08-26 15:47:53.152 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc"
+2025-08-26 15:47:53.615 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:53.6158868+08:00"
+2025-08-26 15:47:53.959 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc", 耗时: 806ms
+2025-08-26 15:47:53.959 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="0b5d8870-e984-4ae0-a28e-fe3ec5ed39fc", 总时长: 816ms
+2025-08-26 15:47:54.626 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:54.6265809+08:00"
+2025-08-26 15:47:55.629 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:55.6292460+08:00"
+2025-08-26 15:47:56.643 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:56.6435487+08:00"
+2025-08-26 15:47:57.645 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:57.6454764+08:00"
+2025-08-26 15:47:58.650 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:58.6505949+08:00"
+2025-08-26 15:47:59.656 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:47:59.6564389+08:00"
+2025-08-26 15:48:00.657 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:00.6577175+08:00"
+2025-08-26 15:48:01.672 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:01.6726191+08:00"
+2025-08-26 15:48:02.695 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:02.6953200+08:00"
+2025-08-26 15:48:03.155 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:48:03.155 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:48:03.155 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="911ed53d-109d-442d-9134-016394f8f294"
+2025-08-26 15:48:03.155 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:48:03.155 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:48:03.155 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="911ed53d-109d-442d-9134-016394f8f294"
+2025-08-26 15:48:03.160 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="911ed53d-109d-442d-9134-016394f8f294", 连接时长: 5ms
+2025-08-26 15:48:03.160 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="911ed53d-109d-442d-9134-016394f8f294"
+2025-08-26 15:48:03.160 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="911ed53d-109d-442d-9134-016394f8f294"
+2025-08-26 15:48:03.160 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="911ed53d-109d-442d-9134-016394f8f294", 任务数量: 2
+2025-08-26 15:48:03.160 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="911ed53d-109d-442d-9134-016394f8f294"
+2025-08-26 15:48:03.705 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:03.7052436+08:00"
+2025-08-26 15:48:04.275 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="911ed53d-109d-442d-9134-016394f8f294", 耗时: 1114ms
+2025-08-26 15:48:04.275 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="911ed53d-109d-442d-9134-016394f8f294", 总时长: 1120ms
+2025-08-26 15:48:04.712 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:04.7121770+08:00"
+2025-08-26 15:48:05.721 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:05.7216872+08:00"
+2025-08-26 15:48:06.727 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:06.7276182+08:00"
+2025-08-26 15:48:07.730 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:07.7302124+08:00"
+2025-08-26 15:48:08.158 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:48:08.158 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:48:08.158 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="2469cc22-1677-4220-ac82-da5e9082d6ca"
+2025-08-26 15:48:08.158 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:48:08.158 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:48:08.158 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="2469cc22-1677-4220-ac82-da5e9082d6ca"
+2025-08-26 15:48:08.166 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="2469cc22-1677-4220-ac82-da5e9082d6ca", 连接时长: 8ms
+2025-08-26 15:48:08.167 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="2469cc22-1677-4220-ac82-da5e9082d6ca", 任务数量: 2
+2025-08-26 15:48:08.167 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="2469cc22-1677-4220-ac82-da5e9082d6ca"
+2025-08-26 15:48:08.167 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="2469cc22-1677-4220-ac82-da5e9082d6ca"
+2025-08-26 15:48:08.167 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="2469cc22-1677-4220-ac82-da5e9082d6ca"
+2025-08-26 15:48:08.744 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:08.7440844+08:00"
+2025-08-26 15:48:08.932 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="2469cc22-1677-4220-ac82-da5e9082d6ca", 耗时: 765ms
+2025-08-26 15:48:08.932 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="2469cc22-1677-4220-ac82-da5e9082d6ca", 总时长: 774ms
+2025-08-26 15:48:09.759 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:09.7592769+08:00"
+2025-08-26 15:48:10.765 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:10.7653955+08:00"
+2025-08-26 15:48:11.772 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:11.7728653+08:00"
+2025-08-26 15:48:12.774 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:12.7747073+08:00"
+2025-08-26 15:48:13.790 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:13.7908903+08:00"
+2025-08-26 15:48:14.805 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:14.8052471+08:00"
+2025-08-26 15:48:15.805 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:15.8052105+08:00"
+2025-08-26 15:48:16.833 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:16.8337746+08:00"
+2025-08-26 15:48:17.864 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:17.8628008+08:00"
+2025-08-26 15:48:18.149 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:48:18.149 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:48:18.149 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="5a51ae51-4cab-46ae-b9fb-090bade29702"
+2025-08-26 15:48:18.149 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:48:18.150 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:48:18.150 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="5a51ae51-4cab-46ae-b9fb-090bade29702"
+2025-08-26 15:48:18.154 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="5a51ae51-4cab-46ae-b9fb-090bade29702", 连接时长: 4ms
+2025-08-26 15:48:18.154 +08:00 [INF] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="5a51ae51-4cab-46ae-b9fb-090bade29702"
+2025-08-26 15:48:18.154 +08:00 [INF] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="5a51ae51-4cab-46ae-b9fb-090bade29702"
+2025-08-26 15:48:18.154 +08:00 [INF] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="5a51ae51-4cab-46ae-b9fb-090bade29702", 任务数量: 2
+2025-08-26 15:48:18.154 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="5a51ae51-4cab-46ae-b9fb-090bade29702"
+2025-08-26 15:48:18.880 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:18.8805526+08:00"
+2025-08-26 15:48:19.663 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="5a51ae51-4cab-46ae-b9fb-090bade29702", 耗时: 1508ms
+2025-08-26 15:48:19.663 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="5a51ae51-4cab-46ae-b9fb-090bade29702", 总时长: 1513ms
+2025-08-26 15:48:19.895 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:19.8957062+08:00"
+2025-08-26 15:48:20.899 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:20.8996945+08:00"
+2025-08-26 15:48:21.905 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:21.9050890+08:00"
+2025-08-26 15:48:22.911 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:22.9114106+08:00"
+2025-08-26 15:48:23.917 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:23.9175916+08:00"
+2025-08-26 15:48:24.924 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:24.9248225+08:00"
+2025-08-26 15:48:25.938 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:25.9388207+08:00"
+2025-08-26 15:48:26.953 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:26.9531805+08:00"
+2025-08-26 15:48:27.965 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:27.9651243+08:00"
+2025-08-26 15:48:28.152 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:48:28.152 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:48:28.152 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72"
+2025-08-26 15:48:28.153 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:48:28.153 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:48:28.153 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72"
+2025-08-26 15:48:28.157 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72", 连接时长: 4ms
+2025-08-26 15:48:28.157 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72"
+2025-08-26 15:48:28.157 +08:00 [INF] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72"
+2025-08-26 15:48:28.157 +08:00 [INF] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72", 任务数量: 2
+2025-08-26 15:48:28.157 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72"
+2025-08-26 15:48:28.781 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72", 耗时: 623ms
+2025-08-26 15:48:28.781 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="f92c2e61-ff7a-4780-94bf-a9ba8630ea72", 总时长: 629ms
+2025-08-26 15:48:28.967 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:28.9677079+08:00"
+2025-08-26 15:48:29.982 +08:00 [DBG] DESKTOP-J6M8022 53260/5 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:29.9828583+08:00"
+2025-08-26 15:48:30.986 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:30.9865961+08:00"
+2025-08-26 15:48:31.989 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:31.9891134+08:00"
+2025-08-26 15:48:33.002 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:33.0020903+08:00"
+2025-08-26 15:48:33.918 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:48:33.918 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:48:33.918 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="5e13b113-c81f-4446-89a3-c98edcc041e9"
+2025-08-26 15:48:33.918 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:48:33.919 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:48:33.919 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="5e13b113-c81f-4446-89a3-c98edcc041e9"
+2025-08-26 15:48:34.011 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:34.0111737+08:00"
+2025-08-26 15:48:34.126 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService snapshot called, modules=*
+2025-08-26 15:48:34.265 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="5e13b113-c81f-4446-89a3-c98edcc041e9", 连接时长: 347ms
+2025-08-26 15:48:34.266 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="5e13b113-c81f-4446-89a3-c98edcc041e9", 任务数量: 2
+2025-08-26 15:48:34.267 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="5e13b113-c81f-4446-89a3-c98edcc041e9"
+2025-08-26 15:48:34.268 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="5e13b113-c81f-4446-89a3-c98edcc041e9"
+2025-08-26 15:48:34.268 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="5e13b113-c81f-4446-89a3-c98edcc041e9"
+2025-08-26 15:48:35.022 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:35.0223065+08:00"
+2025-08-26 15:48:35.188 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="5e13b113-c81f-4446-89a3-c98edcc041e9", 耗时: 921ms
+2025-08-26 15:48:35.188 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="5e13b113-c81f-4446-89a3-c98edcc041e9", 总时长: 1269ms
+2025-08-26 15:48:36.029 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:36.0296604+08:00"
+2025-08-26 15:48:37.032 +08:00 [DBG] DESKTOP-J6M8022 53260/19 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:37.0323521+08:00"
+2025-08-26 15:48:38.033 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:38.0331211+08:00"
+2025-08-26 15:48:39.039 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:39.0394557+08:00"
+2025-08-26 15:48:40.042 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:40.0426468+08:00"
+2025-08-26 15:48:41.045 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:41.0450671+08:00"
+2025-08-26 15:48:42.060 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:42.0602784+08:00"
+2025-08-26 15:48:43.074 +08:00 [DBG] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:43.0743981+08:00"
+2025-08-26 15:48:43.141 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 接受到一个客户端连接
+2025-08-26 15:48:43.141 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端已连接
+2025-08-26 15:48:43.141 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService 客户端会话建立: conn="e5724d89-2075-4bd7-a413-c0694e354b86"
+2025-08-26 15:48:43.141 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 创建命名管道实例
+2025-08-26 15:48:43.141 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService 开始 metrics 推送循环 conn="e5724d89-2075-4bd7-a413-c0694e354b86"
+2025-08-26 15:48:43.141 +08:00 [INF] DESKTOP-J6M8022 53260/14 SystemMonitor.Service.Services.RpcHostedService [startup] 命名管道已创建，等待客户端连接…
+2025-08-26 15:48:43.145 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 客户端断开：已达到流的结尾。 conn="e5724d89-2075-4bd7-a413-c0694e354b86", 连接时长: 4ms
+2025-08-26 15:48:43.145 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环被取消 conn="e5724d89-2075-4bd7-a413-c0694e354b86"
+2025-08-26 15:48:43.145 +08:00 [INF] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Services.RpcHostedService metrics 推送循环结束 conn="e5724d89-2075-4bd7-a413-c0694e354b86"
+2025-08-26 15:48:43.152 +08:00 [INF] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 开始清理会话任务 conn="e5724d89-2075-4bd7-a413-c0694e354b86", 任务数量: 2
+2025-08-26 15:48:43.152 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Services.RpcHostedService 已发送取消信号 conn="e5724d89-2075-4bd7-a413-c0694e354b86"
+2025-08-26 15:48:43.772 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 会话任务优雅清理完成 conn="e5724d89-2075-4bd7-a413-c0694e354b86", 耗时: 619ms
+2025-08-26 15:48:43.772 +08:00 [INF] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Services.RpcHostedService 客户端会话完全结束 conn="e5724d89-2075-4bd7-a413-c0694e354b86", 总时长: 631ms
+2025-08-26 15:48:44.086 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:44.0860234+08:00"
+2025-08-26 15:48:45.088 +08:00 [DBG] DESKTOP-J6M8022 53260/13 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:45.0880425+08:00"
+2025-08-26 15:48:46.097 +08:00 [DBG] DESKTOP-J6M8022 53260/24 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:46.0974833+08:00"
+2025-08-26 15:48:47.102 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:47.1028725+08:00"
+2025-08-26 15:48:48.109 +08:00 [DBG] DESKTOP-J6M8022 53260/22 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:48.1095213+08:00"
+2025-08-26 15:48:49.147 +08:00 [DBG] DESKTOP-J6M8022 53260/25 SystemMonitor.Service.Worker [worker] Worker running at: "2025-08-26T15:48:49.1477086+08:00"

@@ -10,7 +10,7 @@ export const useSessionStore = defineStore('session', {
       this.loading = true; this.error = '';
       const events = useEventsStore();
       const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-      const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
+      const withTimeout = async <T>(p: Promise<T>, ms = 15000): Promise<T> => {
         let timer: any;
         const t = new Promise<never>((_, rej) => { timer = setTimeout(() => rej(new Error('session hello timeout')), ms); });
         try { return await Promise.race([p, t]) as T; }

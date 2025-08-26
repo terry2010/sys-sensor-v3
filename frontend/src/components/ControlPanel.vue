@@ -52,8 +52,8 @@ const burstInterval = ref<number>(1000);
 const burstTtl = ref<number>(5000);
 const log = (m: any) => logs.value.push(`[${new Date().toLocaleTimeString()}] ${typeof m === 'string' ? m : JSON.stringify(m)}`);
 
-// 统一 6s 超时封装 + 800ms 最长 loading 展示，避免长时间占用交互
-const withTimeout = async <T>(p: Promise<T>, ms = 6000): Promise<T> => {
+// 统一 15s 超时封装 + 800ms 最长 loading 展示，避免长时间占用交互
+const withTimeout = async <T>(p: Promise<T>, ms = 15000): Promise<T> => {
   let timer: any; const t = new Promise<never>((_, rej) => { timer = setTimeout(() => rej(new Error('control timeout')), ms); });
   try { return await Promise.race([p, t]) as T; } finally { if (timer) clearTimeout(timer); }
 };
