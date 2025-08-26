@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj": {}
+    "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj": {}
   },
   "projects": {
-    "c:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj": {
+    "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj",
+        "projectUniqueName": "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj",
         "projectName": "SystemMonitor.Service",
-        "projectPath": "c:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj",
+        "projectPath": "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\SystemMonitor.Service.csproj",
         "packagesPath": "C:\\Users\\terry\\.nuget\\packages\\",
-        "outputPath": "c:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\obj\\",
+        "outputPath": "C:\\code\\sys-sensor-v3\\src\\SystemMonitor.Service\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\terry\\AppData\\Roaming\\NuGet\\NuGet.Config"

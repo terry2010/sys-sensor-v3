@@ -238,13 +238,19 @@ namespace SystemMonitor.Service.Services
             {
                 try
                 {
-                    // 创建非阻塞采集器管理器
-                    using var collectorManager = new NonBlockingCollectorManager(_logger);
-                    
                     var logEvery = GetMetricsLogEvery();
                     var consecutiveErrors = 0;
                     // 故障注入计数（仅当前会话内生效）
                     int simCount = 0; bool simTriggered = false;
+                    // 移除本地 lastModules，统一使用 rpcServer 的会话缓存（在 RpcServer 中实现）
+                    // 会话内采集器统计：用于首页观测
+                    var stats = new Dictionary<string, CollectorStat>(StringComparer.OrdinalIgnoreCase);
+                    // 自适应超时：跟踪连续超时次数
+                    var consecTimeouts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                    // 救火采集抑制：记录最近一次救火时间，避免频繁触发
+                    var lastRescueAt = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+                    // 避免救火与原始采集对同一模块并发：记录救火进行中模块
+                    var rescueInFlight = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     // 紧急刹车机制：连续性能问题计数
                     int consecutiveSlowCycles = 0;
                     int emergencyDelayMs = 1000; // 紧急情况下的采集间隔
@@ -295,34 +301,251 @@ namespace SystemMonitor.Service.Services
                         var maxConc = rpcServer.GetMaxConcurrency();
                         var collectors = MetricsRegistry.Collectors.Where(c => enabled.Contains(c.Name)).ToList();
                         
-                        // 通过非阻塞采集器管理器采集所有模块
+                        // 过载保护：如果上次采集耗时过長，跳过昂贵的采集器
+                        bool skipExpensive = false;
                         
-                        foreach (var c in collectors)
+                        // 检查GPU采集器上次耗时
+                        if (stats.TryGetValue("gpu", out var gpuStat) && gpuStat.LastMs > 600) 
+                        {
+                            skipExpensive = true;
+                            _logger.LogWarning("GPU采集器上次耗时 {LastMs}ms，触发过载保护", gpuStat.LastMs);
+                        }
+                        
+                        // 检查Power采集器上次耗时
+                        if (stats.TryGetValue("power", out var powerStat) && powerStat.LastMs > 400) 
+                        {
+                            skipExpensive = true;
+                            _logger.LogWarning("Power采集器上次耗时 {LastMs}ms，触发过载保护", powerStat.LastMs);
+                        }
+                        
+                        // 检查整体采集时间趋势
+                        var recentStats = stats.Values.Where(s => s.LastMs > 0).ToList();
+                        if (recentStats.Count > 0)
+                        {
+                            var totalLastMs = recentStats.Sum(s => s.LastMs);
+                            if (totalLastMs > 1200) // 总耗时超过1.2秒
+                            {
+                                skipExpensive = true;
+                                _logger.LogWarning("总采集耗时 {TotalMs}ms 过高，触发过载保护", totalLastMs);
+                            }
+                        }
+                        
+                        // 如果过载，优先采集关键指标
+                        if (skipExpensive) {
+                            collectors = collectors.Where(c => 
+                                c.Name.Equals("cpu", StringComparison.OrdinalIgnoreCase) ||
+                                c.Name.Equals("memory", StringComparison.OrdinalIgnoreCase) ||
+                                c.Name.Equals("disk", StringComparison.OrdinalIgnoreCase)
+                            ).ToList();
+                            _logger.LogWarning("检测到系统过载，跳过昂贵采集器 (GPU/Power)");
+                        }
+                        
+                        var syncList = collectors.Where(c => syncExempt.Contains(c.Name)).ToList();
+                        var asyncList = collectors.Where(c => !syncExempt.Contains(c.Name)).ToList();
+
+                        // 同步直采（豁免集）
+                        foreach (var c in syncList)
                         {
                             try
                             {
-                                if (collectorManager.TryGetResult(c.Name, () => c.Collect(), out var result))
+                                var swOne = Stopwatch.StartNew();
+                                var val = c.Collect();
+                                swOne.Stop();
+                                if (val != null)
                                 {
-                                    payload[c.Name] = result;
-                                    rpcServer.SetModuleCache(c.Name, result);
+                                    payload[c.Name] = val;
+                                    rpcServer.SetModuleCache(c.Name, val);
                                 }
-                                else
+                                if (swOne.ElapsedMilliseconds > 200)
                                 {
-                                    // 没有结果，尝试使用缓存
-                                    if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
+                                    _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (sync)", c.Name, swOne.ElapsedMilliseconds);
+                                }
+                                // 记录统计
+                                var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                st.AddDuration(swOne.ElapsedMilliseconds);
+                            }
+                            catch
+                            {
+                                var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                st.AddError();
+                                /* ignore collector error */
+                            }
+                        }
+
+                        // 异步并发采集（非豁免集）
+                        if (asyncList.Count > 0)
+                        {
+                            var semaphore = new System.Threading.SemaphoreSlim(Math.Max(1, maxConc));
+                            var tasks = new List<Task>();
+                            const int defaultTimeoutMs = 300;
+                            
+                            // 使用会话级别的CancellationToken确保任务能被正确取消
+
+                            foreach (var c in asyncList)
+                            {
+                                tasks.Add(Task.Run(async () =>
+                                {
+                                    await semaphore.WaitAsync(sessionToken).ConfigureAwait(false);
+                                    try
                                     {
-                                        payload[c.Name] = cached;
+                                        var swOne = Stopwatch.StartNew();
+                                        var work = Task.Run(() => c.Collect());
+                                        int timeoutMs = defaultTimeoutMs;
+                                        // 基础阈值：更激进的超时配置，快速失败避免堆积
+                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 400;
+                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 500;
+                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 600;
+                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = 500;
+                                        // 自适应：若该模块连续超时达到阈值，则临时提升超时以抓到首次数据
+                                        int ct;
+                                        lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct); }
+                                        if (ct >= 2)
+                                        {
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
+                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1000);
+                                        }
+                                        // 亦可在会话刚开始的前几次推送稍微放宽（优化后：更保守的初始超时）
+                                        if (pushTick < 3)
+                                        {
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
+                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1000);
+                                        }
+                                        var done = await Task.WhenAny(work, Task.Delay(timeoutMs, sessionToken)).ConfigureAwait(false);
+                                        if (done == work)
+                                        {
+                                            var val = await work.ConfigureAwait(false);
+                                            swOne.Stop();
+                                            if (val != null)
+                                            {
+                                                lock (payload) { payload[c.Name] = val; }
+                                                rpcServer.SetModuleCache(c.Name, val);
+                                            }
+                                            // 成功则重置连续超时计数
+                                            lock (consecTimeouts) { consecTimeouts[c.Name] = 0; }
+                                            if (swOne.ElapsedMilliseconds > 200)
+                                            {
+                                                _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (async)", c.Name, swOne.ElapsedMilliseconds);
+                                            }
+                                            // 记录统计
+                                            var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                            st.AddDuration(swOne.ElapsedMilliseconds);
+                                        }
+                                        else
+                                        {
+                                            _logger.LogWarning("collector timeout: {Name} exceeded {Timeout}ms, use cached value if any", c.Name, timeoutMs);
+                                            if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
+                                            {
+                                                lock (payload) { payload[c.Name] = cached; }
+                                            }
+                                            // 若连续超时较多，触发一次救火采集（更大超时），尝试播种缓存
+                                            int ct2; long nowTs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                                            lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct2); }
+                                            bool shouldRescue = ct2 >= 3;
+                                            if (shouldRescue)
+                                            {
+                                                bool allowed = false;
+                                                lock (lastRescueAt)
+                                                {
+                                                    lastRescueAt.TryGetValue(c.Name, out var lastTs);
+                                                    if (lastTs == 0 || nowTs - lastTs >= 5000) // 同一模块5秒内最多一次
+                                                    {
+                                                        lastRescueAt[c.Name] = nowTs;
+                                                        allowed = true;
+                                                    }
+                                                }
+                                                if (allowed)
+                                                {
+                                                    bool doRescue = false;
+                                                    lock (rescueInFlight)
+                                                    {
+                                                        if (!rescueInFlight.Contains(c.Name))
+                                                        {
+                                                            rescueInFlight.Add(c.Name);
+                                                            doRescue = true;
+                                                        }
+                                                    }
+                                                    if (doRescue)
+                                                    {
+                                                        int rescueTimeout = timeoutMs;
+                                                        // 优化后：更保守的救火超时配置
+                                                        if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1500);
+                                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1200);
+                                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1000);
+                                                        try
+                                                        {
+                                                            _logger.LogWarning("collector rescue: {Name} try with extended timeout {Timeout}ms", c.Name, rescueTimeout);
+                                                            var rescueTask = Task.Run(() => c.Collect());
+                                                            var rescueDone = await Task.WhenAny(rescueTask, Task.Delay(rescueTimeout, sessionToken)).ConfigureAwait(false);
+                                                            if (rescueDone == rescueTask)
+                                                            {
+                                                                var val2 = await rescueTask.ConfigureAwait(false);
+                                                                if (val2 != null)
+                                                                {
+                                                                    lock (payload) { payload[c.Name] = val2; }
+                                                                    rpcServer.SetModuleCache(c.Name, val2);
+                                                                    lock (consecTimeouts) { consecTimeouts[c.Name] = 0; }
+                                                                    _logger.LogInformation("collector rescue success: {Name}", c.Name);
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                _logger.LogWarning("collector rescue timeout: {Name} exceeded {Timeout}ms", c.Name, rescueTimeout);
+                                                            }
+                                                        }
+                                                        catch { /* ignore rescue errors */ }
+                                                        finally
+                                                        {
+                                                            lock (rescueInFlight) { rescueInFlight.Remove(c.Name); }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            // 递增连续超时计数
+                                            lock (consecTimeouts)
+                                            {
+                                                consecTimeouts.TryGetValue(c.Name, out var n);
+                                                consecTimeouts[c.Name] = n + 1;
+                                            }
+                                            var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                            st.AddTimeout();
+                                        }
                                     }
+                                    catch
+                                    {
+                                        var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
+                                        st.AddError();
+                                        /* ignore collector error */
+                                    }
+                                    finally
+                                    {
+                                        semaphore.Release();
+                                    }
+                                }, sessionToken));
+                            }
+
+                            try 
+                            { 
+                                // 等待所有异步采集任务完成，但有超时保护
+                                var allTasksCompletion = Task.WhenAll(tasks);
+                                var timeoutTask = Task.Delay(10000, sessionToken); // 10秒超时
+                                var completed = await Task.WhenAny(allTasksCompletion, timeoutTask).ConfigureAwait(false);
+                                
+                                if (completed == timeoutTask)
+                                {
+                                    _logger.LogWarning("异步采集任务整体超时，强制继续 conn={ConnId}", connId);
                                 }
+                            } 
+                            catch (OperationCanceledException) 
+                            {
+                                _logger.LogInformation("异步采集任务被取消 conn={ConnId}", connId);
                             }
                             catch (Exception ex)
                             {
-                                _logger.LogWarning(ex, "采集器 {Name} 异常", c.Name);
-                                // 尝试使用缓存
-                                if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
-                                {
-                                    payload[c.Name] = cached;
-                                }
+                                _logger.LogWarning(ex, "异步采集任务异常 conn={ConnId}", connId);
+                            }
+                            finally
+                            {
+                                semaphore.Dispose();
                             }
                         }
 
@@ -480,8 +703,11 @@ namespace SystemMonitor.Service.Services
                         // 附加：采集器统计诊断（供前端首页展示）
                         try
                         {
-                            // 使用非阻塞采集器管理器的统计信息
-                            var diag = collectorManager.GetStatistics();
+                            var diag = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+                            foreach (var kv in stats)
+                            {
+                                diag[kv.Key] = kv.Value.Snapshot();
+                            }
                             payload["collectors_diag"] = diag;
                         }
                         catch { /* ignore diag build error */ }
