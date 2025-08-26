@@ -11,57 +11,37 @@
         <span style="color:#667; font-size:12px;">共 {{ batteries.length }}，显示 {{ batteriesFiltered.length }}</span>
       </div>
       <div v-if="Array.isArray(batteriesFiltered) && batteriesFiltered.length > 0">
-        <div class="tbl-wrap">
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th class="k">Name</th>
-              <th class="v">Present</th>
-              <th class="v">Battery</th>
-              <th class="v">Conn</th>
-              <th class="v">Source</th>
-              <th class="v">Reason</th>
-              <th class="v">HasBattSvc</th>
-              <th class="v">Services</th>
-              <th class="v">Sampling(ms)</th>
-              <th class="v">Retries</th>
-              <th class="v">Address</th>
-              <th class="v">FirstSeen</th>
-              <th class="v">LastSeen</th>
-              <th class="v">LastUpdate</th>
-              <th class="v">Path</th>
-              <th class="v">Open</th>
-              <th class="v">Stage</th>
-              <th class="v">HR_S</th>
-              <th class="v">HR_C</th>
-              <th class="v">HR_V</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(b, i) in batteriesFiltered" :key="i">
-              <td class="k">{{ b.name || b.model || b.interface_path || '—' }}</td>
-              <td class="v">{{ fmtBool(b.present) }}</td>
-              <td class="v">{{ fmtPct(b.battery_percent) }}</td>
-              <td class="v">{{ b.connection || '—' }}</td>
-              <td class="v">{{ b.source || '—' }}</td>
-              <td class="v">{{ b.level_valid_reason || '—' }}</td>
-              <td class="v">{{ fmtBool(b.has_battery_service) }}</td>
-              <td class="v">{{ Array.isArray(b.services) ? b.services.length : (b.has_battery_service === true ? 1 : 0) }}</td>
-              <td class="v">{{ isNum(b.sampling_ms) ? b.sampling_ms : '—' }}</td>
-              <td class="v">{{ isNum(b.retry_count) ? b.retry_count : '—' }}</td>
-              <td class="v">{{ b.address || b.ble_address || '—' }}</td>
-              <td class="v">{{ fmtTs(b.first_seen_ts) }}</td>
-              <td class="v">{{ fmtTs(b.last_seen_ts) }}</td>
-              <td class="v">{{ fmtTs(b.last_update_ts) }}</td>
-              <td class="v" style="max-width:360px;">{{ b.interface_path || '—' }}</td>
-              <td class="v">{{ fmtBool(b.open_ok) }}</td>
-              <td class="v">{{ isNum(b.gatt_err_stage) ? b.gatt_err_stage : '—' }}</td>
-              <td class="v">{{ isNum(b.gatt_hr_services) ? fmtHex(b.gatt_hr_services) : '—' }}</td>
-              <td class="v">{{ isNum(b.gatt_hr_chars) ? fmtHex(b.gatt_hr_chars) : '—' }}</td>
-              <td class="v">{{ isNum(b.gatt_hr_value) ? fmtHex(b.gatt_hr_value) : '—' }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="list">
+          <div v-for="(b, i) in batteriesFiltered" :key="i" class="item">
+            <div class="row head">
+              <div class="name ell">{{ b.name || b.model || b.interface_path || '—' }}</div>
+              <div class="right mono">{{ fmtPct(b.battery_percent) }}</div>
+            </div>
+            <div class="row cols">
+              <div class="mini">在线：{{ fmtBool(b.present) }}</div>
+              <div class="mini">连接：{{ b.connection || '—' }}</div>
+              <div class="mini">来源：{{ b.source || '—' }}</div>
+              <div class="mini">服务：{{ Array.isArray(b.services) ? b.services.length : (b.has_battery_service === true ? 1 : 0) }}</div>
+              <div class="mini">地址：<span class="ell">{{ b.address || b.ble_address || '—' }}</span></div>
+            </div>
+            <details class="more">
+              <summary>更多</summary>
+              <div class="grid">
+                <div class="kv"><span>Reason</span><span>{{ b.level_valid_reason || '—' }}</span></div>
+                <div class="kv"><span>Sampling</span><span>{{ isNum(b.sampling_ms) ? b.sampling_ms : '—' }}</span></div>
+                <div class="kv"><span>Retries</span><span>{{ isNum(b.retry_count) ? b.retry_count : '—' }}</span></div>
+                <div class="kv"><span>FirstSeen</span><span>{{ fmtTs(b.first_seen_ts) }}</span></div>
+                <div class="kv"><span>LastSeen</span><span>{{ fmtTs(b.last_seen_ts) }}</span></div>
+                <div class="kv"><span>LastUpdate</span><span>{{ fmtTs(b.last_update_ts) }}</span></div>
+                <div class="kv"><span>Path</span><span class="wrap">{{ b.interface_path || '—' }}</span></div>
+                <div class="kv"><span>Open</span><span>{{ fmtBool(b.open_ok) }}</span></div>
+                <div class="kv"><span>Stage</span><span>{{ isNum(b.gatt_err_stage) ? b.gatt_err_stage : '—' }}</span></div>
+                <div class="kv"><span>HR_S</span><span>{{ isNum(b.gatt_hr_services) ? fmtHex(b.gatt_hr_services) : '—' }}</span></div>
+                <div class="kv"><span>HR_C</span><span>{{ isNum(b.gatt_hr_chars) ? fmtHex(b.gatt_hr_chars) : '—' }}</span></div>
+                <div class="kv"><span>HR_V</span><span>{{ isNum(b.gatt_hr_value) ? fmtHex(b.gatt_hr_value) : '—' }}</span></div>
+              </div>
+            </details>
+          </div>
         </div>
         <details class="json-box" style="margin-top:6px;">
           <summary>peripherals JSON</summary>
@@ -99,10 +79,18 @@ const fmtHex = (v: any) => {
 </script>
 
 <style scoped>
-.tbl-wrap { width: 100%; overflow-x: auto; }
-.tbl { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 12px; }
-.tbl th, .tbl td { border-bottom: 1px dashed #eee; padding: 6px 4px; text-align: left; }
-.tbl .k { color: #667; }
-.tbl .v { text-align: right; font-weight: 600; }
+.list { display: grid; gap: 8px; }
+.item { border: 1px solid #eee; border-radius: 6px; padding: 8px; background: #fff; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.row.head { font-weight: 600; }
+.row.cols { gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.mini { font-size: 12px; color: #444; }
+.name { font-weight: 600; }
+.ell { max-width: 40vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; color: #666; }
+.more { margin-top: 6px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 6px 12px; margin-top: 6px; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 6px; font-size: 12px; border-bottom: 1px dashed #f0f0f0; padding-bottom: 4px; }
+.kv .wrap { white-space: normal; word-break: break-all; }
 .json-box pre { max-height: 240px; overflow: auto; background: #0b1020; color: #cde2ff; padding: 8px; border-radius: 6px; }
 </style>

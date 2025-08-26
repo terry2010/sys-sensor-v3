@@ -98,3 +98,24 @@
 [2025-08-26 16:17:33.689] Process health check: PID=1104, Run Time=00:09:30.0895817, Memory=165.05MB, Handles=946, Threads=31
 [2025-08-26 16:18:34.009] Process health check: PID=1104, Run Time=00:10:30.4088179, Memory=159.57MB, Handles=963, Threads=34
 [2025-08-26 16:19:34.394] Process health check: PID=1104, Run Time=00:11:30.7943844, Memory=164.81MB, Handles=981, Threads=37
+[2025-08-26 16:20:34.748] Process health check: PID=1104, Run Time=00:12:31.1481413, Memory=168.4MB, Handles=1024, Threads=34
+[2025-08-26 16:20:34.752] [WARNING] High handle count: 1024
+[2025-08-26 16:21:35.000] Process health check: PID=1104, Run Time=00:13:31.4004805, Memory=162.12MB, Handles=985, Threads=34
+[2025-08-26 16:22:35.549] Process health check: PID=1104, Run Time=00:14:31.9478068, Memory=173.1MB, Handles=1017, Threads=34
+[2025-08-26 16:22:35.749] [WARNING] High handle count: 1017
+[2025-08-26 16:23:36.841] Process health check: PID=1104, Run Time=00:15:33.2407119, Memory=161.98MB, Handles=995, Threads=34
+[2025-08-26 16:24:38.942] Process health check: PID=1104, Run Time=00:16:35.3416231, Memory=164.73MB, Handles=1046, Threads=35
+[2025-08-26 16:24:39.713] [WARNING] High handle count: 1046
+[2025-08-26 16:25:40.995] Process health check: PID=1104, Run Time=00:17:37.3950359, Memory=169.72MB, Handles=1016, Threads=32
+[2025-08-26 16:25:41.147] [WARNING] High handle count: 1016
+[2025-08-26 16:26:42.192] Process health check: PID=1104, Run Time=00:18:38.5926615, Memory=164.79MB, Handles=1008, Threads=32
+[2025-08-26 16:26:42.263] [WARNING] High handle count: 1008
+[2025-08-26 16:27:43.233] Process health check: PID=1104, Run Time=00:19:39.6335363, Memory=165.75MB, Handles=1011, Threads=33
+[2025-08-26 16:27:43.848] [WARNING] High handle count: 1011
+[2025-08-26 16:28:45.173] Process health check: PID=1104, Run Time=00:20:41.5731389, Memory=171.46MB, Handles=1044, Threads=33
+[2025-08-26 16:29:25.089] [CRITICAL] Process disappeared! Last PID=1104
+[2025-08-26 16:29:25.144] Process run duration: 00:21:21.5416784
+[2025-08-26 16:29:25.490] Searching for crash cause...
+[2025-08-26 16:29:30.899] SystemMonitor.Service process not found (check #13012)
+[2025-08-26 16:29:36.742] SystemMonitor.Service process not found (check #13013)
+[2025-08-26 16:29:41.819] SystemMonitor.Service process not found (check #13014)

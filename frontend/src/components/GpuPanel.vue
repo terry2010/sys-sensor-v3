@@ -13,85 +13,55 @@
         {{ fmtMB(overallMemUsedMB) }}
       </template>
     </span></div>
-    <table class="tbl" v-if="adapters.length">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th class="num">Usage %</th>
-          <th class="num">Used (MB)</th>
-          <th class="num">Total (MB)</th>
-          <th class="num">Ded Used</th>
-          <th class="num">Ded Total</th>
-          <th class="num">Sha Used</th>
-          <th class="num">Sha Total</th>
-          <th class="num">DXGI Local Budget</th>
-          <th class="num">DXGI Local Used</th>
-          <th class="num">DXGI NonLocal Budget</th>
-          <th class="num">DXGI NonLocal Used</th>
-          <th class="num">3D%</th>
-          <th class="num">Compute%</th>
-          <th class="num">Copy%</th>
-          <th class="num">VDec%</th>
-          <th class="num">VEnc%</th>
-          <th class="num">Core MHz</th>
-          <th class="num">Mem MHz</th>
-          <th class="num">Power W</th>
-          <th class="num">Fan RPM</th>
-          <th class="num">MemCtrl%</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(a, i) in adapters" :key="i" :class="{ active: i === activeIndex }">
-          <td>{{ i }}</td>
-          <td>{{ a.name || a.key || `adapter_${i}` }}</td>
-          <td class="num">{{ fmt1(a.usage_percent) }}</td>
-          <td class="num">{{ fmtMB(sumMB(a.vram_dedicated_used_mb, a.vram_shared_used_mb)) }}</td>
-          <td class="num">{{ fmtMB(sumMB(a.vram_dedicated_total_mb, a.vram_shared_total_mb)) }}</td>
-          <td class="num">{{ fmtMB(a.vram_dedicated_used_mb) }}</td>
-          <td class="num">{{ fmtMB(a.vram_dedicated_total_mb) }}</td>
-          <td class="num">{{ fmtMB(a.vram_shared_used_mb) }}</td>
-          <td class="num">{{ fmtMB(a.vram_shared_total_mb) }}</td>
-          <td class="num">{{ fmtMB(a.dxgi_local_budget_mb) }}</td>
-          <td class="num">{{ fmtMB(a.dxgi_local_usage_mb) }}</td>
-          <td class="num">{{ fmtMB(a.dxgi_nonlocal_budget_mb) }}</td>
-          <td class="num">{{ fmtMB(a.dxgi_nonlocal_usage_mb) }}</td>
-          <td class="num">{{ fmt1(a.usage_by_engine_percent?.['3d']) }}</td>
-          <td class="num">{{ fmt1(a.usage_by_engine_percent?.compute) }}</td>
-          <td class="num">{{ fmt1(a.usage_by_engine_percent?.copy) }}</td>
-          <td class="num">{{ fmt1(a.usage_by_engine_percent?.video_decode ?? a.video_decode_util_percent) }}</td>
-          <td class="num">{{ fmt1(a.usage_by_engine_percent?.video_encode ?? a.video_encode_util_percent) }}</td>
-          <td class="num">{{ fmt1(a.core_clock_mhz) }}</td>
-          <td class="num">{{ fmt1(a.memory_clock_mhz) }}</td>
-          <td class="num">{{ fmt1(a.power_draw_w) }}</td>
-          <td class="num">{{ fmt1(a.fan_rpm) }}</td>
-          <td class="num">{{ fmt1(a.mem_controller_load_percent) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="adapters.length" class="list">
+      <div
+        v-for="(a, i) in adapters"
+        :key="i"
+        class="item"
+        :class="{ active: i === activeIndex }"
+      >
+        <div class="row head">
+          <div class="left ell">#{{ i }} · {{ a.name || a.key || `adapter_${i}` }}</div>
+          <div class="right">{{ fmt1(a.usage_percent) }}%</div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="kv"><span>VRAM Used</span><span>{{ fmtMB(sumMB(a.vram_dedicated_used_mb, a.vram_shared_used_mb)) }}</span></div>
+            <div class="kv"><span>VRAM Total</span><span>{{ fmtMB(sumMB(a.vram_dedicated_total_mb, a.vram_shared_total_mb)) }}</span></div>
+            <div class="kv"><span>Dedicated</span><span>{{ fmtMB(a.vram_dedicated_used_mb) }} / {{ fmtMB(a.vram_dedicated_total_mb) }}</span></div>
+            <div class="kv"><span>Shared</span><span>{{ fmtMB(a.vram_shared_used_mb) }} / {{ fmtMB(a.vram_shared_total_mb) }}</span></div>
+          </div>
+          <div class="col">
+            <div class="kv"><span>DXGI Local</span><span>{{ fmtMB(a.dxgi_local_usage_mb) }} / {{ fmtMB(a.dxgi_local_budget_mb) }}</span></div>
+            <div class="kv"><span>DXGI NonLocal</span><span>{{ fmtMB(a.dxgi_nonlocal_usage_mb) }} / {{ fmtMB(a.dxgi_nonlocal_budget_mb) }}</span></div>
+            <div class="kv"><span>Core/Mem MHz</span><span>{{ fmt1(a.core_clock_mhz) }} / {{ fmt1(a.memory_clock_mhz) }}</span></div>
+            <div class="kv"><span>Power/Fan</span><span>{{ fmt1(a.power_draw_w) }} W / {{ fmt1(a.fan_rpm) }} RPM</span></div>
+          </div>
+          <div class="col">
+            <div class="kv"><span>3D</span><span>{{ fmt1(a.usage_by_engine_percent?.['3d']) }}%</span></div>
+            <div class="kv"><span>Compute/Copy</span><span>{{ fmt1(a.usage_by_engine_percent?.compute) }}% / {{ fmt1(a.usage_by_engine_percent?.copy) }}%</span></div>
+            <div class="kv"><span>VDec/VEnc</span><span>{{ fmt1(a.usage_by_engine_percent?.video_decode ?? a.video_decode_util_percent) }}% / {{ fmt1(a.usage_by_engine_percent?.video_encode ?? a.video_encode_util_percent) }}%</span></div>
+            <div class="kv"><span>MemCtrl</span><span>{{ fmt1(a.mem_controller_load_percent) }}%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div v-else>—</div>
 
     <div class="kv" style="margin-top:8px"><span>Top Processes</span><span></span></div>
-    <table class="tbl" v-if="topProcesses.length">
-      <thead>
-        <tr>
-          <th class="num">PID</th>
-          <th>Name</th>
-          <th class="num">Usage %</th>
-          <th class="num">VDec%</th>
-          <th class="num">VEnc%</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="p in topProcesses" :key="p.pid">
-          <td class="num">{{ p.pid }}</td>
-          <td>{{ p.name || '—' }}</td>
-          <td class="num">{{ fmt1(p.usage_percent) }}</td>
-          <td class="num">{{ fmt1(p.video_decode_util_percent) }}</td>
-          <td class="num">{{ fmt1(p.video_encode_util_percent) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="topProcesses.length" class="list compact">
+      <div v-for="p in topProcesses" :key="p.pid" class="item">
+        <div class="row head">
+          <div class="left ell">{{ p.name || '—' }}</div>
+          <div class="right mono">PID {{ p.pid }}</div>
+        </div>
+        <div class="row cols">
+          <div class="mini">GPU {{ fmt1(p.usage_percent) }}%</div>
+          <div class="mini">VDec {{ fmt1(p.video_decode_util_percent) }}%</div>
+          <div class="mini">VEnc {{ fmt1(p.video_encode_util_percent) }}%</div>
+        </div>
+      </div>
+    </div>
     <div v-else>—</div>
 
     <div class="kv" style="margin-top:8px"><span>Active Adapter (Static)</span><span></span></div>
@@ -210,9 +180,18 @@ const overallMemPercent = computed<number | null>(() => {
 
 <style scoped>
 .sub { color: #666; font-size: 12px; }
-.kv { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12px; }
-.tbl { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
-.tbl th, .tbl td { border-bottom: 1px dashed #eee; padding: 6px 8px; text-align: left; }
-.tbl .num { text-align: right; font-variant-numeric: tabular-nums; }
-tr.active td { background: #f6ffed; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 4px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12px; }
+.list { display: grid; gap: 8px; margin-top: 8px; }
+.list.compact .item { padding: 6px 8px; }
+.item { border: 1px solid #eee; border-radius: 6px; padding: 8px; background: #fff; }
+.item.active { outline: 2px solid #a3d3ff; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.row.head { font-weight: 600; margin-bottom: 4px; }
+.row.cols { gap: 12px; flex-wrap: wrap; }
+.col { min-width: 160px; flex: 1; }
+.ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.right { text-align: right; }
+.mini { font-size: 12px; color: #444; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; color: #666; }
+.card { max-width: 100%; overflow: hidden; }
 </style>

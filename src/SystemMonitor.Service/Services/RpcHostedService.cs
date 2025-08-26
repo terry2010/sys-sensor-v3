@@ -238,19 +238,17 @@ namespace SystemMonitor.Service.Services
             {
                 try
                 {
+                    // 创建非阻塞采集器管理器
+                    using var collectorManager = new NonBlockingCollectorManager(_logger);
+                    
                     var logEvery = GetMetricsLogEvery();
                     var consecutiveErrors = 0;
                     // 故障注入计数（仅当前会话内生效）
                     int simCount = 0; bool simTriggered = false;
-                    // 移除本地 lastModules，统一使用 rpcServer 的会话缓存（在 RpcServer 中实现）
-                    // 会话内采集器统计：用于首页观测
-                    var stats = new Dictionary<string, CollectorStat>(StringComparer.OrdinalIgnoreCase);
-                    // 自适应超时：跟踪连续超时次数
-                    var consecTimeouts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                    // 救火采集抑制：记录最近一次救火时间，避免频繁触发
-                    var lastRescueAt = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-                    // 避免救火与原始采集对同一模块并发：记录救火进行中模块
-                    var rescueInFlight = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    // 紧急刹车机制：连续性能问题计数
+                    int consecutiveSlowCycles = 0;
+                    int emergencyDelayMs = 1000; // 紧急情况下的采集间隔
+                    
                     int pushTick = 0;
                     
                     _logger.LogInformation("开始 metrics 推送循环 conn={ConnId}", connId);
@@ -259,7 +257,17 @@ namespace SystemMonitor.Service.Services
                 {
                     try
                     {
+                        pushTick++;
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        
+                        // 紧急刹车检查：如果连续出现性能问题，降低采集频率
+                        if (consecutiveSlowCycles > 3)
+                        {
+                            _logger.LogWarning("连续 {Count} 个周期性能不佳，开启紧急刹车模式，延迟 {DelayMs}ms", consecutiveSlowCycles, emergencyDelayMs);
+                            await Task.Delay(emergencyDelayMs, sessionToken).ConfigureAwait(false);
+                            // 逐渐恢复正常采集间隔
+                            emergencyDelayMs = Math.Max(1000, emergencyDelayMs - 200);
+                        }
                         // 推送条件：必须是"事件桥接"连接，且开启了 metrics 订阅
                         if (!rpcServer.IsBridgeConnection || !rpcServer.MetricsPushEnabled)
                         {
@@ -286,215 +294,56 @@ namespace SystemMonitor.Service.Services
                         var syncExempt = rpcServer.GetSyncExemptModules();
                         var maxConc = rpcServer.GetMaxConcurrency();
                         var collectors = MetricsRegistry.Collectors.Where(c => enabled.Contains(c.Name)).ToList();
-                        var syncList = collectors.Where(c => syncExempt.Contains(c.Name)).ToList();
-                        var asyncList = collectors.Where(c => !syncExempt.Contains(c.Name)).ToList();
-
-                        // 同步直采（豁免集）
-                        foreach (var c in syncList)
+                        
+                        // 通过非阻塞采集器管理器采集所有模块
+                        
+                        foreach (var c in collectors)
                         {
                             try
                             {
-                                var swOne = Stopwatch.StartNew();
-                                var val = c.Collect();
-                                swOne.Stop();
-                                if (val != null)
+                                if (collectorManager.TryGetResult(c.Name, () => c.Collect(), out var result))
                                 {
-                                    payload[c.Name] = val;
-                                    rpcServer.SetModuleCache(c.Name, val);
+                                    payload[c.Name] = result;
+                                    rpcServer.SetModuleCache(c.Name, result);
                                 }
-                                if (swOne.ElapsedMilliseconds > 200)
+                                else
                                 {
-                                    _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (sync)", c.Name, swOne.ElapsedMilliseconds);
+                                    // 没有结果，尝试使用缓存
+                                    if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
+                                    {
+                                        payload[c.Name] = cached;
+                                    }
                                 }
-                                // 记录统计
-                                var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
-                                st.AddDuration(swOne.ElapsedMilliseconds);
-                            }
-                            catch
-                            {
-                                var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
-                                st.AddError();
-                                /* ignore collector error */
-                            }
-                        }
-
-                        // 异步并发采集（非豁免集）
-                        if (asyncList.Count > 0)
-                        {
-                            var semaphore = new System.Threading.SemaphoreSlim(Math.Max(1, maxConc));
-                            var tasks = new List<Task>();
-                            const int defaultTimeoutMs = 300;
-                            
-                            // 使用会话级别的CancellationToken确保任务能被正确取消
-
-                            foreach (var c in asyncList)
-                            {
-                                tasks.Add(Task.Run(async () =>
-                                {
-                                    await semaphore.WaitAsync(sessionToken).ConfigureAwait(false);
-                                    try
-                                    {
-                                        var swOne = Stopwatch.StartNew();
-                                        var work = Task.Run(() => c.Collect());
-                                        int timeoutMs = defaultTimeoutMs;
-                                        // 基础阈值：根据观测 p95 提升，减少常态超时
-                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 900;
-                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 1500;
-                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 2000;
-                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = 1200;
-                                        // 自适应：若该模块连续超时达到阈值，则临时提升超时以抓到首次数据
-                                        int ct;
-                                        lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct); }
-                                        if (ct >= 2)
-                                        {
-                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 2000);
-                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1500);
-                                        }
-                                        // 亦可在会话刚开始的前几次推送稍微放宽
-                                        if (pushTick < 3)
-                                        {
-                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1800);
-                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
-                                        }
-                                        var done = await Task.WhenAny(work, Task.Delay(timeoutMs, sessionToken)).ConfigureAwait(false);
-                                        if (done == work)
-                                        {
-                                            var val = await work.ConfigureAwait(false);
-                                            swOne.Stop();
-                                            if (val != null)
-                                            {
-                                                lock (payload) { payload[c.Name] = val; }
-                                                rpcServer.SetModuleCache(c.Name, val);
-                                            }
-                                            // 成功则重置连续超时计数
-                                            lock (consecTimeouts) { consecTimeouts[c.Name] = 0; }
-                                            if (swOne.ElapsedMilliseconds > 200)
-                                            {
-                                                _logger.LogWarning("collector slow: {Name} took {Elapsed}ms (async)", c.Name, swOne.ElapsedMilliseconds);
-                                            }
-                                            // 记录统计
-                                            var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
-                                            st.AddDuration(swOne.ElapsedMilliseconds);
-                                        }
-                                        else
-                                        {
-                                            _logger.LogWarning("collector timeout: {Name} exceeded {Timeout}ms, use cached value if any", c.Name, timeoutMs);
-                                            if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
-                                            {
-                                                lock (payload) { payload[c.Name] = cached; }
-                                            }
-                                            // 若连续超时较多，触发一次救火采集（更大超时），尝试播种缓存
-                                            int ct2; long nowTs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                                            lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct2); }
-                                            bool shouldRescue = ct2 >= 3;
-                                            if (shouldRescue)
-                                            {
-                                                bool allowed = false;
-                                                lock (lastRescueAt)
-                                                {
-                                                    lastRescueAt.TryGetValue(c.Name, out var lastTs);
-                                                    if (lastTs == 0 || nowTs - lastTs >= 5000) // 同一模块5秒内最多一次
-                                                    {
-                                                        lastRescueAt[c.Name] = nowTs;
-                                                        allowed = true;
-                                                    }
-                                                }
-                                                if (allowed)
-                                                {
-                                                    bool doRescue = false;
-                                                    lock (rescueInFlight)
-                                                    {
-                                                        if (!rescueInFlight.Contains(c.Name))
-                                                        {
-                                                            rescueInFlight.Add(c.Name);
-                                                            doRescue = true;
-                                                        }
-                                                    }
-                                                    if (doRescue)
-                                                    {
-                                                        int rescueTimeout = timeoutMs;
-                                                        if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 2600);
-                                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 2000);
-                                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1400);
-                                                        try
-                                                        {
-                                                            _logger.LogWarning("collector rescue: {Name} try with extended timeout {Timeout}ms", c.Name, rescueTimeout);
-                                                            var rescueTask = Task.Run(() => c.Collect());
-                                                            var rescueDone = await Task.WhenAny(rescueTask, Task.Delay(rescueTimeout, sessionToken)).ConfigureAwait(false);
-                                                            if (rescueDone == rescueTask)
-                                                            {
-                                                                var val2 = await rescueTask.ConfigureAwait(false);
-                                                                if (val2 != null)
-                                                                {
-                                                                    lock (payload) { payload[c.Name] = val2; }
-                                                                    rpcServer.SetModuleCache(c.Name, val2);
-                                                                    lock (consecTimeouts) { consecTimeouts[c.Name] = 0; }
-                                                                    _logger.LogInformation("collector rescue success: {Name}", c.Name);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                _logger.LogWarning("collector rescue timeout: {Name} exceeded {Timeout}ms", c.Name, rescueTimeout);
-                                                            }
-                                                        }
-                                                        catch { /* ignore rescue errors */ }
-                                                        finally
-                                                        {
-                                                            lock (rescueInFlight) { rescueInFlight.Remove(c.Name); }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            // 递增连续超时计数
-                                            lock (consecTimeouts)
-                                            {
-                                                consecTimeouts.TryGetValue(c.Name, out var n);
-                                                consecTimeouts[c.Name] = n + 1;
-                                            }
-                                            var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
-                                            st.AddTimeout();
-                                        }
-                                    }
-                                    catch
-                                    {
-                                        var st = stats.TryGetValue(c.Name, out var s) ? s : (stats[c.Name] = new CollectorStat());
-                                        st.AddError();
-                                        /* ignore collector error */
-                                    }
-                                    finally
-                                    {
-                                        semaphore.Release();
-                                    }
-                                }, sessionToken));
-                            }
-
-                            try 
-                            { 
-                                // 等待所有异步采集任务完成，但有超时保护
-                                var allTasksCompletion = Task.WhenAll(tasks);
-                                var timeoutTask = Task.Delay(10000, sessionToken); // 10秒超时
-                                var completed = await Task.WhenAny(allTasksCompletion, timeoutTask).ConfigureAwait(false);
-                                
-                                if (completed == timeoutTask)
-                                {
-                                    _logger.LogWarning("异步采集任务整体超时，强制继续 conn={ConnId}", connId);
-                                }
-                            } 
-                            catch (OperationCanceledException) 
-                            {
-                                _logger.LogInformation("异步采集任务被取消 conn={ConnId}", connId);
                             }
                             catch (Exception ex)
                             {
-                                _logger.LogWarning(ex, "异步采集任务异常 conn={ConnId}", connId);
-                            }
-                            finally
-                            {
-                                semaphore.Dispose();
+                                _logger.LogWarning(ex, "采集器 {Name} 异常", c.Name);
+                                // 尝试使用缓存
+                                if (rpcServer.TryGetModuleFromCache(c.Name, out var cached) && cached != null)
+                                {
+                                    payload[c.Name] = cached;
+                                }
                             }
                         }
 
                         swAll.Stop();
+                        var totalCollectMs = (long)swAll.Elapsed.TotalMilliseconds;
+                        
+                        // 紧急刹车机制：更新性能计数器
+                        if (totalCollectMs > 1500) // 单次采集超过1.5秒
+                        {
+                            consecutiveSlowCycles++;
+                            emergencyDelayMs = Math.Min(3000, emergencyDelayMs + 300); // 逐渐增加延迟
+                            _logger.LogWarning("本次采集耗时 {TotalMs}ms，连续慢周期计数: {Count}", totalCollectMs, consecutiveSlowCycles);
+                        }
+                        else if (totalCollectMs < 800) // 正常采集时间
+                        {
+                            consecutiveSlowCycles = Math.Max(0, consecutiveSlowCycles - 1); // 逐渐恢复
+                            if (consecutiveSlowCycles == 0)
+                            {
+                                emergencyDelayMs = 1000; // 重置为默认延迟
+                            }
+                        }
                         // 维持历史/持久化所需的 CPU/Memory 数值（避免从匿名对象中反射）
                         if (enabled.Contains("cpu"))
                         {
@@ -631,11 +480,8 @@ namespace SystemMonitor.Service.Services
                         // 附加：采集器统计诊断（供前端首页展示）
                         try
                         {
-                            var diag = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-                            foreach (var kv in stats)
-                            {
-                                diag[kv.Key] = kv.Value.Snapshot();
-                            }
+                            // 使用非阻塞采集器管理器的统计信息
+                            var diag = collectorManager.GetStatistics();
                             payload["collectors_diag"] = diag;
                         }
                         catch { /* ignore diag build error */ }
