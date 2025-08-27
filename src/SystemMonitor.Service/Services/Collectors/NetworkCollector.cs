@@ -31,13 +31,30 @@ namespace SystemMonitor.Service.Services.Collectors
 
         public object? Collect()
         {
-            object? nc = null; object? nq = null;
-            try { nc = NetCounters.Instance.Read(); } catch { nc = null; }
-            try { nq = NetworkQuery.Instance.Read(); } catch { nq = null; }
-            // 附加：Wi‑Fi 与连通性
-            object? wq = null; object? conn = null;
-            try { wq = WifiQuery.Instance.Read(); } catch { wq = null; }
-            try { conn = ConnectivityService.Instance.Read(); } catch { conn = null; }
+            // 为避免单个子查询阻塞整体采集，这里将各子查询并行执行并设置上限超时
+            // 基线：计数器尽量快（200-300ms），接口/WMI 查询适度放宽（500-700ms），Wi‑Fi/连通性较快（200-400ms）
+            object? nc = null; object? nq = null; object? wq = null; object? conn = null;
+
+            object? TryGetResult(System.Threading.Tasks.Task<object?> t, int timeoutMs)
+            {
+                try
+                {
+                    if (t.Wait(timeoutMs)) return t.Result;
+                }
+                catch { /* ignore */ }
+                return null;
+            }
+
+            var tNc = System.Threading.Tasks.Task.Run<object?>(() => { try { return NetCounters.Instance.Read(); } catch { return null; } });
+            var tNq = System.Threading.Tasks.Task.Run<object?>(() => { try { return NetworkQuery.Instance.Read(); } catch { return null; } });
+            var tWq = System.Threading.Tasks.Task.Run<object?>(() => { try { return WifiQuery.Instance.Read(); } catch { return null; } });
+            var tConn = System.Threading.Tasks.Task.Run<object?>(() => { try { return ConnectivityService.Instance.Read(); } catch { return null; } });
+
+            // 按各自特性读取结果，未完成则置空，避免拖慢整体 Collect()
+            nc = TryGetResult(tNc, 300);
+            nq = TryGetResult(tNq, 700);
+            wq = TryGetResult(tWq, 400);
+            conn = TryGetResult(tConn, 300);
 
             // 提取 counters
             var ioTotals = nc != null ? GetProp(nc, "io_totals") : null;

@@ -32,8 +32,13 @@ fn resolve_repo_root() -> PathBuf {
 }
 
 fn log_line(level: &str, msg: &str) {
-    let root = resolve_repo_root();
-    let log_dir = root.join("logs");
+    // Prefer SYS_SENSOR_LOG_DIR override
+    let log_dir = if let Ok(env_dir) = std::env::var("SYS_SENSOR_LOG_DIR") {
+        std::path::PathBuf::from(env_dir)
+    } else {
+        let root = resolve_repo_root();
+        root.join("logs")
+    };
     let _ = std::fs::create_dir_all(&log_dir);
     let path = log_dir.join("frontend.log");
     if let Ok(mut f) = OpenOptions::new().create(true).append(true).open(path) {

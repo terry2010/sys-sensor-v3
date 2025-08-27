@@ -15,12 +15,22 @@ function Write-Log {
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 Write-Log "Script directory: $scriptDir" "Gray"
 
+# Prepare logs directory and set env var for both backend and frontend
+try {
+    $logDir = Join-Path $scriptDir "logs"
+    if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+    $env:SYS_SENSOR_LOG_DIR = $logDir
+    Write-Log "SYS_SENSOR_LOG_DIR set to: $env:SYS_SENSOR_LOG_DIR" "Gray"
+} catch {
+    Write-Log "Failed to prepare logs directory or set SYS_SENSOR_LOG_DIR: $($_.Exception.Message)" "Yellow"
+}
+
 # Global variables to store started processes
 $global:BackendProcess = $null
 $global:FrontendProcess = $null
 
 # Cleanup function
-function Cleanup-AllProcesses {
+function Stop-StartedProcesses {
     Write-Log "Cleaning up all started processes..." "Yellow"
     
     # Cleanup frontend process
@@ -92,16 +102,16 @@ function Cleanup-AllProcesses {
 
 # Register exit handler
 $null = Register-EngineEvent PowerShell.Exiting -Action {
-    Cleanup-AllProcesses
+    Stop-StartedProcesses
 }
 
 # Register Ctrl+C handler
 try {
     [Console]::CancelKeyPress += {
-        param($sender, $e)
+        param($evtSender, $e)
         $e.Cancel = $true
         Write-Log "`nCtrl+C detected, cleaning up processes..." "Yellow"
-        Cleanup-AllProcesses
+        Stop-StartedProcesses
         exit 0
     }
 } catch {
@@ -117,7 +127,7 @@ try {
 # If -NoKillExisting is not specified, clean existing related processes first
 if (-not $NoKillExisting) {
     Write-Log "Cleaning existing related processes..." "Cyan"
-    Cleanup-AllProcesses
+    Stop-StartedProcesses
 }
 
 try {
@@ -195,6 +205,6 @@ try {
     Write-Log "Stack trace: $($_.Exception.StackTrace)" "Red"
 } finally {
     Write-Log "Shutting down..." "Yellow"
-    Cleanup-AllProcesses
+    Stop-StartedProcesses
     Write-Log "Shutdown completed" "Green"
 }

@@ -60,8 +60,18 @@ try
             return Directory.GetCurrentDirectory();
         }
 
-        var repoRoot = ResolveRepoRoot();
-        var logDir = Path.Combine(repoRoot, "logs");
+        // Prefer environment override for log directory if provided
+        var envLogDir = Environment.GetEnvironmentVariable("SYS_SENSOR_LOG_DIR");
+        string logDir;
+        if (!string.IsNullOrWhiteSpace(envLogDir))
+        {
+            logDir = envLogDir!;
+        }
+        else
+        {
+            var repoRoot = ResolveRepoRoot();
+            logDir = Path.Combine(repoRoot, "logs");
+        }
         try { Directory.CreateDirectory(logDir); } catch { }
 
         // 启用 Serilog 自诊断到标准错误
