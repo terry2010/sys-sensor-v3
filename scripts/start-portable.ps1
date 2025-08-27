@@ -37,7 +37,40 @@ function Cleanup-AllProcesses {
     try {
         if ($global:BackendProcess -and !$global:BackendProcess.HasExited) {
             Write-Log "Stopping backend process (PID: $($global:BackendProcess.Id))..."
-            Stop-Process -Id $global:BackendProcess.Id -Force -ErrorAction SilentlyContinue
+            $stopped = $false
+            try {
+                Stop-Process -Id $global:BackendProcess.Id -Force -ErrorAction Stop
+                $stopped = $true
+            } catch {
+                Write-Log "Direct stop failed (likely due to elevation), trying elevated kill..." "Yellow"
+            }
+
+            if (-not $stopped) {
+                try {
+                    # Try elevated Stop-Process by PID
+                    $elevCmd = "Stop-Process -Id $($global:BackendProcess.Id) -Force"
+                    Start-Process -FilePath "powershell" -ArgumentList "-NoProfile","-WindowStyle","Hidden","-Command", $elevCmd -Verb RunAs -Wait | Out-Null
+                } catch {
+                    Write-Log "Elevated Stop-Process failed: $($_.Exception.Message)" "Red"
+                }
+
+                # If still running, try taskkill by PID then by image name
+                try {
+                    if ($global:BackendProcess -and !$global:BackendProcess.HasExited) {
+                        Start-Process -FilePath "powershell" -ArgumentList "-NoProfile","-WindowStyle","Hidden","-Command", "taskkill /PID $($global:BackendProcess.Id) /F" -Verb RunAs -Wait | Out-Null
+                    }
+                } catch {
+                    Write-Log "Elevated taskkill by PID failed: $($_.Exception.Message)" "Red"
+                }
+
+                try {
+                    if ($global:BackendProcess -and !$global:BackendProcess.HasExited) {
+                        Start-Process -FilePath "powershell" -ArgumentList "-NoProfile","-WindowStyle","Hidden","-Command", "taskkill /IM SystemMonitor.Service.exe /F" -Verb RunAs -Wait | Out-Null
+                    }
+                } catch {
+                    Write-Log "Elevated taskkill by name failed: $($_.Exception.Message)" "Red"
+                }
+            }
         }
     } catch {
         Write-Log "Error while cleaning backend process: $($_.Exception.Message)" "Red"
