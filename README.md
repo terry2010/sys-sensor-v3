@@ -82,7 +82,7 @@ src\SystemMonitor.Service\bin\Debug\net8.0\SystemMonitor.Service.exe --service
 ### 命令行 --help 示例
 借助 System.CommandLine 提供内置帮助：
 
-```text
+```
 SystemMonitor.Service - Windows 系统监控服务
 
 Usage:
@@ -370,5 +370,67 @@ dotnet run --project src\SystemMonitor.Service\SystemMonitor.Service.csproj
 # 关闭注入（当前会话）
 Remove-Item Env:SIM_METRICS_ERROR
 
-# 或调整为“立即触发一次”
+# 或调整为"立即触发一次"
 $env:SIM_METRICS_ERROR = '1'
+```
+
+## 脚本使用说明
+
+### 开发环境脚本
+
+1. `scripts/dev.ps1` - 开发环境启动脚本
+   - 启动时不杀死现有进程
+   - 按Ctrl+C会清理所有本次启动的进程
+   - 集成kill.ps1进行彻底清理
+
+2. `scripts/kill.ps1` - 进程清理脚本
+   - 按进程关键字杀死所有启动过的开发进程和release进程
+   - 支持-Verbose参数显示详细信息
+   - 通过端口检查并清理占用开发端口的进程
+   - 智能过滤只清理最近2小时内启动的进程
+   - 安全保护机制避免误杀重要进程
+
+### 便携式版本脚本
+
+1. `scripts/build-portable.ps1` - 便携式版本构建脚本
+   - 构建前后端的单文件可执行程序
+   - 输出到artifacts/portable目录
+   - 包含版本信息文件
+
+2. `scripts/start-portable.ps1` - 便携式版本启动脚本
+   - 启动前后端程序
+   - 启动时按关键字kill掉之前启动过的exe
+   - 退出或收到Ctrl+C时清除自己启动过的所有程序
+
+## 便携式版本发布与使用
+
+__构建便携式版本__
+
+使用 `scripts/build-portable.ps1` 脚本可以构建一个可在任何Windows电脑上运行的便携式版本，包含前后端两个独立的exe文件：
+
+```powershell
+# 构建便携式版本
+./scripts/build-portable.ps1
+
+# 构建并清理旧版本
+./scripts/build-portable.ps1 -Clean
+```
+
+构建结果将输出到 `artifacts/portable/` 目录，包含：
+- `backend/SystemMonitor.Service.exe` - 后端服务程序
+- `frontend/sys-sensor-v3-app.exe` - 前端应用程序
+- `start-portable.ps1` - 启动脚本
+
+__启动便携式版本__
+
+将整个 `artifacts/portable/` 目录复制到目标电脑后，运行 `start-portable.ps1` 脚本即可启动程序：
+
+```powershell
+# 启动程序（会自动清理已存在的进程）
+./start-portable.ps1
+
+# 启动程序但不清理已存在的进程
+./start-portable.ps1 -NoKillExisting
+```
+
+启动脚本会在启动时自动清理之前运行的同名进程，并在退出时清理本次启动的所有进程。
