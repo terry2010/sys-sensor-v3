@@ -430,9 +430,17 @@ namespace SystemMonitor.Service.Services.Collectors
                 // 公网IP地址（尝试快速获取，失败则跳过）
                 try
                 {
-                    using var client = new WebClient();
-                    client.Timeout = 5000; // 5秒超时
-                    publicIpAddress = client.DownloadString("https://api.ipify.org").Trim();
+                    using var http = new System.Net.Http.HttpClient(new System.Net.Http.HttpClientHandler
+                    {
+                        AllowAutoRedirect = true,
+                        AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+                    })
+                    {
+                        Timeout = TimeSpan.FromMilliseconds(5000)
+                    };
+                    // 同步环境下安全地等待结果
+                    var resp = http.GetStringAsync("https://api.ipify.org").GetAwaiter().GetResult();
+                    publicIpAddress = resp?.Trim();
                 }
                 catch { /* 忽略公网IP获取失败 */ }
             }
@@ -567,24 +575,6 @@ namespace SystemMonitor.Service.Services.Collectors
                 32 => "Detachable",
                 _ => $"Unknown ({chassisType})"
             };
-        }
-    }
-
-    /// <summary>
-    /// WebClient扩展，支持超时设置
-    /// </summary>
-    internal class WebClient : System.Net.WebClient
-    {
-        public int Timeout { get; set; } = 30000; // 默认30秒
-
-        protected override WebRequest GetWebRequest(Uri uri)
-        {
-            var request = base.GetWebRequest(uri);
-            if (request != null)
-            {
-                request.Timeout = Timeout;
-            }
-            return request;
         }
     }
 }

@@ -113,12 +113,19 @@ namespace SystemMonitor.Service.Services.Collectors
 
             try
             {
+                // 整体时间预算，避免在低速/异常环境下长时间阻塞导致外层超时
+                var swBudget = Stopwatch.StartNew();
+                const int budgetMs = 1200; // 尽量在 ~1.2s 内完成一次采集
+                bool BudgetExceeded() => swBudget.ElapsedMilliseconds > budgetMs;
+
                 // 1) 聚合 GPU Engine 使用率（按适配器）
                 var adapters = new Dictionary<string, AdapterAgg>(StringComparer.OrdinalIgnoreCase);
                 var pidAgg = new Dictionary<int, (double total, double vdec, double venc)>(capacity: 64);
 
                 // 确保已创建并预热计数器实例
                 EnsureInstances();
+
+                if (BudgetExceeded()) return null; // 预算已用尽，尽快返回，由外层做缓存/占位
 
                 if (_enginePct.Count > 0)
                 {
@@ -173,6 +180,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 try
                 {
                     bool needWmiFallback = adapters.Count == 0 || adapters.Values.All(a => a.Total <= 0.0);
+                    if (BudgetExceeded()) needWmiFallback = false;
                     if (needWmiFallback)
                     {
                         using var s = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name, UtilizationPercentage FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
@@ -212,6 +220,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 {
                     foreach (var kvp in _mem)
                     {
+                        if (BudgetExceeded()) break;
                         var inst = kvp.Key; var ct = kvp.Value;
                         try
                         {
@@ -244,6 +253,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 double? packagePowerW = null;
                 double? fanRpm = null;
                 double? memControllerLoadPct = null;
+                double? gpuCoreLoadPct = null; // 作为 GPU Engine 计数器的回退
                 bool seenIntelGpu = false;
                 var vendorAgg = new Dictionary<string, (double? temp, double? coreClk, double? memClk, double? powerW, double? fanRpm, double? memCtrlLoad)>(StringComparer.OrdinalIgnoreCase)
                 {
@@ -253,14 +263,16 @@ namespace SystemMonitor.Service.Services.Collectors
                 };
                 try
                 {
-                    var all = SensorsProvider.Current.DumpAll();
-                    foreach (var s in all)
+                    if (!BudgetExceeded())
                     {
-                        var vendor = string.Equals(s.hw_type, "GpuNvidia", StringComparison.OrdinalIgnoreCase) ? "nvidia"
+                        var all = SensorsProvider.Current.DumpAll();
+                        foreach (var s in all)
+                        {
+                            var vendor = string.Equals(s.hw_type, "GpuNvidia", StringComparison.OrdinalIgnoreCase) ? "nvidia"
                                    : string.Equals(s.hw_type, "GpuAmd", StringComparison.OrdinalIgnoreCase) ? "amd"
                                    : string.Equals(s.hw_type, "GpuIntel", StringComparison.OrdinalIgnoreCase) ? "intel" : null;
-                        if (vendor == null) continue;
-                        if (vendor == "intel") seenIntelGpu = true;
+                            if (vendor == null) continue;
+                            if (vendor == "intel") seenIntelGpu = true;
 
                         // accumulate per vendor (take max for temp; take max for clocks; sum not needed)
                         var agg = vendorAgg[vendor];
@@ -303,9 +315,17 @@ namespace SystemMonitor.Service.Services.Collectors
                                 var name = (s.sensor_name ?? string.Empty).ToLowerInvariant();
                                 if (name.Contains("memory controller") || name.Contains("mem controller") || name.Contains("memory usage"))
                                     agg.memCtrlLoad = Math.Max(agg.memCtrlLoad ?? 0, s.value.Value);
+                                // 记录 GPU Core Load（供引擎利用率为0时回退使用）。尽量匹配常见名字："GPU Core", "Core"（GPU 下）。
+                                if (name.Contains("gpu core") || (name.Contains("core") && (string.Equals(s.hw_type, "GpuNvidia", StringComparison.OrdinalIgnoreCase)
+                                    || string.Equals(s.hw_type, "GpuAmd", StringComparison.OrdinalIgnoreCase)
+                                    || string.Equals(s.hw_type, "GpuIntel", StringComparison.OrdinalIgnoreCase))))
+                                {
+                                    gpuCoreLoadPct = Math.Max(gpuCoreLoadPct ?? 0, s.value.Value);
+                                }
                             }
                         }
                         vendorAgg[vendor] = agg;
+                    }
                     }
 
                     double[] arrOf(Func<(double? temp, double? coreClk, double? memClk, double? powerW, double? fanRpm, double? memCtrlLoad), double?> sel)
@@ -345,7 +365,7 @@ namespace SystemMonitor.Service.Services.Collectors
                 // iGPU/WMI 回退：若仅有一个适配器且名称/总量为空，尝试用 Win32_VideoController 填充
                 try
                 {
-                    if (adapters.Count == 1)
+                    if (adapters.Count == 1 && !BudgetExceeded())
                     {
                         var key = adapters.Keys.First();
                         var agg = adapters[key];
@@ -356,6 +376,7 @@ namespace SystemMonitor.Service.Services.Collectors
                             try
                             {
                                 using var searcher = new ManagementObjectSearcher("SELECT Name, AdapterRAM FROM Win32_VideoController");
+                                try { searcher.Options.Timeout = TimeSpan.FromMilliseconds(500); } catch { }
                                 foreach (ManagementObject mo in searcher.Get())
                                 {
                                     var name = mo["Name"] as string;
@@ -395,8 +416,8 @@ namespace SystemMonitor.Service.Services.Collectors
                 catch { }
 
                 // DXGI 显存预算（local/non-local） + 静态信息
-                var dxgi = DxgiHelper.GetAdapterBudgets();
-                var dxgiDesc = DxgiHelper.GetAdapterDesc1();
+                var dxgi = BudgetExceeded() ? new Dictionary<string, (int localBudgetMb, int localUsageMb, int nonlocalBudgetMb, int nonlocalUsageMb)>() : DxgiHelper.GetAdapterBudgets();
+                var dxgiDesc = BudgetExceeded() ? new Dictionary<string, DxgiHelper.DxgiDescLite>() : DxgiHelper.GetAdapterDesc1();
 
                 // 在构造列表前：若仍未得到 GPU 温度且系统存在 Intel GPU（VendorId=0x8086），则用 CPU Package 温度兜底
                 try
@@ -421,6 +442,9 @@ namespace SystemMonitor.Service.Services.Collectors
 
                 // 4) 构造返回对象
                 var list = new List<object>();
+                // 若所有适配器的 Engine 汇总为 0 且存在 LHM 的 GPU Core Load，则使用其作为 usage 回退
+                bool useSensorUsageFallback = false;
+                try { useSensorUsageFallback = adapters.Count > 0 && adapters.Values.All(a => a.Total <= 0.0) && gpuCoreLoadPct.HasValue; } catch { }
                 var indexToKey = new Dictionary<int, string>();
                 int idx = 0;
                 foreach (var kv in adapters.OrderBy(k => k.Key, StringComparer.OrdinalIgnoreCase))
@@ -428,13 +452,16 @@ namespace SystemMonitor.Service.Services.Collectors
                     var key = kv.Key;
                     var a = kv.Value;
                     var name = nameMap.TryGetValue(key, out var n) ? n : key;
-                    double usage = Math.Clamp(a.Total, 0.0, 100.0);
+                    double usage = useSensorUsageFallback ? Math.Clamp(gpuCoreLoadPct!.Value, 0.0, 100.0) : Math.Clamp(a.Total, 0.0, 100.0);
                     var byEngine = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-                    if (a.ByEng3D > 0) byEngine["3d"] = a.ByEng3D;
-                    if (a.ByEngCompute > 0) byEngine["compute"] = a.ByEngCompute;
-                    if (a.ByEngCopy > 0) byEngine["copy"] = a.ByEngCopy;
-                    if (a.ByEngVDec > 0) byEngine["video_decode"] = a.ByEngVDec;
-                    if (a.ByEngVEnc > 0) byEngine["video_encode"] = a.ByEngVEnc;
+                    if (!useSensorUsageFallback)
+                    {
+                        if (a.ByEng3D > 0) byEngine["3d"] = a.ByEng3D;
+                        if (a.ByEngCompute > 0) byEngine["compute"] = a.ByEngCompute;
+                        if (a.ByEngCopy > 0) byEngine["copy"] = a.ByEngCopy;
+                        if (a.ByEngVDec > 0) byEngine["video_decode"] = a.ByEngVDec;
+                        if (a.ByEngVEnc > 0) byEngine["video_encode"] = a.ByEngVEnc;
+                    }
 
                     // DXGI budgets by normalized LUID
                     int? dxgiLocalBudget = null, dxgiLocalUsage = null, dxgiNonLocalBudget = null, dxgiNonLocalUsage = null;

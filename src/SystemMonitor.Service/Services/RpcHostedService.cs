@@ -340,13 +340,25 @@ namespace SystemMonitor.Service.Services
                         
                         // 如果过载，优先采集关键指标
                         if (skipExpensive) {
-                            collectors = collectors.Where(c => 
-                                c.Name.Equals("cpu", StringComparison.OrdinalIgnoreCase) ||
-                                c.Name.Equals("memory", StringComparison.OrdinalIgnoreCase) ||
-                                c.Name.Equals("disk", StringComparison.OrdinalIgnoreCase)
+                            // 引入冷却重试：每 3 次推送允许 gpu/network 各尝试一次，避免永久饥饿
+                            bool allowRetry = (pushTick % 3) == 0;
+                            var baseKeep = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "cpu", "memory", "disk", "system_info" };
+                            collectors = collectors.Where(c =>
+                                baseKeep.Contains(c.Name) ||
+                                (allowRetry && (c.Name.Equals("gpu", StringComparison.OrdinalIgnoreCase) || c.Name.Equals("network", StringComparison.OrdinalIgnoreCase)))
                             ).ToList();
-                            _logger.LogWarning("检测到系统过载，跳过昂贵采集器 (GPU/Power/Network)");
+                            _logger.LogWarning("检测到系统过载，跳过昂贵采集器 (GPU/Power/Network)，allowRetry={AllowRetry}", allowRetry);
                         }
+
+                        // 观测：打印启用模块与本轮实际采集器列表
+                        try
+                        {
+                            _logger.LogDebug("enabled=[{Enabled}] selected_collectors=[{Collectors}] skipExpensive={Skip}",
+                                string.Join(", ", enabled),
+                                string.Join(", ", collectors.Select(x => x.Name)),
+                                skipExpensive);
+                        }
+                        catch { }
                         
                         var syncList = collectors.Where(c => syncExempt.Contains(c.Name)).ToList();
                         var asyncList = collectors.Where(c => !syncExempt.Contains(c.Name)).ToList();
@@ -402,14 +414,14 @@ namespace SystemMonitor.Service.Services
                                         // 基础阈值：更激进的超时配置，快速失败避免堆积
                                         if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 500;
                                         else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 700;
-                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 900;
+                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 1500;
                                         else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
                                         // 自适应：若该模块连续超时达到阈值，则临时提升超时以抓到首次数据
                                         int ct;
                                         lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct); }
                                         if (ct >= 2)
                                         {
-                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1500);
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 2000);
                                             if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
                                             if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1300);
                                         }
@@ -450,7 +462,7 @@ namespace SystemMonitor.Service.Services
                                             // 若连续超时较多，触发一次救火采集（更大超时），尝试播种缓存
                                             int ct2; long nowTs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                                             lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct2); }
-                                            bool shouldRescue = ct2 >= 3;
+                                            bool shouldRescue = ct2 >= 2;
                                             if (shouldRescue)
                                             {
                                                 bool allowed = false;
@@ -478,7 +490,7 @@ namespace SystemMonitor.Service.Services
                                                     {
                                                         int rescueTimeout = timeoutMs;
                                                         // 优化后：更保守的救火超时配置
-                                                        if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1500);
+                                                        if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 2500);
                                                         else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1200);
                                                         else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) rescueTimeout = Math.Max(rescueTimeout, 1000);
                                                         try
@@ -618,6 +630,42 @@ namespace SystemMonitor.Service.Services
                             }
                         }
                         catch { }
+                        // 若启用了 network 但未采集到，尝试使用缓存，否则填充占位
+                        try
+                        {
+                            if (enabled.Contains("network") && !payload.ContainsKey("network"))
+                            {
+                                bool filled = false;
+                                if (rpcServer.TryGetModuleFromCache("network", out var cached) && cached != null)
+                                {
+                                    payload["network"] = cached;
+                                    filled = true;
+                                }
+                                if (!filled)
+                                {
+                                    payload["network"] = new { status = "warming_up" };
+                                }
+                            }
+                        }
+                        catch { }
+                        // 若启用了 system_info 但未采集到，尝试使用缓存，否则填充占位
+                        try
+                        {
+                            if (enabled.Contains("system_info") && !payload.ContainsKey("system_info"))
+                            {
+                                bool filled = false;
+                                if (rpcServer.TryGetModuleFromCache("system_info", out var cached) && cached != null)
+                                {
+                                    payload["system_info"] = cached;
+                                    filled = true;
+                                }
+                                if (!filled)
+                                {
+                                    payload["system_info"] = new { status = "warming_up" };
+                                }
+                            }
+                        }
+                        catch { }
                         // 若启用了 gpu 且已采集到，将其克隆到 gpu_raw 方便前端首页直接展示 JSON
                         try
                         {
@@ -628,15 +676,22 @@ namespace SystemMonitor.Service.Services
                         }
                         catch { }
 
-                        // 若启用了 gpu 但未采集到，尝试使用缓存（避免快照/首页缺 gpu）
+                        // 若启用了 gpu 但未采集到，尝试使用缓存；如无，则填充占位以便前端显示字段并等待播种
                         try
                         {
                             if (enabled.Contains("gpu") && !payload.ContainsKey("gpu"))
                             {
+                                bool filled = false;
                                 if (rpcServer.TryGetModuleFromCache("gpu", out var cached) && cached != null)
                                 {
                                     payload["gpu"] = cached;
                                     payload["gpu_raw"] = cached;
+                                    filled = true;
+                                }
+                                if (!filled)
+                                {
+                                    payload["gpu"] = new { status = "warming_up" };
+                                    payload["gpu_raw"] = payload["gpu"];
                                 }
                             }
                         }
@@ -721,6 +776,13 @@ namespace SystemMonitor.Service.Services
                             payload["collectors_diag"] = diag;
                         }
                         catch { /* ignore diag build error */ }
+
+                        // 观测：输出本次 payload 的 key，辅助定位缺失模块
+                        try
+                        {
+                            _logger.LogDebug("metrics payload keys: [{Keys}]", string.Join(", ", payload.Keys));
+                        }
+                        catch { }
 
                         await rpc.NotifyAsync("metrics", payload).ConfigureAwait(false);
                         // 推送成功后，刷新会话缓存
