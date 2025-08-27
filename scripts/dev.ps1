@@ -135,17 +135,27 @@ Pop-Location
 Write-Host '[dev] Development environment started' -ForegroundColor Green
 Write-Host '[dev] Press Ctrl+C to cleanup all processes and exit' -ForegroundColor Yellow
 Write-Host '[dev] Waiting for frontend application to exit...' -ForegroundColor Cyan
+Write-Host '[dev] Note: Close the frontend window to exit the development environment' -ForegroundColor Yellow
 
 try {
     if ($global:FrontendProcess) { 
+        # Wait for the frontend process to exit
+        # This will be interrupted if the user closes the window
         Wait-Process -Id $global:FrontendProcess.Id 
+        Write-Host '[dev] Frontend process exited normally' -ForegroundColor Green
     } else { 
         # If frontend process failed to start, wait for user manual exit
         Write-Host '[dev] Frontend process did not start normally, press any key to exit...'
         $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
     }
+} catch [System.InvalidOperationException] {
+    # This occurs when the process has already exited
+    Write-Host '[dev] Frontend process has already exited' -ForegroundColor Yellow
+} catch [System.Management.Automation.ProcessCommandException] {
+    # This occurs when the process cannot be found
+    Write-Host '[dev] Frontend process not found or already exited' -ForegroundColor Yellow
 } catch {
-    Write-Host '[dev] Exception occurred while waiting for process:' $_.Exception.Message
+    Write-Host '[dev] Exception occurred while waiting for process:' $_.Exception.Message -ForegroundColor Red
 } finally {
     Cleanup-AllProcesses
 }
