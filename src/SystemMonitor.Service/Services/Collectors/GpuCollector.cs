@@ -106,7 +106,8 @@ namespace SystemMonitor.Service.Services.Collectors
         public object? Collect()
         {
             var now = Environment.TickCount64;
-            if (now - _lastTicks < 200 && _lastVal != null) return _lastVal;
+            // 增加缓存时间到500ms，减少频繁采集
+            if (now - _lastTicks < 500 && _lastVal != null) return _lastVal;
 
             EnsureInit();
 
@@ -168,12 +169,15 @@ namespace SystemMonitor.Service.Services.Collectors
                     }
                 }
                 // WMI 回退：当性能计数器不可用或总使用率为 0 时，使用 WMI GPUEngine 聚合 usage
+                // 添加超时保护
                 try
                 {
                     bool needWmiFallback = adapters.Count == 0 || adapters.Values.All(a => a.Total <= 0.0);
                     if (needWmiFallback)
                     {
                         using var s = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name, UtilizationPercentage FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
+                        // 设置WMI查询超时
+                        s.Options.Timeout = TimeSpan.FromMilliseconds(1000);
                         foreach (ManagementObject mo in s.Get())
                         {
                             try

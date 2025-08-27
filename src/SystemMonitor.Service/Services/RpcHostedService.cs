@@ -304,18 +304,25 @@ namespace SystemMonitor.Service.Services
                         // 过载保护：如果上次采集耗时过長，跳过昂贵的采集器
                         bool skipExpensive = false;
                         
-                        // 检查GPU采集器上次耗时
-                        if (stats.TryGetValue("gpu", out var gpuStat) && gpuStat.LastMs > 600) 
+                        // 检查GPU采集器上次耗时（调整阈值）
+                        if (stats.TryGetValue("gpu", out var gpuStat) && gpuStat.LastMs > 800) 
                         {
                             skipExpensive = true;
                             _logger.LogWarning("GPU采集器上次耗时 {LastMs}ms，触发过载保护", gpuStat.LastMs);
                         }
                         
-                        // 检查Power采集器上次耗时
-                        if (stats.TryGetValue("power", out var powerStat) && powerStat.LastMs > 400) 
+                        // 检查Power采集器上次耗时（调整阈值）
+                        if (stats.TryGetValue("power", out var powerStat) && powerStat.LastMs > 600) 
                         {
                             skipExpensive = true;
                             _logger.LogWarning("Power采集器上次耗时 {LastMs}ms，触发过载保护", powerStat.LastMs);
+                        }
+                        
+                        // 检查Network采集器上次耗时（新增）
+                        if (stats.TryGetValue("network", out var networkStat) && networkStat.LastMs > 1000) 
+                        {
+                            skipExpensive = true;
+                            _logger.LogWarning("Network采集器上次耗时 {LastMs}ms，触发过载保护", networkStat.LastMs);
                         }
                         
                         // 检查整体采集时间趋势
@@ -323,7 +330,8 @@ namespace SystemMonitor.Service.Services
                         if (recentStats.Count > 0)
                         {
                             var totalLastMs = recentStats.Sum(s => s.LastMs);
-                            if (totalLastMs > 1200) // 总耗时超过1.2秒
+                            // 调整总耗时阈值
+                            if (totalLastMs > 2000) // 总耗时超过2秒
                             {
                                 skipExpensive = true;
                                 _logger.LogWarning("总采集耗时 {TotalMs}ms 过高，触发过载保护", totalLastMs);
@@ -337,7 +345,7 @@ namespace SystemMonitor.Service.Services
                                 c.Name.Equals("memory", StringComparison.OrdinalIgnoreCase) ||
                                 c.Name.Equals("disk", StringComparison.OrdinalIgnoreCase)
                             ).ToList();
-                            _logger.LogWarning("检测到系统过载，跳过昂贵采集器 (GPU/Power)");
+                            _logger.LogWarning("检测到系统过载，跳过昂贵采集器 (GPU/Power/Network)");
                         }
                         
                         var syncList = collectors.Where(c => syncExempt.Contains(c.Name)).ToList();
@@ -392,23 +400,25 @@ namespace SystemMonitor.Service.Services
                                         var work = Task.Run(() => c.Collect());
                                         int timeoutMs = defaultTimeoutMs;
                                         // 基础阈值：更激进的超时配置，快速失败避免堆积
-                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 400;
-                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 500;
-                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 600;
-                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = 500;
+                                        if (string.Equals(c.Name, "disk", StringComparison.OrdinalIgnoreCase)) timeoutMs = 500;
+                                        else if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = 700;
+                                        else if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = 900;
+                                        else if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = 800;
                                         // 自适应：若该模块连续超时达到阈值，则临时提升超时以抓到首次数据
                                         int ct;
                                         lock (consecTimeouts) { consecTimeouts.TryGetValue(c.Name, out ct); }
                                         if (ct >= 2)
                                         {
-                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
-                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1000);
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1500);
+                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
+                                            if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1300);
                                         }
                                         // 亦可在会话刚开始的前几次推送稍微放宽（优化后：更保守的初始超时）
                                         if (pushTick < 3)
                                         {
-                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
-                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1000);
+                                            if (string.Equals(c.Name, "gpu", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1500);
+                                            if (string.Equals(c.Name, "power", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1200);
+                                            if (string.Equals(c.Name, "network", StringComparison.OrdinalIgnoreCase)) timeoutMs = Math.Max(timeoutMs, 1300);
                                         }
                                         var done = await Task.WhenAny(work, Task.Delay(timeoutMs, sessionToken)).ConfigureAwait(false);
                                         if (done == work)

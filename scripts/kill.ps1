@@ -24,8 +24,13 @@ try {
         foreach ($proc in $procs) {
             if ($proc.Id -ne $currentPid) {
                 try {
-                    $proc.Kill()
-                    Write-Log "Killed PID: $($proc.Id)" "Green"
+                    # Check if process has already exited
+                    if (!$proc.HasExited) {
+                        $proc.Kill()
+                        Write-Log "Killed PID: $($proc.Id)" "Green"
+                    } else {
+                        if ($Verbose) { Write-Log "Process PID: $($proc.Id) has already exited" "Gray" }
+                    }
                 } catch {
                     Write-Log "Unable to kill PID: $($proc.Id) - $($_.Exception.Message)" "Red"
                 }
@@ -49,9 +54,14 @@ try {
                 # Simple check: if it's a recent dotnet process within our scope
                 try {
                     $null = $proc.WorkingSet  # 触发可能的访问异常
-                    $proc.Kill()
-                    Write-Log "Killed dotnet PID: $($proc.Id)" "Green"
-                    $killedAny = $true
+                    # Check if process has already exited
+                    if (!$proc.HasExited) {
+                        $proc.Kill()
+                        Write-Log "Killed dotnet PID: $($proc.Id)" "Green"
+                        $killedAny = $true
+                    } else {
+                        if ($Verbose) { Write-Log "Dotnet process PID: $($proc.Id) has already exited" "Gray" }
+                    }
                 } catch {
                     # Ignore inaccessible processes
                 }
@@ -78,8 +88,13 @@ try {
         foreach ($proc in $tauriProcs) {
             if ($proc.Id -ne $currentPid) {
                 try {
-                    $proc.Kill()
-                    Write-Log "Killed Tauri PID: $($proc.Id)" "Green"
+                    # Check if process has already exited
+                    if (!$proc.HasExited) {
+                        $proc.Kill()
+                        Write-Log "Killed Tauri PID: $($proc.Id)" "Green"
+                    } else {
+                        if ($Verbose) { Write-Log "Tauri process PID: $($proc.Id) has already exited" "Gray" }
+                    }
                 } catch {
                     Write-Log "Unable to kill Tauri PID: $($proc.Id) - $($_.Exception.Message)" "Red"
                 }

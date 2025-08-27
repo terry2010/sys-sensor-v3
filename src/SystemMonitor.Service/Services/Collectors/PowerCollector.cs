@@ -29,7 +29,8 @@ namespace SystemMonitor.Service.Services.Collectors
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 lock (_lock)
                 {
-                    if (_lastPayload != null && now - _lastTs <= 400)
+                    // 增加缓存时间到600ms，减少频繁采集
+                    if (_lastPayload != null && now - _lastTs <= 600)
                     {
                         return _lastPayload;
                     }

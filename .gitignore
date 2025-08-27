@@ -85,3 +85,6 @@ temp/
 # 项目排除（不纳入版本控制）
 ###############################################################################
 src/SystemMonitor.Service/bin
+/rc/SystemMonitor.Service/logs1
+logs1
+/src/SystemMonitor.Tests/TestResults1

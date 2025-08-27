@@ -137,7 +137,8 @@ namespace SystemMonitor.Service.Services.Collectors
         {
             EnsureInit();
             var now = Environment.TickCount64;
-            if (now - _lastTicks < 200 && _lastPayload != null)
+            // 增加缓存时间到300ms
+            if (now - _lastTicks < 300 && _lastPayload != null)
             {
                 return _lastPayload;
             }
@@ -193,7 +194,10 @@ namespace SystemMonitor.Service.Services.Collectors
                 double secs = (_niLastAt == 0) ? 1.0 : Math.Max(0.2, (now - _niLastAt) / 1000.0); // 与节流一致，至少 200ms
                 try
                 {
-                    foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+                    // 添加超时保护，限制网络接口查询时间
+                    var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
+                    var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+                    foreach (var ni in networkInterfaces)
                     {
                         if (!IsValidInterface(ni.Name)) continue;
                         try
