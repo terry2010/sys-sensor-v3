@@ -1252,11 +1252,11 @@ namespace SystemMonitor.Service.Services.Collectors
             if (h.IsInvalid)
             {
                 int e1 = Marshal.GetLastWin32Error();
-                var h2 = TryOpen(GENERIC_READ);
+                using var h2 = TryOpen(GENERIC_READ);
                 if (h2.IsInvalid)
                 {
                     int e2 = Marshal.GetLastWin32Error();
-                    var h3 = TryOpen(0);
+                    using var h3 = TryOpen(0);
                     if (h3.IsInvalid)
                     {
                         int e3 = Marshal.GetLastWin32Error();
@@ -1273,7 +1273,10 @@ namespace SystemMonitor.Service.Services.Collectors
                         {
                             try { Serilog.Log.Information("[SMART] Open {Path} with ACCESS=0 (fallback). PrevErr GRW={E1} GR={E2}", path, e1, e2); } catch { }
                         }
-                        return h3;
+                        // 克隆句柄以返回所有权
+                        var cloned = new SafeFileHandle(h3.DangerousGetHandle(), false);
+                        h3.SetHandleAsInvalid(); // 标记为无效，避免重复释放
+                        return cloned;
                     }
                 }
                 else
@@ -1282,7 +1285,10 @@ namespace SystemMonitor.Service.Services.Collectors
                     {
                         try { Serilog.Log.Information("[SMART] Open {Path} with GENERIC_READ (fallback). PrevErr GRW={E1}", path, e1); } catch { }
                     }
-                    return h2;
+                    // 克隆句柄以返回所有权
+                    var cloned = new SafeFileHandle(h2.DangerousGetHandle(), false);
+                    h2.SetHandleAsInvalid(); // 标记为无效，避免重复释放
+                    return cloned;
                 }
             }
             else

@@ -68,6 +68,7 @@ export const useMetricsStore = defineStore('metrics', {
   state: () => ({
     latest: null as MetricPoint | null,
     history: [] as MetricPoint[],
+    maxHistory: 120, // 减少历史记录数量，避免内存过度增长
     lastAt: 0,
     count: 0,
   }),
@@ -77,7 +78,15 @@ export const useMetricsStore = defineStore('metrics', {
       service.onMetrics((p: MetricPoint) => {
         this.latest = p;
         this.history.push(p);
-        if (this.history.length > 300) this.history.shift();
+        // 减少历史记录上限，同时实现更激进的清理策略
+        if (this.history.length > this.maxHistory) {
+          // 如果超出限制太多，一次性清理更多数据，避免频繁操作数组
+          if (this.history.length > this.maxHistory * 1.5) {
+            this.history = this.history.slice(-this.maxHistory);
+          } else {
+            this.history.shift();
+          }
+        }
         this.lastAt = Date.now();
         this.count += 1;
         try { if ((p as any)?.gpu) console.debug('[metrics] gpu:', (p as any).gpu); } catch {}

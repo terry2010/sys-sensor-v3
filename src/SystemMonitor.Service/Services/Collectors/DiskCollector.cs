@@ -8,7 +8,7 @@ namespace SystemMonitor.Service.Services.Collectors
         public string Name => "disk";
         // 慢路径缓存（物理盘/SMART/NVMe Identify/ErrorLog）——降低每轮重 I/O 频率
         private static readonly object _slowLock = new object();
-        private static int PHYS_TTL_MS = 10000;       // 物理盘 ≥10s 刷新（暂不外露）
+        private static int PHYS_TTL_MS = 30000;       // 物理盘 ≥30s 刷新（从原来的10s增加到30s）
         private static int SMART_TTL_MS = 30000;      // SMART/温度 ≥30s 刷新（可配置）
         private static int NVME_ERRLOG_TTL_MS = 90000; // NVMe ErrorLog ≥90s 刷新（可配置）
         private static int NVME_IDENT_TTL_MS = 600000; // NVMe Identify/Namespace ≥10min 刷新（可配置）

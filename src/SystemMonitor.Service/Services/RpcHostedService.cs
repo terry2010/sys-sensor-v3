@@ -199,7 +199,7 @@ namespace SystemMonitor.Service.Services
                     e?.Description ?? "unknown", connId, (long)elapsed.TotalMilliseconds);
                 
                 // 立即取消所有会话任务
-                try { sessionCts.Cancel(); } catch { }
+                try { sessionCts.Cancel(); } catch (Exception ex) { _logger.LogWarning(ex, "取消会话任务异常 conn={ConnId}", connId); }
                 
                 try
                 {
@@ -207,7 +207,7 @@ namespace SystemMonitor.Service.Services
                     var payload = new { reason };
                     rpcServer.NotifyBridge("bridge_disconnected", payload);
                 }
-                catch { /* ignore */ }
+                catch (Exception ex) { _logger.LogWarning(ex, "通知桥接断开异常 conn={ConnId}", connId); }
             };
 
             rpc.StartListening();
@@ -224,7 +224,8 @@ namespace SystemMonitor.Service.Services
                             SystemMonitor.Service.Services.Collectors.DiskCollector.RefreshPhysicalCache();
                         }
                         catch { }
-                        await Task.Delay(12000, sessionToken).ConfigureAwait(false);
+                        // 增加延迟时间，从原来的12秒增加到30秒，减少频繁查询
+                        await Task.Delay(30000, sessionToken).ConfigureAwait(false);
                     }
                 }
                 catch (OperationCanceledException) { }
@@ -259,12 +260,26 @@ namespace SystemMonitor.Service.Services
                     
                     _logger.LogInformation("开始 metrics 推送循环 conn={ConnId}", connId);
                     
-                    while (!sessionToken.IsCancellationRequested)
+                    // 优化垃圾回收，定期强制GC
+                int gcCounter = 0;
+                int gcInterval = 10; // 每10次推送周期触发一次GC
+                
+                while (!sessionToken.IsCancellationRequested)
                 {
                     try
                     {
                         pushTick++;
+                        gcCounter++;
                         var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                        
+                        // 定期强制GC，减少内存压力
+                        if (gcCounter >= gcInterval)
+                        {                            
+                            gcCounter = 0;
+                            // 强制进行垃圾回收
+                            GC.Collect(2, GCCollectionMode.Forced, true, true);
+                            _logger.LogDebug("强制进行了垃圾回收");
+                        }
                         
                         // 紧急刹车检查：如果连续出现性能问题，降低采集频率
                         if (consecutiveSlowCycles > 3)
@@ -496,11 +511,20 @@ namespace SystemMonitor.Service.Services
                                                         try
                                                         {
                                                             _logger.LogWarning("collector rescue: {Name} try with extended timeout {Timeout}ms", c.Name, rescueTimeout);
-                                                            var rescueTask = Task.Run(() => c.Collect());
-                                                            var rescueDone = await Task.WhenAny(rescueTask, Task.Delay(rescueTimeout, sessionToken)).ConfigureAwait(false);
-                                                            if (rescueDone == rescueTask)
+                                                            // 创建一个封装了收集器调用的方法，避免直接嵌套Task.Run，减少堆栈嵌套
+                                                            async Task<object?> RunCollectorWithTimeout()
                                                             {
-                                                                var val2 = await rescueTask.ConfigureAwait(false);
+                                                                var collectTask = Task.Run(() => c.Collect());
+                                                                if (await Task.WhenAny(collectTask, Task.Delay(rescueTimeout, sessionToken)).ConfigureAwait(false) == collectTask)
+                                                                {
+                                                                    return await collectTask.ConfigureAwait(false);
+                                                                }
+                                                                throw new TimeoutException($"Collector {c.Name} rescue timed out after {rescueTimeout}ms");
+                                                            }
+                                                            
+                                                            try
+                                                            {
+                                                                var val2 = await RunCollectorWithTimeout().ConfigureAwait(false);
                                                                 if (val2 != null)
                                                                 {
                                                                     lock (payload) { payload[c.Name] = val2; }
@@ -509,7 +533,7 @@ namespace SystemMonitor.Service.Services
                                                                     _logger.LogInformation("collector rescue success: {Name}", c.Name);
                                                                 }
                                                             }
-                                                            else
+                                                            catch (TimeoutException)
                                                             {
                                                                 _logger.LogWarning("collector rescue timeout: {Name} exceeded {Timeout}ms", c.Name, rescueTimeout);
                                                             }

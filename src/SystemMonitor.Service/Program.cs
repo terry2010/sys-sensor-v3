@@ -150,6 +150,9 @@ try
         // 添加内存压力监控和GC优化
         SetupMemoryMonitoring();
         
+        // 添加定期资源清理
+        SetupResourceCleanup();
+        
         try
         {
             Console.WriteLine("[BOOT] 开始运行 host...");
@@ -315,6 +318,10 @@ static void SetupMemoryMonitoring()
                     if (heapSize > 500 * 1024 * 1024) // 500MB 的堆分配
                     {
                         Console.WriteLine($"[警告] 堆分配过多: {heapSize / 1024 / 1024}MB");
+                        // 强制进行垃圾回收
+                        GC.Collect(2, GCCollectionMode.Forced, true, true);
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
                     }
                 }
                 catch { /* 忽略检查失败 */ }
@@ -330,5 +337,45 @@ static void SetupMemoryMonitoring()
     catch (Exception ex)
     {
         Console.WriteLine($"[监控] 内存监控设置失败: {ex.Message}");
+    }
+}
+
+// 添加定期资源清理函数
+static void SetupResourceCleanup()
+{
+    try
+    {
+        Console.WriteLine("[监控] 设置定期资源清理");
+        
+        // 每5分钟进行一次资源清理
+        var cleanupTimer = new Timer(_ =>
+        {
+            try
+            {
+                var process = Process.GetCurrentProcess();
+                var handleCount = process.HandleCount;
+                
+                Console.WriteLine($"[资源清理] 当前句柄数: {handleCount}");
+                
+                // 如果句柄数过高，强制进行垃圾回收以释放资源
+                if (handleCount > 800) // 800句柄阈值
+                {
+                    Console.WriteLine($"[警告] 句柄数过高: {handleCount}, 强制执行 GC");
+                    GC.Collect(2, GCCollectionMode.Forced, true, true);
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[监控] 资源清理失败: {ex.Message}");
+            }
+        }, null, TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5)); // 每5分钟检查一次
+        
+        Console.WriteLine("[监控] 资源清理设置完成");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[监控] 资源清理设置失败: {ex.Message}");
     }
 }

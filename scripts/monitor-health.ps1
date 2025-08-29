@@ -24,7 +24,7 @@ while ((Get-Date) -lt $endTime) {
     $serviceProc = Get-Process SystemMonitor.Service -ErrorAction SilentlyContinue
     
     if ($serviceProc) {
-        $pid = $serviceProc.Id
+        $procId = $serviceProc.Id
         $memoryMB = [math]::Round($serviceProc.WorkingSet64/1MB, 1)
         $handles = $serviceProc.HandleCount
         $threads = $serviceProc.Threads.Count
@@ -37,7 +37,7 @@ while ((Get-Date) -lt $endTime) {
         }
         $lastPid = $pid
         
-        Write-Host "  Service running - PID: $pid" -ForegroundColor Green
+        Write-Host "  Service running - PID: $procId" -ForegroundColor Green
         Write-Host "  Memory: ${memoryMB}MB | Handles: $handles | Threads: $threads" -ForegroundColor Gray
         Write-Host "  Uptime: $([int]$uptime.TotalMinutes)m$([int]$uptime.Seconds)s" -ForegroundColor Gray
         

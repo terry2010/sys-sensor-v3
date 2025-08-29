@@ -546,11 +546,26 @@ namespace SystemMonitor.Service.Services.Collectors
                 };
                 using var proc = Process.Start(psi);
                 if (proc == null) return null;
+                
                 var sb = new StringBuilder();
                 proc.OutputDataReceived += (s, e) => { if (e.Data != null) sb.AppendLine(e.Data); };
                 proc.BeginOutputReadLine();
                 var err = proc.StandardError.ReadToEnd();
-                if (!proc.WaitForExit(4000)) { try { proc.Kill(); } catch { } }
+                
+                // 使用超时等待进程结束，避免无限期阻塞
+                if (!proc.WaitForExit(4000)) 
+                { 
+                    try 
+                    { 
+                        proc.Kill(); 
+                        proc.WaitForExit(1000); // 等待进程完全终止
+                    } 
+                    catch 
+                    { 
+                        // 忽略终止进程时的异常
+                    } 
+                }
+                
                 var output = sb.Length > 0 ? sb.ToString() : null;
                 if (!string.IsNullOrWhiteSpace(err)) LogDiag($"[StorageQuery] pwsh err: {err.Trim()}\n");
                 return output;
